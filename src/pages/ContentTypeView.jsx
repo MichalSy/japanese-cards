@@ -16,26 +16,6 @@ export default function ContentTypeView() {
         { id: 'na', name: 'Na-Reihe', count: 5, progress: 0 },
       ],
     },
-    katakana: {
-      name: 'Katakana',
-      groups: [
-        { id: 'a', name: 'A-Reihe', count: 5, progress: 0 },
-        { id: 'ka', name: 'Ka-Reihe', count: 5, progress: 0 },
-      ],
-    },
-    words: {
-      name: 'Wörter',
-      groups: [
-        { id: 'animals', name: 'Tiere', count: 8, progress: 0 },
-        { id: 'food', name: 'Essen', count: 12, progress: 0 },
-      ],
-    },
-    sentences: {
-      name: 'Sätze',
-      groups: [
-        { id: 'greetings', name: 'Grüße', count: 6, progress: 0 },
-      ],
-    },
   }
 
   const data = contentData[contentType] || contentData.hiragana
@@ -46,58 +26,38 @@ export default function ContentTypeView() {
     <AppLayout>
       <AppHeader onBack={() => navigate('/')}>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', margin: 0 }}>{data.name}</h1>
-          <p style={{ fontSize: '12px', color: '#cbd5e1', margin: '4px 0 0 0' }}>{completedCount}/{totalCount} abgeschlossen</p>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{data.name}</h1>
+          <p className="text-sm" style={{ color: 'var(--color-text-tertiary)', margin: 'var(--spacing-1) 0 0 0' }}>{completedCount}/{totalCount} abgeschlossen</p>
         </div>
       </AppHeader>
 
       <AppContent>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="space-y-6">
           <Card>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>Gesamtfortschritt</span>
-                <span style={{ fontSize: '14px', fontWeight: '600', color: '#ec4899' }}>{Math.round((completedCount / totalCount) * 100)}%</span>
+                <span className="text-sm font-medium text-primary">Gesamtfortschritt</span>
+                <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>{Math.round((completedCount / totalCount) * 100)}%</span>
               </div>
-              <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px' }}>
-                <div
-                  style={{
-                    background: 'linear-gradient(to right, #ec4899, #a855f7)',
-                    height: '8px',
-                    borderRadius: '9999px',
-                    transition: 'width 0.3s ease',
-                    width: `${(completedCount / totalCount) * 100}%`
-                  }}
-                ></div>
+              <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
+                <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', transition: 'width 0.3s ease', width: `${(completedCount / totalCount) * 100}%` }}></div>
               </div>
             </div>
           </Card>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+          <div className="grid-1">
             {data.groups.map((group) => (
-              <Card
-                key={group.id}
-                interactive
-                onClick={() => navigate(`/content/${contentType}/${group.id}`)}
-              >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Card key={group.id} interactive onClick={() => navigate(`/content/${contentType}/${group.id}`)}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
-                      <h3 style={{ fontWeight: '500', color: '#1f2937', fontSize: '16px', margin: 0 }}>{group.name}</h3>
-                      <p style={{ fontSize: '12px', color: '#6b7280', margin: '4px 0 0 0' }}>{group.count} Zeichen</p>
+                      <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{group.name}</h3>
+                      <p className="text-sm text-tertiary" style={{ margin: 'var(--spacing-1) 0 0 0' }}>{group.count} Zeichen</p>
                     </div>
-                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#ec4899' }}>{group.progress}%</span>
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>{group.progress}%</span>
                   </div>
-                  <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px' }}>
-                    <div
-                      style={{
-                        background: 'linear-gradient(to right, #ec4899, #a855f7)',
-                        height: '8px',
-                        borderRadius: '9999px',
-                        transition: 'width 0.3s ease',
-                        width: `${group.progress}%`
-                      }}
-                    ></div>
+                  <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
+                    <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', transition: 'width 0.3s ease', width: `${group.progress}%` }}></div>
                   </div>
                 </div>
               </Card>
