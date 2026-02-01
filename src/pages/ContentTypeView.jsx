@@ -24,11 +24,8 @@ export default function ContentTypeView() {
 
   return (
     <AppLayout>
-      <AppHeader onBack={() => navigate('/')}>
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{data.name}</h1>
-          <p className="text-sm" style={{ color: 'var(--color-text-tertiary)', margin: 'var(--spacing-1) 0 0 0' }}>{completedCount}/{totalCount} abgeschlossen</p>
-        </div>
+      <AppHeader onBack={() => navigate('/')} progress={`${completedCount}/${totalCount}`}>
+        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{data.name}</h1>
       </AppHeader>
 
       <AppContent>

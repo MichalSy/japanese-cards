@@ -24,10 +24,7 @@ export default function GameModeSelector() {
   return (
     <AppLayout>
       <AppHeader onBack={() => navigate(`/content/${contentType}`)}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{groupName}</h1>
-          <p className="text-sm text-tertiary">Wähle einen Modus</p>
-        </div>
+        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{groupName}</h1>
       </AppHeader>
 
       <AppContent>

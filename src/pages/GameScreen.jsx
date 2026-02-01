@@ -22,17 +22,7 @@ export default function GameScreen() {
   return (
     <AppLayout>
       <AppHeader onBack={() => navigate(-1)}>
-        <div style={{ flex: 1 }}>
-          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{modeNames[modeId]}</h1>
-          <p className="text-sm text-tertiary">Score: 0 / 15</p>
-        </div>
-        <button style={{ padding: 'var(--spacing-2)', backgroundColor: 'transparent', border: 'none', borderRadius: '50%', cursor: 'pointer', color: 'var(--color-text-primary)' }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="1"/>
-            <circle cx="19" cy="12" r="1"/>
-            <circle cx="5" cy="12" r="1"/>
-          </svg>
-        </button>
+        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{modeNames[modeId]}</h1>
       </AppHeader>
 
       <AppContent>

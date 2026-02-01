@@ -23,10 +23,7 @@ export default function MainMenu() {
   return (
     <AppLayout>
       <AppHeader>
-        <div>
-          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>Japanese Cards</h1>
-          <p className="text-xs" style={{ color: 'var(--color-text-tertiary)', margin: '2px 0 0 0' }}>Learn Japanese</p>
-        </div>
+        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>Japanese Cards</h1>
       </AppHeader>
 
       <AppContent>
