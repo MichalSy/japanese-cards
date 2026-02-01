@@ -26,7 +26,7 @@ export function AppHeader({ children, onBack }) {
 
 export function AppContent({ children }) {
   return (
-    <div className="flex-1 overflow-y-auto px-[var(--spacing-4)] py-[var(--spacing-5)]">
+    <div className="flex-1 overflow-y-auto px-[var(--spacing-6)] py-[var(--spacing-5)]">
       {children}
     </div>
   )
