@@ -107,7 +107,7 @@ export default function MainMenu() {
       </AppContent>
 
       <AppFooter>
-        <div style={{ width: '100%', display: 'flex', gap: 0, height: '100%' }}>
+        <div style={{ width: '100%', display: 'flex', gap: 0, height: '100%', alignItems: 'stretch' }}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -120,15 +120,14 @@ export default function MainMenu() {
                 justifyContent: 'center',
                 gap: 'var(--spacing-1)',
                 padding: '0',
-                borderRadius: '0',
+                borderRadius: 'var(--radius-md)',
                 transition: 'all 0.2s',
                 fontWeight: '500',
                 border: 'none',
                 cursor: 'pointer',
                 backgroundColor: activeTab === tab.id ? `linear-gradient(135deg, var(--color-primary), var(--color-secondary))` : 'transparent',
                 background: activeTab === tab.id ? `linear-gradient(135deg, var(--color-primary), var(--color-secondary))` : 'transparent',
-                color: activeTab === tab.id ? 'white' : 'var(--color-text-tertiary)',
-                height: '100%'
+                color: activeTab === tab.id ? 'white' : 'var(--color-text-tertiary)'
               }}
             >
               <span style={{ fontSize: '24px' }}>{tab.icon}</span>
