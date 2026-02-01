@@ -70,7 +70,7 @@ export default function ContentTypeView() {
           </Card>
 
           {/* Groups */}
-          <div className="space-y-[var(--spacing-3)]">
+          <div className="grid grid-cols-1 gap-[var(--spacing-3)]">
             {data.groups.map((group) => (
               <Card
                 key={group.id}

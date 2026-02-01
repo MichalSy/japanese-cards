@@ -8,11 +8,11 @@ export function AppLayout({ children }) {
 
 export function AppHeader({ children, onBack }) {
   return (
-    <div className="h-20 bg-gradient-to-r from-slate-900 to-slate-800 flex items-center px-[var(--spacing-4)] border-b border-slate-700/30">
+    <div className="h-20 bg-gradient-to-r from-slate-900 to-slate-800 flex items-center px-[var(--spacing-6)] border-b border-slate-700/30 gap-[var(--spacing-3)]">
       {onBack && (
         <button
           onClick={onBack}
-          className="p-2 mr-3 hover:bg-white/10 rounded-full transition-all text-white"
+          className="p-2 hover:bg-white/10 rounded-full transition-all text-white flex-shrink-0"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M19 12H5M12 19l-7-7 7-7"/>

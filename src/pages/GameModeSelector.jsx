@@ -53,7 +53,7 @@ export default function GameModeSelector() {
           </Card>
 
           {/* Game Modes */}
-          <div className="space-y-[var(--spacing-3)]">
+          <div className="grid grid-cols-1 gap-[var(--spacing-3)]">
             {gameModes.map((mode) => (
               <Card
                 key={mode.id}

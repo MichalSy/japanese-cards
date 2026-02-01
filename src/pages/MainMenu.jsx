@@ -33,7 +33,7 @@ export default function MainMenu() {
         {activeTab === 'start' && (
           <div className="space-y-[var(--spacing-5)]">
             <h2 className="text-base font-medium text-[var(--md-on-surface)]">Kategorien</h2>
-            <div className="space-y-[var(--spacing-3)]">
+            <div className="grid grid-cols-1 gap-[var(--spacing-3)]">
               {contentTypes.map((type) => {
                 const Icon = type.icon
                 return (
@@ -62,7 +62,7 @@ export default function MainMenu() {
         {activeTab === 'progress' && (
           <div className="space-y-[var(--spacing-5)]">
             <h2 className="text-base font-medium text-[var(--md-on-surface)]">Dein Fortschritt</h2>
-            <div className="space-y-[var(--spacing-3)]">
+            <div className="grid grid-cols-1 gap-[var(--spacing-3)]">
               {contentTypes.map((type) => (
                 <Card key={type.id}>
                   <div className="space-y-[var(--spacing-2)]">
@@ -114,12 +114,12 @@ export default function MainMenu() {
       </AppContent>
 
       <AppFooter>
-        <div className="w-full flex items-center justify-around gap-[var(--spacing-3)]">
+        <div className="w-full flex items-center gap-[var(--spacing-2)]">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center gap-[var(--spacing-2)] py-[var(--spacing-2)] px-[var(--spacing-4)] rounded-[var(--radius-lg)] transition-all font-medium ${
+              className={`flex-1 flex flex-col items-center gap-[var(--spacing-2)] py-[var(--spacing-2)] px-[var(--spacing-3)] rounded-[var(--radius-lg)] transition-all font-medium ${
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-[var(--md-primary)] to-[var(--md-secondary)] text-white'
                   : 'text-[var(--md-on-surface-variant)]'
