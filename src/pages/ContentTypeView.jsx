@@ -46,49 +46,57 @@ export default function ContentTypeView() {
     <AppLayout>
       <AppHeader onBack={() => navigate('/')}>
         <div>
-          <h1 className="text-2xl font-bold text-white">{data.name}</h1>
-          <p className="text-xs text-slate-300">{completedCount}/{totalCount} abgeschlossen</p>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', margin: 0 }}>{data.name}</h1>
+          <p style={{ fontSize: '12px', color: '#cbd5e1', margin: '4px 0 0 0' }}>{completedCount}/{totalCount} abgeschlossen</p>
         </div>
       </AppHeader>
 
       <AppContent>
-        <div className="space-y-[var(--spacing-5)]">
-          {/* Progress Card */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <Card>
-            <div className="space-y-[var(--spacing-3)]">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-[var(--md-on-surface)]">Gesamtfortschritt</span>
-                <span className="text-sm font-semibold text-[var(--md-primary)]">{Math.round((completedCount / totalCount) * 100)}%</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>Gesamtfortschritt</span>
+                <span style={{ fontSize: '14px', fontWeight: '600', color: '#ec4899' }}>{Math.round((completedCount / totalCount) * 100)}%</span>
               </div>
-              <div className="w-full bg-slate-200 rounded-full h-2">
+              <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px' }}>
                 <div
-                  className="bg-gradient-to-r from-[var(--md-primary)] to-[var(--md-secondary)] h-2 rounded-full transition-all"
-                  style={{ width: `${(completedCount / totalCount) * 100}%` }}
+                  style={{
+                    background: 'linear-gradient(to right, #ec4899, #a855f7)',
+                    height: '8px',
+                    borderRadius: '9999px',
+                    transition: 'width 0.3s ease',
+                    width: `${(completedCount / totalCount) * 100}%`
+                  }}
                 ></div>
               </div>
             </div>
           </Card>
 
-          {/* Groups */}
-          <div className="grid grid-cols-1 gap-[var(--spacing-3)]">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
             {data.groups.map((group) => (
               <Card
                 key={group.id}
                 interactive
                 onClick={() => navigate(`/content/${contentType}/${group.id}`)}
               >
-                <div className="space-y-[var(--spacing-3)]">
-                  <div className="flex justify-between items-start">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
-                      <h3 className="font-medium text-[var(--md-on-surface)] text-base">{group.name}</h3>
-                      <p className="text-xs text-[var(--md-on-surface-variant)]">{group.count} Zeichen</p>
+                      <h3 style={{ fontWeight: '500', color: '#1f2937', fontSize: '16px', margin: 0 }}>{group.name}</h3>
+                      <p style={{ fontSize: '12px', color: '#6b7280', margin: '4px 0 0 0' }}>{group.count} Zeichen</p>
                     </div>
-                    <span className="text-sm font-semibold text-[var(--md-primary)]">{group.progress}%</span>
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#ec4899' }}>{group.progress}%</span>
                   </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
+                  <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px' }}>
                     <div
-                      className="bg-gradient-to-r from-[var(--md-primary)] to-[var(--md-secondary)] h-2 rounded-full transition-all"
-                      style={{ width: `${group.progress}%` }}
+                      style={{
+                        background: 'linear-gradient(to right, #ec4899, #a855f7)',
+                        height: '8px',
+                        borderRadius: '9999px',
+                        transition: 'width 0.3s ease',
+                        width: `${group.progress}%`
+                      }}
                     ></div>
                   </div>
                 </div>
@@ -99,11 +107,7 @@ export default function ContentTypeView() {
       </AppContent>
 
       <AppFooter>
-        <Button
-          variant="filled"
-          onClick={() => navigate(`/content/${contentType}/${data.groups[0].id}`)}
-          className="w-full"
-        >
+        <Button onClick={() => navigate(`/content/${contentType}/${data.groups[0].id}`)}>
           Spielen →
         </Button>
       </AppFooter>

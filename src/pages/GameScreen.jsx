@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { AppLayout, AppHeader, AppContent, AppFooter, Card, Button } from '../components/Layout'
+import { AppLayout, AppHeader, AppContent, AppFooter, Button } from '../components/Layout'
 
 export default function GameScreen() {
   const { contentType, groupId, modeId } = useParams()
@@ -22,11 +22,23 @@ export default function GameScreen() {
   return (
     <AppLayout>
       <AppHeader onBack={() => navigate(-1)}>
-        <div className="flex-1">
-          <h1 className="text-xl font-bold text-white">{modeNames[modeId]}</h1>
-          <p className="text-xs text-slate-300">Score: 0 / 15</p>
+        <div style={{ flex: 1 }}>
+          <h1 style={{ fontSize: '20px', fontWeight: 'bold', color: 'white', margin: 0 }}>{modeNames[modeId]}</h1>
+          <p style={{ fontSize: '12px', color: '#cbd5e1', margin: '4px 0 0 0' }}>Score: 0 / 15</p>
         </div>
-        <button className="p-2 hover:bg-white/10 rounded-full transition-all text-white">
+        <button
+          style={{
+            padding: '8px',
+            backgroundColor: 'transparent',
+            border: 'none',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="1"/>
             <circle cx="19" cy="12" r="1"/>
@@ -36,11 +48,11 @@ export default function GameScreen() {
       </AppHeader>
 
       <AppContent>
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <div className="text-6xl mb-[var(--spacing-5)]">{modeEmojis[modeId]}</div>
-            <h2 className="text-2xl font-bold text-[var(--md-on-surface)] mb-[var(--spacing-2)]">Wird geladen...</h2>
-            <p className="text-base text-[var(--md-on-surface-variant)]">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '60px', marginBottom: '20px' }}>{modeEmojis[modeId]}</div>
+            <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 8px 0' }}>Wird geladen...</h2>
+            <p style={{ fontSize: '16px', color: '#6b7280', margin: 0 }}>
               {modeNames[modeId]} wird vorbereitet
             </p>
           </div>
@@ -48,16 +60,24 @@ export default function GameScreen() {
       </AppContent>
 
       <AppFooter>
-        <div className="w-full flex items-center gap-[var(--spacing-3)]">
-          <button className="flex-1 py-[var(--spacing-3)] bg-[var(--md-surface-variant)] text-[var(--md-on-surface)] font-medium rounded-[var(--radius-lg)] hover:bg-slate-200 transition-all active:scale-95 text-base">
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              padding: '12px 24px',
+              borderRadius: '12px',
+              fontWeight: '500',
+              fontSize: '14px',
+              transition: 'all 0.2s ease',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#f3f4f6',
+              color: '#1f2937'
+            }}
+          >
             Info
           </button>
-          <Button
-            variant="filled"
-            className="flex-1"
-          >
-            Start Game
-          </Button>
+          <Button>Start Game</Button>
         </div>
       </AppFooter>
     </AppLayout>

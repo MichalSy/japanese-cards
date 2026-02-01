@@ -24,16 +24,16 @@ export default function MainMenu() {
     <AppLayout>
       <AppHeader>
         <div>
-          <h1 className="text-2xl font-bold text-white">Japanese Cards</h1>
-          <p className="text-xs text-slate-300">Learn Japanese</p>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', margin: 0 }}>Japanese Cards</h1>
+          <p style={{ fontSize: '12px', color: '#cbd5e1', margin: '4px 0 0 0' }}>Learn Japanese</p>
         </div>
       </AppHeader>
 
       <AppContent>
         {activeTab === 'start' && (
-          <div className="space-y-6">
-            <h2 className="text-base font-medium text-slate-900">Kategorien</h2>
-            <div className="grid grid-cols-1 gap-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '500', color: '#1f2937', margin: 0 }}>Kategorien</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
               {contentTypes.map((type) => {
                 const Icon = type.icon
                 return (
@@ -42,15 +42,15 @@ export default function MainMenu() {
                     interactive
                     onClick={() => navigate(`/content/${type.id}`)}
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-slate-100 rounded-full flex-shrink-0">
-                        <Icon size={24} className="text-slate-700" strokeWidth={2} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <div style={{ padding: '12px', backgroundColor: '#f3f4f6', borderRadius: '50%', flexShrink: 0 }}>
+                        <Icon size={24} style={{ color: '#374151', strokeWidth: '2px' }} />
                       </div>
-                      <div className="flex-1 text-left">
-                        <h3 className="font-medium text-slate-900 text-base">{type.name}</h3>
-                        <p className="text-xs text-slate-500">{type.desc}</p>
+                      <div style={{ flex: 1, textAlign: 'left' }}>
+                        <h3 style={{ fontWeight: '500', color: '#1f2937', fontSize: '16px', margin: 0 }}>{type.name}</h3>
+                        <p style={{ fontSize: '12px', color: '#6b7280', margin: '4px 0 0 0' }}>{type.desc}</p>
                       </div>
-                      <span className="text-slate-400">→</span>
+                      <span style={{ color: '#9ca3af' }}>→</span>
                     </div>
                   </Card>
                 )
@@ -60,18 +60,18 @@ export default function MainMenu() {
         )}
 
         {activeTab === 'progress' && (
-          <div className="space-y-6">
-            <h2 className="text-base font-medium text-slate-900">Dein Fortschritt</h2>
-            <div className="grid grid-cols-1 gap-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '500', color: '#1f2937', margin: 0 }}>Dein Fortschritt</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
               {contentTypes.map((type) => (
                 <Card key={type.id}>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-slate-900">{type.name}</span>
-                      <span className="text-sm font-semibold text-pink-600">42%</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>{type.name}</span>
+                      <span style={{ fontSize: '14px', fontWeight: '600', color: '#ec4899' }}>42%</span>
                     </div>
-                    <div className="w-full bg-slate-200 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full" style={{ width: '42%' }}></div>
+                    <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px' }}>
+                      <div style={{ background: 'linear-gradient(to right, #ec4899, #a855f7)', height: '8px', borderRadius: '9999px', width: '42%' }}></div>
                     </div>
                   </div>
                 </Card>
@@ -81,31 +81,31 @@ export default function MainMenu() {
         )}
 
         {activeTab === 'stats' && (
-          <div className="space-y-6">
-            <h2 className="text-base font-medium text-slate-900">Statistiken</h2>
-            <div className="grid grid-cols-2 gap-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '500', color: '#1f2937', margin: 0 }}>Statistiken</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <Card>
-                <div className="text-center">
-                  <p className="text-xs text-slate-500 font-medium mb-2">Tage aktiv</p>
-                  <p className="text-3xl font-bold text-pink-600">12</p>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontSize: '12px', color: '#6b7280', fontWeight: '500', margin: '0 0 8px 0' }}>Tage aktiv</p>
+                  <p style={{ fontSize: '30px', fontWeight: 'bold', color: '#ec4899', margin: 0 }}>12</p>
                 </div>
               </Card>
               <Card>
-                <div className="text-center">
-                  <p className="text-xs text-slate-500 font-medium mb-2">Punkte</p>
-                  <p className="text-3xl font-bold text-purple-600">1.2K</p>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontSize: '12px', color: '#6b7280', fontWeight: '500', margin: '0 0 8px 0' }}>Punkte</p>
+                  <p style={{ fontSize: '30px', fontWeight: 'bold', color: '#a855f7', margin: 0 }}>1.2K</p>
                 </div>
               </Card>
               <Card>
-                <div className="text-center">
-                  <p className="text-xs text-slate-500 font-medium mb-2">Genauigkeit</p>
-                  <p className="text-3xl font-bold text-blue-600">89%</p>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontSize: '12px', color: '#6b7280', fontWeight: '500', margin: '0 0 8px 0' }}>Genauigkeit</p>
+                  <p style={{ fontSize: '30px', fontWeight: 'bold', color: '#3b82f6', margin: 0 }}>89%</p>
                 </div>
               </Card>
               <Card>
-                <div className="text-center">
-                  <p className="text-xs text-slate-500 font-medium mb-2">Streak</p>
-                  <p className="text-3xl font-bold text-green-600">7</p>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontSize: '12px', color: '#6b7280', fontWeight: '500', margin: '0 0 8px 0' }}>Streak</p>
+                  <p style={{ fontSize: '30px', fontWeight: 'bold', color: '#10b981', margin: 0 }}>7</p>
                 </div>
               </Card>
             </div>
@@ -114,19 +114,30 @@ export default function MainMenu() {
       </AppContent>
 
       <AppFooter>
-        <div className="w-full flex items-center gap-2">
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '8px' }}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex flex-col items-center gap-2 py-2 px-3 rounded-lg transition-all font-medium ${
-                activeTab === tab.id
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white'
-                  : 'text-slate-500'
-              }`}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                transition: 'all 0.2s',
+                fontWeight: '500',
+                border: 'none',
+                cursor: 'pointer',
+                backgroundColor: activeTab === tab.id ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'transparent',
+                background: activeTab === tab.id ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'transparent',
+                color: activeTab === tab.id ? 'white' : '#6b7280'
+              }}
             >
-              <span className="text-2xl">{tab.icon}</span>
-              <span className="text-xs font-medium">{tab.label}</span>
+              <span style={{ fontSize: '24px' }}>{tab.icon}</span>
+              <span style={{ fontSize: '12px', fontWeight: '500' }}>{tab.label}</span>
             </button>
           ))}
         </div>
