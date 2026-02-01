@@ -7,7 +7,7 @@ import './App.css'
 
 export default function App() {
   return (
-    <Router>
+    <Router basename="/japanese-cards/">
       <Routes>
         <Route path="/" element={<MainMenu />} />
         <Route path="/content/:contentType" element={<ContentTypeView />} />
