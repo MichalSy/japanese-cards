@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Zap } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 export default function ContentTypeView() {
   const { contentType } = useParams()
@@ -8,120 +8,112 @@ export default function ContentTypeView() {
   const contentData = {
     hiragana: {
       name: 'Hiragana',
-      emoji: 'あ',
-      color: 'from-pink-500 to-rose-500',
       groups: [
-        { id: 'a', name: 'A-Reihe', accuracy: 93, completed: true, count: 5 },
-        { id: 'ka', name: 'Ka-Reihe', accuracy: 87, completed: true, count: 5 },
-        { id: 'sa', name: 'Sa-Reihe', accuracy: 0, completed: false, count: 5 },
-        { id: 'ta', name: 'Ta-Reihe', accuracy: 0, completed: false, count: 5 },
-        { id: 'na', name: 'Na-Reihe', accuracy: 0, completed: false, count: 5 },
+        { id: 'a', name: 'A-Reihe', count: 5, progress: 93 },
+        { id: 'ka', name: 'Ka-Reihe', count: 5, progress: 87 },
+        { id: 'sa', name: 'Sa-Reihe', count: 5, progress: 0 },
+        { id: 'ta', name: 'Ta-Reihe', count: 5, progress: 0 },
+        { id: 'na', name: 'Na-Reihe', count: 5, progress: 0 },
       ],
     },
     katakana: {
       name: 'Katakana',
-      emoji: 'カ',
-      color: 'from-purple-500 to-pink-500',
       groups: [
-        { id: 'a', name: 'A-Reihe', accuracy: 0, completed: false, count: 5 },
-        { id: 'ka', name: 'Ka-Reihe', accuracy: 0, completed: false, count: 5 },
+        { id: 'a', name: 'A-Reihe', count: 5, progress: 0 },
+        { id: 'ka', name: 'Ka-Reihe', count: 5, progress: 0 },
       ],
     },
     words: {
       name: 'Wörter',
-      emoji: '📚',
-      color: 'from-blue-500 to-cyan-500',
       groups: [
-        { id: 'animals', name: 'Tiere', accuracy: 0, completed: false, count: 8 },
-        { id: 'food', name: 'Essen', accuracy: 0, completed: false, count: 12 },
+        { id: 'animals', name: 'Tiere', count: 8, progress: 0 },
+        { id: 'food', name: 'Essen', count: 12, progress: 0 },
       ],
     },
     sentences: {
       name: 'Sätze',
-      emoji: '💬',
-      color: 'from-green-500 to-emerald-500',
       groups: [
-        { id: 'greetings', name: 'Grüße', accuracy: 0, completed: false, count: 6 },
+        { id: 'greetings', name: 'Grüße', count: 6, progress: 0 },
       ],
     },
   }
 
   const data = contentData[contentType] || contentData.hiragana
-  const completedCount = data.groups.filter(g => g.completed).length
+  const completedCount = data.groups.filter(g => g.progress > 0).length
   const totalCount = data.groups.length
 
-  const getProgressColor = (accuracy) => {
-    if (accuracy === 0) return 'bg-gray-400'
-    if (accuracy < 50) return 'bg-red-500'
-    if (accuracy < 80) return 'bg-yellow-500'
-    return 'bg-green-500'
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 pb-20">
-      <div className="max-w-sm mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="p-3 hover:bg-white/10 rounded-xl transition-all"
-          >
-            <ArrowLeft size={24} className="text-white" />
-          </button>
-          <div>
-            <h1 className="text-3xl font-bold text-white">{data.name}</h1>
-            <p className="text-purple-300 text-sm">{completedCount}/{totalCount} abgeschlossen</p>
-          </div>
-          <span className="text-5xl ml-auto">{data.emoji}</span>
+    <div className="fixed inset-0 bg-white flex flex-col">
+      {/* Top Header */}
+      <div className="h-20 bg-gradient-to-r from-slate-900 to-slate-800 flex items-center px-6 border-b border-slate-700 gap-4">
+        <button
+          onClick={() => navigate('/')}
+          className="p-2 hover:bg-white/10 rounded-lg transition-all text-white"
+        >
+          <ArrowLeft size={24} />
+        </button>
+        <div className="flex-1">
+          <h1 className="text-2xl font-black text-white">{data.name}</h1>
+          <p className="text-xs text-slate-400">{completedCount}/{totalCount} abgeschlossen</p>
         </div>
+      </div>
 
-        {/* Progress Bar */}
-        <div className="mb-6 bg-white/5 rounded-xl p-4 backdrop-blur-lg border border-white/10">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-white font-semibold">Fortschritt</span>
-            <span className="text-purple-300 font-bold">{Math.round((completedCount / totalCount) * 100)}%</span>
+      {/* Content Area - Scrollable */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="space-y-4">
+          {/* Progress Overview */}
+          <div className="rounded-2xl bg-gradient-to-r from-pink-50 to-purple-50 border-2 border-pink-200 p-4 mb-6">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-sm font-semibold text-slate-900">Gesamtfortschritt</span>
+              <span className="text-sm font-bold text-pink-600">{Math.round((completedCount / totalCount) * 100)}%</span>
+            </div>
+            <div className="w-full bg-slate-200 rounded-full h-3">
+              <div
+                className="bg-gradient-to-r from-pink-500 to-purple-500 h-3 rounded-full transition-all"
+                style={{ width: `${(completedCount / totalCount) * 100}%` }}
+              ></div>
+            </div>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-            <div
-              className={`h-3 rounded-full bg-gradient-to-r ${data.color} transition-all`}
-              style={{ width: `${(completedCount / totalCount) * 100}%` }}
-            ></div>
-          </div>
-        </div>
 
-        {/* Groups */}
-        <div className="space-y-3 mb-8">
+          {/* Groups */}
           {data.groups.map((group) => (
             <button
               key={group.id}
               onClick={() => navigate(`/content/${contentType}/${group.id}`)}
-              className="w-full p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-all transform hover:scale-105 text-left backdrop-blur-lg border border-white/20 active:scale-95"
+              className="w-full group relative overflow-hidden rounded-2xl bg-white border-2 border-slate-200 hover:border-slate-300 hover:shadow-md p-4 transition-all active:scale-95 text-left"
             >
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <h3 className="font-bold text-white text-lg">{group.name}</h3>
-                  <p className="text-purple-300 text-sm">{group.count} Zeichen</p>
+              <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5 group-hover:from-pink-500/10 group-hover:to-purple-500/10 transition-all"></div>
+              <div className="relative">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="font-semibold text-slate-900 text-lg">{group.name}</h3>
+                    <p className="text-xs text-slate-500">{group.count} Zeichen</p>
+                  </div>
+                  <span className="text-sm font-bold text-pink-600">{group.progress}%</span>
                 </div>
-                {group.completed ? (
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-green-400">{group.accuracy}%</div>
-                    <div className="text-xs text-green-300">✅ Abgeschlossen</div>
-                  </div>
-                ) : (
-                  <div className="text-right">
-                    <Zap size={24} className="text-gray-400" />
-                    <div className="text-xs text-gray-400">Neu</div>
-                  </div>
-                )}
+                <div className="w-full bg-slate-200 rounded-full h-2">
+                  <div
+                    className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full transition-all"
+                    style={{ width: `${group.progress}%` }}
+                  ></div>
+                </div>
               </div>
             </button>
           ))}
         </div>
 
-        {/* Bottom Info */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900 to-transparent">
-          <p className="text-center text-purple-300 text-sm">Wähle eine Gruppe zum Starten</p>
-        </div>
+        {/* Bottom padding for tab navigation */}
+        <div className="h-8"></div>
+      </div>
+
+      {/* Bottom Navigation - Fixed */}
+      <div className="h-16 bg-white border-t-2 border-slate-200 flex items-center justify-center px-6">
+        <button
+          onClick={() => navigate(`/content/${contentType}/${data.groups[0].id}`)}
+          className="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all active:scale-95"
+        >
+          Zum Spielen
+        </button>
       </div>
     </div>
   )

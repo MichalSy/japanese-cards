@@ -1,56 +1,62 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Play } from 'lucide-react'
+import { ArrowLeft, Pause } from 'lucide-react'
 
 export default function GameScreen() {
   const { contentType, groupId, modeId } = useParams()
   const navigate = useNavigate()
 
   const modeNames = {
-    swipe: { name: 'Swipe Game', emoji: '👆', color: 'from-pink-500 to-rose-500' },
-    multiChoice: { name: 'Multiple Choice', emoji: '🎯', color: 'from-blue-500 to-cyan-500' },
-    flashcard: { name: 'Flashcard', emoji: '🃏', color: 'from-purple-500 to-pink-500' },
-    typing: { name: 'Typing Challenge', emoji: '⌨️', color: 'from-orange-500 to-red-500' },
+    swipe: 'Swipe Game',
+    multiChoice: 'Multiple Choice',
+    flashcard: 'Flashcard',
+    typing: 'Typing Challenge',
   }
 
-  const mode = modeNames[modeId]
+  const modeEmojis = {
+    swipe: '👆',
+    multiChoice: '🎯',
+    flashcard: '🃏',
+    typing: '⌨️',
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 flex flex-col">
-      <div className="max-w-sm mx-auto w-full flex flex-col gap-4 flex-1">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-3 hover:bg-white/10 rounded-xl transition-all"
-          >
-            <ArrowLeft size={24} className="text-white" />
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold text-white">{mode?.name}</h1>
-            <p className="text-purple-300 text-xs">{contentType} / {groupId}</p>
-          </div>
-          <span className="text-4xl ml-auto">{mode?.emoji}</span>
+    <div className="fixed inset-0 bg-white flex flex-col">
+      {/* Top Header */}
+      <div className="h-20 bg-gradient-to-r from-slate-900 to-slate-800 flex items-center px-6 border-b border-slate-700 gap-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="p-2 hover:bg-white/10 rounded-lg transition-all text-white"
+        >
+          <ArrowLeft size={24} />
+        </button>
+        <div className="flex-1">
+          <h1 className="text-2xl font-black text-white">{modeNames[modeId]}</h1>
+          <p className="text-xs text-slate-400">Score: 0 / 15</p>
         </div>
+        <button className="p-2 hover:bg-white/10 rounded-lg transition-all text-white">
+          <Pause size={24} />
+        </button>
+      </div>
 
-        {/* Game Area */}
-        <div className={`flex-1 bg-gradient-to-br ${mode?.color} rounded-3xl shadow-2xl p-6 flex items-center justify-center`}>
-          <div className="text-center">
-            <div className="text-8xl mb-6 animate-bounce">{mode?.emoji}</div>
-            <h2 className="text-3xl font-bold text-white mb-3">Spiel wird geladen...</h2>
-            <p className="text-white/80 mb-8">Das {mode?.name} wird gerade vorbereitet</p>
-            <button className="bg-white text-gray-900 px-8 py-4 rounded-xl font-bold flex items-center gap-2 mx-auto hover:bg-gray-100 transition-all transform hover:scale-105 active:scale-95">
-              <Play size={20} />
-              Starten
-            </button>
-          </div>
-        </div>
-
-        {/* Bottom Info */}
-        <div className="bg-white/5 rounded-2xl p-4 backdrop-blur-lg border border-white/20 text-center">
-          <p className="text-purple-300 text-sm">
-            💡 Tipp: Diese Seite wird bald mit echtem Gameplay gefüllt!
+      {/* Game Content Area */}
+      <div className="flex-1 overflow-y-auto flex items-center justify-center px-6">
+        <div className="text-center">
+          <div className="text-7xl mb-6">{modeEmojis[modeId]}</div>
+          <h2 className="text-3xl font-bold text-slate-900 mb-3">Game wird geladen...</h2>
+          <p className="text-slate-600 text-lg">
+            Das {modeNames[modeId]} wird gerade vorbereitet
           </p>
         </div>
+      </div>
+
+      {/* Bottom Controls */}
+      <div className="h-20 bg-white border-t-2 border-slate-200 flex items-center justify-center px-6 gap-3">
+        <button className="flex-1 py-3 bg-slate-100 text-slate-900 font-semibold rounded-xl hover:bg-slate-200 transition-all active:scale-95">
+          Fortschritt
+        </button>
+        <button className="flex-1 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all active:scale-95">
+          Start Game
+        </button>
       </div>
     </div>
   )
