@@ -107,7 +107,7 @@ export default function MainMenu() {
       </AppContent>
 
       <AppFooter>
-        <div className="space-x-3" style={{ width: '100%' }}>
+        <div className="space-x-3" style={{ width: '100%', display: 'flex', gap: 0 }}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -118,8 +118,8 @@ export default function MainMenu() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: 'var(--spacing-2)',
-                padding: 'var(--spacing-2) var(--spacing-3)',
-                borderRadius: 'var(--radius-lg)',
+                padding: 'var(--spacing-2) 0',
+                borderRadius: 'var(--radius-md)',
                 transition: 'all 0.2s',
                 fontWeight: '500',
                 border: 'none',
