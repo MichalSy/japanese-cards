@@ -58,7 +58,14 @@ function generateStaticHtml() {
         fs.writeFileSync(fullPath, customHtml)
       })
 
-      console.log(`✅ Generated ${routes.length} static HTML files with correct titles`)
+      // Create 404.html as copy of index.html for GitHub Pages SPA fallback
+      // This handles all dynamic routes (like /game/:contentType/:groupId/:modeId)
+      fs.copyFileSync(
+        path.join(distDir, 'index.html'),
+        path.join(distDir, '404.html')
+      )
+
+      console.log(`✅ Generated ${routes.length} static HTML files + 404.html fallback`)
     },
   }
 }
