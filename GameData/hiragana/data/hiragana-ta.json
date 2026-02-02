@@ -8,6 +8,30 @@
       "character": "た",
       "romaji": "ta",
       "meaning": "Reisfeld"
+    },
+    {
+      "id": "h-ti",
+      "character": "ち",
+      "romaji": "chi/ti",
+      "meaning": "1000"
+    },
+    {
+      "id": "h-tu",
+      "character": "つ",
+      "romaji": "tsu",
+      "meaning": "Hafen"
+    },
+    {
+      "id": "h-te",
+      "character": "て",
+      "romaji": "te",
+      "meaning": "Hand"
+    },
+    {
+      "id": "h-to",
+      "character": "と",
+      "romaji": "to",
+      "meaning": "Tür"
     }
   ]
 }

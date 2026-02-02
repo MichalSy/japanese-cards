@@ -8,6 +8,30 @@
       "character": "か",
       "romaji": "ka",
       "meaning": "Feuer / Überprüfung"
+    },
+    {
+      "id": "h-ki",
+      "character": "き",
+      "romaji": "ki",
+      "meaning": "Baum"
+    },
+    {
+      "id": "h-ku",
+      "character": "く",
+      "romaji": "ku",
+      "meaning": "Kreis"
+    },
+    {
+      "id": "h-ke",
+      "character": "け",
+      "romaji": "ke",
+      "meaning": "Hüft"
+    },
+    {
+      "id": "h-ko",
+      "character": "こ",
+      "romaji": "ko",
+      "meaning": "Kind"
     }
   ]
 }
