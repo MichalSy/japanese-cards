@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
+import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
 export default function GameModeSelector() {
@@ -23,8 +24,8 @@ export default function GameModeSelector() {
 
   return (
     <AppLayout>
-      <AppHeader onBack={() => navigate(`/content/${contentType}`)}>
-        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{groupName}</h1>
+      <AppHeader>
+        <AppHeaderBar title={groupName} />
       </AppHeader>
 
       <AppContent>

@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { fetchCategoryConfig } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
+import AppHeaderBar from '../components/AppHeaderBar'
 import CategoryCardSkeleton from '../components/CategoryCardSkeleton'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
@@ -40,9 +41,7 @@ export default function ContentTypeView() {
     return (
       <AppLayout>
         <AppHeader>
-          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-            {language === 'de' ? 'Lade...' : 'Loading...'}
-          </h1>
+          <AppHeaderBar title={language === 'de' ? 'Lade...' : 'Loading...'} />
         </AppHeader>
         <AppContent>
           <div className="space-y-6">
@@ -59,9 +58,7 @@ export default function ContentTypeView() {
     return (
       <AppLayout>
         <AppHeader>
-          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-            {language === 'de' ? 'Fehler' : 'Error'}
-          </h1>
+          <AppHeaderBar title={language === 'de' ? 'Fehler' : 'Error'} />
         </AppHeader>
         <AppContent>
           <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
@@ -81,25 +78,7 @@ export default function ContentTypeView() {
   return (
     <AppLayout>
       <AppHeader>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-          <button
-            onClick={() => navigate('/')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--color-text-primary)',
-              fontSize: '20px',
-              cursor: 'pointer',
-              padding: '4px 8px',
-            }}
-          >
-            ←
-          </button>
-          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0, flex: 1, textAlign: 'center' }}>
-            {categoryName}
-          </h1>
-          <div style={{ width: '36px' }} />
-        </div>
+        <AppHeaderBar title={categoryName} />
       </AppHeader>
 
       <AppContent>

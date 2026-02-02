@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
+import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Button } from '../components/Layout'
 
 export default function GameScreen() {
@@ -21,8 +22,8 @@ export default function GameScreen() {
 
   return (
     <AppLayout>
-      <AppHeader onBack={() => navigate(-1)}>
-        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{modeNames[modeId]}</h1>
+      <AppHeader>
+        <AppHeaderBar title={modeNames[modeId]} />
       </AppHeader>
 
       <AppContent>

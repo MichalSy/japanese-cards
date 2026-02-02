@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { fetchCategories } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
-import LanguageToggle from '../components/LanguageToggle'
+import AppHeaderBar from '../components/AppHeaderBar'
 import CategoryCardSkeleton from '../components/CategoryCardSkeleton'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
@@ -54,10 +54,7 @@ export default function MainMenu() {
   return (
     <AppLayout>
       <AppHeader>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: 'var(--spacing-2)' }}>
-          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>Japanese Cards</h1>
-          <LanguageToggle />
-        </div>
+        <AppHeaderBar />
       </AppHeader>
 
       <AppContent>
