@@ -4,29 +4,25 @@
       "id": "hiragana",
       "name": "ひらがな",
       "emoji": "あ",
-      "type": "characters",
-      "config": "hiragana/hiragana.json"
+      "type": "characters"
     },
     {
       "id": "katakana",
       "name": "カタカナ",
       "emoji": "ア",
-      "type": "characters",
-      "config": "katakana/katakana.json"
+      "type": "characters"
     },
     {
       "id": "words",
       "name": "単語",
       "emoji": "💬",
-      "type": "vocabulary",
-      "config": "words/words.json"
+      "type": "vocabulary"
     },
     {
       "id": "sentences",
       "name": "文",
       "emoji": "✍️",
-      "type": "phrases",
-      "config": "sentences/sentences.json"
+      "type": "phrases"
     }
   ]
 }
