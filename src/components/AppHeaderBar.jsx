@@ -9,13 +9,13 @@ export default function AppHeaderBar({ title }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: '100px 1fr 100px',
+      gridTemplateColumns: 'auto 1fr 100px',
       alignItems: 'center',
       width: '100%',
       gap: 'var(--spacing-2)',
     }}>
       {/* Left - Back Button */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', padding: '5px 0' }}>
         {!isHome && (
           <button
             onClick={() => navigate(-1)}
