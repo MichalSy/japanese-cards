@@ -1,26 +1,42 @@
 import { useNavigate, useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { fetchCategoryConfig } from '../config/api'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
 export default function GameModeSelector() {
   const { contentType, groupId } = useParams()
   const navigate = useNavigate()
+  const [categoryConfig, setCategoryConfig] = useState(null)
 
-  const groupNames = {
-    hiragana: {
-      a: 'Hiragana - A-Reihe',
-      ka: 'Hiragana - Ka-Reihe',
-    },
+  useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        const config = await fetchCategoryConfig(contentType)
+        setCategoryConfig(config)
+      } catch (err) {
+        console.error('Failed to load category config:', err)
+      }
+    }
+
+    loadConfig()
+  }, [contentType])
+
+  const allGameModes = {
+    swipe: { name: 'Swipe Game', emoji: '👆', desc: 'Wische links/rechts' },
+    multiChoice: { name: 'Multiple Choice', emoji: '🎯', desc: 'Wähle die richtige Antwort' },
+    flashcard: { name: 'Flashcard', emoji: '🃏', desc: 'Karte umdrehen' },
+    typing: { name: 'Typing Challenge', emoji: '⌨️', desc: 'Tippe Romaji' },
   }
 
-  const gameModes = [
-    { id: 'swipe', name: 'Swipe Game', emoji: '👆', desc: 'Wische links/rechts' },
-    { id: 'multiChoice', name: 'Multiple Choice', emoji: '🎯', desc: 'Wähle die richtige Antwort' },
-    { id: 'flashcard', name: 'Flashcard', emoji: '🃏', desc: 'Karte umdrehen' },
-    { id: 'typing', name: 'Typing Challenge', emoji: '⌨️', desc: 'Tippe Romaji' },
-  ]
+  // Filter game modes based on category config
+  const availableGameModes = categoryConfig?.gameModes || []
+  const gameModes = availableGameModes.map(modeId => ({
+    id: modeId,
+    ...allGameModes[modeId]
+  })).filter(mode => mode.name) // Filter out invalid modes
 
-  const groupName = groupNames[contentType]?.[groupId] || 'Gruppe'
+  const groupName = categoryConfig?.groups?.find(g => g.id === groupId)?.name || 'Gruppe'
 
   return (
     <AppLayout>

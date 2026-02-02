@@ -10,6 +10,7 @@
   "type": "vocabulary",
   "enabled": false,
   "showAllOption": true,
+  "gameModes": ["multiChoice", "flashcard", "typing"],
   "groups": [
     {
       "id": "all",
