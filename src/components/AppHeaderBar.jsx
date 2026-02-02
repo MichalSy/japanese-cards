@@ -12,45 +12,46 @@ export default function AppHeaderBar({ title }) {
       alignItems: 'center',
       justifyContent: 'space-between',
       width: '100%',
-      gap: 'var(--spacing-2)',
+      gap: 'var(--spacing-4)',
     }}>
-      <div style={{ flex: 1 }}>
-        {!isHome && (
-          <button
-            onClick={() => navigate(-1)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--color-text-primary)',
-              fontSize: '24px',
-              cursor: 'pointer',
-              padding: '4px 8px',
-              transition: 'opacity 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = '0.7'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = '1'
-            }}
-          >
-            ←
-          </button>
-        )}
-      </div>
+      {!isHome && (
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '44px',
+            height: '44px',
+            color: 'var(--color-text-primary)',
+            fontSize: '20px',
+            cursor: 'pointer',
+            border: 'none',
+            borderRadius: '50%',
+            transition: 'all 0.2s',
+            backgroundColor: 'transparent',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--color-surface-light)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent'
+          }}
+        >
+          ←
+        </button>
+      )}
 
       <h1 className="text-lg font-bold" style={{
         color: 'var(--color-text-primary)',
         margin: 0,
         textAlign: 'center',
-        flex: 2,
+        flex: 1,
       }}>
         {title || 'Japanese Cards'}
       </h1>
 
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-        <LanguageToggle />
-      </div>
+      <LanguageToggle />
     </div>
   )
 }
