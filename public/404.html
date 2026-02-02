@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/japanese-cards/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Japanese Cards</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // GitHub Pages 404.html redirect trick
+      // Capture the pathname and redirect to index.html with path encoded
+      const path = window.location.pathname.split('/').slice(1).join('/');
+      const params = new URLSearchParams(window.location.search);
+      
+      sessionStorage.redirect = path;
+      if (path) {
+        window.location.replace('/japanese-cards/?redirect=' + encodeURIComponent('/' + path));
+      }
+    </script>
+  </body>
+</html>
