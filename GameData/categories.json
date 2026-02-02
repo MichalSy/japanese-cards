@@ -5,28 +5,28 @@
       "name": "ひらがな",
       "emoji": "あ",
       "type": "characters",
-      "config": "hiragana.json"
+      "config": "hiragana/hiragana.json"
     },
     {
       "id": "katakana",
       "name": "カタカナ",
       "emoji": "ア",
       "type": "characters",
-      "config": "katakana.json"
+      "config": "katakana/katakana.json"
     },
     {
       "id": "words",
       "name": "単語",
       "emoji": "💬",
       "type": "vocabulary",
-      "config": "words.json"
+      "config": "words/words.json"
     },
     {
       "id": "sentences",
       "name": "文",
       "emoji": "✍️",
       "type": "phrases",
-      "config": "sentences.json"
+      "config": "sentences/sentences.json"
     }
   ]
 }
