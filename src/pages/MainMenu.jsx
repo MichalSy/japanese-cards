@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { fetchCategories } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
 import LanguageToggle from '../components/LanguageToggle'
+import CategoryCardSkeleton from '../components/CategoryCardSkeleton'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
 export default function MainMenu() {
@@ -67,8 +68,10 @@ export default function MainMenu() {
             </h2>
             
             {loading && (
-              <div style={{ textAlign: 'center', color: 'var(--color-text-tertiary)' }}>
-                {language === 'de' ? 'Lade Kategorien...' : 'Loading categories...'}
+              <div className="grid-1">
+                {[1, 2, 3, 4].map((i) => (
+                  <CategoryCardSkeleton key={i} />
+                ))}
               </div>
             )}
 
@@ -79,7 +82,7 @@ export default function MainMenu() {
             )}
 
             {!loading && !error && contentTypes.length > 0 && (
-              <div className="grid-1">
+              <div className="grid-1 fade-in">
                 {contentTypes.map((type) => (
                   <Card key={type.id} interactive onClick={() => navigate(`/content/${type.id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
