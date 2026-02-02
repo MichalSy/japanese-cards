@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { fetchCategoryConfig } from '../config/api'
+import { fetchCategoryConfig, fetchGameModes } from '../config/api'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
@@ -8,33 +8,38 @@ export default function GameModeSelector() {
   const { contentType, groupId } = useParams()
   const navigate = useNavigate()
   const [categoryConfig, setCategoryConfig] = useState(null)
+  const [gameModeConfig, setGameModeConfig] = useState(null)
 
   useEffect(() => {
-    const loadConfig = async () => {
+    const loadConfigs = async () => {
       try {
-        const config = await fetchCategoryConfig(contentType)
-        setCategoryConfig(config)
+        const [categoryData, gameModeData] = await Promise.all([
+          fetchCategoryConfig(contentType),
+          fetchGameModes()
+        ])
+        setCategoryConfig(categoryData)
+        setGameModeConfig(gameModeData)
       } catch (err) {
-        console.error('Failed to load category config:', err)
+        console.error('Failed to load configs:', err)
       }
     }
 
-    loadConfig()
+    loadConfigs()
   }, [contentType])
 
-  const allGameModes = {
-    swipe: { name: 'Swipe Game', emoji: '👆', desc: 'Wische links/rechts' },
-    multiChoice: { name: 'Multiple Choice', emoji: '🎯', desc: 'Wähle die richtige Antwort' },
-    flashcard: { name: 'Flashcard', emoji: '🃏', desc: 'Karte umdrehen' },
-    typing: { name: 'Typing Challenge', emoji: '⌨️', desc: 'Tippe Romaji' },
+  // Build map of game modes from config
+  const gameModeMap = {}
+  if (gameModeConfig?.gameModes) {
+    gameModeConfig.gameModes.forEach(mode => {
+      gameModeMap[mode.id] = mode
+    })
   }
 
-  // Filter game modes based on category config
+  // Filter game modes: available in category config AND enabled in global config
   const availableGameModes = categoryConfig?.gameModes || []
-  const gameModes = availableGameModes.map(modeId => ({
-    id: modeId,
-    ...allGameModes[modeId]
-  })).filter(mode => mode.name) // Filter out invalid modes
+  const gameModes = availableGameModes
+    .map(modeId => gameModeMap[modeId])
+    .filter(mode => mode && mode.enabled) // Filter out disabled modes
 
   const groupName = categoryConfig?.groups?.find(g => g.id === groupId)?.name || 'Gruppe'
 
@@ -69,7 +74,7 @@ export default function GameModeSelector() {
                   <span style={{ fontSize: '32px', flexShrink: 0 }}>{mode.emoji}</span>
                   <div style={{ flex: 1, textAlign: 'left' }}>
                     <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{mode.name}</h3>
-                    <p className="text-sm text-tertiary" style={{ margin: 'var(--spacing-1) 0 0 0' }}>{mode.desc}</p>
+                    <p className="text-sm text-tertiary" style={{ margin: 'var(--spacing-1) 0 0 0' }}>{mode.description}</p>
                   </div>
                   <span style={{ color: 'var(--color-text-tertiary)' }}>→</span>
                 </div>

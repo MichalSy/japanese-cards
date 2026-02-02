@@ -43,3 +43,15 @@ export const fetchGroupData = async (categoryId, groupId) => {
     throw error
   }
 }
+
+// Fetch game modes config
+export const fetchGameModes = async () => {
+  try {
+    const response = await fetch(buildUrl('gamemodes.json'))
+    if (!response.ok) throw new Error('Failed to fetch game modes')
+    return await response.json()
+  } catch (error) {
+    console.error('Error fetching game modes:', error)
+    throw error
+  }
+}
