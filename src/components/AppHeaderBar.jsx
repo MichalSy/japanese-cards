@@ -51,7 +51,7 @@ export default function AppHeaderBar({ title }) {
       <h1 className="text-lg font-bold" style={{
         color: 'var(--color-text-primary)',
         margin: 0,
-        textAlign: 'center',
+        textAlign: 'left',
       }}>
         {title || 'Japanese Cards'}
       </h1>
