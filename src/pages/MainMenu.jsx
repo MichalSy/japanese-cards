@@ -31,12 +31,18 @@ export default function MainMenu() {
 
   const tabs = [
     { id: 'start', label: 'Start', icon: '🎮' },
-    { id: 'progress', label: 'Progress', icon: '📊' },
-    { id: 'stats', label: 'Stats', icon: '🏆' },
+    { id: 'progress', label: 'Fortschritt', icon: '📊' },
+    { id: 'stats', label: 'Statistiken', icon: '🏆' },
   ]
 
-  const getIconComponent = (emoji) => {
-    return <span style={{ fontSize: '24px' }}>{emoji}</span>
+  // Get display name based on category type
+  const getDisplayName = (category) => {
+    if (category.type === 'characters') {
+      // For characters, only show Japanese name
+      return category.name
+    }
+    // For others, show German name with English subtitle
+    return category.nameDe || category.name
   }
 
   return (
@@ -67,13 +73,27 @@ export default function MainMenu() {
                 {contentTypes.map((type) => (
                   <Card key={type.id} interactive onClick={() => navigate(`/content/${type.id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
-                      <div style={{ padding: 'var(--spacing-3)', backgroundColor: 'var(--color-surface-light)', borderRadius: '50%', flexShrink: 0, fontSize: '24px' }}>
+                      <div 
+                        style={{ 
+                          width: '60px',
+                          height: '60px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: 'var(--color-surface-light)', 
+                          borderRadius: '50%',
+                          flexShrink: 0,
+                          fontSize: '32px'
+                        }}
+                      >
                         {type.emoji}
                       </div>
                       <div style={{ flex: 1, textAlign: 'left' }}>
-                        <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{type.name}</h3>
+                        <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
+                          {getDisplayName(type)}
+                        </h3>
                       </div>
-                      <span style={{ color: 'var(--color-text-tertiary)' }}>→</span>
+                      <span style={{ color: 'var(--color-text-tertiary)', fontSize: '20px' }}>→</span>
                     </div>
                   </Card>
                 ))}
@@ -90,7 +110,7 @@ export default function MainMenu() {
                 <Card key={type.id}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="text-sm font-medium text-primary">{type.name}</span>
+                      <span className="text-sm font-medium text-primary">{getDisplayName(type)}</span>
                       <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>42%</span>
                     </div>
                     <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>

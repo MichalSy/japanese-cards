@@ -1,7 +1,10 @@
 {
   "id": "words",
-  "name": "単語 (Wörter)",
-  "description": "Japanische Wörter und Vokabeln",
+  "name": "単語",
+  "nameEn": "Vocabulary",
+  "nameDe": "Vokabeln",
+  "descriptionEn": "Learn Japanese words and expressions",
+  "descriptionDe": "Lerne japanische Wörter und Ausdrücke",
   "emoji": "💬",
   "color": "#06b6d4",
   "type": "vocabulary",
