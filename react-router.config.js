@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 export default {
-  ssr: false, // Disable SSR for hash-based client-side routing (works better with GitHub Pages)
+  ssr: true, // Enable SSR for full HTML generation
   async prerender() {
     const routes = ["/"];
     const publicDir = path.join(process.cwd(), "public", "GameData");
