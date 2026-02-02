@@ -5,6 +5,7 @@ export function useSwipeGame(items, cardCount) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cards, setCards] = useState([])
   const [correctAnswers, setCorrectAnswers] = useState({}) // Map of card id -> isCorrect
+  const [displayCards, setDisplayCards] = useState([]) // What to show (real or fake)
   const [stats, setStats] = useState({
     correct: 0,
     incorrect: 0,
@@ -31,11 +32,25 @@ export function useSwipeGame(items, cardCount) {
     
     // Generate correct answers for each card (50/50 random)
     const answers = {}
+    const display = []
+    
     deck.forEach((card, idx) => {
-      answers[`${idx}-${card.id}`] = Math.random() > 0.5
+      const isCorrectAnswer = Math.random() > 0.5
+      answers[`${idx}-${card.id}`] = isCorrectAnswer
+      
+      // If correct answer, show the real card
+      // If incorrect answer, show random other card from items
+      if (isCorrectAnswer) {
+        display.push(card)
+      } else {
+        // Pick random different card from items
+        const randomCard = items[Math.floor(Math.random() * items.length)]
+        display.push(randomCard)
+      }
     })
     
     setCards(deck)
+    setDisplayCards(display)
     setCorrectAnswers(answers)
     setGameState('playing')
   }, [items, cardCount])
@@ -65,13 +80,14 @@ export function useSwipeGame(items, cardCount) {
   }, [currentIndex, cards])
 
   const getCardStack = useCallback(() => {
-    // Return 3-4 cards for stack (current + buffer)
-    return cards.slice(currentIndex, currentIndex + 4)
-  }, [cards, currentIndex])
+    // Return 3-4 display cards for stack (what user sees)
+    return displayCards.slice(currentIndex, currentIndex + 4)
+  }, [displayCards, currentIndex])
 
   return {
     gameState,
-    currentCard: cards[currentIndex],
+    currentCard: displayCards[currentIndex], // Show what user sees
+    realCard: cards[currentIndex], // The actual card for tracking
     cardStack: getCardStack(),
     currentIndex,
     totalCards: cards.length,
