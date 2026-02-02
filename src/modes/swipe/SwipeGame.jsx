@@ -109,7 +109,7 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
                       <div style={{ padding: 'var(--spacing-2) var(--spacing-3)', backgroundColor: 'var(--color-surface-light)', borderRadius: 'var(--radius-md)' }}>
                         <p className="text-xs text-tertiary" style={{ margin: '0 0 var(--spacing-1) 0' }}>Gezeigt:</p>
                         <p className="text-sm font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-                          {mistake.displayedCard?.meaning || mistake.displayedCard?.romaji || '?'}
+                          {mistake.displayedCard?.romaji || '?'}
                         </p>
                       </div>
 
@@ -117,7 +117,7 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
                       <div style={{ padding: 'var(--spacing-2) var(--spacing-3)', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderRadius: 'var(--radius-md)', border: '1px solid #10b981' }}>
                         <p className="text-xs text-tertiary" style={{ margin: '0 0 var(--spacing-1) 0' }}>Korrekt:</p>
                         <p className="text-sm font-medium" style={{ color: '#10b981', margin: 0 }}>
-                          {mistake.realCard?.meaning || mistake.realCard?.romaji || '?'}
+                          {mistake.realCard?.romaji || '?'}
                         </p>
                       </div>
 
