@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting...</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Capture the requested path and redirect to index.html
+    const path = window.location.pathname.replace(/^\/japanese-cards/, '');
+    if (path && path !== '/') {
+      window.sessionStorage.setItem('redirect', path);
+      window.location.href = '/japanese-cards/';
+    } else {
+      window.location.href = '/japanese-cards/';
+    }
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
+</html>
