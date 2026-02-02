@@ -26,14 +26,14 @@ export default function AppHeaderBar({ title }) {
               width: '44px',
               height: '44px',
               color: 'var(--color-text-primary)',
-              fontSize: '20px',
+              fontSize: '27px',
               cursor: 'pointer',
               border: 'none',
               borderRadius: '50%',
               transition: 'all 0.2s',
               backgroundColor: 'transparent',
               lineHeight: 1,
-              padding: 0,
+              padding: '0 0 5px 0',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = 'var(--color-surface-light)'
