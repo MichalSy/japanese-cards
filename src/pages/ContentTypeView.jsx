@@ -41,7 +41,7 @@ export default function ContentTypeView() {
     return (
       <AppLayout>
         <AppHeader>
-          <AppHeaderBar title={language === 'de' ? 'Lade...' : 'Loading...'} />
+          <AppHeaderBar title="" />
         </AppHeader>
         <AppContent>
           <div className="space-y-6">
@@ -56,7 +56,7 @@ export default function ContentTypeView() {
     return (
       <AppLayout>
         <AppHeader>
-          <AppHeaderBar title={language === 'de' ? 'Fehler' : 'Error'} />
+          <AppHeaderBar title="" />
         </AppHeader>
         <AppContent>
           <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
