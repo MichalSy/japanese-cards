@@ -29,6 +29,12 @@ walk(buildDir, (filePath) => {
       '"basename":"/japanese-cards/"'
     );
     
+    // Fix the manifestPath for lazy route discovery
+    newContent = newContent.replace(
+      /"manifestPath":"\/__manifest"/g,
+      '"manifestPath":"/japanese-cards/__manifest"'
+    );
+    
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent);
       console.log(`✅ Fixed: ${path.relative(buildDir, filePath)}`);
