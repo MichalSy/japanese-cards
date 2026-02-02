@@ -84,8 +84,8 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
   }
 
   const getOffset = () => {
-    // Stack cards with slight offset
-    return index * 8
+    // Cards exactly behind each other - no stack visual
+    return 0
   }
 
   return (
@@ -98,29 +98,29 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         left: '50%',
         top: '50%',
         transform: `
-          translateX(calc(-50% + ${translateX}px + ${getOffset()}px))
-          translateY(calc(-50% + ${getOffset()}px))
+          translateX(calc(-50% + ${translateX}px))
+          translateY(-50%)
           rotateZ(${rotateZ}deg)
-          scale(${1 - index * 0.02})
         `,
         width: '90%',
-        maxWidth: '400px',
-        height: '500px',
+        maxWidth: '380px',
+        height: '520px',
         backgroundColor: getBackgroundColor(),
-        borderRadius: 'var(--radius-lg)',
+        borderRadius: '24px',
         border: '2px solid var(--color-surface-light)',
         zIndex: getZIndex(),
         cursor: isActive ? 'grab' : 'default',
         transition: 'transform 0.05s ease-out',
-        padding: 'var(--spacing-6)',
+        padding: 'var(--spacing-8)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         color: 'var(--color-text-primary)',
         opacity: opacity,
         userSelect: 'none',
         overflow: 'hidden',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
       }}
     >
       {/* Flash overlay */}
@@ -134,44 +134,102 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             transition: 'opacity 0.3s ease',
             pointerEvents: 'none',
             zIndex: 10,
+            borderRadius: '24px',
           }}
         />
       )}
-      {/* Character (for Hiragana/Katakana) */}
-      {card.character && (
-        <div style={{ fontSize: '120px', marginBottom: 'var(--spacing-4)', fontWeight: '700' }}>
-          {card.character}
-        </div>
-      )}
 
-      {/* Question/Prompt */}
-      {card.word && (
-        <div style={{ fontSize: '32px', marginBottom: 'var(--spacing-4)', fontWeight: '700', textAlign: 'center' }}>
-          {card.word}
-        </div>
-      )}
+      {/* Top Section: Character */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {card.character && (
+          <div style={{ fontSize: '140px', fontWeight: '700', lineHeight: 1 }}>
+            {card.character}
+          </div>
+        )}
+        {card.word && (
+          <div style={{ fontSize: '48px', fontWeight: '700', textAlign: 'center', lineHeight: 1 }}>
+            {card.word}
+          </div>
+        )}
+      </div>
 
-      {/* Meaning/Answer */}
-      {card.meaning && (
-        <div style={{ fontSize: '24px', color: 'var(--color-text-secondary)', textAlign: 'center' }}>
-          {card.meaning}
-        </div>
-      )}
+      {/* Middle Section: Question */}
+      <div style={{ 
+        fontSize: '16px', 
+        color: 'var(--color-text-secondary)', 
+        textAlign: 'center',
+        marginBottom: 'var(--spacing-4)',
+        fontWeight: '500',
+        opacity: 0.8
+      }}>
+        Ist das Zeichen richtig zugeordnet?
+      </div>
 
-      {/* Romaji */}
-      {card.romaji && (
-        <div style={{ fontSize: '16px', color: 'var(--color-text-tertiary)', marginTop: 'var(--spacing-4)', fontStyle: 'italic' }}>
-          {card.romaji}
-        </div>
-      )}
+      {/* Bottom Section: Romaji + Arrows */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--spacing-4)' }}>
+        {/* Romaji only */}
+        {card.romaji && (
+          <div style={{ 
+            fontSize: '20px', 
+            color: '#ec4899',
+            fontWeight: '600',
+            letterSpacing: '1px',
+            fontStyle: 'italic',
+          }}>
+            {card.romaji}
+          </div>
+        )}
 
-      {/* Swipe Indicators - always consistent: left = false, right = true */}
-      {!swipeState && (
-        <div style={{ position: 'absolute', bottom: 'var(--spacing-4)', left: 0, right: 0, display: 'flex', justifyContent: 'space-around', padding: '0 var(--spacing-4)', fontSize: '12px', color: 'var(--color-text-tertiary)' }}>
-          <span>❌ Falsch</span>
-          <span>✅ Richtig</span>
-        </div>
-      )}
+        {/* Arrow Buttons */}
+        {!swipeState && (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between',
+            width: '100%',
+            maxWidth: '280px',
+            gap: 'var(--spacing-6)',
+            marginTop: 'var(--spacing-2)',
+          }}>
+            {/* Left Arrow - Falsch */}
+            <div style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+              padding: 'var(--spacing-3)',
+              borderRadius: '16px',
+              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              color: '#ef4444',
+              fontSize: '28px',
+              fontWeight: 'bold',
+              opacity: 0.7,
+            }}>
+              ←
+              <span style={{ fontSize: '12px', fontWeight: '600', letterSpacing: '0.5px' }}>Falsch</span>
+            </div>
+
+            {/* Right Arrow - Richtig */}
+            <div style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+              padding: 'var(--spacing-3)',
+              borderRadius: '16px',
+              backgroundColor: 'rgba(236, 72, 153, 0.15)',
+              color: '#ec4899',
+              fontSize: '28px',
+              fontWeight: 'bold',
+              opacity: 0.8,
+            }}>
+              →
+              <span style={{ fontSize: '12px', fontWeight: '600', letterSpacing: '0.5px' }}>Richtig</span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
