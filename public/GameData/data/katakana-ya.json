@@ -1,0 +1,13 @@
+{
+  "id": "katakana-ya",
+  "name": "Ya-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-ya",
+      "character": "ヤ",
+      "romaji": "ya",
+      "meaning": "Pfeil"
+    }
+  ]
+}

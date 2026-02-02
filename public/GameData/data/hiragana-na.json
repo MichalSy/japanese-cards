@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-na",
+  "name": "Na-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-na",
+      "character": "な",
+      "romaji": "na",
+      "meaning": "Name"
+    }
+  ]
+}

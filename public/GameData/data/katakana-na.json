@@ -1,0 +1,13 @@
+{
+  "id": "katakana-na",
+  "name": "Na-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-na",
+      "character": "ナ",
+      "romaji": "na",
+      "meaning": "Name"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "katakana-ta",
+  "name": "Ta-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-ta",
+      "character": "タ",
+      "romaji": "ta",
+      "meaning": "Reisfeld"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "sentences-all",
+  "name": "Alle Sätze",
+  "type": "phrases",
+  "items": [
+    {
+      "id": "s-1",
+      "sentence": "おはようございます。",
+      "romaji": "Ohayou gozaimasu.",
+      "meaning": "Guten Morgen. (formell)",
+      "difficulty": "Anfänger",
+      "context": "Morgens oder im formellen Kontext"
+    },
+    {
+      "id": "s-2",
+      "sentence": "私の名前はミハルです。",
+      "romaji": "Watashi no namae wa Miharu desu.",
+      "meaning": "Mein Name ist Miharu.",
+      "difficulty": "Anfänger",
+      "context": "Selbstvorstellung"
+    },
+    {
+      "id": "s-3",
+      "sentence": "日本語を勉強しています。",
+      "romaji": "Nihongo wo benkyou shite imasu.",
+      "meaning": "Ich lerne gerade Japanisch.",
+      "difficulty": "Anfänger+",
+      "context": "Über Aktivitäten sprechen"
+    }
+  ]
+}

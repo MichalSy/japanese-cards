@@ -1,0 +1,61 @@
+{
+  "id": "hiragana",
+  "name": "ひらがな (Hiragana)",
+  "description": "Japanische Schrift für native Wörter",
+  "emoji": "📝",
+  "color": "#ec4899",
+  "type": "characters",
+  "showAllOption": true,
+  "groups": [
+    {
+      "id": "a",
+      "name": "A-Reihe",
+      "dataFile": "data/hiragana-a.json"
+    },
+    {
+      "id": "ka",
+      "name": "Ka-Reihe",
+      "dataFile": "data/hiragana-ka.json"
+    },
+    {
+      "id": "sa",
+      "name": "Sa-Reihe",
+      "dataFile": "data/hiragana-sa.json"
+    },
+    {
+      "id": "ta",
+      "name": "Ta-Reihe",
+      "dataFile": "data/hiragana-ta.json"
+    },
+    {
+      "id": "na",
+      "name": "Na-Reihe",
+      "dataFile": "data/hiragana-na.json"
+    },
+    {
+      "id": "ha",
+      "name": "Ha-Reihe",
+      "dataFile": "data/hiragana-ha.json"
+    },
+    {
+      "id": "ma",
+      "name": "Ma-Reihe",
+      "dataFile": "data/hiragana-ma.json"
+    },
+    {
+      "id": "ya",
+      "name": "Ya-Reihe",
+      "dataFile": "data/hiragana-ya.json"
+    },
+    {
+      "id": "ra",
+      "name": "Ra-Reihe",
+      "dataFile": "data/hiragana-ra.json"
+    },
+    {
+      "id": "wa",
+      "name": "Wa-Reihe",
+      "dataFile": "data/hiragana-wa.json"
+    }
+  ]
+}

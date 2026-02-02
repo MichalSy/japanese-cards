@@ -1,0 +1,16 @@
+{
+  "id": "words",
+  "name": "単語 (Wörter)",
+  "description": "Japanische Wörter und Vokabeln",
+  "emoji": "💬",
+  "color": "#06b6d4",
+  "type": "vocabulary",
+  "showAllOption": true,
+  "groups": [
+    {
+      "id": "all",
+      "name": "Alle Wörter",
+      "dataFile": "data/words-all.json"
+    }
+  ]
+}

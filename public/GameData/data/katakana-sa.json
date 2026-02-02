@@ -1,0 +1,13 @@
+{
+  "id": "katakana-sa",
+  "name": "Sa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-sa",
+      "character": "サ",
+      "romaji": "sa",
+      "meaning": "Unterschied"
+    }
+  ]
+}

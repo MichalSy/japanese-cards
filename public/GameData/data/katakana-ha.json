@@ -1,0 +1,13 @@
+{
+  "id": "katakana-ha",
+  "name": "Ha-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-ha",
+      "character": "ハ",
+      "romaji": "ha",
+      "meaning": "Acht"
+    }
+  ]
+}

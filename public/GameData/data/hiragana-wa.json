@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-wa",
+  "name": "Wa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-wa",
+      "character": "わ",
+      "romaji": "wa",
+      "meaning": "Ring"
+    }
+  ]
+}

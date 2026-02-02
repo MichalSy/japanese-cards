@@ -1,0 +1,13 @@
+{
+  "id": "katakana-ka",
+  "name": "Ka-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-ka",
+      "character": "カ",
+      "romaji": "ka",
+      "meaning": "Feuer"
+    }
+  ]
+}
