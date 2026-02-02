@@ -55,3 +55,32 @@ export const fetchGameModes = async () => {
     throw error
   }
 }
+
+// Fetch all items from a category (for "Alle kombiniert")
+export const fetchAllItemsFromCategory = async (categoryId) => {
+  try {
+    const config = await fetchCategoryConfig(categoryId)
+    
+    // Load all group data files in parallel
+    const itemPromises = config.groups.map(group =>
+      fetchGroupData(categoryId, group.id)
+    )
+    
+    const groupsData = await Promise.all(itemPromises)
+    
+    // Combine all items from all groups
+    const allItems = groupsData.reduce((acc, groupData) => {
+      return [...acc, ...(groupData.items || [])]
+    }, [])
+    
+    return {
+      id: `${categoryId}-all`,
+      name: `${config.name} - Alle kombiniert`,
+      type: config.type,
+      items: allItems,
+    }
+  } catch (error) {
+    console.error(`Error fetching all items for ${categoryId}:`, error)
+    throw error
+  }
+}

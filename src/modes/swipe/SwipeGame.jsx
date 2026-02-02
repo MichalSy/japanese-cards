@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchGroupData } from '../../config/api'
+import { fetchGroupData, fetchAllItemsFromCategory } from '../../config/api'
 import { useSwipeGame } from './useSwipeGame'
 import SwipeCard from './SwipeCard'
 import { AppContent, AppFooter, Card } from '../../components/Layout'
@@ -17,7 +17,14 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await fetchGroupData(contentType, groupId)
+        let data
+        if (groupId === 'all') {
+          // Load all items from all groups in category
+          data = await fetchAllItemsFromCategory(contentType)
+        } else {
+          // Load single group
+          data = await fetchGroupData(contentType, groupId)
+        }
         setItems(data.items || [])
       } catch (err) {
         setError(err.message)
