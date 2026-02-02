@@ -6,32 +6,27 @@
     {
       "id": "h-za",
       "character": "ざ",
-      "romaji": "za",
-      "meaning": "Unterschied (Dakuten)"
+      "romaji": "za"
     },
     {
       "id": "h-zi",
       "character": "じ",
-      "romaji": "ji",
-      "meaning": "Charakter (Dakuten)"
+      "romaji": "ji"
     },
     {
       "id": "h-zu",
       "character": "ず",
-      "romaji": "zu",
-      "meaning": "Zeichnung (Dakuten)"
+      "romaji": "zu"
     },
     {
       "id": "h-ze",
       "character": "ぜ",
-      "romaji": "ze",
-      "meaning": "Sicherheit (Dakuten)"
+      "romaji": "ze"
     },
     {
       "id": "h-zo",
       "character": "ぞ",
-      "romaji": "zo",
-      "meaning": "Schatz (Dakuten)"
+      "romaji": "zo"
     }
   ]
 }

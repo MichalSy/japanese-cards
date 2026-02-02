@@ -6,32 +6,27 @@
     {
       "id": "h-sa",
       "character": "さ",
-      "romaji": "sa",
-      "meaning": "Unterschied"
+      "romaji": "sa"
     },
     {
       "id": "h-si",
       "character": "し",
-      "romaji": "shi/si",
-      "meaning": "Zahl vier"
+      "romaji": "shi/si"
     },
     {
       "id": "h-su",
       "character": "す",
-      "romaji": "su",
-      "meaning": "Essen"
+      "romaji": "su"
     },
     {
       "id": "h-se",
       "character": "せ",
-      "romaji": "se",
-      "meaning": "Temperament"
+      "romaji": "se"
     },
     {
       "id": "h-so",
       "character": "そ",
-      "romaji": "so",
-      "meaning": "Das"
+      "romaji": "so"
     }
   ]
 }

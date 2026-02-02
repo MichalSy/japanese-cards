@@ -6,32 +6,27 @@
     {
       "id": "h-ha",
       "character": "は",
-      "romaji": "ha",
-      "meaning": "Blatt / Thema"
+      "romaji": "ha"
     },
     {
       "id": "h-hi",
       "character": "ひ",
-      "romaji": "hi",
-      "meaning": "Sonne"
+      "romaji": "hi"
     },
     {
       "id": "h-hu",
       "character": "ふ",
-      "romaji": "fu",
-      "meaning": "Pflug"
+      "romaji": "fu"
     },
     {
       "id": "h-he",
       "character": "へ",
-      "romaji": "he",
-      "meaning": "Schuss"
+      "romaji": "he"
     },
     {
       "id": "h-ho",
       "character": "ほ",
-      "romaji": "ho",
-      "meaning": "Feuer"
+      "romaji": "ho"
     }
   ]
 }

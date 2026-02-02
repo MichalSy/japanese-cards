@@ -6,32 +6,27 @@
     {
       "id": "h-na",
       "character": "な",
-      "romaji": "na",
-      "meaning": "Name"
+      "romaji": "na"
     },
     {
       "id": "h-ni",
       "character": "に",
-      "romaji": "ni",
-      "meaning": "Zahl zwei"
+      "romaji": "ni"
     },
     {
       "id": "h-nu",
       "character": "ぬ",
-      "romaji": "nu",
-      "meaning": "Kleidung"
+      "romaji": "nu"
     },
     {
       "id": "h-ne",
       "character": "ね",
-      "romaji": "ne",
-      "meaning": "Katze"
+      "romaji": "ne"
     },
     {
       "id": "h-no",
       "character": "の",
-      "romaji": "no",
-      "meaning": "Busch"
+      "romaji": "no"
     }
   ]
 }

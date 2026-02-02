@@ -6,32 +6,27 @@
     {
       "id": "h-da",
       "character": "だ",
-      "romaji": "da",
-      "meaning": "Aber (Dakuten)"
+      "romaji": "da"
     },
     {
       "id": "h-di",
       "character": "ぢ",
-      "romaji": "di",
-      "meaning": "Straße (Dakuten)"
+      "romaji": "di"
     },
     {
       "id": "h-du",
       "character": "づ",
-      "romaji": "du",
-      "meaning": "Verbindung (Dakuten)"
+      "romaji": "du"
     },
     {
       "id": "h-de",
       "character": "で",
-      "romaji": "de",
-      "meaning": "Ausfahrt (Dakuten)"
+      "romaji": "de"
     },
     {
       "id": "h-do",
       "character": "ど",
-      "romaji": "do",
-      "meaning": "Erde (Dakuten)"
+      "romaji": "do"
     }
   ]
 }

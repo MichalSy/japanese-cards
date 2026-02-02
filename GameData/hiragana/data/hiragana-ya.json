@@ -6,20 +6,17 @@
     {
       "id": "h-ya",
       "character": "や",
-      "romaji": "ya",
-      "meaning": "Taverne"
+      "romaji": "ya"
     },
     {
       "id": "h-yu",
       "character": "ゆ",
-      "romaji": "yu",
-      "meaning": "Öl"
+      "romaji": "yu"
     },
     {
       "id": "h-yo",
       "character": "よ",
-      "romaji": "yo",
-      "meaning": "Nacht"
+      "romaji": "yo"
     }
   ]
 }
