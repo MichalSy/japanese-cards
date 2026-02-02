@@ -8,6 +8,30 @@
       "character": "ら",
       "romaji": "ra",
       "meaning": "Rauch"
+    },
+    {
+      "id": "h-ri",
+      "character": "り",
+      "romaji": "ri",
+      "meaning": "Grund"
+    },
+    {
+      "id": "h-ru",
+      "character": "る",
+      "romaji": "ru",
+      "meaning": "Salz"
+    },
+    {
+      "id": "h-re",
+      "character": "れ",
+      "romaji": "re",
+      "meaning": "Ordner"
+    },
+    {
+      "id": "h-ro",
+      "character": "ろ",
+      "romaji": "ro",
+      "meaning": "Farbe"
     }
   ]
 }

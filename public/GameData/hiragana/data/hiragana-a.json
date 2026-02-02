@@ -7,7 +7,31 @@
       "id": "h-a",
       "character": "あ",
       "romaji": "a",
-      "meaning": "Vokal A"
+      "meaning": "a-Laut"
+    },
+    {
+      "id": "h-i",
+      "character": "い",
+      "romaji": "i",
+      "meaning": "i-Laut"
+    },
+    {
+      "id": "h-u",
+      "character": "う",
+      "romaji": "u",
+      "meaning": "u-Laut"
+    },
+    {
+      "id": "h-e",
+      "character": "え",
+      "romaji": "e",
+      "meaning": "e-Laut"
+    },
+    {
+      "id": "h-o",
+      "character": "お",
+      "romaji": "o",
+      "meaning": "o-Laut"
     }
   ]
 }

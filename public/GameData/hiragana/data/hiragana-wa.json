@@ -8,6 +8,18 @@
       "character": "わ",
       "romaji": "wa",
       "meaning": "Ring"
+    },
+    {
+      "id": "h-wo",
+      "character": "を",
+      "romaji": "wo",
+      "meaning": "Objekt-Partikel"
+    },
+    {
+      "id": "h-n",
+      "character": "ん",
+      "romaji": "n",
+      "meaning": "n-Laut"
     }
   ]
 }
