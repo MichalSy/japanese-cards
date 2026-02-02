@@ -66,9 +66,7 @@ export default function MainMenu() {
             
             {loading && (
               <div className="grid-1">
-                {[1, 2, 3, 4].map((i) => (
-                  <CategoryCardSkeleton key={i} />
-                ))}
+                <CategoryCardSkeleton />
               </div>
             )}
 

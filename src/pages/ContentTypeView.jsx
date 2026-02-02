@@ -46,8 +46,6 @@ export default function ContentTypeView() {
         <AppContent>
           <div className="space-y-6">
             <CategoryCardSkeleton />
-            <CategoryCardSkeleton />
-            <CategoryCardSkeleton />
           </div>
         </AppContent>
       </AppLayout>
