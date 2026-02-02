@@ -1,25 +1,52 @@
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import AppHeaderBar from '../components/AppHeaderBar'
-import { AppLayout, AppHeader, AppContent, AppFooter, Button } from '../components/Layout'
+import { AppLayout, AppHeader, AppContent } from '../components/Layout'
+
+// Lazy load game modes
+const SwipeGame = lazy(() => import('../modes/swipe/SwipeGame'))
+
+const GAME_MODES = {
+  swipe: SwipeGame,
+  multiChoice: null, // TODO
+  flashcard: null, // TODO
+  typing: null, // TODO
+}
+
+const modeNames = {
+  swipe: 'Swipe Game',
+  multiChoice: 'Multiple Choice',
+  flashcard: 'Flashcard',
+  typing: 'Typing Challenge',
+}
+
+const modeEmojis = {
+  swipe: '👆',
+  multiChoice: '🎯',
+  flashcard: '🃏',
+  typing: '⌨️',
+}
 
 export default function GameScreen() {
   const { contentType, groupId, modeId } = useParams()
   const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
   const cardCount = searchParams.get('cards') || 20
 
-  const modeNames = {
-    swipe: 'Swipe Game',
-    multiChoice: 'Multiple Choice',
-    flashcard: 'Flashcard',
-    typing: 'Typing Challenge',
-  }
+  const GameComponent = GAME_MODES[modeId]
 
-  const modeEmojis = {
-    swipe: '👆',
-    multiChoice: '🎯',
-    flashcard: '🃏',
-    typing: '⌨️',
+  if (!GameComponent) {
+    return (
+      <AppLayout>
+        <AppHeader>
+          <AppHeaderBar title={modeNames[modeId] || 'Unbekannter Modus'} />
+        </AppHeader>
+        <AppContent>
+          <div style={{ padding: 'var(--spacing-4)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
+            Dieser Modus ist noch nicht verfügbar.
+          </div>
+        </AppContent>
+      </AppLayout>
+    )
   }
 
   return (
@@ -28,29 +55,26 @@ export default function GameScreen() {
         <AppHeaderBar title={modeNames[modeId]} />
       </AppHeader>
 
-      <AppContent>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '60px', marginBottom: 'var(--spacing-5)' }}>{modeEmojis[modeId]}</div>
-            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: '0 0 var(--spacing-2) 0' }}>Wird geladen...</h2>
-            <p className="text-base text-secondary" style={{ margin: '0 0 var(--spacing-3) 0' }}>
-              {modeNames[modeId]} wird vorbereitet
-            </p>
-            <p className="text-sm text-tertiary" style={{ margin: 0 }}>
-              Karten: {cardCount === 'all' ? 'Alle' : cardCount}
-            </p>
-          </div>
-        </div>
-      </AppContent>
-
-      <AppFooter>
-        <div className="space-x-3" style={{ width: '100%' }}>
-          <button style={{ flex: 1, padding: 'var(--spacing-3) var(--spacing-6)', borderRadius: 'var(--radius-lg)', fontWeight: '500', fontSize: '14px', transition: 'all 0.2s ease', border: 'none', cursor: 'pointer', backgroundColor: 'var(--color-surface-light)', color: 'var(--color-text-primary)', fontFamily: 'var(--font-family)' }}>
-            Info
-          </button>
-          <Button>Start Game</Button>
-        </div>
-      </AppFooter>
+      <Suspense
+        fallback={
+          <AppContent>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '60px', marginBottom: 'var(--spacing-5)' }}>{modeEmojis[modeId]}</div>
+                <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: '0 0 var(--spacing-2) 0' }}>Wird geladen...</h2>
+                <p className="text-base text-secondary" style={{ margin: '0 0 var(--spacing-3) 0' }}>
+                  {modeNames[modeId]} wird vorbereitet
+                </p>
+                <p className="text-sm text-tertiary" style={{ margin: 0 }}>
+                  Karten: {cardCount === 'all' ? 'Alle' : cardCount}
+                </p>
+              </div>
+            </div>
+          </AppContent>
+        }
+      >
+        <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} />
+      </Suspense>
     </AppLayout>
   )
 }
