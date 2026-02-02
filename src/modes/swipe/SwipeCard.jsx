@@ -139,96 +139,95 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         />
       )}
 
-      {/* Top Section: Character */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      {/* Top Section: Question */}
+      <div style={{ 
+        fontSize: '18px', 
+        color: 'var(--color-text-secondary)', 
+        textAlign: 'center',
+        fontWeight: '600',
+        letterSpacing: '0.3px',
+        marginBottom: 'var(--spacing-6)',
+      }}>
+        Ist das Zeichen richtig zugeordnet?
+      </div>
+
+      {/* Middle Section: Character - LARGE */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--spacing-4)' }}>
         {card.character && (
-          <div style={{ fontSize: '140px', fontWeight: '700', lineHeight: 1 }}>
+          <div style={{ fontSize: '160px', fontWeight: '700', lineHeight: 0.9 }}>
             {card.character}
           </div>
         )}
         {card.word && (
-          <div style={{ fontSize: '48px', fontWeight: '700', textAlign: 'center', lineHeight: 1 }}>
+          <div style={{ fontSize: '56px', fontWeight: '700', textAlign: 'center', lineHeight: 1 }}>
             {card.word}
           </div>
         )}
       </div>
 
-      {/* Middle Section: Question */}
+      {/* Romaji - CLAIM/ASSERTION */}
+      {card.romaji && (
+        <div style={{ 
+          fontSize: '32px', 
+          color: '#ec4899',
+          fontWeight: '700',
+          letterSpacing: '1px',
+          fontStyle: 'italic',
+          marginBottom: 'var(--spacing-6)',
+          padding: '0 var(--spacing-4)',
+          textAlign: 'center',
+        }}>
+          {card.romaji}
+        </div>
+      )}
+
+      {/* Arrow Buttons - Always in DOM, hidden when flashing */}
       <div style={{ 
-        fontSize: '16px', 
-        color: 'var(--color-text-secondary)', 
-        textAlign: 'center',
-        marginBottom: 'var(--spacing-4)',
-        fontWeight: '500',
-        opacity: 0.8
+        display: 'flex', 
+        justifyContent: 'space-between',
+        width: '100%',
+        maxWidth: '300px',
+        gap: 'var(--spacing-6)',
+        opacity: swipeState ? 0 : 1,
+        transition: 'opacity 0.2s ease',
       }}>
-        Ist das Zeichen richtig zugeordnet?
-      </div>
+        {/* Left Arrow - Falsch */}
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '10px',
+          padding: 'var(--spacing-4)',
+          borderRadius: '18px',
+          backgroundColor: 'rgba(239, 68, 68, 0.15)',
+          color: '#ef4444',
+          fontSize: '32px',
+          fontWeight: 'bold',
+          transition: 'all 0.2s ease',
+        }}>
+          ←
+          <span style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.5px' }}>Falsch</span>
+        </div>
 
-      {/* Bottom Section: Romaji + Arrows */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--spacing-4)' }}>
-        {/* Romaji only */}
-        {card.romaji && (
-          <div style={{ 
-            fontSize: '20px', 
-            color: '#ec4899',
-            fontWeight: '600',
-            letterSpacing: '1px',
-            fontStyle: 'italic',
-          }}>
-            {card.romaji}
-          </div>
-        )}
-
-        {/* Arrow Buttons */}
-        {!swipeState && (
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between',
-            width: '100%',
-            maxWidth: '280px',
-            gap: 'var(--spacing-6)',
-            marginTop: 'var(--spacing-2)',
-          }}>
-            {/* Left Arrow - Falsch */}
-            <div style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '8px',
-              padding: 'var(--spacing-3)',
-              borderRadius: '16px',
-              backgroundColor: 'rgba(239, 68, 68, 0.1)',
-              color: '#ef4444',
-              fontSize: '28px',
-              fontWeight: 'bold',
-              opacity: 0.7,
-            }}>
-              ←
-              <span style={{ fontSize: '12px', fontWeight: '600', letterSpacing: '0.5px' }}>Falsch</span>
-            </div>
-
-            {/* Right Arrow - Richtig */}
-            <div style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '8px',
-              padding: 'var(--spacing-3)',
-              borderRadius: '16px',
-              backgroundColor: 'rgba(236, 72, 153, 0.15)',
-              color: '#ec4899',
-              fontSize: '28px',
-              fontWeight: 'bold',
-              opacity: 0.8,
-            }}>
-              →
-              <span style={{ fontSize: '12px', fontWeight: '600', letterSpacing: '0.5px' }}>Richtig</span>
-            </div>
-          </div>
-        )}
+        {/* Right Arrow - Richtig */}
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '10px',
+          padding: 'var(--spacing-4)',
+          borderRadius: '18px',
+          backgroundColor: 'rgba(236, 72, 153, 0.2)',
+          color: '#ec4899',
+          fontSize: '32px',
+          fontWeight: 'bold',
+          transition: 'all 0.2s ease',
+        }}>
+          →
+          <span style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.5px' }}>Richtig</span>
+        </div>
       </div>
     </div>
   )
