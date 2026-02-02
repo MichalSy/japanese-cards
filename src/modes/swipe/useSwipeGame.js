@@ -18,14 +18,17 @@ export function useSwipeGame(items, cardCount) {
     }
 
     // Determine how many cards to use
-    const count = cardCount === 'all' ? items.length : Math.min(parseInt(cardCount), items.length)
+    const count = cardCount === 'all' ? items.length : parseInt(cardCount)
     
-    // Shuffle and take only needed count
-    const shuffled = [...items]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, count)
+    // Build card deck (repeat if necessary)
+    let deck = []
+    while (deck.length < count) {
+      const remaining = count - deck.length
+      const itemsToAdd = [...items].sort(() => Math.random() - 0.5).slice(0, remaining)
+      deck = [...deck, ...itemsToAdd]
+    }
     
-    setCards(shuffled)
+    setCards(deck)
     setGameState('playing')
   }, [items, cardCount])
 

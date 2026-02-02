@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 export default function SwipeCard({ card, index, isActive, onSwipe }) {
   const [swipeState, setSwipeState] = useState(null) // null, swiping, correct, incorrect
@@ -6,6 +6,10 @@ export default function SwipeCard({ card, index, isActive, onSwipe }) {
   const [rotateZ, setRotateZ] = useState(0)
   const [translateX, setTranslateX] = useState(0)
   const [opacity, setOpacity] = useState(1)
+  const [flashOpacity, setFlashOpacity] = useState(0)
+
+  // Random decide if this card should be "correct" or "incorrect"
+  const correctAnswer = useMemo(() => Math.random() > 0.5, [card])
 
   if (!card) return null
 
@@ -35,15 +39,27 @@ export default function SwipeCard({ card, index, isActive, onSwipe }) {
     const isSwipedRight = translateX > threshold
 
     if (isSwipedLeft || isSwipedRight) {
-      // Determine if correct
-      const isCorrect = isSwipedRight // Right = correct, Left = incorrect
+      // Determine if correct based on random answer + swipe direction
+      // Right swipe = user thinks correct, Left swipe = user thinks incorrect
+      const userThinkCorrect = isSwipedRight
+      const isCorrect = userThinkCorrect === correctAnswer
       
-      // Set flash state
+      // Flash animation
       setSwipeState(isCorrect ? 'correct' : 'incorrect')
+      setFlashOpacity(1)
+      
+      // Fade out flash
+      await new Promise(resolve => {
+        setTimeout(() => {
+          setFlashOpacity(0)
+        }, 200)
+        setTimeout(resolve, 300)
+      })
       
       // Animate out
       setTranslateX(isSwipedLeft ? -500 : 500)
       setRotateZ(isSwipedLeft ? -45 : 45)
+      setOpacity(0)
       
       // Wait for animation then call callback
       await new Promise(resolve => setTimeout(resolve, 300))
@@ -57,9 +73,13 @@ export default function SwipeCard({ card, index, isActive, onSwipe }) {
   }
 
   const getBackgroundColor = () => {
-    if (swipeState === 'correct') return '#10b981' // Green
-    if (swipeState === 'incorrect') return '#ef4444' // Red
     return 'var(--color-surface)'
+  }
+
+  const getFlashColor = () => {
+    if (swipeState === 'correct') return 'rgba(16, 185, 129, 0.8)' // Green
+    if (swipeState === 'incorrect') return 'rgba(239, 68, 68, 0.8)' // Red
+    return 'transparent'
   }
 
   const getZIndex = () => {
@@ -94,19 +114,32 @@ export default function SwipeCard({ card, index, isActive, onSwipe }) {
         border: '2px solid var(--color-surface-light)',
         zIndex: getZIndex(),
         cursor: isActive ? 'grab' : 'default',
-        transition: swipeState 
-          ? 'background-color 0.2s ease'
-          : 'transform 0.05s ease-out',
+        transition: 'transform 0.05s ease-out',
         padding: 'var(--spacing-6)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         color: 'var(--color-text-primary)',
-        opacity: swipeState ? 0.95 : opacity,
+        opacity: opacity,
         userSelect: 'none',
+        overflow: 'hidden',
       }}
     >
+      {/* Flash overlay */}
+      {swipeState && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: getFlashColor(),
+            opacity: flashOpacity,
+            transition: 'opacity 0.3s ease',
+            pointerEvents: 'none',
+            zIndex: 10,
+          }}
+        />
+      )}
       {/* Character (for Hiragana/Katakana) */}
       {card.character && (
         <div style={{ fontSize: '120px', marginBottom: 'var(--spacing-4)', fontWeight: '700' }}>
@@ -135,11 +168,13 @@ export default function SwipeCard({ card, index, isActive, onSwipe }) {
         </div>
       )}
 
-      {/* Swipe Indicators */}
-      <div style={{ position: 'absolute', bottom: 'var(--spacing-4)', left: 0, right: 0, display: 'flex', justifyContent: 'space-around', padding: '0 var(--spacing-4)', fontSize: '12px', color: 'var(--color-text-tertiary)' }}>
-        <span>❌ Falsch</span>
-        <span>✅ Richtig</span>
-      </div>
+      {/* Swipe Indicators - show what's correct this round */}
+      {!swipeState && (
+        <div style={{ position: 'absolute', bottom: 'var(--spacing-4)', left: 0, right: 0, display: 'flex', justifyContent: 'space-around', padding: '0 var(--spacing-4)', fontSize: '12px', color: 'var(--color-text-tertiary)' }}>
+          <span>{correctAnswer ? '❌ Falsch' : '✅ Richtig'}</span>
+          <span>{correctAnswer ? '✅ Richtig' : '❌ Falsch'}</span>
+        </div>
+      )}
     </div>
   )
 }
