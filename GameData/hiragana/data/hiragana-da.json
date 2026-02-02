@@ -1,0 +1,37 @@
+{
+  "id": "hiragana-da",
+  "name": "Da-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-da",
+      "character": "だ",
+      "romaji": "da",
+      "meaning": "Aber (Dakuten)"
+    },
+    {
+      "id": "h-di",
+      "character": "ぢ",
+      "romaji": "di",
+      "meaning": "Straße (Dakuten)"
+    },
+    {
+      "id": "h-du",
+      "character": "づ",
+      "romaji": "du",
+      "meaning": "Verbindung (Dakuten)"
+    },
+    {
+      "id": "h-de",
+      "character": "で",
+      "romaji": "de",
+      "meaning": "Ausfahrt (Dakuten)"
+    },
+    {
+      "id": "h-do",
+      "character": "ど",
+      "romaji": "do",
+      "meaning": "Erde (Dakuten)"
+    }
+  ]
+}

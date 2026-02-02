@@ -1,0 +1,37 @@
+{
+  "id": "hiragana-ga",
+  "name": "Ga-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ga",
+      "character": "が",
+      "romaji": "ga",
+      "meaning": "Aber (Dakuten)"
+    },
+    {
+      "id": "h-gi",
+      "character": "ぎ",
+      "romaji": "gi",
+      "meaning": "Silber (Dakuten)"
+    },
+    {
+      "id": "h-gu",
+      "character": "ぐ",
+      "romaji": "gu",
+      "meaning": "Kreis (Dakuten)"
+    },
+    {
+      "id": "h-ge",
+      "character": "げ",
+      "romaji": "ge",
+      "meaning": "Fähigkeit (Dakuten)"
+    },
+    {
+      "id": "h-go",
+      "character": "ご",
+      "romaji": "go",
+      "meaning": "Sprache (Dakuten)"
+    }
+  ]
+}

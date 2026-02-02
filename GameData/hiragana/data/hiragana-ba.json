@@ -1,0 +1,37 @@
+{
+  "id": "hiragana-ba",
+  "name": "Ba-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ba",
+      "character": "ば",
+      "romaji": "ba",
+      "meaning": "Rose (Dakuten)"
+    },
+    {
+      "id": "h-bi",
+      "character": "び",
+      "romaji": "bi",
+      "meaning": "Schönheit (Dakuten)"
+    },
+    {
+      "id": "h-bu",
+      "character": "ぶ",
+      "romaji": "bu",
+      "meaning": "Lappen (Dakuten)"
+    },
+    {
+      "id": "h-be",
+      "character": "べ",
+      "romaji": "be",
+      "meaning": "Überlegung (Dakuten)"
+    },
+    {
+      "id": "h-bo",
+      "character": "ぼ",
+      "romaji": "bo",
+      "meaning": "Hut (Dakuten)"
+    }
+  ]
+}
