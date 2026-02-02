@@ -8,15 +8,14 @@ export default function AppHeaderBar({ title }) {
 
   return (
     <div style={{
-      display: 'flex',
+      display: 'grid',
+      gridTemplateColumns: '44px 1fr 100px',
       alignItems: 'center',
-      justifyContent: 'center',
       width: '100%',
-      position: 'relative',
-      gap: 'var(--spacing-4)',
+      gap: 'var(--spacing-2)',
     }}>
-      {/* Left slot - always reserve space for back button */}
-      <div style={{ width: '44px', flexShrink: 0 }}>
+      {/* Left - Back Button */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
         {!isHome && (
           <button
             onClick={() => navigate(-1)}
@@ -48,21 +47,17 @@ export default function AppHeaderBar({ title }) {
         )}
       </div>
 
-      {/* Center - always centered title */}
+      {/* Center - Title */}
       <h1 className="text-lg font-bold" style={{
         color: 'var(--color-text-primary)',
         margin: 0,
         textAlign: 'center',
-        flex: 1,
-        position: 'absolute',
-        left: '50%',
-        transform: 'translateX(-50%)',
       }}>
         {title || 'Japanese Cards'}
       </h1>
 
-      {/* Right - language toggle */}
-      <div style={{ width: '100px', flexShrink: 0, textAlign: 'right' }}>
+      {/* Right - Language Toggle */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
         <LanguageToggle />
       </div>
     </div>
