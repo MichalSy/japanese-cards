@@ -1,10 +1,12 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Button } from '../components/Layout'
 
 export default function GameScreen() {
   const { contentType, groupId, modeId } = useParams()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const cardCount = searchParams.get('cards') || 20
 
   const modeNames = {
     swipe: 'Swipe Game',
@@ -31,8 +33,11 @@ export default function GameScreen() {
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '60px', marginBottom: 'var(--spacing-5)' }}>{modeEmojis[modeId]}</div>
             <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: '0 0 var(--spacing-2) 0' }}>Wird geladen...</h2>
-            <p className="text-base text-secondary" style={{ margin: 0 }}>
+            <p className="text-base text-secondary" style={{ margin: '0 0 var(--spacing-3) 0' }}>
               {modeNames[modeId]} wird vorbereitet
+            </p>
+            <p className="text-sm text-tertiary" style={{ margin: 0 }}>
+              Karten: {cardCount === 'all' ? 'Alle' : cardCount}
             </p>
           </div>
         </div>

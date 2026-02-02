@@ -9,6 +9,7 @@ export default function GameModeSelector() {
   const navigate = useNavigate()
   const [categoryConfig, setCategoryConfig] = useState(null)
   const [gameModeConfig, setGameModeConfig] = useState(null)
+  const [cardCount, setCardCount] = useState(20)
 
   useEffect(() => {
     const loadConfigs = async () => {
@@ -51,6 +52,32 @@ export default function GameModeSelector() {
 
       <AppContent>
         <div className="space-y-6">
+          {/* Card Count Selector */}
+          <div style={{ padding: 'var(--spacing-3)', backgroundColor: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-surface-light)' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-3)', color: 'var(--color-text-primary)', fontWeight: '500' }}>
+              <span>Kartenanzahl:</span>
+              <select
+                value={cardCount}
+                onChange={(e) => setCardCount(e.target.value === 'all' ? 'all' : parseInt(e.target.value))}
+                style={{
+                  padding: 'var(--spacing-2) var(--spacing-3)',
+                  backgroundColor: 'var(--color-surface-light)',
+                  color: 'var(--color-text-primary)',
+                  border: '1px solid var(--color-surface-dark)',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                }}
+              >
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="all">Alle</option>
+              </select>
+            </label>
+          </div>
+
           <Card>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
               <h3 className="text-sm font-medium text-primary">Deine Statistik</h3>
@@ -69,7 +96,7 @@ export default function GameModeSelector() {
 
           <div className="grid-1">
             {gameModes.map((mode) => (
-              <Card key={mode.id} interactive onClick={() => navigate(`/game/${contentType}/${groupId}/${mode.id}`)}>
+              <Card key={mode.id} interactive onClick={() => navigate(`/game/${contentType}/${groupId}/${mode.id}?cards=${cardCount}`)}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
                   <span style={{ fontSize: '32px', flexShrink: 0 }}>{mode.emoji}</span>
                   <div style={{ flex: 1, textAlign: 'left' }}>
