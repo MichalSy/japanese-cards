@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Generate static HTML files for all routes with correct titles
+// Generate static HTML files for all routes dynamically based on GameData
 function generateStaticHtml() {
   return {
     name: 'generate-static-html',
@@ -14,33 +14,67 @@ function generateStaticHtml() {
     enforce: 'post',
     writeBundle() {
       const distDir = path.join(__dirname, 'dist')
+      const publicDir = path.join(__dirname, 'public')
       const indexHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf-8')
 
-      // Define all routes with their titles
-      const routes = [
-        { path: 'content/hiragana', title: 'ひらがな' },
-        { path: 'content/hiragana/a', title: 'ひらがな - A-Reihe' },
-        { path: 'content/hiragana/ka', title: 'ひらがな - Ka-Reihe' },
-        { path: 'content/hiragana/sa', title: 'ひらがな - Sa-Reihe' },
-        { path: 'content/hiragana/ta', title: 'ひらがな - Ta-Reihe' },
-        { path: 'content/hiragana/na', title: 'ひらがな - Na-Reihe' },
-        { path: 'content/hiragana/ha', title: 'ひらがな - Ha-Reihe' },
-        { path: 'content/hiragana/ma', title: 'ひらがな - Ma-Reihe' },
-        { path: 'content/hiragana/ya', title: 'ひらがな - Ya-Reihe' },
-        { path: 'content/hiragana/ra', title: 'ひらがな - Ra-Reihe' },
-        { path: 'content/hiragana/wa', title: 'ひらがな - Wa-Reihe' },
-        { path: 'content/hiragana/ga', title: 'ひらがな - Ga-Reihe' },
-        { path: 'content/hiragana/za', title: 'ひらがな - Za-Reihe' },
-        { path: 'content/hiragana/da', title: 'ひらがな - Da-Reihe' },
-        { path: 'content/hiragana/ba', title: 'ひらがな - Ba-Reihe' },
-        { path: 'content/hiragana/pa', title: 'ひらがな - Pa-Reihe' },
-        { path: 'content/hiragana/all', title: 'ひらがな - Alle kombiniert' },
-        { path: 'content/katakana', title: 'カタカナ' },
-        { path: 'content/words', title: 'Vokabeln' },
-        { path: 'content/sentences', title: 'Sätze' },
-      ]
+      const routes = []
 
-      // Generate HTML files with custom titles
+      try {
+        // Read categories and global game modes
+        const categoriesData = JSON.parse(fs.readFileSync(path.join(publicDir, 'GameData', 'categories.json'), 'utf-8'))
+        const gameModesData = JSON.parse(fs.readFileSync(path.join(publicDir, 'GameData', 'gamemodes.json'), 'utf-8'))
+        const globalEnabledModes = gameModesData.gameModes.filter(m => m.enabled).map(m => m.id)
+
+        categoriesData.categories.forEach(cat => {
+          // Even if a category is disabled, we might want to generate routes if they were accessible
+          // But usually we only want enabled ones. Let's include all that have a directory.
+          const catDir = path.join(publicDir, 'GameData', cat.id)
+          if (!fs.existsSync(catDir)) return
+
+          // Content list page (e.g., /content/hiragana)
+          routes.push({ path: `content/${cat.id}`, title: cat.name })
+
+          // Read category specific config
+          const catConfigPath = path.join(catDir, 'category.json')
+          if (fs.existsSync(catConfigPath)) {
+            const catConfig = JSON.parse(fs.readFileSync(catConfigPath, 'utf-8'))
+            
+            const processGroup = (groupId, groupName) => {
+              // Mode selector page (e.g., /content/hiragana/a)
+              routes.push({ path: `content/${cat.id}/${groupId}`, title: `${cat.name} - ${groupName}` })
+              
+              // Game pages for each mode (e.g., /game/hiragana/a/swipe)
+              // We intersect global enabled modes with category supported modes
+              const supportedModes = catConfig.gameModes || []
+              globalEnabledModes.forEach(modeId => {
+                if (supportedModes.includes(modeId)) {
+                  const modeName = modeId.charAt(0).toUpperCase() + modeId.slice(1)
+                  routes.push({ 
+                    path: `game/${cat.id}/${groupId}/${modeId}`, 
+                    title: `${cat.name} - ${groupName} (${modeName})` 
+                  })
+                }
+              })
+            }
+
+            // Individual groups
+            if (catConfig.groups) {
+              catConfig.groups.forEach(group => {
+                processGroup(group.id, group.name)
+              })
+            }
+
+            // "All" option if enabled
+            if (catConfig.showAllOption) {
+              processGroup('all', 'Alle kombiniert')
+            }
+          }
+        })
+      } catch (err) {
+        console.error('❌ Error generating dynamic routes:', err)
+      }
+
+      // Generate the actual HTML files
       routes.forEach(({ path: routePath, title }) => {
         const fullPath = path.join(distDir, routePath, 'index.html')
         const dir = path.dirname(fullPath)
@@ -49,7 +83,7 @@ function generateStaticHtml() {
           fs.mkdirSync(dir, { recursive: true })
         }
         
-        // Replace title in HTML
+        // Replace title in HTML for SEO and correct tab naming
         const customHtml = indexHtml.replace(
           /<title>.*?<\/title>/,
           `<title>${title} - Japanese Cards</title>`
@@ -58,7 +92,7 @@ function generateStaticHtml() {
         fs.writeFileSync(fullPath, customHtml)
       })
 
-      console.log(`✅ Generated ${routes.length} static HTML files with correct titles`)
+      console.log(`✅ Dynamically generated ${routes.length} static HTML files for GitHub Pages`)
     },
   }
 }
