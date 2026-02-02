@@ -4,6 +4,7 @@ export function useSwipeGame(items, cardCount) {
   const [gameState, setGameState] = useState('loading') // loading, playing, finished
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cards, setCards] = useState([])
+  const [correctAnswers, setCorrectAnswers] = useState({}) // Map of card id -> isCorrect
   const [stats, setStats] = useState({
     correct: 0,
     incorrect: 0,
@@ -28,7 +29,14 @@ export function useSwipeGame(items, cardCount) {
       deck = [...deck, ...itemsToAdd]
     }
     
+    // Generate correct answers for each card (50/50 random)
+    const answers = {}
+    deck.forEach((card, idx) => {
+      answers[`${idx}-${card.id}`] = Math.random() > 0.5
+    })
+    
     setCards(deck)
+    setCorrectAnswers(answers)
     setGameState('playing')
   }, [items, cardCount])
 
@@ -69,5 +77,6 @@ export function useSwipeGame(items, cardCount) {
     totalCards: cards.length,
     stats,
     handleSwipe,
+    correctAnswer: cards[currentIndex] ? correctAnswers[`${currentIndex}-${cards[currentIndex].id}`] : null,
   }
 }

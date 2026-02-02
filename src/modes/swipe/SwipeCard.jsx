@@ -1,15 +1,12 @@
 import { useState, useEffect, useMemo } from 'react'
 
-export default function SwipeCard({ card, index, isActive, onSwipe }) {
+export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswer }) {
   const [swipeState, setSwipeState] = useState(null) // null, swiping, correct, incorrect
   const [touchStart, setTouchStart] = useState(0)
   const [rotateZ, setRotateZ] = useState(0)
   const [translateX, setTranslateX] = useState(0)
   const [opacity, setOpacity] = useState(1)
   const [flashOpacity, setFlashOpacity] = useState(0)
-
-  // Random decide if this card should be "correct" or "incorrect"
-  const correctAnswer = useMemo(() => Math.random() > 0.5, [card])
 
   if (!card) return null
 

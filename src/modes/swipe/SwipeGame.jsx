@@ -121,6 +121,7 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
             index={idx}
             isActive={idx === 0}
             onSwipe={game.handleSwipe}
+            correctAnswer={idx === 0 ? game.correctAnswer : undefined}
           />
         ))}
       </div>
