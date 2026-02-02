@@ -39,20 +39,19 @@ export function useSwipeGame(items, cardCount) {
       const isCorrectMeaning = Math.random() > 0.5
       
       if (isCorrectMeaning) {
-        // Show the real card with its correct meaning
+        // Show the real card with its correct romaji
         display.push(card)
       } else {
-        // Show the character but with a DIFFERENT wrong meaning
+        // Show the character but with a DIFFERENT wrong romaji
         let wrongCard
-        // Keep trying until we find a different meaning
+        // Keep trying until we find a different romaji
         do {
           wrongCard = items[Math.floor(Math.random() * items.length)]
-        } while (wrongCard.meaning === card.meaning || wrongCard.romaji === card.romaji)
+        } while (wrongCard.romaji === card.romaji)
         
-        // Combine: show character from deck, meaning from random different item
+        // Combine: show character from deck, romaji from random different item
         display.push({
           ...card,
-          meaning: wrongCard.meaning,
           romaji: wrongCard.romaji,
         })
       }
