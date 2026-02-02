@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
 /* Font Loading Optimization */
-/* Use system fonts first (no FOIT), load custom font in background */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=optional');
+/* Use only system fonts - no external fonts, no layout shift */
 
 /* Skeleton Loading Animation */
 @keyframes shimmer {
