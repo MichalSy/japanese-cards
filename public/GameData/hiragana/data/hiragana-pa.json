@@ -1,0 +1,37 @@
+{
+  "id": "hiragana-pa",
+  "name": "Pa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-pa",
+      "character": "ぱ",
+      "romaji": "pa",
+      "meaning": "Priester (Handakuten)"
+    },
+    {
+      "id": "h-pi",
+      "character": "ぴ",
+      "romaji": "pi",
+      "meaning": "Bild (Handakuten)"
+    },
+    {
+      "id": "h-pu",
+      "character": "ぷ",
+      "romaji": "pu",
+      "meaning": "Wasser-Spinne (Handakuten)"
+    },
+    {
+      "id": "h-pe",
+      "character": "ぺ",
+      "romaji": "pe",
+      "meaning": "Gürtel (Handakuten)"
+    },
+    {
+      "id": "h-po",
+      "character": "ぽ",
+      "romaji": "po",
+      "meaning": "Berg (Handakuten)"
+    }
+  ]
+}

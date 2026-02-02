@@ -57,6 +57,31 @@
       "id": "wa",
       "name": "Wa-Reihe",
       "dataFile": "data/hiragana-wa.json"
+    },
+    {
+      "id": "ga",
+      "name": "Ga-Reihe",
+      "dataFile": "data/hiragana-ga.json"
+    },
+    {
+      "id": "za",
+      "name": "Za-Reihe",
+      "dataFile": "data/hiragana-za.json"
+    },
+    {
+      "id": "da",
+      "name": "Da-Reihe",
+      "dataFile": "data/hiragana-da.json"
+    },
+    {
+      "id": "ba",
+      "name": "Ba-Reihe",
+      "dataFile": "data/hiragana-ba.json"
+    },
+    {
+      "id": "pa",
+      "name": "Pa-Reihe",
+      "dataFile": "data/hiragana-pa.json"
     }
   ]
 }

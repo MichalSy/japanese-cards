@@ -1,0 +1,37 @@
+{
+  "id": "hiragana-za",
+  "name": "Za-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-za",
+      "character": "ざ",
+      "romaji": "za",
+      "meaning": "Unterschied (Dakuten)"
+    },
+    {
+      "id": "h-zi",
+      "character": "じ",
+      "romaji": "ji",
+      "meaning": "Charakter (Dakuten)"
+    },
+    {
+      "id": "h-zu",
+      "character": "ず",
+      "romaji": "zu",
+      "meaning": "Zeichnung (Dakuten)"
+    },
+    {
+      "id": "h-ze",
+      "character": "ぜ",
+      "romaji": "ze",
+      "meaning": "Sicherheit (Dakuten)"
+    },
+    {
+      "id": "h-zo",
+      "character": "ぞ",
+      "romaji": "zo",
+      "meaning": "Schatz (Dakuten)"
+    }
+  ]
+}
