@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-ta",
+  "name": "Ta-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ta",
+      "character": "た",
+      "romaji": "ta",
+      "meaning": "Reisfeld"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-ma",
+  "name": "Ma-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ma",
+      "character": "ま",
+      "romaji": "ma",
+      "meaning": "Falsche / Sanft"
+    }
+  ]
+}

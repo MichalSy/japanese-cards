@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-ha",
+  "name": "Ha-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ha",
+      "character": "は",
+      "romaji": "ha",
+      "meaning": "Blatt / Thema"
+    }
+  ]
+}

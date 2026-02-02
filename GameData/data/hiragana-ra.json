@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-ra",
+  "name": "Ra-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ra",
+      "character": "ら",
+      "romaji": "ra",
+      "meaning": "Rauch"
+    }
+  ]
+}

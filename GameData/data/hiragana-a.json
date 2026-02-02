@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-a",
+  "name": "A-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-a",
+      "character": "あ",
+      "romaji": "a",
+      "meaning": "Vokal A"
+    }
+  ]
+}

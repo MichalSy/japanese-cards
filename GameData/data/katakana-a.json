@@ -1,0 +1,13 @@
+{
+  "id": "katakana-a",
+  "name": "A-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-a",
+      "character": "ア",
+      "romaji": "a",
+      "meaning": "Vokal A"
+    }
+  ]
+}

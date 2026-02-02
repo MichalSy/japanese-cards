@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-sa",
+  "name": "Sa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-sa",
+      "character": "さ",
+      "romaji": "sa",
+      "meaning": "Unterschied"
+    }
+  ]
+}

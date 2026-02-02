@@ -1,0 +1,13 @@
+{
+  "id": "hiragana-ka",
+  "name": "Ka-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ka",
+      "character": "か",
+      "romaji": "ka",
+      "meaning": "Feuer / Überprüfung"
+    }
+  ]
+}

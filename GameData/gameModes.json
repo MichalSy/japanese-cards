@@ -1,0 +1,32 @@
+{
+  "gameModes": [
+    {
+      "id": "swipe",
+      "name": "Swipe-Spiel",
+      "emoji": "👆",
+      "description": "Wische links oder rechts um zu antworten",
+      "color": "#ec4899"
+    },
+    {
+      "id": "multiple-choice",
+      "name": "Multiple Choice",
+      "emoji": "🎯",
+      "description": "Wähle die richtige Antwort aus 4 Optionen",
+      "color": "#a855f7"
+    },
+    {
+      "id": "flashcard",
+      "name": "Kartenspiel",
+      "emoji": "🃏",
+      "description": "Klassische Lernkarten zum Umschlagen",
+      "color": "#06b6d4"
+    },
+    {
+      "id": "typing",
+      "name": "Tipp-Quiz",
+      "emoji": "⌨️",
+      "description": "Tippe die Antwort ein",
+      "color": "#8b5cf6"
+    }
+  ]
+}
