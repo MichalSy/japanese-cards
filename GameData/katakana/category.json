@@ -5,6 +5,7 @@
   "emoji": "🔤",
   "color": "#a855f7",
   "type": "characters",
+  "enabled": false,
   "showAllOption": true,
   "groups": [
     {

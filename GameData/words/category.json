@@ -5,6 +5,7 @@
   "emoji": "💬",
   "color": "#06b6d4",
   "type": "vocabulary",
+  "enabled": false,
   "showAllOption": true,
   "groups": [
     {

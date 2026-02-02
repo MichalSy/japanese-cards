@@ -4,25 +4,29 @@
       "id": "hiragana",
       "name": "ひらがな",
       "emoji": "あ",
-      "type": "characters"
+      "type": "characters",
+      "enabled": true
     },
     {
       "id": "katakana",
       "name": "カタカナ",
       "emoji": "ア",
-      "type": "characters"
+      "type": "characters",
+      "enabled": false
     },
     {
       "id": "words",
       "name": "単語",
       "emoji": "💬",
-      "type": "vocabulary"
+      "type": "vocabulary",
+      "enabled": false
     },
     {
       "id": "sentences",
       "name": "文",
       "emoji": "✍️",
-      "type": "phrases"
+      "type": "phrases",
+      "enabled": false
     }
   ]
 }
