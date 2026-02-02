@@ -165,11 +165,11 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         </div>
       )}
 
-      {/* Swipe Indicators - show what's correct this round */}
+      {/* Swipe Indicators - always consistent: left = false, right = true */}
       {!swipeState && (
         <div style={{ position: 'absolute', bottom: 'var(--spacing-4)', left: 0, right: 0, display: 'flex', justifyContent: 'space-around', padding: '0 var(--spacing-4)', fontSize: '12px', color: 'var(--color-text-tertiary)' }}>
-          <span>{correctAnswer ? '❌ Falsch' : '✅ Richtig'}</span>
-          <span>{correctAnswer ? '✅ Richtig' : '❌ Falsch'}</span>
+          <span>❌ Falsch</span>
+          <span>✅ Richtig</span>
         </div>
       )}
     </div>

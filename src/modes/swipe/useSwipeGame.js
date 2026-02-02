@@ -35,18 +35,27 @@ export function useSwipeGame(items, cardCount) {
     const display = []
     
     deck.forEach((card, idx) => {
-      const isCorrectAnswer = Math.random() > 0.5
-      answers[`${idx}-${card.id}`] = isCorrectAnswer
+      // 50/50: show correct meaning or random wrong meaning
+      const isCorrectMeaning = Math.random() > 0.5
       
-      // If correct answer, show the real card
-      // If incorrect answer, show random other card from items
-      if (isCorrectAnswer) {
+      if (isCorrectMeaning) {
+        // Show the real card with its correct meaning
         display.push(card)
       } else {
-        // Pick random different card from items
-        const randomCard = items[Math.floor(Math.random() * items.length)]
-        display.push(randomCard)
+        // Show the character but with a wrong meaning (random other card's meaning)
+        const wrongCard = items[Math.floor(Math.random() * items.length)]
+        // Combine: show character from deck, meaning from random item
+        display.push({
+          ...card,
+          meaning: wrongCard.meaning,
+          romaji: wrongCard.romaji,
+        })
       }
+      
+      // Store if the pairing is correct (for scoring)
+      // Right swipe = "this pairing is correct"
+      // True = user should swipe right, False = user should swipe left
+      answers[`${idx}-${card.id}`] = isCorrectMeaning
     })
     
     setCards(deck)
