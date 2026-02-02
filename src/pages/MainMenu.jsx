@@ -2,11 +2,12 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { fetchCategories } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
+import LanguageToggle from '../components/LanguageToggle'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
 export default function MainMenu() {
   const navigate = useNavigate()
-  const { language, toggleLanguage } = useLanguage()
+  const { language } = useLanguage()
   const [activeTab, setActiveTab] = useState('start')
   const [contentTypes, setContentTypes] = useState([])
   const [loading, setLoading] = useState(true)
@@ -54,30 +55,7 @@ export default function MainMenu() {
       <AppHeader>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: 'var(--spacing-2)' }}>
           <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>Japanese Cards</h1>
-          <button
-            onClick={toggleLanguage}
-            style={{
-              padding: 'var(--spacing-2) var(--spacing-3)',
-              backgroundColor: 'var(--color-surface-light)',
-              border: '1px solid var(--color-surface-dark)',
-              borderRadius: 'var(--radius-sm)',
-              color: 'var(--color-text-primary)',
-              fontWeight: '600',
-              cursor: 'pointer',
-              fontSize: '12px',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-primary)'
-              e.currentTarget.style.color = 'white'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-surface-light)'
-              e.currentTarget.style.color = 'var(--color-text-primary)'
-            }}
-          >
-            {language === 'de' ? 'EN' : 'DE'}
-          </button>
+          <LanguageToggle />
         </div>
       </AppHeader>
 
