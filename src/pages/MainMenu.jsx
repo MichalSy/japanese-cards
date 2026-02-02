@@ -1,24 +1,43 @@
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, Zap, Target, Award } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { fetchCategories } from '../config/api'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
 export default function MainMenu() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('start')
+  const [contentTypes, setContentTypes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const contentTypes = [
-    { id: 'hiragana', name: 'Hiragana', icon: BookOpen, desc: '日本語の基本文字' },
-    { id: 'katakana', name: 'Katakana', icon: Target, desc: '外来語の文字' },
-    { id: 'words', name: 'Wörter', icon: Zap, desc: 'Vokabeltraining' },
-    { id: 'sentences', name: 'Sätze', icon: Award, desc: 'Satzstrukturen' },
-  ]
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        setLoading(true)
+        const data = await fetchCategories()
+        // Filter enabled categories
+        const enabledCategories = data.categories.filter(cat => cat.enabled !== false)
+        setContentTypes(enabledCategories)
+      } catch (err) {
+        setError(err.message)
+        console.error('Failed to load categories:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadCategories()
+  }, [])
 
   const tabs = [
     { id: 'start', label: 'Start', icon: '🎮' },
     { id: 'progress', label: 'Progress', icon: '📊' },
     { id: 'stats', label: 'Stats', icon: '🏆' },
   ]
+
+  const getIconComponent = (emoji) => {
+    return <span style={{ fontSize: '24px' }}>{emoji}</span>
+  }
 
   return (
     <AppLayout>
@@ -30,25 +49,36 @@ export default function MainMenu() {
         {activeTab === 'start' && (
           <div className="space-y-6">
             <h2 className="text-base font-medium text-primary">Kategorien</h2>
-            <div className="grid-1">
-              {contentTypes.map((type) => {
-                const Icon = type.icon
-                return (
+            
+            {loading && (
+              <div style={{ textAlign: 'center', color: 'var(--color-text-tertiary)' }}>
+                Lade Kategorien...
+              </div>
+            )}
+
+            {error && (
+              <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
+                Fehler beim Laden: {error}
+              </div>
+            )}
+
+            {!loading && !error && contentTypes.length > 0 && (
+              <div className="grid-1">
+                {contentTypes.map((type) => (
                   <Card key={type.id} interactive onClick={() => navigate(`/content/${type.id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
-                      <div style={{ padding: 'var(--spacing-3)', backgroundColor: 'var(--color-surface-light)', borderRadius: '50%', flexShrink: 0 }}>
-                        <Icon size={24} style={{ color: 'var(--color-text-secondary)', strokeWidth: '2px' }} />
+                      <div style={{ padding: 'var(--spacing-3)', backgroundColor: 'var(--color-surface-light)', borderRadius: '50%', flexShrink: 0, fontSize: '24px' }}>
+                        {type.emoji}
                       </div>
                       <div style={{ flex: 1, textAlign: 'left' }}>
                         <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{type.name}</h3>
-                        <p className="text-sm" style={{ color: 'var(--color-text-tertiary)', margin: 'var(--spacing-1) 0 0 0' }}>{type.desc}</p>
                       </div>
                       <span style={{ color: 'var(--color-text-tertiary)' }}>→</span>
                     </div>
                   </Card>
-                )
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
