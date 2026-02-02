@@ -42,16 +42,10 @@ export default function MainMenu() {
   }
 
   const getCategoryName = (category) => {
-    if (category.type === 'characters') {
-      return category.name
-    }
-    return getLabel(category, 'name')
+    return getLabel(category, 'name') || category.name
   }
 
   const getCategoryDescription = (category) => {
-    if (category.type === 'characters') {
-      return ''
-    }
     return getLabel(category, 'description')
   }
 

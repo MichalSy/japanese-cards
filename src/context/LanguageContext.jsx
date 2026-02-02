@@ -1,12 +1,31 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 const LanguageContext = createContext()
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState('de') // 'de' or 'en'
+  const [language, setLanguage] = useState('de')
+  const [isLoaded, setIsLoaded] = useState(false)
 
+  // Load language from localStorage on mount
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language')
+    if (savedLanguage) {
+      setLanguage(savedLanguage)
+    }
+    setIsLoaded(true)
+  }, [])
+
+  // Save language to localStorage when it changes
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'de' ? 'en' : 'de')
+    setLanguage(prev => {
+      const newLanguage = prev === 'de' ? 'en' : 'de'
+      localStorage.setItem('language', newLanguage)
+      return newLanguage
+    })
+  }
+
+  if (!isLoaded) {
+    return null
   }
 
   return (
