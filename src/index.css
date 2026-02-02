@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 /* Font Loading Optimization */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap');
+/* Use system fonts first (no FOIT), load custom font in background */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=optional');
 
 /* Skeleton Loading Animation */
 @keyframes shimmer {
@@ -16,9 +17,9 @@
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--color-surface-light) 0%,
-    var(--color-surface) 50%,
-    var(--color-surface-light) 100%
+    rgba(51, 65, 85, 0.3) 0%,
+    rgba(30, 41, 59, 0.3) 50%,
+    rgba(51, 65, 85, 0.3) 100%
   );
   background-size: 1000px 100%;
   animation: shimmer 2s infinite;
@@ -80,8 +81,8 @@
   --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.16), 0 6px 12px rgba(0, 0, 0, 0.12);
   
-  /* Typography */
-  --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Typography - System fonts first for speed, Roboto optional as fallback */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
 }
 
 * {
