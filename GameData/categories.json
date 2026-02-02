@@ -5,6 +5,8 @@
       "name": "ひらがな",
       "nameEn": "Hiragana",
       "nameDe": "Hiragana",
+      "descriptionEn": "Japanese script for native words",
+      "descriptionDe": "Japanische Schrift für native Wörter",
       "emoji": "あ",
       "type": "characters",
       "enabled": true
@@ -14,6 +16,8 @@
       "name": "カタカナ",
       "nameEn": "Katakana",
       "nameDe": "Katakana",
+      "descriptionEn": "Japanese script for foreign words",
+      "descriptionDe": "Japanische Schrift für Fremdwörter",
       "emoji": "ア",
       "type": "characters",
       "enabled": false
