@@ -71,7 +71,12 @@ export function useSwipeGame(items, cardCount) {
       setStats(prev => ({
         ...prev,
         incorrect: prev.incorrect + 1,
-        mistakes: [...prev.mistakes, cards[currentIndex]]
+        mistakes: [...prev.mistakes, {
+          realCard: cards[currentIndex], // The actual character
+          displayedCard: displayCards[currentIndex], // What was shown (with possibly wrong meaning)
+          userAction: swipeDirection, // 'left' or 'right'
+          wasCorrectPairing: correctAnswers[`${currentIndex}-${cards[currentIndex].id}`],
+        }]
       }))
     } else {
       setStats(prev => ({
