@@ -1,60 +1,144 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { AppLayout, AppHeader, AppContent, AppFooter, Card, Button } from '../components/Layout'
+import { useState, useEffect } from 'react'
+import { fetchCategoryConfig } from '../config/api'
+import { useLanguage } from '../context/LanguageContext'
+import CategoryCardSkeleton from '../components/CategoryCardSkeleton'
+import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
 export default function ContentTypeView() {
   const { contentType } = useParams()
   const navigate = useNavigate()
+  const { language } = useLanguage()
+  const [categoryConfig, setCategoryConfig] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const contentData = {
-    hiragana: {
-      name: 'Hiragana',
-      groups: [
-        { id: 'a', name: 'A-Reihe', count: 5, progress: 93 },
-        { id: 'ka', name: 'Ka-Reihe', count: 5, progress: 87 },
-        { id: 'sa', name: 'Sa-Reihe', count: 5, progress: 0 },
-        { id: 'ta', name: 'Ta-Reihe', count: 5, progress: 0 },
-        { id: 'na', name: 'Na-Reihe', count: 5, progress: 0 },
-      ],
-    },
+  useEffect(() => {
+    const loadCategoryConfig = async () => {
+      try {
+        setLoading(true)
+        const config = await fetchCategoryConfig(contentType)
+        setCategoryConfig(config)
+      } catch (err) {
+        setError(err.message)
+        console.error(`Failed to load category config for ${contentType}:`, err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadCategoryConfig()
+  }, [contentType])
+
+  const getLabel = (obj, key) => {
+    if (!obj) return ''
+    const fieldKey = language === 'de' ? `${key}De` : `${key}En`
+    return obj[fieldKey] || obj[key] || ''
   }
 
-  const data = contentData[contentType] || contentData.hiragana
-  const completedCount = data.groups.filter(g => g.progress > 0).length
-  const totalCount = data.groups.length
+  if (loading) {
+    return (
+      <AppLayout>
+        <AppHeader>
+          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
+            {language === 'de' ? 'Lade...' : 'Loading...'}
+          </h1>
+        </AppHeader>
+        <AppContent>
+          <div className="space-y-6">
+            <CategoryCardSkeleton />
+            <CategoryCardSkeleton />
+            <CategoryCardSkeleton />
+          </div>
+        </AppContent>
+      </AppLayout>
+    )
+  }
+
+  if (error || !categoryConfig) {
+    return (
+      <AppLayout>
+        <AppHeader>
+          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
+            {language === 'de' ? 'Fehler' : 'Error'}
+          </h1>
+        </AppHeader>
+        <AppContent>
+          <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
+            {language === 'de' ? 'Fehler beim Laden:' : 'Error loading:'} {error}
+          </div>
+        </AppContent>
+      </AppLayout>
+    )
+  }
+
+  const categoryName = getLabel(categoryConfig, 'name') || categoryConfig.name
+  const totalItems = categoryConfig.groups.reduce((sum, group) => {
+    // We don't know item counts yet, so we'll display group count
+    return sum + 1
+  }, 0)
 
   return (
     <AppLayout>
-      <AppHeader onBack={() => navigate('/')} progress={`${completedCount}/${totalCount}`}>
-        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{data.name}</h1>
+      <AppHeader>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <button
+            onClick={() => navigate('/')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-text-primary)',
+              fontSize: '20px',
+              cursor: 'pointer',
+              padding: '4px 8px',
+            }}
+          >
+            ←
+          </button>
+          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0, flex: 1, textAlign: 'center' }}>
+            {categoryName}
+          </h1>
+          <div style={{ width: '36px' }} />
+        </div>
       </AppHeader>
 
       <AppContent>
-        <div className="space-y-6">
-          <Card>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="text-sm font-medium text-primary">Gesamtfortschritt</span>
-                <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>{Math.round((completedCount / totalCount) * 100)}%</span>
+        <div className="space-y-6 fade-in">
+          {categoryConfig.showAllOption && (
+            <Card interactive onClick={() => navigate(`/content/${contentType}/all`)}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div>
+                    <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
+                      {language === 'de' ? 'Alle kombiniert' : 'All Combined'}
+                    </h3>
+                    <p className="text-sm text-tertiary" style={{ margin: 'var(--spacing-1) 0 0 0' }}>
+                      {categoryConfig.groups.length} {language === 'de' ? 'Gruppen' : 'groups'}
+                    </p>
+                  </div>
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>0%</span>
+                </div>
+                <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
+                  <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', width: '0%' }}></div>
+                </div>
               </div>
-              <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
-                <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', transition: 'width 0.3s ease', width: `${(completedCount / totalCount) * 100}%` }}></div>
-              </div>
-            </div>
-          </Card>
+            </Card>
+          )}
 
           <div className="grid-1">
-            {data.groups.map((group) => (
+            {categoryConfig.groups.map((group) => (
               <Card key={group.id} interactive onClick={() => navigate(`/content/${contentType}/${group.id}`)}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
-                      <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{group.name}</h3>
-                      <p className="text-sm text-tertiary" style={{ margin: 'var(--spacing-1) 0 0 0' }}>{group.count} Zeichen</p>
+                      <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
+                        {group.name}
+                      </h3>
                     </div>
-                    <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>{group.progress}%</span>
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>0%</span>
                   </div>
                   <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
-                    <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', transition: 'width 0.3s ease', width: `${group.progress}%` }}></div>
+                    <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', width: '0%' }}></div>
                   </div>
                 </div>
               </Card>
@@ -64,9 +148,29 @@ export default function ContentTypeView() {
       </AppContent>
 
       <AppFooter>
-        <Button onClick={() => navigate(`/content/${contentType}/${data.groups[0].id}`)}>
-          Spielen →
-        </Button>
+        <button
+          onClick={() => navigate(`/content/${contentType}/${categoryConfig.groups[0].id}`)}
+          style={{
+            flex: 1,
+            padding: 'var(--spacing-3) var(--spacing-4)',
+            backgroundColor: 'var(--color-primary)',
+            color: 'white',
+            border: 'none',
+            borderRadius: 'var(--radius-md)',
+            fontWeight: '600',
+            cursor: 'pointer',
+            fontSize: '16px',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--color-primary-light)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--color-primary)'
+          }}
+        >
+          {language === 'de' ? 'Spielen' : 'Play'} →
+        </button>
       </AppFooter>
     </AppLayout>
   )
