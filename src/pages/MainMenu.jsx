@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { fetchCategories } from '../config/api'
+import { useLanguage } from '../context/LanguageContext'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
 export default function MainMenu() {
   const navigate = useNavigate()
+  const { language, toggleLanguage } = useLanguage()
   const [activeTab, setActiveTab] = useState('start')
   const [contentTypes, setContentTypes] = useState([])
   const [loading, setLoading] = useState(true)
@@ -15,7 +17,6 @@ export default function MainMenu() {
       try {
         setLoading(true)
         const data = await fetchCategories()
-        // Filter enabled categories
         const enabledCategories = data.categories.filter(cat => cat.enabled !== false)
         setContentTypes(enabledCategories)
       } catch (err) {
@@ -30,41 +31,78 @@ export default function MainMenu() {
   }, [])
 
   const tabs = [
-    { id: 'start', label: 'Start', icon: '🎮' },
-    { id: 'progress', label: 'Fortschritt', icon: '📊' },
-    { id: 'stats', label: 'Statistiken', icon: '🏆' },
+    { id: 'start', labelDe: 'Start', labelEn: 'Start', icon: '🎮' },
+    { id: 'progress', labelDe: 'Fortschritt', labelEn: 'Progress', icon: '📊' },
+    { id: 'stats', labelDe: 'Statistiken', labelEn: 'Stats', icon: '🏆' },
   ]
 
-  // Get display name based on category type
-  const getDisplayName = (category) => {
+  const getLabel = (obj, key) => {
+    const fieldKey = language === 'de' ? `${key}De` : `${key}En`
+    return obj[fieldKey] || obj[key]
+  }
+
+  const getCategoryName = (category) => {
     if (category.type === 'characters') {
-      // For characters, only show Japanese name
       return category.name
     }
-    // For others, show German name with English subtitle
-    return category.nameDe || category.name
+    return getLabel(category, 'name')
+  }
+
+  const getCategoryDescription = (category) => {
+    if (category.type === 'characters') {
+      return ''
+    }
+    return getLabel(category, 'description')
   }
 
   return (
     <AppLayout>
       <AppHeader>
-        <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>Japanese Cards</h1>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: 'var(--spacing-2)' }}>
+          <h1 className="text-lg font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>Japanese Cards</h1>
+          <button
+            onClick={toggleLanguage}
+            style={{
+              padding: 'var(--spacing-2) var(--spacing-3)',
+              backgroundColor: 'var(--color-surface-light)',
+              border: '1px solid var(--color-surface-dark)',
+              borderRadius: 'var(--radius-sm)',
+              color: 'var(--color-text-primary)',
+              fontWeight: '600',
+              cursor: 'pointer',
+              fontSize: '12px',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-primary)'
+              e.currentTarget.style.color = 'white'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-surface-light)'
+              e.currentTarget.style.color = 'var(--color-text-primary)'
+            }}
+          >
+            {language === 'de' ? 'EN' : 'DE'}
+          </button>
+        </div>
       </AppHeader>
 
       <AppContent>
         {activeTab === 'start' && (
           <div className="space-y-6">
-            <h2 className="text-base font-medium text-primary">Kategorien</h2>
+            <h2 className="text-base font-medium text-primary">
+              {language === 'de' ? 'Kategorien' : 'Categories'}
+            </h2>
             
             {loading && (
               <div style={{ textAlign: 'center', color: 'var(--color-text-tertiary)' }}>
-                Lade Kategorien...
+                {language === 'de' ? 'Lade Kategorien...' : 'Loading categories...'}
               </div>
             )}
 
             {error && (
               <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
-                Fehler beim Laden: {error}
+                {language === 'de' ? 'Fehler beim Laden:' : 'Error loading:'} {error}
               </div>
             )}
 
@@ -90,8 +128,13 @@ export default function MainMenu() {
                       </div>
                       <div style={{ flex: 1, textAlign: 'left' }}>
                         <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-                          {getDisplayName(type)}
+                          {getCategoryName(type)}
                         </h3>
+                        {getCategoryDescription(type) && (
+                          <p className="text-sm" style={{ color: 'var(--color-text-tertiary)', margin: 'var(--spacing-1) 0 0 0' }}>
+                            {getCategoryDescription(type)}
+                          </p>
+                        )}
                       </div>
                       <span style={{ color: 'var(--color-text-tertiary)', fontSize: '20px' }}>→</span>
                     </div>
@@ -104,13 +147,15 @@ export default function MainMenu() {
 
         {activeTab === 'progress' && (
           <div className="space-y-6">
-            <h2 className="text-base font-medium text-primary">Dein Fortschritt</h2>
+            <h2 className="text-base font-medium text-primary">
+              {language === 'de' ? 'Dein Fortschritt' : 'Your Progress'}
+            </h2>
             <div className="grid-1">
               {contentTypes.map((type) => (
                 <Card key={type.id}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="text-sm font-medium text-primary">{getDisplayName(type)}</span>
+                      <span className="text-sm font-medium text-primary">{getCategoryName(type)}</span>
                       <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>42%</span>
                     </div>
                     <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
@@ -125,29 +170,39 @@ export default function MainMenu() {
 
         {activeTab === 'stats' && (
           <div className="space-y-6">
-            <h2 className="text-base font-medium text-primary">Statistiken</h2>
+            <h2 className="text-base font-medium text-primary">
+              {language === 'de' ? 'Statistiken' : 'Statistics'}
+            </h2>
             <div className="grid-2">
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>Tage aktiv</p>
+                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                    {language === 'de' ? 'Tage aktiv' : 'Days active'}
+                  </p>
                   <p className="text-3xl font-bold" style={{ color: 'var(--color-primary)', margin: 0 }}>12</p>
                 </div>
               </Card>
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>Punkte</p>
+                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                    {language === 'de' ? 'Punkte' : 'Points'}
+                  </p>
                   <p className="text-3xl font-bold" style={{ color: 'var(--color-secondary)', margin: 0 }}>1.2K</p>
                 </div>
               </Card>
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>Genauigkeit</p>
+                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                    {language === 'de' ? 'Genauigkeit' : 'Accuracy'}
+                  </p>
                   <p className="text-3xl font-bold" style={{ color: '#3b82f6', margin: 0 }}>89%</p>
                 </div>
               </Card>
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>Streak</p>
+                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                    {language === 'de' ? 'Streak' : 'Streak'}
+                  </p>
                   <p className="text-3xl font-bold" style={{ color: '#10b981', margin: 0 }}>7</p>
                 </div>
               </Card>
@@ -158,32 +213,35 @@ export default function MainMenu() {
 
       <AppFooter>
         <div style={{ width: '100%', display: 'flex', gap: 0, height: '100%', alignItems: 'stretch' }}>
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 'var(--spacing-1)',
-                padding: '0',
-                borderRadius: 'var(--radius-md)',
-                transition: 'all 0.2s',
-                fontWeight: '500',
-                border: 'none',
-                cursor: 'pointer',
-                backgroundColor: activeTab === tab.id ? `linear-gradient(135deg, var(--color-primary), var(--color-secondary))` : 'transparent',
-                background: activeTab === tab.id ? `linear-gradient(135deg, var(--color-primary), var(--color-secondary))` : 'transparent',
-                color: activeTab === tab.id ? 'white' : 'var(--color-text-tertiary)'
-              }}
-            >
-              <span style={{ fontSize: '24px' }}>{tab.icon}</span>
-              <span className="text-sm font-medium">{tab.label}</span>
-            </button>
-          ))}
+          {tabs.map((tab) => {
+            const label = language === 'de' ? tab.labelDe : tab.labelEn
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 'var(--spacing-1)',
+                  padding: '0',
+                  borderRadius: 'var(--radius-md)',
+                  transition: 'all 0.2s',
+                  fontWeight: '500',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: activeTab === tab.id ? `linear-gradient(135deg, var(--color-primary), var(--color-secondary))` : 'transparent',
+                  background: activeTab === tab.id ? `linear-gradient(135deg, var(--color-primary), var(--color-secondary))` : 'transparent',
+                  color: activeTab === tab.id ? 'white' : 'var(--color-text-tertiary)'
+                }}
+              >
+                <span style={{ fontSize: '24px' }}>{tab.icon}</span>
+                <span className="text-sm font-medium">{label}</span>
+              </button>
+            )
+          })}
         </div>
       </AppFooter>
     </AppLayout>
