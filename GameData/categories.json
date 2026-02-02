@@ -3,6 +3,8 @@
     {
       "id": "hiragana",
       "name": "ひらがな",
+      "nameEn": "Hiragana",
+      "nameDe": "Hiragana",
       "emoji": "あ",
       "type": "characters",
       "enabled": true
@@ -10,6 +12,8 @@
     {
       "id": "katakana",
       "name": "カタカナ",
+      "nameEn": "Katakana",
+      "nameDe": "Katakana",
       "emoji": "ア",
       "type": "characters",
       "enabled": false
@@ -17,6 +21,10 @@
     {
       "id": "words",
       "name": "単語",
+      "nameEn": "Vocabulary",
+      "nameDe": "Vokabeln",
+      "description": "Learn Japanese words and expressions",
+      "descriptionDe": "Lerne japanische Wörter und Ausdrücke",
       "emoji": "💬",
       "type": "vocabulary",
       "enabled": false
@@ -24,6 +32,10 @@
     {
       "id": "sentences",
       "name": "文",
+      "nameEn": "Sentences",
+      "nameDe": "Sätze",
+      "description": "Master sentence structures and grammar",
+      "descriptionDe": "Beherrsche Satzstrukturen und Grammatik",
       "emoji": "✍️",
       "type": "phrases",
       "enabled": false
