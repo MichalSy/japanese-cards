@@ -1,0 +1,12 @@
+{
+  "id": "katakana-ma",
+  "name": "Ma-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-ma",
+      "character": "マ",
+      "romaji": "ma"
+    }
+  ]
+}

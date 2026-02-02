@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-ka",
+  "name": "Ka-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ka",
+      "character": "か",
+      "romaji": "ka"
+    },
+    {
+      "id": "h-ki",
+      "character": "き",
+      "romaji": "ki"
+    },
+    {
+      "id": "h-ku",
+      "character": "く",
+      "romaji": "ku"
+    },
+    {
+      "id": "h-ke",
+      "character": "け",
+      "romaji": "ke"
+    },
+    {
+      "id": "h-ko",
+      "character": "こ",
+      "romaji": "ko"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-ha",
+  "name": "Ha-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ha",
+      "character": "は",
+      "romaji": "ha"
+    },
+    {
+      "id": "h-hi",
+      "character": "ひ",
+      "romaji": "hi"
+    },
+    {
+      "id": "h-hu",
+      "character": "ふ",
+      "romaji": "fu"
+    },
+    {
+      "id": "h-he",
+      "character": "へ",
+      "romaji": "he"
+    },
+    {
+      "id": "h-ho",
+      "character": "ほ",
+      "romaji": "ho"
+    }
+  ]
+}

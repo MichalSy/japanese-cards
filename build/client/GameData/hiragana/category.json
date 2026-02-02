@@ -1,0 +1,91 @@
+{
+  "id": "hiragana",
+  "name": "ひらがな",
+  "nameEn": "Hiragana",
+  "nameDe": "Hiragana",
+  "descriptionEn": "Japanese script for native words",
+  "descriptionDe": "Japanische Schrift für native Wörter",
+  "emoji": "あ",
+  "color": "#ec4899",
+  "type": "characters",
+  "enabled": true,
+  "showAllOption": true,
+  "gameModes": ["swipe", "multiChoice", "flashcard", "typing"],
+  "groups": [
+    {
+      "id": "a",
+      "name": "A-Reihe",
+      "dataFile": "data/hiragana-a.json"
+    },
+    {
+      "id": "ka",
+      "name": "Ka-Reihe",
+      "dataFile": "data/hiragana-ka.json"
+    },
+    {
+      "id": "sa",
+      "name": "Sa-Reihe",
+      "dataFile": "data/hiragana-sa.json"
+    },
+    {
+      "id": "ta",
+      "name": "Ta-Reihe",
+      "dataFile": "data/hiragana-ta.json"
+    },
+    {
+      "id": "na",
+      "name": "Na-Reihe",
+      "dataFile": "data/hiragana-na.json"
+    },
+    {
+      "id": "ha",
+      "name": "Ha-Reihe",
+      "dataFile": "data/hiragana-ha.json"
+    },
+    {
+      "id": "ma",
+      "name": "Ma-Reihe",
+      "dataFile": "data/hiragana-ma.json"
+    },
+    {
+      "id": "ya",
+      "name": "Ya-Reihe",
+      "dataFile": "data/hiragana-ya.json"
+    },
+    {
+      "id": "ra",
+      "name": "Ra-Reihe",
+      "dataFile": "data/hiragana-ra.json"
+    },
+    {
+      "id": "wa",
+      "name": "Wa-Reihe",
+      "dataFile": "data/hiragana-wa.json"
+    },
+    {
+      "id": "ga",
+      "name": "Ga-Reihe",
+      "dataFile": "data/hiragana-ga.json"
+    },
+    {
+      "id": "za",
+      "name": "Za-Reihe",
+      "dataFile": "data/hiragana-za.json"
+    },
+    {
+      "id": "da",
+      "name": "Da-Reihe",
+      "dataFile": "data/hiragana-da.json"
+    },
+    {
+      "id": "ba",
+      "name": "Ba-Reihe",
+      "dataFile": "data/hiragana-ba.json"
+    },
+    {
+      "id": "pa",
+      "name": "Pa-Reihe",
+      "dataFile": "data/hiragana-pa.json"
+    }
+  ]
+}

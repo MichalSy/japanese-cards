@@ -1,0 +1,66 @@
+{
+  "id": "katakana",
+  "name": "カタカナ",
+  "nameEn": "Katakana",
+  "nameDe": "Katakana",
+  "descriptionEn": "Japanese script for foreign words",
+  "descriptionDe": "Japanische Schrift für Fremdwörter",
+  "emoji": "ア",
+  "color": "#a855f7",
+  "type": "characters",
+  "enabled": false,
+  "showAllOption": true,
+  "gameModes": ["swipe", "multiChoice", "flashcard", "typing"],
+  "groups": [
+    {
+      "id": "a",
+      "name": "A-Reihe",
+      "dataFile": "data/katakana-a.json"
+    },
+    {
+      "id": "ka",
+      "name": "Ka-Reihe",
+      "dataFile": "data/katakana-ka.json"
+    },
+    {
+      "id": "sa",
+      "name": "Sa-Reihe",
+      "dataFile": "data/katakana-sa.json"
+    },
+    {
+      "id": "ta",
+      "name": "Ta-Reihe",
+      "dataFile": "data/katakana-ta.json"
+    },
+    {
+      "id": "na",
+      "name": "Na-Reihe",
+      "dataFile": "data/katakana-na.json"
+    },
+    {
+      "id": "ha",
+      "name": "Ha-Reihe",
+      "dataFile": "data/katakana-ha.json"
+    },
+    {
+      "id": "ma",
+      "name": "Ma-Reihe",
+      "dataFile": "data/katakana-ma.json"
+    },
+    {
+      "id": "ya",
+      "name": "Ya-Reihe",
+      "dataFile": "data/katakana-ya.json"
+    },
+    {
+      "id": "ra",
+      "name": "Ra-Reihe",
+      "dataFile": "data/katakana-ra.json"
+    },
+    {
+      "id": "wa",
+      "name": "Wa-Reihe",
+      "dataFile": "data/katakana-wa.json"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "words-all",
+  "name": "Alle Wörter",
+  "type": "vocabulary",
+  "items": [
+    {
+      "id": "w-1",
+      "word": "学生",
+      "romaji": "gakusei",
+      "wordType": "Noun",
+      "exampleSentence": "私は学生です。(Ich bin Student.)"
+    },
+    {
+      "id": "w-2",
+      "word": "犬",
+      "romaji": "inu",
+      "wordType": "Noun",
+      "exampleSentence": "大きい犬です。(Es ist ein großer Hund.)"
+    },
+    {
+      "id": "w-3",
+      "word": "水",
+      "romaji": "mizu",
+      "wordType": "Noun",
+      "exampleSentence": "冷たい水が欲しいです。(Ich möchte kaltes Wasser.)"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "hiragana-ya",
+  "name": "Ya-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ya",
+      "character": "や",
+      "romaji": "ya"
+    },
+    {
+      "id": "h-yu",
+      "character": "ゆ",
+      "romaji": "yu"
+    },
+    {
+      "id": "h-yo",
+      "character": "よ",
+      "romaji": "yo"
+    }
+  ]
+}

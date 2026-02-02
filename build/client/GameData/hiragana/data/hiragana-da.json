@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-da",
+  "name": "Da-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-da",
+      "character": "だ",
+      "romaji": "da"
+    },
+    {
+      "id": "h-di",
+      "character": "ぢ",
+      "romaji": "di"
+    },
+    {
+      "id": "h-du",
+      "character": "づ",
+      "romaji": "du"
+    },
+    {
+      "id": "h-de",
+      "character": "で",
+      "romaji": "de"
+    },
+    {
+      "id": "h-do",
+      "character": "ど",
+      "romaji": "do"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-ta",
+  "name": "Ta-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ta",
+      "character": "た",
+      "romaji": "ta"
+    },
+    {
+      "id": "h-ti",
+      "character": "ち",
+      "romaji": "chi/ti"
+    },
+    {
+      "id": "h-tu",
+      "character": "つ",
+      "romaji": "tsu"
+    },
+    {
+      "id": "h-te",
+      "character": "て",
+      "romaji": "te"
+    },
+    {
+      "id": "h-to",
+      "character": "と",
+      "romaji": "to"
+    }
+  ]
+}

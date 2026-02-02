@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-ga",
+  "name": "Ga-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ga",
+      "character": "が",
+      "romaji": "ga"
+    },
+    {
+      "id": "h-gi",
+      "character": "ぎ",
+      "romaji": "gi"
+    },
+    {
+      "id": "h-gu",
+      "character": "ぐ",
+      "romaji": "gu"
+    },
+    {
+      "id": "h-ge",
+      "character": "げ",
+      "romaji": "ge"
+    },
+    {
+      "id": "h-go",
+      "character": "ご",
+      "romaji": "go"
+    }
+  ]
+}

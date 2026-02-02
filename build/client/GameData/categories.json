@@ -1,0 +1,48 @@
+{
+  "categories": [
+    {
+      "id": "hiragana",
+      "name": "ひらがな",
+      "nameEn": "Hiragana",
+      "nameDe": "Hiragana",
+      "descriptionEn": "Japanese script for native words",
+      "descriptionDe": "Japanische Schrift für native Wörter",
+      "emoji": "あ",
+      "type": "characters",
+      "enabled": true
+    },
+    {
+      "id": "katakana",
+      "name": "カタカナ",
+      "nameEn": "Katakana",
+      "nameDe": "Katakana",
+      "descriptionEn": "Japanese script for foreign words",
+      "descriptionDe": "Japanische Schrift für Fremdwörter",
+      "emoji": "ア",
+      "type": "characters",
+      "enabled": false
+    },
+    {
+      "id": "words",
+      "name": "単語",
+      "nameEn": "Vocabulary",
+      "nameDe": "Vokabeln",
+      "descriptionEn": "Learn Japanese words and expressions",
+      "descriptionDe": "Lerne japanische Wörter und Ausdrücke",
+      "emoji": "💬",
+      "type": "vocabulary",
+      "enabled": false
+    },
+    {
+      "id": "sentences",
+      "name": "文",
+      "nameEn": "Sentences",
+      "nameDe": "Sätze",
+      "descriptionEn": "Master sentence structures and grammar",
+      "descriptionDe": "Beherrsche Satzstrukturen und Grammatik",
+      "emoji": "✍️",
+      "type": "phrases",
+      "enabled": false
+    }
+  ]
+}

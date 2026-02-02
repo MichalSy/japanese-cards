@@ -1,0 +1,22 @@
+{
+  "id": "hiragana-wa",
+  "name": "Wa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-wa",
+      "character": "わ",
+      "romaji": "wa"
+    },
+    {
+      "id": "h-wo",
+      "character": "を",
+      "romaji": "wo"
+    },
+    {
+      "id": "h-n",
+      "character": "ん",
+      "romaji": "n"
+    }
+  ]
+}

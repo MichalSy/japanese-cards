@@ -1,0 +1,21 @@
+{
+  "id": "words",
+  "name": "単語",
+  "nameEn": "Vocabulary",
+  "nameDe": "Vokabeln",
+  "descriptionEn": "Learn Japanese words and expressions",
+  "descriptionDe": "Lerne japanische Wörter und Ausdrücke",
+  "emoji": "💬",
+  "color": "#06b6d4",
+  "type": "vocabulary",
+  "enabled": false,
+  "showAllOption": true,
+  "gameModes": ["multiChoice", "flashcard", "typing"],
+  "groups": [
+    {
+      "id": "all",
+      "name": "Alle Wörter",
+      "dataFile": "data/words-all.json"
+    }
+  ]
+}

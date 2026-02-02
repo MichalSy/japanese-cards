@@ -1,0 +1,12 @@
+{
+  "id": "katakana-wa",
+  "name": "Wa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "k-wa",
+      "character": "ワ",
+      "romaji": "wa"
+    }
+  ]
+}

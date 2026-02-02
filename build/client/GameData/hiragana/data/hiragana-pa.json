@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-pa",
+  "name": "Pa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-pa",
+      "character": "ぱ",
+      "romaji": "pa"
+    },
+    {
+      "id": "h-pi",
+      "character": "ぴ",
+      "romaji": "pi"
+    },
+    {
+      "id": "h-pu",
+      "character": "ぷ",
+      "romaji": "pu"
+    },
+    {
+      "id": "h-pe",
+      "character": "ぺ",
+      "romaji": "pe"
+    },
+    {
+      "id": "h-po",
+      "character": "ぽ",
+      "romaji": "po"
+    }
+  ]
+}

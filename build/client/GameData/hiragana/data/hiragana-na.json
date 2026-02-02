@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-na",
+  "name": "Na-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-na",
+      "character": "な",
+      "romaji": "na"
+    },
+    {
+      "id": "h-ni",
+      "character": "に",
+      "romaji": "ni"
+    },
+    {
+      "id": "h-nu",
+      "character": "ぬ",
+      "romaji": "nu"
+    },
+    {
+      "id": "h-ne",
+      "character": "ね",
+      "romaji": "ne"
+    },
+    {
+      "id": "h-no",
+      "character": "の",
+      "romaji": "no"
+    }
+  ]
+}

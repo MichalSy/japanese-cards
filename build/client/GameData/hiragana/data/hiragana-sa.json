@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-sa",
+  "name": "Sa-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-sa",
+      "character": "さ",
+      "romaji": "sa"
+    },
+    {
+      "id": "h-si",
+      "character": "し",
+      "romaji": "shi/si"
+    },
+    {
+      "id": "h-su",
+      "character": "す",
+      "romaji": "su"
+    },
+    {
+      "id": "h-se",
+      "character": "せ",
+      "romaji": "se"
+    },
+    {
+      "id": "h-so",
+      "character": "そ",
+      "romaji": "so"
+    }
+  ]
+}

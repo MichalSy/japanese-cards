@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-ma",
+  "name": "Ma-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ma",
+      "character": "ま",
+      "romaji": "ma"
+    },
+    {
+      "id": "h-mi",
+      "character": "み",
+      "romaji": "mi"
+    },
+    {
+      "id": "h-mu",
+      "character": "む",
+      "romaji": "mu"
+    },
+    {
+      "id": "h-me",
+      "character": "め",
+      "romaji": "me"
+    },
+    {
+      "id": "h-mo",
+      "character": "も",
+      "romaji": "mo"
+    }
+  ]
+}

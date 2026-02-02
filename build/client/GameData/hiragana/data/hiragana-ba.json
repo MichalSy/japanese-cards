@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-ba",
+  "name": "Ba-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-ba",
+      "character": "ば",
+      "romaji": "ba"
+    },
+    {
+      "id": "h-bi",
+      "character": "び",
+      "romaji": "bi"
+    },
+    {
+      "id": "h-bu",
+      "character": "ぶ",
+      "romaji": "bu"
+    },
+    {
+      "id": "h-be",
+      "character": "べ",
+      "romaji": "be"
+    },
+    {
+      "id": "h-bo",
+      "character": "ぼ",
+      "romaji": "bo"
+    }
+  ]
+}

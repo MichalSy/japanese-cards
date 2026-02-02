@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-za",
+  "name": "Za-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-za",
+      "character": "ざ",
+      "romaji": "za"
+    },
+    {
+      "id": "h-zi",
+      "character": "じ",
+      "romaji": "ji"
+    },
+    {
+      "id": "h-zu",
+      "character": "ず",
+      "romaji": "zu"
+    },
+    {
+      "id": "h-ze",
+      "character": "ぜ",
+      "romaji": "ze"
+    },
+    {
+      "id": "h-zo",
+      "character": "ぞ",
+      "romaji": "zo"
+    }
+  ]
+}

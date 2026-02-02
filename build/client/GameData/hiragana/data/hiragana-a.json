@@ -1,0 +1,32 @@
+{
+  "id": "hiragana-a",
+  "name": "A-Reihe",
+  "type": "characters",
+  "items": [
+    {
+      "id": "h-a",
+      "character": "あ",
+      "romaji": "a"
+    },
+    {
+      "id": "h-i",
+      "character": "い",
+      "romaji": "i"
+    },
+    {
+      "id": "h-u",
+      "character": "う",
+      "romaji": "u"
+    },
+    {
+      "id": "h-e",
+      "character": "え",
+      "romaji": "e"
+    },
+    {
+      "id": "h-o",
+      "character": "お",
+      "romaji": "o"
+    }
+  ]
+}
