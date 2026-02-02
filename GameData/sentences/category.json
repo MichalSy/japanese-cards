@@ -10,6 +10,7 @@
   "type": "phrases",
   "enabled": false,
   "showAllOption": true,
+  "gameModes": ["multiChoice", "typing"],
   "groups": [
     {
       "id": "all",
