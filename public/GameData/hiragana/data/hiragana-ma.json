@@ -6,32 +6,27 @@
     {
       "id": "h-ma",
       "character": "ま",
-      "romaji": "ma",
-      "meaning": "Falsche / Sanft"
+      "romaji": "ma"
     },
     {
       "id": "h-mi",
       "character": "み",
-      "romaji": "mi",
-      "meaning": "Wasser"
+      "romaji": "mi"
     },
     {
       "id": "h-mu",
       "character": "む",
-      "romaji": "mu",
-      "meaning": "Pflanze"
+      "romaji": "mu"
     },
     {
       "id": "h-me",
       "character": "め",
-      "romaji": "me",
-      "meaning": "Auge"
+      "romaji": "me"
     },
     {
       "id": "h-mo",
       "character": "も",
-      "romaji": "mo",
-      "meaning": "Auch"
+      "romaji": "mo"
     }
   ]
 }

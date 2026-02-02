@@ -6,32 +6,27 @@
     {
       "id": "h-a",
       "character": "あ",
-      "romaji": "a",
-      "meaning": "a-Laut"
+      "romaji": "a"
     },
     {
       "id": "h-i",
       "character": "い",
-      "romaji": "i",
-      "meaning": "i-Laut"
+      "romaji": "i"
     },
     {
       "id": "h-u",
       "character": "う",
-      "romaji": "u",
-      "meaning": "u-Laut"
+      "romaji": "u"
     },
     {
       "id": "h-e",
       "character": "え",
-      "romaji": "e",
-      "meaning": "e-Laut"
+      "romaji": "e"
     },
     {
       "id": "h-o",
       "character": "お",
-      "romaji": "o",
-      "meaning": "o-Laut"
+      "romaji": "o"
     }
   ]
 }

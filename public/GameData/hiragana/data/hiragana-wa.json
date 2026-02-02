@@ -6,20 +6,17 @@
     {
       "id": "h-wa",
       "character": "わ",
-      "romaji": "wa",
-      "meaning": "Ring"
+      "romaji": "wa"
     },
     {
       "id": "h-wo",
       "character": "を",
-      "romaji": "wo",
-      "meaning": "Objekt-Partikel"
+      "romaji": "wo"
     },
     {
       "id": "h-n",
       "character": "ん",
-      "romaji": "n",
-      "meaning": "n-Laut"
+      "romaji": "n"
     }
   ]
 }

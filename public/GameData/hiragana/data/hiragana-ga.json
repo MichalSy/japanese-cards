@@ -6,32 +6,27 @@
     {
       "id": "h-ga",
       "character": "が",
-      "romaji": "ga",
-      "meaning": "Aber (Dakuten)"
+      "romaji": "ga"
     },
     {
       "id": "h-gi",
       "character": "ぎ",
-      "romaji": "gi",
-      "meaning": "Silber (Dakuten)"
+      "romaji": "gi"
     },
     {
       "id": "h-gu",
       "character": "ぐ",
-      "romaji": "gu",
-      "meaning": "Kreis (Dakuten)"
+      "romaji": "gu"
     },
     {
       "id": "h-ge",
       "character": "げ",
-      "romaji": "ge",
-      "meaning": "Fähigkeit (Dakuten)"
+      "romaji": "ge"
     },
     {
       "id": "h-go",
       "character": "ご",
-      "romaji": "go",
-      "meaning": "Sprache (Dakuten)"
+      "romaji": "go"
     }
   ]
 }

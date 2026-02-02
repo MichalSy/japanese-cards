@@ -6,32 +6,27 @@
     {
       "id": "h-ba",
       "character": "ば",
-      "romaji": "ba",
-      "meaning": "Rose (Dakuten)"
+      "romaji": "ba"
     },
     {
       "id": "h-bi",
       "character": "び",
-      "romaji": "bi",
-      "meaning": "Schönheit (Dakuten)"
+      "romaji": "bi"
     },
     {
       "id": "h-bu",
       "character": "ぶ",
-      "romaji": "bu",
-      "meaning": "Lappen (Dakuten)"
+      "romaji": "bu"
     },
     {
       "id": "h-be",
       "character": "べ",
-      "romaji": "be",
-      "meaning": "Überlegung (Dakuten)"
+      "romaji": "be"
     },
     {
       "id": "h-bo",
       "character": "ぼ",
-      "romaji": "bo",
-      "meaning": "Hut (Dakuten)"
+      "romaji": "bo"
     }
   ]
 }

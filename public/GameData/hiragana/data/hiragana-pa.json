@@ -6,32 +6,27 @@
     {
       "id": "h-pa",
       "character": "ぱ",
-      "romaji": "pa",
-      "meaning": "Priester (Handakuten)"
+      "romaji": "pa"
     },
     {
       "id": "h-pi",
       "character": "ぴ",
-      "romaji": "pi",
-      "meaning": "Bild (Handakuten)"
+      "romaji": "pi"
     },
     {
       "id": "h-pu",
       "character": "ぷ",
-      "romaji": "pu",
-      "meaning": "Wasser-Spinne (Handakuten)"
+      "romaji": "pu"
     },
     {
       "id": "h-pe",
       "character": "ぺ",
-      "romaji": "pe",
-      "meaning": "Gürtel (Handakuten)"
+      "romaji": "pe"
     },
     {
       "id": "h-po",
       "character": "ぽ",
-      "romaji": "po",
-      "meaning": "Berg (Handakuten)"
+      "romaji": "po"
     }
   ]
 }
