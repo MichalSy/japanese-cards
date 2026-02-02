@@ -9,7 +9,7 @@ export default function AppHeaderBar({ title }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr 100px',
+      gridTemplateColumns: 'auto 1fr auto',
       alignItems: 'center',
       width: '100%',
       gap: 'var(--spacing-2)',
