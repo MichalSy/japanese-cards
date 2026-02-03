@@ -255,7 +255,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           minHeight: '90px',
         }}>
           {/* Show correction when wrong answer */}
-          {showCorrection && card.correctRomaji && card.correctRomaji !== card.shownRomaji && (
+          {showCorrection && card.isWrongPairing && (
             <div style={{
               display: 'flex',
               flexDirection: 'column',

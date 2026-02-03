@@ -44,21 +44,38 @@ export function useSwipeGame(items, cardCount) {
           ...card,
           shownRomaji: card.romaji,    // What user sees (correct)
           correctRomaji: card.romaji,  // The right answer
+          isWrongPairing: false,       // Flag: This is a CORRECT pairing
         })
       } else {
         // Show the character but with a DIFFERENT wrong romaji
         let wrongCard
+        let attempts = 0
+        const maxAttempts = 20
+        
         // Keep trying until we find a different romaji
         do {
           wrongCard = items[Math.floor(Math.random() * items.length)]
-        } while (wrongCard.romaji === card.romaji)
+          attempts++
+        } while (wrongCard.romaji === card.romaji && attempts < maxAttempts)
         
-        // Combine: show character from deck, romaji from random different item
-        display.push({
-          ...card,
-          shownRomaji: wrongCard.romaji,  // What user sees (wrong)
-          correctRomaji: card.romaji,     // The right answer (hidden)
-        })
+        // Safety check: if we couldn't find a different romaji, skip this card
+        if (wrongCard.romaji === card.romaji) {
+          // Fall back to showing correct answer if we can't find wrong one
+          display.push({
+            ...card,
+            shownRomaji: card.romaji,
+            correctRomaji: card.romaji,
+            isWrongPairing: false,
+          })
+        } else {
+          // Combine: show character from deck, romaji from random different item
+          display.push({
+            ...card,
+            shownRomaji: wrongCard.romaji,  // What user sees (wrong)
+            correctRomaji: card.romaji,     // The right answer (hidden)
+            isWrongPairing: true,           // Flag: This is a WRONG pairing
+          })
+        }
       }
       
       // Store if the pairing is correct (for scoring)
