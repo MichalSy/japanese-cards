@@ -197,7 +197,7 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
       )}
 
       {/* Game Container */}
-      <div style={{ position: 'relative', height: '600px', marginBottom: 'var(--spacing-6)' }}>
+      <div style={{ position: 'relative', height: '600px', marginBottom: 'var(--spacing-6)', overflow: 'hidden' }}>
         {game.cardStack.map((card, idx) => (
           <SwipeCard
             key={`${game.currentIndex + idx}`}
