@@ -9,6 +9,8 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
 
   if (!card) return null
 
+  const character = card.character || card.word || ''
+
   // Handle Touch + Mouse drag
   const handleDragStart = (e) => {
     if (!isActive || swipeState) return
@@ -67,10 +69,10 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
       rotation: direction === 'right' ? 20 : -20
     })
     
-    // Callback after animation completes
+    // Callback after animation completes - pass character for toast
     setTimeout(() => {
-      onSwipe(isCorrect, direction, card.correctRomaji)
-    }, 350)
+      onSwipe(isCorrect, direction, card.correctRomaji, character)
+    }, 300)
   }
 
   const getTransitionStyle = () => {
@@ -78,16 +80,16 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
       return 'none' // No transition while dragging for instant response
     }
     if (swipeState === 'exit') {
-      return 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.35s ease-out'
+      return 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease-out'
     }
     // Snap back animation
-    return 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' // Spring effect
+    return 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)' // Spring effect
   }
 
   const getFlashColor = () => {
     if (swipeState !== 'exit') return 'transparent'
     const isCorrect = (exitDirection === 'right') === correctAnswer
-    return isCorrect ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)'
+    return isCorrect ? 'rgba(16, 185, 129, 0.5)' : 'rgba(239, 68, 68, 0.5)'
   }
 
   return (
@@ -109,9 +111,9 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           rotate(${position.rotation}deg)
         `,
         transformOrigin: 'center center',
-        width: '90%',
-        maxWidth: '420px',
-        height: '580px',
+        width: '92%',
+        maxWidth: '380px',
+        height: '460px',
         backgroundColor: 'var(--color-surface)',
         borderRadius: 'var(--radius-xl)',
         border: '1px solid var(--color-surface-light)',
@@ -128,8 +130,8 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         userSelect: 'none',
         overflow: 'hidden',
         boxShadow: isDragging 
-          ? '0 32px 64px rgba(0,0,0,0.35)' 
-          : '0 24px 48px rgba(0,0,0,0.2)',
+          ? '0 24px 48px rgba(0,0,0,0.35)' 
+          : '0 16px 32px rgba(0,0,0,0.2)',
         touchAction: 'none',
       }}
     >
@@ -152,10 +154,10 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         <>
           <div style={{
             position: 'absolute',
-            left: '20px',
+            left: '16px',
             top: '50%',
             transform: 'translateY(-50%)',
-            fontSize: '48px',
+            fontSize: '40px',
             opacity: Math.min(1, Math.max(0, -position.x / 100)),
             transition: 'opacity 0.1s',
             pointerEvents: 'none',
@@ -164,10 +166,10 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           </div>
           <div style={{
             position: 'absolute',
-            right: '20px',
+            right: '16px',
             top: '50%',
             transform: 'translateY(-50%)',
-            fontSize: '48px',
+            fontSize: '40px',
             opacity: Math.min(1, Math.max(0, position.x / 100)),
             transition: 'opacity 0.1s',
             pointerEvents: 'none',
@@ -183,18 +185,17 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 'var(--spacing-8)',
+        padding: 'var(--spacing-6)',
         height: '100%',
         width: '100%',
       }}>
         {/* Top Section: Question */}
         <div style={{ 
-          fontSize: '16px', 
+          fontSize: '14px', 
           color: 'var(--color-text-secondary)', 
           textAlign: 'center',
-          fontWeight: '600',
-          letterSpacing: '0.5px',
-          lineHeight: 1.4,
+          fontWeight: '500',
+          letterSpacing: '0.3px',
         }}>
           Ist das Zeichen richtig zugeordnet?
         </div>
@@ -205,10 +206,10 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           flexDirection: 'column',
           alignItems: 'center', 
           justifyContent: 'center',
-          gap: 'var(--spacing-6)',
+          gap: 'var(--spacing-4)',
           flex: 1,
         }}>
-          {/* Character - LARGE */}
+          {/* Character */}
           <div style={{ 
             display: 'flex',
             alignItems: 'center',
@@ -216,9 +217,9 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           }}>
             {card.character && (
               <div style={{ 
-                fontSize: '140px', 
+                fontSize: '110px', 
                 fontWeight: '700', 
-                lineHeight: 0.95,
+                lineHeight: 1,
                 color: 'var(--color-text-primary)',
               }}>
                 {card.character}
@@ -226,7 +227,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             )}
             {card.word && (
               <div style={{ 
-                fontSize: '48px', 
+                fontSize: '40px', 
                 fontWeight: '700', 
                 textAlign: 'center', 
                 lineHeight: 1.1,
@@ -240,13 +241,11 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           {/* Romaji - What user sees */}
           {(card.shownRomaji || card.romaji) && (
             <div style={{ 
-              fontSize: '28px', 
+              fontSize: '24px', 
               color: '#ec4899',
               fontWeight: '700',
               letterSpacing: '0.5px',
               fontStyle: 'italic',
-              padding: '0 var(--spacing-4)',
-              textAlign: 'center',
             }}>
               {card.shownRomaji || card.romaji}
             </div>
@@ -258,8 +257,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           display: 'flex', 
           justifyContent: 'space-between',
           width: '100%',
-          gap: 'var(--spacing-4)',
-          minHeight: '90px',
+          gap: 'var(--spacing-3)',
           opacity: swipeState === 'exit' ? 0 : 1,
           transition: 'opacity 0.15s',
         }}>
@@ -272,13 +270,13 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '8px',
-              padding: 'var(--spacing-4) var(--spacing-3)',
+              gap: '4px',
+              padding: 'var(--spacing-3) var(--spacing-2)',
               borderRadius: 'var(--radius-lg)',
               backgroundColor: 'rgba(239, 68, 68, 0.15)',
               border: '2px solid rgba(239, 68, 68, 0.3)',
               color: '#ef4444',
-              fontSize: '28px',
+              fontSize: '24px',
               fontWeight: 'bold',
               cursor: swipeState === 'exit' ? 'default' : 'pointer',
               transition: 'all 0.2s ease',
@@ -288,7 +286,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               if (swipeState !== 'exit') {
                 e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.25)'
                 e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.5)'
-                e.currentTarget.style.transform = 'scale(1.05)'
+                e.currentTarget.style.transform = 'scale(1.03)'
               }
             }}
             onMouseLeave={(e) => {
@@ -298,7 +296,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             }}
           >
             ←
-            <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginTop: '2px' }}>Falsch</span>
+            <span style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.3px' }}>Falsch</span>
           </button>
 
           {/* Right Button - Richtig */}
@@ -310,13 +308,13 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '8px',
-              padding: 'var(--spacing-4) var(--spacing-3)',
+              gap: '4px',
+              padding: 'var(--spacing-3) var(--spacing-2)',
               borderRadius: 'var(--radius-lg)',
               backgroundColor: 'rgba(236, 72, 153, 0.2)',
               border: '2px solid rgba(236, 72, 153, 0.4)',
               color: '#ec4899',
-              fontSize: '28px',
+              fontSize: '24px',
               fontWeight: 'bold',
               cursor: swipeState === 'exit' ? 'default' : 'pointer',
               transition: 'all 0.2s ease',
@@ -326,7 +324,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               if (swipeState !== 'exit') {
                 e.currentTarget.style.backgroundColor = 'rgba(236, 72, 153, 0.3)'
                 e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.6)'
-                e.currentTarget.style.transform = 'scale(1.05)'
+                e.currentTarget.style.transform = 'scale(1.03)'
               }
             }}
             onMouseLeave={(e) => {
@@ -336,7 +334,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             }}
           >
             →
-            <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginTop: '2px' }}>Richtig</span>
+            <span style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.3px' }}>Richtig</span>
           </button>
         </div>
       </div>

@@ -17,25 +17,35 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
   const game = useSwipeGame(items, cardCount)
   
   // Wrap handleSwipe to show toast
-  const handleSwipeWithToast = (isCorrect, direction, correctRomaji) => {
+  const handleSwipeWithToast = (isCorrect, direction, correctRomaji, character) => {
     // Clear any existing timeout
     if (toastTimeoutRef.current) {
       clearTimeout(toastTimeoutRef.current)
+      toastTimeoutRef.current = null
     }
     
-    // Set toast content and show it
-    setToast({ isCorrect, correctRomaji, id: Date.now() })
+    // Set toast content and show it immediately
+    const toastData = { isCorrect, correctRomaji, character, id: Date.now() }
+    setToast(toastData)
     setToastVisible(true)
     
     // Hide after delay (fade out, then remove)
     toastTimeoutRef.current = setTimeout(() => {
       setToastVisible(false)
-      // Remove toast content after fade-out animation
-      setTimeout(() => setToast(null), 300)
-    }, 1500)
+      toastTimeoutRef.current = setTimeout(() => setToast(null), 300)
+    }, 1200)
     
     game.handleSwipe(isCorrect, direction)
   }
+  
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current)
+      }
+    }
+  }, [])
 
   // Load game data
   useEffect(() => {
@@ -164,61 +174,48 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
 
   return (
     <AppContent>
-      {/* Toast Notification - Top position under header */}
+      {/* Toast Notification - Compact, under header */}
       {toast && (
         <div 
           key={toast.id}
           style={{
             position: 'fixed',
-            top: '80px',
+            top: '72px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1000,
             opacity: toastVisible ? 1 : 0,
-            transition: 'opacity 0.3s ease-out',
+            transition: 'opacity 0.25s ease-out',
             pointerEvents: 'none',
           }}
         >
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 'var(--spacing-3)',
-            padding: 'var(--spacing-3) var(--spacing-4)',
+            gap: 'var(--spacing-2)',
+            padding: '6px 12px',
             backgroundColor: toast.isCorrect ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-            backdropFilter: 'blur(8px)',
+            borderRadius: 'var(--radius-md)',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
           }}>
             {/* Icon */}
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: 'var(--radius-md)',
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px',
-              color: 'white',
-              fontWeight: 'bold',
-            }}>
+            <span style={{ fontSize: '14px', color: 'white' }}>
               {toast.isCorrect ? '✓' : '✗'}
-            </div>
+            </span>
             
-            {/* Text */}
-            <div style={{
-              fontSize: '16px',
-              fontWeight: '600',
-              color: 'white',
-            }}>
-              {toast.isCorrect ? 'Richtig!' : `Falsch → ${toast.correctRomaji}`}
-            </div>
+            {/* Text - show character for wrong answers */}
+            <span style={{ fontSize: '14px', fontWeight: '600', color: 'white' }}>
+              {toast.isCorrect 
+                ? 'Richtig!' 
+                : `${toast.character || ''} = ${toast.correctRomaji}`
+              }
+            </span>
           </div>
         </div>
       )}
 
       {/* Game Container */}
-      <div style={{ position: 'relative', height: '600px', marginBottom: 'var(--spacing-6)', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: '480px', marginBottom: 'var(--spacing-4)', overflow: 'hidden' }}>
         {game.cardStack.map((card, idx) => (
           <SwipeCard
             key={`${game.currentIndex + idx}`}
