@@ -71,7 +71,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     return 'all 0.28s cubic-bezier(0.34, 1.2, 0.64, 1)'
   }
 
-  const swipeProgress = Math.min(1, Math.abs(position.x) / 100)
+  const swipeProgress = Math.min(1, Math.abs(position.x) / 50) // Lower threshold for faster feedback
   const isSwipingRight = position.x > 0
   const isSwipingLeft = position.x < 0
 
@@ -118,19 +118,19 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         left: 0,
         top: 0,
         bottom: 0,
-        width: '80px',
-        background: `linear-gradient(90deg, rgba(239, 68, 68, ${isSwipingLeft ? swipeProgress * 0.3 : 0}) 0%, transparent 100%)`,
+        width: '50%',
+        background: `linear-gradient(90deg, rgba(239, 68, 68, ${isSwipingLeft ? swipeProgress * 0.5 : 0}) 0%, transparent 100%)`,
         pointerEvents: 'none',
         transition: isDragging ? 'none' : 'background 0.2s',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingLeft: '16px',
+        justifyContent: 'flex-start',
+        paddingLeft: '20px',
       }}>
         <span style={{
-          fontSize: '32px',
+          fontSize: '36px',
           opacity: isSwipingLeft ? swipeProgress : 0,
-          transform: `scale(${0.5 + swipeProgress * 0.5})`,
+          transform: `scale(${0.6 + swipeProgress * 0.4})`,
           transition: isDragging ? 'none' : 'all 0.2s',
         }}>✗</span>
       </div>
@@ -141,17 +141,17 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         right: 0,
         top: 0,
         bottom: 0,
-        width: '80px',
-        background: `linear-gradient(-90deg, rgba(16, 185, 129, ${isSwipingRight ? swipeProgress * 0.3 : 0}) 0%, transparent 100%)`,
+        width: '50%',
+        background: `linear-gradient(-90deg, rgba(16, 185, 129, ${isSwipingRight ? swipeProgress * 0.5 : 0}) 0%, transparent 100%)`,
         pointerEvents: 'none',
         transition: isDragging ? 'none' : 'background 0.2s',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingRight: '16px',
+        justifyContent: 'flex-end',
+        paddingRight: '20px',
       }}>
         <span style={{
-          fontSize: '32px',
+          fontSize: '36px',
           opacity: isSwipingRight ? swipeProgress : 0,
           transform: `scale(${0.5 + swipeProgress * 0.5})`,
           transition: isDragging ? 'none' : 'all 0.2s',
