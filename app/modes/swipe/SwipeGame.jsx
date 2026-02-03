@@ -148,50 +148,50 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
 
   return (
     <AppContent>
-      {/* Toast Notification */}
+      {/* Toast Notification - Top position under header */}
       {toast && (
         <div style={{
           position: 'fixed',
-          top: '50%',
+          top: '80px',
           left: '50%',
-          transform: 'translate(-50%, -50%)',
+          transform: 'translateX(-50%)',
           zIndex: 1000,
-          animation: 'toastFadeIn 0.3s ease-in',
+          animation: 'toastSlideIn 0.25s ease-out',
         }}>
           <div style={{
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
-            gap: '20px',
+            gap: 'var(--spacing-3)',
+            padding: 'var(--spacing-3) var(--spacing-4)',
+            backgroundColor: toast.isCorrect ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            backdropFilter: 'blur(8px)',
           }}>
-            {/* Circle with icon */}
+            {/* Icon */}
             <div style={{
-              width: '100px',
-              height: '100px',
-              borderRadius: '50%',
-              backgroundColor: toast.isCorrect ? '#10b981' : '#ef4444',
+              width: '32px',
+              height: '32px',
+              borderRadius: 'var(--radius-md)',
+              backgroundColor: 'rgba(255,255,255,0.2)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '50px',
+              fontSize: '18px',
               color: 'white',
               fontWeight: 'bold',
-              boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
             }}>
               {toast.isCorrect ? '✓' : '✗'}
             </div>
             
-            {/* Correct romaji if wrong */}
-            {!toast.isCorrect && toast.correctRomaji && (
-              <div style={{
-                fontSize: '24px',
-                fontWeight: '700',
-                color: '#10b981',
-                fontStyle: 'italic',
-              }}>
-                Richtig: {toast.correctRomaji}
-              </div>
-            )}
+            {/* Text */}
+            <div style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: 'white',
+            }}>
+              {toast.isCorrect ? 'Richtig!' : `Falsch → ${toast.correctRomaji}`}
+            </div>
           </div>
         </div>
       )}

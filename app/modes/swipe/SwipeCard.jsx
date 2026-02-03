@@ -113,7 +113,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         maxWidth: '420px',
         height: '580px',
         backgroundColor: 'var(--color-surface)',
-        borderRadius: '32px',
+        borderRadius: 'var(--radius-xl)',
         border: '1px solid var(--color-surface-light)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
@@ -143,7 +143,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           transition: 'opacity 0.15s ease',
           pointerEvents: 'none',
           zIndex: 10,
-          borderRadius: '32px',
+          borderRadius: 'var(--radius-xl)',
         }}
       />
 
@@ -274,7 +274,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               alignItems: 'center',
               gap: '8px',
               padding: 'var(--spacing-4) var(--spacing-3)',
-              borderRadius: '20px',
+              borderRadius: 'var(--radius-lg)',
               backgroundColor: 'rgba(239, 68, 68, 0.15)',
               border: '2px solid rgba(239, 68, 68, 0.3)',
               color: '#ef4444',
@@ -312,7 +312,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               alignItems: 'center',
               gap: '8px',
               padding: 'var(--spacing-4) var(--spacing-3)',
-              borderRadius: '20px',
+              borderRadius: 'var(--radius-lg)',
               backgroundColor: 'rgba(236, 72, 153, 0.2)',
               border: '2px solid rgba(236, 72, 153, 0.4)',
               color: '#ec4899',
