@@ -2,7 +2,8 @@ import { useState, useEffect, useMemo } from 'react'
 
 export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswer }) {
   const [swipeState, setSwipeState] = useState(null) // null, swiping, correct, incorrect
-  const [touchStart, setTouchStart] = useState(0)
+  const [dragStart, setDragStart] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   const [rotateZ, setRotateZ] = useState(0)
   const [translateX, setTranslateX] = useState(0)
   const [opacity, setOpacity] = useState(1)
@@ -10,63 +11,74 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
 
   if (!card) return null
 
-  const handleTouchStart = (e) => {
-    if (!isActive) return
-    setTouchStart(e.touches[0].clientX)
+  // Handle Touch + Mouse drag
+  const handleDragStart = (e) => {
+    if (!isActive || swipeState) return
+    setIsDragging(true)
+    setDragStart(e.touches ? e.touches[0].clientX : e.clientX)
   }
 
-  const handleTouchMove = (e) => {
-    if (!isActive || swipeState) return
-    const currentX = e.touches[0].clientX
-    const diff = currentX - touchStart
+  const handleDragMove = (e) => {
+    if (!isActive || swipeState || !isDragging) return
+    const currentX = e.touches ? e.touches[0].clientX : e.clientX
+    const diff = currentX - dragStart
     const maxDiff = 150
 
     if (Math.abs(diff) > 20) {
-      const percentage = Math.min(Math.abs(diff) / maxDiff, 1)
       setRotateZ((diff / maxDiff) * 15)
       setTranslateX(diff)
     }
   }
 
-  const handleTouchEnd = async () => {
+  const handleDragEnd = async () => {
     if (!isActive) return
+    setIsDragging(false)
 
     const threshold = 80
     const isSwipedLeft = translateX < -threshold
     const isSwipedRight = translateX > threshold
 
     if (isSwipedLeft || isSwipedRight) {
-      // Determine if correct based on random answer + swipe direction
-      // Right swipe = user thinks correct, Left swipe = user thinks incorrect
-      const userThinkCorrect = isSwipedRight
-      const isCorrect = userThinkCorrect === correctAnswer
-      
-      // Flash animation
-      setSwipeState(isCorrect ? 'correct' : 'incorrect')
-      setFlashOpacity(1)
-      
-      // Fade out flash
-      await new Promise(resolve => {
-        setTimeout(() => {
-          setFlashOpacity(0)
-        }, 200)
-        setTimeout(resolve, 300)
-      })
-      
-      // Animate out
-      setTranslateX(isSwipedLeft ? -500 : 500)
-      setRotateZ(isSwipedLeft ? -45 : 45)
-      setOpacity(0)
-      
-      // Wait for animation then call callback
-      await new Promise(resolve => setTimeout(resolve, 300))
-      
-      onSwipe(isCorrect, isSwipedRight ? 'right' : 'left')
+      await triggerResponse(isSwipedRight)
     } else {
       // Snap back
       setRotateZ(0)
       setTranslateX(0)
     }
+  }
+
+  // Handle Button Click
+  const handleButtonClick = async (isCorrect) => {
+    if (!isActive || swipeState) return
+    await triggerResponse(isCorrect)
+  }
+
+  const triggerResponse = async (userThinkCorrect) => {
+    if (!isActive) return
+    
+    const isCorrect = userThinkCorrect === correctAnswer
+    
+    // Flash animation
+    setSwipeState(isCorrect ? 'correct' : 'incorrect')
+    setFlashOpacity(1)
+    
+    // Fade out flash
+    await new Promise(resolve => {
+      setTimeout(() => {
+        setFlashOpacity(0)
+      }, 200)
+      setTimeout(resolve, 300)
+    })
+    
+    // Animate out
+    setTranslateX(userThinkCorrect ? 500 : -500)
+    setRotateZ(userThinkCorrect ? 45 : -45)
+    setOpacity(0)
+    
+    // Wait for animation then call callback
+    await new Promise(resolve => setTimeout(resolve, 300))
+    
+    onSwipe(isCorrect, userThinkCorrect ? 'right' : 'left')
   }
 
   const getBackgroundColor = () => {
@@ -90,9 +102,13 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
 
   return (
     <div
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onTouchStart={handleDragStart}
+      onTouchMove={handleDragMove}
+      onTouchEnd={handleDragEnd}
+      onMouseDown={handleDragStart}
+      onMouseMove={isDragging ? handleDragMove : undefined}
+      onMouseUp={handleDragEnd}
+      onMouseLeave={isDragging ? handleDragEnd : undefined}
       style={{
         position: 'absolute',
         left: '50%',
@@ -103,24 +119,25 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           rotateZ(${rotateZ}deg)
         `,
         width: '90%',
-        maxWidth: '380px',
-        height: '520px',
+        maxWidth: '420px',
+        height: '580px',
         backgroundColor: getBackgroundColor(),
-        borderRadius: '24px',
-        border: '2px solid var(--color-surface-light)',
+        borderRadius: '32px',
+        border: '1px solid var(--color-surface-light)',
         zIndex: getZIndex(),
-        cursor: isActive ? 'grab' : 'default',
-        transition: 'transform 0.05s ease-out',
-        padding: 'var(--spacing-8)',
+        cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
+        transition: isDragging ? 'none' : 'transform 0.05s ease-out',
+        padding: '0',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         color: 'var(--color-text-primary)',
         opacity: opacity,
         userSelect: 'none',
         overflow: 'hidden',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+        boxShadow: '0 24px 48px rgba(0,0,0,0.2)',
+        touchAction: 'none',
       }}
     >
       {/* Flash overlay */}
@@ -134,99 +151,166 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             transition: 'opacity 0.3s ease',
             pointerEvents: 'none',
             zIndex: 10,
-            borderRadius: '24px',
+            borderRadius: '32px',
           }}
         />
       )}
 
-      {/* Top Section: Question */}
-      <div style={{ 
-        fontSize: '18px', 
-        color: 'var(--color-text-secondary)', 
-        textAlign: 'center',
-        fontWeight: '600',
-        letterSpacing: '0.3px',
-        marginBottom: 'var(--spacing-6)',
-      }}>
-        Ist das Zeichen richtig zugeordnet?
-      </div>
-
-      {/* Middle Section: Character - LARGE */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--spacing-4)' }}>
-        {card.character && (
-          <div style={{ fontSize: '160px', fontWeight: '700', lineHeight: 0.9 }}>
-            {card.character}
-          </div>
-        )}
-        {card.word && (
-          <div style={{ fontSize: '56px', fontWeight: '700', textAlign: 'center', lineHeight: 1 }}>
-            {card.word}
-          </div>
-        )}
-      </div>
-
-      {/* Romaji - CLAIM/ASSERTION */}
-      {card.romaji && (
-        <div style={{ 
-          fontSize: '32px', 
-          color: '#ec4899',
-          fontWeight: '700',
-          letterSpacing: '1px',
-          fontStyle: 'italic',
-          marginBottom: 'var(--spacing-6)',
-          padding: '0 var(--spacing-4)',
-          textAlign: 'center',
-        }}>
-          {card.romaji}
-        </div>
-      )}
-
-      {/* Arrow Buttons - Always in DOM, hidden when flashing */}
-      <div style={{ 
-        display: 'flex', 
+      {/* Content Wrapper */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         justifyContent: 'space-between',
+        padding: 'var(--spacing-8)',
+        height: '100%',
         width: '100%',
-        maxWidth: '300px',
-        gap: 'var(--spacing-6)',
-        opacity: swipeState ? 0 : 1,
-        transition: 'opacity 0.2s ease',
       }}>
-        {/* Left Arrow - Falsch */}
-        <div style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '10px',
-          padding: 'var(--spacing-4)',
-          borderRadius: '18px',
-          backgroundColor: 'rgba(239, 68, 68, 0.15)',
-          color: '#ef4444',
-          fontSize: '32px',
-          fontWeight: 'bold',
-          transition: 'all 0.2s ease',
+        {/* Top Section: Question */}
+        <div style={{ 
+          fontSize: '16px', 
+          color: 'var(--color-text-secondary)', 
+          textAlign: 'center',
+          fontWeight: '600',
+          letterSpacing: '0.5px',
+          lineHeight: 1.4,
         }}>
-          ←
-          <span style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.5px' }}>Falsch</span>
+          Ist das Zeichen richtig zugeordnet?
         </div>
 
-        {/* Right Arrow - Richtig */}
-        <div style={{
-          flex: 1,
-          display: 'flex',
+        {/* Middle Section: Character + Romaji */}
+        <div style={{ 
+          display: 'flex', 
           flexDirection: 'column',
-          alignItems: 'center',
-          gap: '10px',
-          padding: 'var(--spacing-4)',
-          borderRadius: '18px',
-          backgroundColor: 'rgba(236, 72, 153, 0.2)',
-          color: '#ec4899',
-          fontSize: '32px',
-          fontWeight: 'bold',
-          transition: 'all 0.2s ease',
+          alignItems: 'center', 
+          justifyContent: 'center',
+          gap: 'var(--spacing-6)',
+          flex: 1,
         }}>
-          →
-          <span style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.5px' }}>Richtig</span>
+          {/* Character - LARGE */}
+          <div style={{ 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            {card.character && (
+              <div style={{ 
+                fontSize: '140px', 
+                fontWeight: '700', 
+                lineHeight: 0.95,
+                color: 'var(--color-text-primary)',
+              }}>
+                {card.character}
+              </div>
+            )}
+            {card.word && (
+              <div style={{ 
+                fontSize: '48px', 
+                fontWeight: '700', 
+                textAlign: 'center', 
+                lineHeight: 1.1,
+                color: 'var(--color-text-primary)',
+              }}>
+                {card.word}
+              </div>
+            )}
+          </div>
+
+          {/* Romaji - Assertion */}
+          {card.romaji && (
+            <div style={{ 
+              fontSize: '28px', 
+              color: '#ec4899',
+              fontWeight: '700',
+              letterSpacing: '0.5px',
+              fontStyle: 'italic',
+              padding: '0 var(--spacing-4)',
+              textAlign: 'center',
+            }}>
+              {card.romaji}
+            </div>
+          )}
+        </div>
+
+        {/* Bottom Section: Buttons */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          width: '100%',
+          gap: 'var(--spacing-4)',
+          opacity: swipeState ? 0 : 1,
+          transition: 'opacity 0.2s ease',
+          pointerEvents: swipeState ? 'none' : 'auto',
+        }}>
+          {/* Left Button - Falsch */}
+          <button
+            onClick={() => handleButtonClick(false)}
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+              padding: 'var(--spacing-4) var(--spacing-3)',
+              borderRadius: '20px',
+              backgroundColor: 'rgba(239, 68, 68, 0.15)',
+              border: '2px solid rgba(239, 68, 68, 0.3)',
+              color: '#ef4444',
+              fontSize: '28px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              lineHeight: 1,
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = 'rgba(239, 68, 68, 0.25)'
+              e.target.style.borderColor = 'rgba(239, 68, 68, 0.5)'
+              e.target.style.transform = 'scale(1.05)'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'rgba(239, 68, 68, 0.15)'
+              e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)'
+              e.target.style.transform = 'scale(1)'
+            }}
+          >
+            ←
+            <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginTop: '2px' }}>Falsch</span>
+          </button>
+
+          {/* Right Button - Richtig */}
+          <button
+            onClick={() => handleButtonClick(true)}
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+              padding: 'var(--spacing-4) var(--spacing-3)',
+              borderRadius: '20px',
+              backgroundColor: 'rgba(236, 72, 153, 0.2)',
+              border: '2px solid rgba(236, 72, 153, 0.4)',
+              color: '#ec4899',
+              fontSize: '28px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              lineHeight: 1,
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.3)'
+              e.target.style.borderColor = 'rgba(236, 72, 153, 0.6)'
+              e.target.style.transform = 'scale(1.05)'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.2)'
+              e.target.style.borderColor = 'rgba(236, 72, 153, 0.4)'
+              e.target.style.transform = 'scale(1)'
+            }}
+          >
+            →
+            <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginTop: '2px' }}>Richtig</span>
+          </button>
         </div>
       </div>
     </div>
