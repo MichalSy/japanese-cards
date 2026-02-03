@@ -229,16 +229,16 @@ export function clearCategoryProgress(category) {
  * Calculate progress percentage for a group
  * @param {Array} groupItems - Array of items in the group (from API)
  * @param {string} category - Category name (hiragana, katakana, etc.)
- * @returns {number} Percentage of items with score > 0
+ * @returns {number} Percentage of items with score >= 3 (mastered)
  */
 export function getGroupProgress(groupItems, category) {
   if (!groupItems || groupItems.length === 0) return 0
   
   const progress = getCategoryProgress(category)
-  const itemsWithPositiveScore = groupItems.filter(item => {
+  const masteredItems = groupItems.filter(item => {
     const termProgress = progress[item.id] || { score: 0, learned: false }
-    return termProgress.score > 0
+    return termProgress.score >= 3
   }).length
   
-  return Math.round((itemsWithPositiveScore / groupItems.length) * 100)
+  return Math.round((masteredItems / groupItems.length) * 100)
 }
