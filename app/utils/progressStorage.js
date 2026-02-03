@@ -4,12 +4,15 @@
  * Structure:
  * {
  *   "hiragana": {
- *     "h-a": { "score": 3, "learned": true },
- *     "h-ka": { "score": -2, "learned": true }
+ *     "progress": {
+ *       "h-a": { "score": 3, "learned": true },
+ *       "h-ka": { "score": -2, "learned": true }
+ *     },
+ *     "lastPlayed": "2026-02-03T15:00:00Z"
  *   },
- *   "katakana": { ... },
- *   "words": { ... },
- *   "sentences": { ... }
+ *   "katakana": {
+ *     "progress": { ... }
+ *   }
  * }
  * 
  * Score Logic:
@@ -19,30 +22,33 @@
  * - learned: true once practiced
  */
 
-const STORAGE_KEY = 'japanese-cards-progress'
+const STORAGE_KEY = 'japanese-cards'
 const MIN_SCORE = -5
 
 /**
- * Get all progress data
+ * Get all data for a category
  */
-export function getAllProgress() {
+export function getCategoryData(category) {
   try {
     const data = localStorage.getItem(STORAGE_KEY)
-    return data ? JSON.parse(data) : {}
+    const allData = data ? JSON.parse(data) : {}
+    return allData[category] || { progress: {} }
   } catch (e) {
-    console.error('Failed to load progress:', e)
-    return {}
+    console.error('Failed to load data:', e)
+    return { progress: {} }
   }
 }
 
 /**
- * Save all progress data
+ * Save category data
  */
-function saveAllProgress(data) {
+function saveCategoryData(category, data) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    const allData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+    allData[category] = data
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allData))
   } catch (e) {
-    console.error('Failed to save progress:', e)
+    console.error('Failed to save data:', e)
   }
 }
 
@@ -50,34 +56,37 @@ function saveAllProgress(data) {
  * Get progress for a specific category
  */
 export function getCategoryProgress(category) {
-  const all = getAllProgress()
-  return all[category] || {}
+  const categoryData = getCategoryData(category)
+  return categoryData.progress || {}
 }
 
 /**
  * Get progress for a specific term
  */
 export function getTermProgress(category, termId) {
-  const categoryData = getCategoryProgress(category)
-  return categoryData[termId] || { score: 0, learned: false }
+  const progress = getCategoryProgress(category)
+  return progress[termId] || { score: 0, learned: false }
 }
 
 /**
  * Record a correct answer
  */
 export function recordCorrect(category, termId) {
-  const all = getAllProgress()
-  if (!all[category]) all[category] = {}
+  const categoryData = getCategoryData(category)
+  const progress = categoryData.progress || {}
   
-  const current = all[category][termId] || { score: 0, learned: false }
+  const current = progress[termId] || { score: 0, learned: false }
   
-  all[category][termId] = {
+  progress[termId] = {
     score: current.score + 1,
     learned: true
   }
   
-  saveAllProgress(all)
-  return all[category][termId]
+  categoryData.progress = progress
+  categoryData.lastPlayed = new Date().toISOString()
+  saveCategoryData(category, categoryData)
+  
+  return progress[termId]
 }
 
 /**
@@ -86,38 +95,39 @@ export function recordCorrect(category, termId) {
  * - If score was negative: decrement (min -5)
  */
 export function recordWrong(category, termId) {
-  const all = getAllProgress()
-  if (!all[category]) all[category] = {}
+  const categoryData = getCategoryData(category)
+  const progress = categoryData.progress || {}
   
-  const current = all[category][termId] || { score: 0, learned: false }
+  const current = progress[termId] || { score: 0, learned: false }
   
   let newScore
   if (current.score >= 0) {
-    // Was positive or zero, reset to -1
     newScore = -1
   } else {
-    // Already negative, go more negative (min -5)
     newScore = Math.max(MIN_SCORE, current.score - 1)
   }
   
-  all[category][termId] = {
+  progress[termId] = {
     score: newScore,
     learned: true
   }
   
-  saveAllProgress(all)
-  return all[category][termId]
+  categoryData.progress = progress
+  categoryData.lastPlayed = new Date().toISOString()
+  saveCategoryData(category, categoryData)
+  
+  return progress[termId]
 }
 
 /**
  * Record multiple results at once (batch update)
  */
 export function recordResults(category, results) {
-  const all = getAllProgress()
-  if (!all[category]) all[category] = {}
+  const categoryData = getCategoryData(category)
+  const progress = categoryData.progress || {}
   
   results.forEach(({ termId, isCorrect }) => {
-    const current = all[category][termId] || { score: 0, learned: false }
+    const current = progress[termId] || { score: 0, learned: false }
     
     let newScore
     if (isCorrect) {
@@ -128,29 +138,32 @@ export function recordResults(category, results) {
       newScore = Math.max(MIN_SCORE, current.score - 1)
     }
     
-    all[category][termId] = {
+    progress[termId] = {
       score: newScore,
       learned: true
     }
   })
   
-  saveAllProgress(all)
-  return all[category]
+  categoryData.progress = progress
+  categoryData.lastPlayed = new Date().toISOString()
+  saveCategoryData(category, categoryData)
+  
+  return progress
 }
 
 /**
  * Get statistics for a category
  */
 export function getCategoryStats(category) {
-  const categoryData = getCategoryProgress(category)
-  const terms = Object.values(categoryData)
+  const progress = getCategoryProgress(category)
+  const terms = Object.values(progress)
   
   if (terms.length === 0) {
     return {
       totalLearned: 0,
-      mastered: 0,      // score >= 3
-      learning: 0,      // score 1-2
-      struggling: 0,    // score <= 0
+      mastered: 0,
+      learning: 0,
+      struggling: 0,
       averageScore: 0
     }
   }
@@ -174,18 +187,24 @@ export function getCategoryStats(category) {
  * Get overall statistics across all categories
  */
 export function getOverallStats() {
-  const all = getAllProgress()
-  let totalLearned = 0
-  let totalMastered = 0
-  
-  Object.values(all).forEach(category => {
-    Object.values(category).forEach(term => {
-      if (term.learned) totalLearned++
-      if (term.score >= 3) totalMastered++
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+    let totalLearned = 0
+    let totalMastered = 0
+    
+    Object.values(data).forEach(category => {
+      const progress = category.progress || {}
+      Object.values(progress).forEach(term => {
+        if (term.learned) totalLearned++
+        if (term.score >= 3) totalMastered++
+      })
     })
-  })
-  
-  return { totalLearned, totalMastered }
+    
+    return { totalLearned, totalMastered }
+  } catch (e) {
+    console.error('Failed to get overall stats:', e)
+    return { totalLearned: 0, totalMastered: 0 }
+  }
 }
 
 /**
@@ -199,7 +218,9 @@ export function clearAllProgress() {
  * Clear progress for a specific category
  */
 export function clearCategoryProgress(category) {
-  const all = getAllProgress()
-  delete all[category]
-  saveAllProgress(all)
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+  if (data[category]) {
+    data[category].progress = {}
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
 }
