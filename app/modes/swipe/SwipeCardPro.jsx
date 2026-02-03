@@ -5,7 +5,6 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const [dragStart, setDragStart] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [position, setPosition] = useState({ x: 0, rotation: 0 })
-  const [exitDirection, setExitDirection] = useState(null)
 
   const character = card?.character || card?.word || ''
 
@@ -15,7 +14,6 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     const isCorrect = userThinkCorrect === correctAnswer
     const direction = userThinkCorrect ? 'right' : 'left'
     
-    setExitDirection(direction)
     setSwipeState('exit')
     setPosition({
       x: direction === 'right' ? 300 : -300,
@@ -27,7 +25,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     }, 220)
   }, [card, correctAnswer, onSwipe, character, swipeState])
 
-  // Keyboard support for desktop
+  // Keyboard support
   useEffect(() => {
     if (!isActive || swipeState || !card) return
     
@@ -95,10 +93,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const isSwipingRight = position.x > 0
   const isSwipingLeft = position.x < 0
 
-  // Calculate stack offset for background cards
-  const stackOffset = index * 4
-  const stackScale = 1 - (index * 0.03)
-  const stackOpacity = index === 0 ? 1 : 0.6 - (index * 0.15)
+  // Stack effect for background cards
+  const stackOffset = index * 6
+  const stackScale = 1 - (index * 0.02)
+  const stackOpacity = index === 0 ? 1 : 0.5 - (index * 0.15)
 
   return (
     <div
@@ -120,15 +118,15 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
           scale(${stackScale})
         `,
         width: 'calc(100% - 48px)',
-        maxWidth: '320px',
+        maxWidth: '340px',
         aspectRatio: '3/4',
-        background: 'rgba(30, 41, 59, 0.85)',
-        backdropFilter: 'blur(20px)',
-        borderRadius: '20px',
-        border: '1px solid rgba(236, 72, 153, 0.3)',
+        background: 'rgba(30, 41, 59, 0.75)',
+        backdropFilter: 'blur(24px)',
+        borderRadius: '24px',
+        border: '2px solid rgba(236, 72, 153, 0.4)',
         boxShadow: index === 0 
-          ? '0 0 40px rgba(236, 72, 153, 0.3), 0 0 80px rgba(236, 72, 153, 0.15), inset 0 0 60px rgba(236, 72, 153, 0.05)'
-          : '0 4px 20px rgba(0,0,0,0.3)',
+          ? '0 0 60px rgba(236, 72, 153, 0.35), 0 0 100px rgba(236, 72, 153, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)'
+          : '0 8px 32px rgba(0,0,0,0.4)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
@@ -141,34 +139,23 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         touchAction: 'none',
       }}
     >
-      {/* Pink glow border effect */}
-      <div style={{
-        position: 'absolute',
-        inset: '-2px',
-        borderRadius: '22px',
-        background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.5), rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.5))',
-        zIndex: -1,
-        filter: 'blur(2px)',
-        opacity: index === 0 ? 1 : 0.3,
-      }} />
-
-      {/* Swipe feedback - left edge */}
+      {/* Swipe feedback - left */}
       <div style={{
         position: 'absolute',
         left: 0,
         top: 0,
         bottom: 0,
         width: '50%',
-        background: `linear-gradient(90deg, rgba(239, 68, 68, ${isSwipingLeft ? swipeProgress * 0.5 : 0}) 0%, transparent 100%)`,
+        background: `linear-gradient(90deg, rgba(239, 68, 68, ${isSwipingLeft ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
         pointerEvents: 'none',
         transition: isDragging ? 'none' : 'background 0.2s',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingLeft: '20px',
+        paddingLeft: '24px',
       }}>
         <span style={{
-          fontSize: '36px',
+          fontSize: '40px',
           opacity: isSwipingLeft ? swipeProgress : 0,
           transform: `scale(${0.6 + swipeProgress * 0.4})`,
           transition: isDragging ? 'none' : 'all 0.2s',
@@ -176,23 +163,23 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         }}>✗</span>
       </div>
 
-      {/* Swipe feedback - right edge */}
+      {/* Swipe feedback - right */}
       <div style={{
         position: 'absolute',
         right: 0,
         top: 0,
         bottom: 0,
         width: '50%',
-        background: `linear-gradient(-90deg, rgba(16, 185, 129, ${isSwipingRight ? swipeProgress * 0.5 : 0}) 0%, transparent 100%)`,
+        background: `linear-gradient(-90deg, rgba(16, 185, 129, ${isSwipingRight ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
         pointerEvents: 'none',
         transition: isDragging ? 'none' : 'background 0.2s',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        paddingRight: '20px',
+        paddingRight: '24px',
       }}>
         <span style={{
-          fontSize: '36px',
+          fontSize: '40px',
           opacity: isSwipingRight ? swipeProgress : 0,
           transform: `scale(${0.5 + swipeProgress * 0.5})`,
           transition: isDragging ? 'none' : 'all 0.2s',
@@ -200,7 +187,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         }}>✓</span>
       </div>
 
-      {/* Main Content - centered */}
+      {/* Main Content */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -208,16 +195,15 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         justifyContent: 'center',
         flex: 1,
         padding: '32px 24px',
-        gap: '16px',
+        gap: '12px',
       }}>
         {/* Character */}
         <div style={{ 
-          fontSize: 'clamp(80px, 24vw, 140px)', 
+          fontSize: 'clamp(90px, 26vw, 160px)', 
           fontWeight: '200', 
           lineHeight: 1,
           color: 'white',
           textAlign: 'center',
-          textShadow: '0 0 40px rgba(255,255,255,0.1)',
         }}>
           {character}
         </div>
@@ -225,19 +211,18 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         {/* Romaji */}
         {(card.shownRomaji || card.romaji) && (
           <div style={{ 
-            fontSize: '26px', 
+            fontSize: '28px', 
             color: '#ec4899',
             fontWeight: '500',
-            letterSpacing: '3px',
+            letterSpacing: '4px',
             textTransform: 'lowercase',
-            textShadow: '0 0 20px rgba(236, 72, 153, 0.5)',
           }}>
             {card.shownRomaji || card.romaji}
           </div>
         )}
       </div>
 
-      {/* Bottom action buttons */}
+      {/* Bottom Buttons - inside card like the design */}
       <div style={{ 
         display: 'flex', 
         padding: '16px 20px',
@@ -245,17 +230,18 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         gap: '12px',
         opacity: swipeState === 'exit' ? 0 : 1,
       }}>
+        {/* Falsch Button */}
         <button
           onClick={() => handleButtonClick(false)}
           disabled={swipeState === 'exit'}
           style={{
             flex: 1,
-            padding: '14px 16px',
-            borderRadius: '14px',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            border: '1.5px solid rgba(239, 68, 68, 0.4)',
+            padding: '16px 20px',
+            borderRadius: '16px',
+            backgroundColor: 'rgba(239, 68, 68, 0.12)',
+            border: '1.5px solid rgba(239, 68, 68, 0.5)',
             color: '#f87171',
-            fontSize: '15px',
+            fontSize: '16px',
             fontWeight: '600',
             cursor: 'pointer',
             transition: 'all 0.15s',
@@ -263,32 +249,32 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px',
-            boxShadow: '0 0 20px rgba(239, 68, 68, 0.15)',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)'
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(239, 68, 68, 0.25)'
+            e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.7)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)'
-            e.currentTarget.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.15)'
+            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.12)'
+            e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.5)'
           }}
         >
-          <span style={{ fontSize: '16px' }}>✗</span>
-          Falsch
+          <span>✗</span>
+          <span>Falsch</span>
         </button>
 
+        {/* Richtig Button */}
         <button
           onClick={() => handleButtonClick(true)}
           disabled={swipeState === 'exit'}
           style={{
             flex: 1,
-            padding: '14px 16px',
-            borderRadius: '14px',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            border: '1.5px solid rgba(16, 185, 129, 0.4)',
+            padding: '16px 20px',
+            borderRadius: '16px',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            border: '1.5px solid rgba(16, 185, 129, 0.5)',
             color: '#34d399',
-            fontSize: '15px',
+            fontSize: '16px',
             fontWeight: '600',
             cursor: 'pointer',
             transition: 'all 0.15s',
@@ -296,19 +282,18 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px',
-            boxShadow: '0 0 20px rgba(16, 185, 129, 0.15)',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.2)'
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(16, 185, 129, 0.25)'
+            e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.7)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.1)'
-            e.currentTarget.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.15)'
+            e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.12)'
+            e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.5)'
           }}
         >
-          <span style={{ fontSize: '16px' }}>✓</span>
-          Richtig
+          <span>✓</span>
+          <span>Richtig</span>
         </button>
       </div>
     </div>

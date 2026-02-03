@@ -15,6 +15,9 @@ const GAME_MODES = {
   typing: null, // TODO
 }
 
+// Modes that handle their own layout (fullscreen)
+const FULLSCREEN_MODES = ['swipePro']
+
 const modeNames = {
   swipe: 'Swipe Game',
   swipePro: 'Swipe Pro ✨',
@@ -44,6 +47,7 @@ export default function GameScreen() {
   const cardCount = searchParams.get('cards') || 20
 
   const GameComponent = GAME_MODES[modeId]
+  const isFullscreen = FULLSCREEN_MODES.includes(modeId)
 
   if (!GameComponent) {
     return (
@@ -60,6 +64,35 @@ export default function GameScreen() {
     )
   }
 
+  // Fullscreen modes handle their own layout
+  if (isFullscreen) {
+    return (
+      <Suspense
+        fallback={
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            height: '100vh',
+            backgroundColor: '#0f172a',
+            color: 'white',
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '60px', marginBottom: '20px' }}>{modeEmojis[modeId]}</div>
+              <h2 style={{ fontSize: '24px', fontWeight: '700', margin: '0 0 8px 0' }}>Wird geladen...</h2>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', margin: 0 }}>
+                {modeNames[modeId]} wird vorbereitet
+              </p>
+            </div>
+          </div>
+        }
+      >
+        <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} />
+      </Suspense>
+    )
+  }
+
+  // Standard modes use AppLayout
   return (
     <AppLayout>
       <AppHeader>
