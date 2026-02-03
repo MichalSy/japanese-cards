@@ -130,68 +130,45 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
           {game.stats.mistakes.length > 0 && (
             <div>
               <h3 className="text-base font-medium" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-3)' }}>
-                Fehler ({game.stats.mistakes.length})
+                📚 Nochmal üben
               </h3>
-              <div className="space-y-3">
+              <div style={{ 
+                display: 'flex', 
+                flexWrap: 'wrap', 
+                gap: '8px' 
+              }}>
                 {game.stats.mistakes.map((mistake, idx) => {
                   const character = mistake.realCard?.character || mistake.realCard?.word || '?'
-                  const shownRomaji = mistake.displayedCard?.shownRomaji || mistake.displayedCard?.romaji
                   const correctRomaji = mistake.realCard?.romaji
-                  const wasCorrectPairing = mistake.wasCorrectPairing
-                  const userSaidCorrect = mistake.userAction === 'right'
                   
                   return (
-                    <Card key={idx}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {/* Header: Correct combination prominently */}
-                        <div style={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          gap: '12px',
-                          paddingBottom: '12px',
-                          borderBottom: '1px solid var(--color-surface-light)'
-                        }}>
-                          <div style={{ 
-                            fontSize: '40px', 
-                            fontWeight: '300',
-                            color: 'var(--color-text-primary)',
-                          }}>
-                            {character}
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            <div style={{ 
-                              fontSize: '20px', 
-                              color: '#10b981',
-                              fontWeight: '600',
-                            }}>
-                              {correctRomaji}
-                            </div>
-                            {!wasCorrectPairing && (
-                              <div style={{ 
-                                fontSize: '13px', 
-                                color: 'var(--color-text-tertiary)',
-                              }}>
-                                (behauptet: <span style={{ color: '#ef4444' }}>{shownRomaji}</span>)
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* Explanation */}
-                        <div style={{ display: 'flex', gap: '16px', fontSize: '13px' }}>
-                          <div style={{ color: 'var(--color-text-tertiary)' }}>
-                            Du: <span style={{ color: '#ef4444', fontWeight: '600' }}>
-                              {userSaidCorrect ? 'Richtig' : 'Falsch'}
-                            </span>
-                          </div>
-                          <div style={{ color: 'var(--color-text-tertiary)' }}>
-                            Korrekt: <span style={{ color: '#10b981', fontWeight: '600' }}>
-                              {wasCorrectPairing ? 'Richtig' : 'Falsch'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
+                    <div 
+                      key={idx}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 14px',
+                        backgroundColor: 'var(--color-surface)',
+                        borderRadius: '12px',
+                        border: '1px solid var(--color-surface-light)',
+                      }}
+                    >
+                      <span style={{ 
+                        fontSize: '24px', 
+                        fontWeight: '300',
+                        color: 'var(--color-text-primary)',
+                      }}>
+                        {character}
+                      </span>
+                      <span style={{ 
+                        fontSize: '15px', 
+                        color: 'var(--color-primary)',
+                        fontWeight: '500',
+                      }}>
+                        {correctRomaji}
+                      </span>
+                    </div>
                   )
                 })}
               </div>
