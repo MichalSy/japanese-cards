@@ -17,7 +17,7 @@ function walk(dir, callback) {
   });
 }
 
-console.log("🛠️ Fixing basename, manifestPath, and routeDiscovery in generated HTML files...");
+console.log("🛠️ Fixing basename, manifestPath, and isSpaMode in generated HTML files...");
 
 walk(buildDir, (filePath) => {
   if (filePath.endsWith(".html")) {
@@ -39,6 +39,15 @@ walk(buildDir, (filePath) => {
       newContent = newContent.replace(
         /"manifestPath":"\/__manifest"/g,
         '"manifestPath":"/japanese-cards/__manifest"'
+      );
+      fixed = true;
+    }
+    
+    // Enable SPA mode for proper client-side routing
+    if (newContent.includes('"isSpaMode":false')) {
+      newContent = newContent.replace(
+        /"isSpaMode":false/g,
+        '"isSpaMode":true'
       );
       fixed = true;
     }
