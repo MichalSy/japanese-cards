@@ -102,22 +102,22 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Almost pure transparent - glass only
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
-        backdropFilter: 'blur(60px) brightness(1.4) saturate(0.8)',
-        WebkitBackdropFilter: 'blur(60px) brightness(1.4) saturate(0.8)',
+        // Ultra-transparent glass - almost invisible background
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0.1) 100%)',
+        backdropFilter: 'blur(70px) brightness(1.45) saturate(0.75)',
+        WebkitBackdropFilter: 'blur(70px) brightness(1.45) saturate(0.75)',
         borderRadius: '28px',
         // Fine pink border
         border: index === 0 ? '2px solid rgba(236, 72, 153, 0.9)' : '1px solid rgba(100, 116, 139, 0.2)',
         boxShadow: index === 0 
           ? `
-            0 0 2px rgba(236, 72, 153, 0.9),
-            0 0 8px rgba(236, 72, 153, 0.85),
-            0 0 16px rgba(236, 72, 153, 0.65),
-            0 0 32px rgba(236, 72, 153, 0.35),
-            0 0 56px rgba(236, 72, 153, 0.15),
-            inset 0 0 20px rgba(0, 0, 0, 0.08),
-            inset 0 0 60px rgba(255, 255, 255, 0.06)
+            0 0 2px rgba(236, 72, 153, 1),
+            0 0 8px rgba(236, 72, 153, 0.9),
+            0 0 18px rgba(236, 72, 153, 0.7),
+            0 0 36px rgba(236, 72, 153, 0.4),
+            0 0 60px rgba(236, 72, 153, 0.18),
+            inset 0 0 20px rgba(0, 0, 0, 0.05),
+            inset 0 0 70px rgba(255, 255, 255, 0.08)
           `
           : '0 8px 32px rgba(0,0,0,0.3)',
         zIndex: 100 - index,
