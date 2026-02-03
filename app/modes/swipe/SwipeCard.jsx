@@ -93,10 +93,10 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           translateY(-50%)
           rotate(${position.rotation}deg)
         `,
-        width: 'calc(100% - 40px)',
-        maxWidth: '360px',
-        height: 'calc(100% - 32px)',
-        maxHeight: '560px',
+        width: 'calc(100% - 64px)',
+        maxWidth: '340px',
+        height: 'calc(100% - 48px)',
+        maxHeight: '500px',
         background: 'var(--color-surface)',
         borderRadius: '16px',
         border: '1px solid var(--color-surface-light)',
