@@ -1,7 +1,10 @@
-import { reactRouter } from "@react-router/dev/vite";
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/japanese-cards/", // Still needed for asset paths even with hash routing
-  plugins: [reactRouter()],
+  base: "/japanese-cards/",
+  plugins: [react()],
+  build: {
+    outDir: "build/client",
+  },
 });

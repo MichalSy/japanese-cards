@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "react-router dev",
-    "build": "react-router build && node scripts/fix-basename.js && node scripts/github-pages-spa.js",
-    "start": "react-router-serve ./build/server/index.js",
+    "dev": "vite",
+    "build": "vite build && node scripts/github-pages-spa.js",
+    "start": "vite preview",
     "lint": "eslint .",
     "preview": "vite preview"
   },
