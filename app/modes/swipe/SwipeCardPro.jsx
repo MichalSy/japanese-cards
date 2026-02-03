@@ -108,7 +108,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         WebkitBackdropFilter: 'blur(70px) brightness(1.45) saturate(0.75)',
         borderRadius: '28px',
         // Fine pink border
-        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.9)' : '1px solid rgba(100, 116, 139, 0.2)',
+        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.15)',
         boxShadow: index === 0 
           ? `
             0 0 2px rgba(236, 72, 153, 1),
@@ -138,11 +138,11 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       {/* Strong diagonal glass reflection - spotlight effect */}
       <div style={{
         position: 'absolute',
-        top: '-48%',
-        left: '-48%',
-        width: '196%',
-        height: '196%',
-        background: 'linear-gradient(135deg, transparent 0%, transparent 22%, rgba(255,255,255,0.6) 40%, rgba(255,255,255,0.3) 60%, transparent 78%, transparent 100%)',
+        top: '-47%',
+        left: '-47%',
+        width: '194%',
+        height: '194%',
+        background: 'linear-gradient(135deg, transparent 0%, transparent 24%, rgba(255,255,255,0.55) 40%, rgba(255,255,255,0.28) 60%, transparent 76%, transparent 100%)',
         pointerEvents: 'none',
         transform: 'rotate(0deg)',
         zIndex: 1,
