@@ -133,28 +133,88 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
                 Fehler ({game.stats.mistakes.length})
               </h3>
               <div className="space-y-3">
-                {game.stats.mistakes.map((mistake, idx) => (
-                  <Card key={idx}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
-                      <div style={{ 
-                        fontSize: '32px', 
-                        fontWeight: '700',
-                        color: 'var(--color-text-primary)',
-                        minWidth: '50px'
-                      }}>
-                        {mistake.realCard?.character || mistake.realCard?.word || '?'}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '14px', color: '#ef4444', marginBottom: '2px' }}>
-                          ✗ {mistake.displayedCard?.romaji}
+                {game.stats.mistakes.map((mistake, idx) => {
+                  const character = mistake.realCard?.character || mistake.realCard?.word || '?'
+                  const shownRomaji = mistake.displayedCard?.shownRomaji || mistake.displayedCard?.romaji
+                  const correctRomaji = mistake.realCard?.romaji
+                  const wasCorrectPairing = mistake.wasCorrectPairing
+                  const userSaidCorrect = mistake.userAction === 'right'
+                  
+                  return (
+                    <Card key={idx}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        {/* Header: Character + what was shown */}
+                        <div style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: '12px',
+                          paddingBottom: '12px',
+                          borderBottom: '1px solid var(--color-surface-light)'
+                        }}>
+                          <div style={{ 
+                            fontSize: '40px', 
+                            fontWeight: '300',
+                            color: 'var(--color-text-primary)',
+                          }}>
+                            {character}
+                          </div>
+                          <div style={{ 
+                            fontSize: '20px', 
+                            color: 'var(--color-primary)',
+                            fontWeight: '500',
+                            fontStyle: 'italic',
+                          }}>
+                            {shownRomaji}
+                          </div>
+                          <div style={{
+                            marginLeft: 'auto',
+                            padding: '4px 10px',
+                            borderRadius: '100px',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            backgroundColor: wasCorrectPairing ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                            color: wasCorrectPairing ? '#10b981' : '#ef4444',
+                          }}>
+                            {wasCorrectPairing ? 'War richtig' : 'War falsch'}
+                          </div>
                         </div>
-                        <div style={{ fontSize: '14px', color: '#10b981' }}>
-                          ✓ {mistake.realCard?.romaji}
+                        
+                        {/* Explanation */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px' }}>
+                          <div style={{ color: 'var(--color-text-tertiary)' }}>
+                            <span>Deine Antwort: </span>
+                            <span style={{ 
+                              color: '#ef4444',
+                              fontWeight: '600'
+                            }}>
+                              „{userSaidCorrect ? 'Richtig' : 'Falsch'}"
+                            </span>
+                          </div>
+                          
+                          <div style={{ color: 'var(--color-text-tertiary)' }}>
+                            <span>Korrekte Antwort: </span>
+                            <span style={{ 
+                              color: '#10b981',
+                              fontWeight: '600'
+                            }}>
+                              „{wasCorrectPairing ? 'Richtig' : 'Falsch'}"
+                            </span>
+                          </div>
+                          
+                          {!wasCorrectPairing && (
+                            <div style={{ 
+                              marginTop: '4px',
+                              color: 'var(--color-text-secondary)',
+                              fontStyle: 'italic'
+                            }}>
+                              {character} = {correctRomaji}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  )
+                })}
               </div>
             </div>
           )}
