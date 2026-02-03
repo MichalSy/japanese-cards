@@ -143,7 +143,7 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
                   return (
                     <Card key={idx}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {/* Header: Character + what was shown */}
+                        {/* Header: Correct combination prominently */}
                         <div style={{ 
                           display: 'flex', 
                           alignItems: 'center', 
@@ -158,58 +158,37 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
                           }}>
                             {character}
                           </div>
-                          <div style={{ 
-                            fontSize: '20px', 
-                            color: 'var(--color-primary)',
-                            fontWeight: '500',
-                            fontStyle: 'italic',
-                          }}>
-                            {shownRomaji}
-                          </div>
-                          <div style={{
-                            marginLeft: 'auto',
-                            padding: '4px 10px',
-                            borderRadius: '100px',
-                            fontSize: '12px',
-                            fontWeight: '600',
-                            backgroundColor: wasCorrectPairing ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                            color: wasCorrectPairing ? '#10b981' : '#ef4444',
-                          }}>
-                            {wasCorrectPairing ? 'War richtig' : 'War falsch'}
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <div style={{ 
+                              fontSize: '20px', 
+                              color: '#10b981',
+                              fontWeight: '600',
+                            }}>
+                              {correctRomaji}
+                            </div>
+                            {!wasCorrectPairing && (
+                              <div style={{ 
+                                fontSize: '13px', 
+                                color: 'var(--color-text-tertiary)',
+                              }}>
+                                (behauptet: <span style={{ color: '#ef4444' }}>{shownRomaji}</span>)
+                              </div>
+                            )}
                           </div>
                         </div>
                         
                         {/* Explanation */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px' }}>
+                        <div style={{ display: 'flex', gap: '16px', fontSize: '13px' }}>
                           <div style={{ color: 'var(--color-text-tertiary)' }}>
-                            <span>Deine Antwort: </span>
-                            <span style={{ 
-                              color: '#ef4444',
-                              fontWeight: '600'
-                            }}>
-                              „{userSaidCorrect ? 'Richtig' : 'Falsch'}"
+                            Du: <span style={{ color: '#ef4444', fontWeight: '600' }}>
+                              {userSaidCorrect ? 'Richtig' : 'Falsch'}
                             </span>
                           </div>
-                          
                           <div style={{ color: 'var(--color-text-tertiary)' }}>
-                            <span>Korrekte Antwort: </span>
-                            <span style={{ 
-                              color: '#10b981',
-                              fontWeight: '600'
-                            }}>
-                              „{wasCorrectPairing ? 'Richtig' : 'Falsch'}"
+                            Korrekt: <span style={{ color: '#10b981', fontWeight: '600' }}>
+                              {wasCorrectPairing ? 'Richtig' : 'Falsch'}
                             </span>
                           </div>
-                          
-                          {!wasCorrectPairing && (
-                            <div style={{ 
-                              marginTop: '4px',
-                              color: 'var(--color-text-secondary)',
-                              fontStyle: 'italic'
-                            }}>
-                              {character} = {correctRomaji}
-                            </div>
-                          )}
                         </div>
                       </div>
                     </Card>
