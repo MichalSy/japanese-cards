@@ -25,8 +25,8 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     e.preventDefault()
     const clientX = e.touches ? e.touches[0].clientX : e.clientX
     const diff = clientX - dragStart
-    const rotation = (diff / 250) * 8
-    setPosition({ x: diff, rotation: Math.max(-10, Math.min(10, rotation)) })
+    const rotation = (diff / 300) * 6
+    setPosition({ x: diff, rotation: Math.max(-8, Math.min(8, rotation)) })
   }
 
   const handleDragEnd = () => {
@@ -56,22 +56,21 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     setExitDirection(direction)
     setSwipeState('exit')
     setPosition({
-      x: direction === 'right' ? 320 : -320,
-      rotation: direction === 'right' ? 12 : -12
+      x: direction === 'right' ? 300 : -300,
+      rotation: direction === 'right' ? 10 : -10
     })
     
     setTimeout(() => {
       onSwipe(isCorrect, direction, card.correctRomaji, character)
-    }, 250)
+    }, 220)
   }
 
   const getTransition = () => {
     if (isDragging) return 'none'
-    if (swipeState === 'exit') return 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
-    return 'all 0.3s cubic-bezier(0.34, 1.3, 0.64, 1)'
+    if (swipeState === 'exit') return 'all 0.22s ease-out'
+    return 'all 0.28s cubic-bezier(0.34, 1.2, 0.64, 1)'
   }
 
-  // Calculate swipe progress for visual feedback
   const swipeProgress = Math.min(1, Math.abs(position.x) / 100)
   const isSwipingRight = position.x > 0
   const isSwipingLeft = position.x < 0
@@ -98,21 +97,9 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         maxWidth: '360px',
         height: 'calc(100% - 32px)',
         maxHeight: '560px',
-        background: `linear-gradient(
-          180deg,
-          var(--color-surface) 0%,
-          rgba(30, 41, 59, 0.95) 100%
-        )`,
-        borderRadius: '12px',
-        border: `1px solid ${
-          isDragging 
-            ? isSwipingRight 
-              ? `rgba(16, 185, 129, ${0.3 + swipeProgress * 0.4})` 
-              : isSwipingLeft 
-                ? `rgba(239, 68, 68, ${0.3 + swipeProgress * 0.4})`
-                : 'var(--color-surface-light)'
-            : 'var(--color-surface-light)'
-        }`,
+        background: 'var(--color-surface)',
+        borderRadius: '16px',
+        border: '1px solid var(--color-surface-light)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
@@ -122,36 +109,68 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         opacity: swipeState === 'exit' ? 0 : 1,
         userSelect: 'none',
         overflow: 'hidden',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
         touchAction: 'none',
       }}
     >
-      {/* Swipe feedback overlay */}
-      {isDragging && swipeProgress > 0.1 && (
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: isSwipingRight 
-            ? `rgba(16, 185, 129, ${swipeProgress * 0.15})`
-            : `rgba(239, 68, 68, ${swipeProgress * 0.15})`,
-          pointerEvents: 'none',
-          borderRadius: '12px',
-        }} />
-      )}
+      {/* Swipe feedback - left edge */}
+      <div style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        width: '80px',
+        background: `linear-gradient(90deg, rgba(239, 68, 68, ${isSwipingLeft ? swipeProgress * 0.3 : 0}) 0%, transparent 100%)`,
+        pointerEvents: 'none',
+        transition: isDragging ? 'none' : 'background 0.2s',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingLeft: '16px',
+      }}>
+        <span style={{
+          fontSize: '32px',
+          opacity: isSwipingLeft ? swipeProgress : 0,
+          transform: `scale(${0.5 + swipeProgress * 0.5})`,
+          transition: isDragging ? 'none' : 'all 0.2s',
+        }}>✗</span>
+      </div>
 
-      {/* Content */}
+      {/* Swipe feedback - right edge */}
+      <div style={{
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0,
+        width: '80px',
+        background: `linear-gradient(-90deg, rgba(16, 185, 129, ${isSwipingRight ? swipeProgress * 0.3 : 0}) 0%, transparent 100%)`,
+        pointerEvents: 'none',
+        transition: isDragging ? 'none' : 'background 0.2s',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingRight: '16px',
+      }}>
+        <span style={{
+          fontSize: '32px',
+          opacity: isSwipingRight ? swipeProgress : 0,
+          transform: `scale(${0.5 + swipeProgress * 0.5})`,
+          transition: isDragging ? 'none' : 'all 0.2s',
+        }}>✓</span>
+      </div>
+
+      {/* Main Content - centered */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        padding: '32px 24px',
-        gap: '24px',
+        padding: '40px 24px',
+        gap: '20px',
       }}>
         {/* Character */}
         <div style={{ 
-          fontSize: 'clamp(100px, 25vw, 160px)', 
+          fontSize: 'clamp(100px, 28vw, 180px)', 
           fontWeight: '200', 
           lineHeight: 1,
           color: 'var(--color-text-primary)',
@@ -163,32 +182,23 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         {/* Romaji */}
         {(card.shownRomaji || card.romaji) && (
           <div style={{ 
-            fontSize: '32px', 
+            fontSize: '28px', 
             color: 'var(--color-primary)',
             fontWeight: '500',
-            letterSpacing: '2px',
+            letterSpacing: '3px',
+            textTransform: 'lowercase',
           }}>
             {card.shownRomaji || card.romaji}
           </div>
         )}
-
-        {/* Swipe indicator - shows when dragging */}
-        {isDragging && swipeProgress > 0.3 && (
-          <div style={{
-            fontSize: '48px',
-            opacity: swipeProgress,
-            transition: 'opacity 0.1s',
-          }}>
-            {isSwipingRight ? '✓' : '✗'}
-          </div>
-        )}
       </div>
 
-      {/* Action Buttons - minimal design */}
+      {/* Bottom action area */}
       <div style={{ 
         display: 'flex', 
-        padding: '0 20px 24px',
-        gap: '12px',
+        padding: '20px 24px',
+        paddingBottom: '28px',
+        gap: '16px',
         opacity: swipeState === 'exit' ? 0 : 1,
       }}>
         <button
@@ -196,28 +206,24 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           disabled={swipeState === 'exit'}
           style={{
             flex: 1,
-            padding: '14px',
-            borderRadius: '8px',
-            backgroundColor: 'transparent',
-            border: '1px solid rgba(239, 68, 68, 0.4)',
-            color: '#ef4444',
-            fontSize: '14px',
+            padding: '16px 20px',
+            borderRadius: '100px',
+            backgroundColor: 'rgba(239, 68, 68, 0.08)',
+            border: 'none',
+            color: '#f87171',
+            fontSize: '15px',
             fontWeight: '500',
             cursor: 'pointer',
             transition: 'all 0.15s',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)'
+            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.15)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent'
+            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.08)'
           }}
         >
-          <span>←</span> Falsch
+          Falsch
         </button>
 
         <button
@@ -225,28 +231,24 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           disabled={swipeState === 'exit'}
           style={{
             flex: 1,
-            padding: '14px',
-            borderRadius: '8px',
-            backgroundColor: 'transparent',
-            border: '1px solid rgba(16, 185, 129, 0.4)',
-            color: '#10b981',
-            fontSize: '14px',
+            padding: '16px 20px',
+            borderRadius: '100px',
+            backgroundColor: 'rgba(16, 185, 129, 0.08)',
+            border: 'none',
+            color: '#34d399',
+            fontSize: '15px',
             fontWeight: '500',
             cursor: 'pointer',
             transition: 'all 0.15s',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.1)'
+            e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.15)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent'
+            e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.08)'
           }}
         >
-          Richtig <span>→</span>
+          Richtig
         </button>
       </div>
     </div>
