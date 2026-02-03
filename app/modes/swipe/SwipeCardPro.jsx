@@ -102,10 +102,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Ultra-transparent glass - almost invisible background
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0.1) 100%)',
-        backdropFilter: 'blur(70px) brightness(1.45) saturate(0.75)',
-        WebkitBackdropFilter: 'blur(70px) brightness(1.45) saturate(0.75)',
+        // TRULY transparent - let background show through!
+        background: 'rgba(255, 255, 255, 0.01)',
+        backdropFilter: 'blur(80px) brightness(1.5) contrast(0.95) saturate(0.7)',
+        WebkitBackdropFilter: 'blur(80px) brightness(1.5) contrast(0.95) saturate(0.7)',
         borderRadius: '28px',
         // Fine pink border
         border: index === 0 ? '2px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.15)',
