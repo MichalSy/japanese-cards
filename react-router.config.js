@@ -2,8 +2,9 @@ export default {
   ssr: true,
   async prerender() {
     // GitHub Pages SPA: Only prerender index.html
-    // GitHub Pages automatically serves 404.html for non-existent routes
-    // React Router hydrates client-side and routes dynamically
+    // 404.html (copy of index.html) handles all non-existent routes
+    // React Router hydrates & routes client-side
+    // Loaders run on client via useLoaderData hook integration
     return ["/"];
   },
 };
