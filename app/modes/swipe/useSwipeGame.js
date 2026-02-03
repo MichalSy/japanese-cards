@@ -34,9 +34,15 @@ export function useSwipeGame(items, cardCount) {
     const answers = {}
     const display = []
     
+    // Create array of true/false (50/50), then shuffle
+    const correctnessArray = [
+      ...Array(Math.ceil(deck.length / 2)).fill(true),
+      ...Array(Math.floor(deck.length / 2)).fill(false)
+    ].sort(() => Math.random() - 0.5)
+    
     deck.forEach((card, idx) => {
-      // 50/50: show correct meaning or random wrong meaning
-      const isCorrectMeaning = Math.random() > 0.5
+      // Use pre-shuffled randomness array instead of inline Math.random
+      const isCorrectMeaning = correctnessArray[idx]
       
       if (isCorrectMeaning) {
         // Show the real card with its correct romaji
