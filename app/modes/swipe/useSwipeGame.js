@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import { recordCorrect, recordWrong } from '../../utils/progressStorage'
 
-export function useSwipeGame(items, cardCount) {
+export function useSwipeGame(items, cardCount, category) {
   const [gameState, setGameState] = useState('loading') // loading, playing, finished
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cards, setCards] = useState([])
@@ -98,6 +99,16 @@ export function useSwipeGame(items, cardCount) {
 
   const handleSwipe = useCallback((isCorrect, swipeDirection) => {
     const nextIndex = currentIndex + 1
+    const currentCard = cards[currentIndex]
+
+    // Save progress to storage
+    if (category && currentCard) {
+      if (isCorrect) {
+        recordCorrect(category, currentCard.id)
+      } else {
+        recordWrong(category, currentCard.id)
+      }
+    }
 
     if (!isCorrect) {
       setStats(prev => ({
@@ -123,7 +134,7 @@ export function useSwipeGame(items, cardCount) {
     } else {
       setCurrentIndex(nextIndex)
     }
-  }, [currentIndex, cards])
+  }, [currentIndex, cards, category])
 
   const getCardStack = useCallback(() => {
     // Return 3-4 display cards for stack (what user sees)

@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router'
 import { useState, useEffect } from 'react'
 import { fetchCategoryConfig } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
+import { getCategoryStats } from '../utils/progressStorage'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
@@ -16,6 +17,7 @@ export default function ContentTypeView() {
   const [categoryConfig, setCategoryConfig] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [stats, setStats] = useState(null)
 
   useEffect(() => {
     (async () => {
@@ -23,6 +25,10 @@ export default function ContentTypeView() {
         setLoading(true)
         const config = await fetchCategoryConfig(contentType)
         setCategoryConfig(config)
+        
+        // Load stats from storage
+        const categoryStats = getCategoryStats(contentType)
+        setStats(categoryStats)
       } catch (err) {
         setError(err.message)
         console.error(`Failed to load category config for ${contentType}:`, err)
@@ -82,12 +88,12 @@ export default function ContentTypeView() {
               <h3 className="text-sm font-medium text-primary">Deine Statistik</h3>
               <div className="grid-2">
                 <div>
-                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Korrekt</p>
-                  <p className="text-2xl font-bold" style={{ color: '#10b981', margin: 0 }}>—</p>
+                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Gelernt</p>
+                  <p className="text-2xl font-bold" style={{ color: '#10b981', margin: 0 }}>{stats?.totalLearned || 0}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Genauigkeit</p>
-                  <p className="text-2xl font-bold" style={{ color: '#3b82f6', margin: 0 }}>—</p>
+                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Beherrscht</p>
+                  <p className="text-2xl font-bold" style={{ color: '#3b82f6', margin: 0 }}>{stats?.mastered || 0}</p>
                 </div>
               </div>
             </div>

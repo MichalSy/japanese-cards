@@ -14,7 +14,7 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
   const [toastVisible, setToastVisible] = useState(false)
   const toastTimeoutRef = useRef(null)
 
-  const game = useSwipeGame(items, cardCount)
+  const game = useSwipeGame(items, cardCount, contentType)
   
   // Wrap handleSwipe to show toast
   const handleSwipeWithToast = (isCorrect, direction, correctRomaji, character) => {
