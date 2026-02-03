@@ -5,9 +5,11 @@ import { AppLayout, AppHeader, AppContent } from '../components/Layout'
 
 // Lazy load game modes
 const SwipeGame = lazy(() => import('../modes/swipe/SwipeGame'))
+const SwipeGamePro = lazy(() => import('../modes/swipe/SwipeGamePro'))
 
 const GAME_MODES = {
   swipe: SwipeGame,
+  swipePro: SwipeGamePro,
   multiChoice: null, // TODO
   flashcard: null, // TODO
   typing: null, // TODO
@@ -15,6 +17,7 @@ const GAME_MODES = {
 
 const modeNames = {
   swipe: 'Swipe Game',
+  swipePro: 'Swipe Pro ✨',
   multiChoice: 'Multiple Choice',
   flashcard: 'Flashcard',
   typing: 'Typing Challenge',
@@ -22,6 +25,7 @@ const modeNames = {
 
 const modeEmojis = {
   swipe: '👆',
+  swipePro: '🌟',
   multiChoice: '🎯',
   flashcard: '🃏',
   typing: '⌨️',

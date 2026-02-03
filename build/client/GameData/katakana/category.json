@@ -10,7 +10,7 @@
   "type": "characters",
   "enabled": false,
   "showAllOption": true,
-  "gameModes": ["swipe", "multiChoice", "flashcard", "typing"],
+  "gameModes": ["swipe", "swipePro", "multiChoice", "flashcard", "typing"],
   "groups": [
     {
       "id": "a",
