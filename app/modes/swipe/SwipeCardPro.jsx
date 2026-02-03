@@ -79,101 +79,147 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const isSwipingRight = position.x > 0
   const isSwipingLeft = position.x < 0
 
-  // Stack styling
-  const stackOffset = index * 8
-  const stackScale = 1 - (index * 0.03)
-  const stackOpacity = index === 0 ? 1 : Math.max(0.3, 0.7 - (index * 0.2))
-
-  // Neon glow effect
-  const mainCardShadow = `
-    0 0 15px rgba(236, 72, 153, 1),
-    0 0 30px rgba(236, 72, 153, 0.8),
-    0 0 45px rgba(236, 72, 153, 0.6),
-    0 0 60px rgba(236, 72, 153, 0.4),
-    0 0 90px rgba(236, 72, 153, 0.2)
-  `
+  // Stack styling - make stacked cards more visible
+  const stackOffset = index * 6
+  const stackScale = 1 - (index * 0.02)
+  const stackOpacity = index === 0 ? 1 : Math.max(0.4, 0.7 - (index * 0.15))
+  const stackBlur = index === 0 ? 0 : index * 4
 
   return (
-    <div
-      onTouchStart={handleDragStart}
-      onTouchMove={handleDragMove}
-      onTouchEnd={handleDragEnd}
-      onMouseDown={handleDragStart}
-      onMouseMove={isDragging ? handleDragMove : undefined}
-      onMouseUp={handleDragEnd}
-      onMouseLeave={isDragging ? handleDragEnd : undefined}
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        transform: `translateX(calc(-50% + ${position.x}px)) translateY(calc(-50% + ${stackOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
-        width: 'calc(100% - 40px)',
-        maxWidth: '340px',
-        height: 'auto',
-        aspectRatio: '3/4',
-        background: 'linear-gradient(145deg, rgba(45, 55, 72, 0.9) 0%, rgba(30, 41, 59, 0.95) 100%)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        borderRadius: '24px',
-        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.9)' : '1px solid rgba(100, 116, 139, 0.4)',
-        boxShadow: index === 0 ? mainCardShadow : '0 8px 32px rgba(0,0,0,0.4)',
-        zIndex: 100 - index,
-        cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
-        transition: getTransition(),
-        willChange: 'transform, opacity',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        opacity: swipeState === 'exit' ? 0 : stackOpacity,
-        userSelect: 'none',
-        overflow: 'hidden',
-        touchAction: 'none',
-      }}
-    >
-      {/* Glass reflection effect */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '50%',
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)',
-        borderRadius: '24px 24px 0 0',
-        pointerEvents: 'none',
-      }} />
-
-      {/* Swipe feedback left */}
-      <div style={{
-        position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
-        background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
-        pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
-        display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '24px',
-      }}>
-        <span style={{ fontSize: '48px', opacity: isSwipingLeft ? swipeProgress : 0, color: '#ef4444' }}>✗</span>
-      </div>
-
-      {/* Swipe feedback right */}
-      <div style={{
-        position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%',
-        background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
-        pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
-        display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px',
-      }}>
-        <span style={{ fontSize: '48px', opacity: isSwipingRight ? swipeProgress : 0, color: '#10b981' }}>✓</span>
-      </div>
-
-      {/* Character */}
-      <div style={{ fontSize: 'clamp(80px, 22vw, 140px)', fontWeight: '200', lineHeight: 1, color: 'white', textAlign: 'center', marginBottom: '16px' }}>
-        {character}
-      </div>
-
-      {/* Romaji */}
-      {(card.shownRomaji || card.romaji) && (
-        <div style={{ fontSize: '26px', color: '#ec4899', fontWeight: '500', letterSpacing: '4px', textTransform: 'lowercase' }}>
-          {card.shownRomaji || card.romaji}
-        </div>
+    <>
+      {/* Outer glow ring - separate from card */}
+      {index === 0 && (
+        <div style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: `translateX(calc(-50% + ${position.x}px)) translateY(-50%) rotate(${position.rotation}deg)`,
+          width: 'calc(100% - 24px)',
+          maxWidth: '360px',
+          aspectRatio: '3/4',
+          borderRadius: '32px',
+          border: '3px solid rgba(236, 72, 153, 0.8)',
+          boxShadow: `
+            0 0 20px rgba(236, 72, 153, 0.9),
+            0 0 40px rgba(236, 72, 153, 0.6),
+            0 0 60px rgba(236, 72, 153, 0.4),
+            0 0 80px rgba(236, 72, 153, 0.2),
+            inset 0 0 30px rgba(236, 72, 153, 0.1)
+          `,
+          zIndex: 99,
+          pointerEvents: 'none',
+          transition: getTransition(),
+          opacity: swipeState === 'exit' ? 0 : 1,
+        }} />
       )}
-    </div>
+
+      {/* Card */}
+      <div
+        onTouchStart={handleDragStart}
+        onTouchMove={handleDragMove}
+        onTouchEnd={handleDragEnd}
+        onMouseDown={handleDragStart}
+        onMouseMove={isDragging ? handleDragMove : undefined}
+        onMouseUp={handleDragEnd}
+        onMouseLeave={isDragging ? handleDragEnd : undefined}
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: `translateX(calc(-50% + ${position.x}px)) translateY(calc(-50% + ${stackOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
+          width: 'calc(100% - 48px)',
+          maxWidth: '320px',
+          aspectRatio: '3/4',
+          background: 'linear-gradient(145deg, rgba(55, 65, 81, 0.85) 0%, rgba(40, 50, 70, 0.9) 50%, rgba(30, 40, 60, 0.95) 100%)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderRadius: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          zIndex: 100 - index,
+          cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
+          transition: getTransition(),
+          willChange: 'transform, opacity',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: swipeState === 'exit' ? 0 : stackOpacity,
+          userSelect: 'none',
+          overflow: 'hidden',
+          touchAction: 'none',
+          filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
+        }}
+      >
+        {/* Diagonal glass reflection */}
+        <div style={{
+          position: 'absolute',
+          top: '-50%',
+          left: '-50%',
+          width: '200%',
+          height: '200%',
+          background: 'linear-gradient(135deg, transparent 0%, transparent 40%, rgba(255,255,255,0.12) 45%, rgba(255,255,255,0.05) 55%, transparent 60%, transparent 100%)',
+          pointerEvents: 'none',
+          transform: 'rotate(0deg)',
+        }} />
+
+        {/* Top highlight */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: '10%',
+          right: '10%',
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+          pointerEvents: 'none',
+        }} />
+
+        {/* Swipe feedback left */}
+        <div style={{
+          position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
+          background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
+          pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
+          display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '24px',
+        }}>
+          <span style={{ fontSize: '48px', opacity: isSwipingLeft ? swipeProgress : 0, color: '#ef4444' }}>✗</span>
+        </div>
+
+        {/* Swipe feedback right */}
+        <div style={{
+          position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%',
+          background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
+          pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
+          display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px',
+        }}>
+          <span style={{ fontSize: '48px', opacity: isSwipingRight ? swipeProgress : 0, color: '#10b981' }}>✓</span>
+        </div>
+
+        {/* Character */}
+        <div style={{ 
+          fontSize: 'clamp(90px, 25vw, 160px)', 
+          fontWeight: '200', 
+          lineHeight: 1, 
+          color: 'white', 
+          textAlign: 'center', 
+          marginBottom: '20px',
+          textShadow: '0 2px 10px rgba(0,0,0,0.3)',
+        }}>
+          {character}
+        </div>
+
+        {/* Romaji - larger and more vibrant */}
+        {(card.shownRomaji || card.romaji) && (
+          <div style={{ 
+            fontSize: '32px', 
+            color: '#f472b6', 
+            fontWeight: '600', 
+            letterSpacing: '6px', 
+            textTransform: 'lowercase',
+            textShadow: '0 0 20px rgba(236, 72, 153, 0.5)',
+          }}>
+            {card.shownRomaji || card.romaji}
+          </div>
+        )}
+      </div>
+    </>
   )
 }
