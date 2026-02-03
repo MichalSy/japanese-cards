@@ -82,16 +82,15 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   // Stack styling
   const stackOffset = index * 8
   const stackScale = 1 - (index * 0.03)
-  const stackOpacity = index === 0 ? 1 : Math.max(0.2, 0.6 - (index * 0.2))
+  const stackOpacity = index === 0 ? 1 : Math.max(0.3, 0.7 - (index * 0.2))
 
-  // Neon glow effect for main card - very intense
+  // Neon glow effect
   const mainCardShadow = `
-    0 0 10px rgba(236, 72, 153, 1),
-    0 0 20px rgba(236, 72, 153, 0.9),
-    0 0 40px rgba(236, 72, 153, 0.7),
-    0 0 60px rgba(236, 72, 153, 0.5),
-    0 0 80px rgba(236, 72, 153, 0.4),
-    0 0 120px rgba(236, 72, 153, 0.2)
+    0 0 15px rgba(236, 72, 153, 1),
+    0 0 30px rgba(236, 72, 153, 0.8),
+    0 0 45px rgba(236, 72, 153, 0.6),
+    0 0 60px rgba(236, 72, 153, 0.4),
+    0 0 90px rgba(236, 72, 153, 0.2)
   `
 
   return (
@@ -108,14 +107,16 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         left: '50%',
         top: '50%',
         transform: `translateX(calc(-50% + ${position.x}px)) translateY(calc(-50% + ${stackOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
-        width: 'calc(100% - 48px)',
-        maxWidth: '320px',
+        width: 'calc(100% - 40px)',
+        maxWidth: '340px',
+        height: 'auto',
         aspectRatio: '3/4',
-        background: 'rgba(30, 41, 59, 0.85)',
-        backdropFilter: 'blur(20px)',
-        borderRadius: '20px',
-        border: index === 0 ? '2.5px solid rgba(236, 72, 153, 1)' : '1px solid rgba(100, 116, 139, 0.3)',
-        boxShadow: index === 0 ? mainCardShadow : '0 8px 32px rgba(0,0,0,0.3)',
+        background: 'linear-gradient(145deg, rgba(45, 55, 72, 0.9) 0%, rgba(30, 41, 59, 0.95) 100%)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderRadius: '24px',
+        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.9)' : '1px solid rgba(100, 116, 139, 0.4)',
+        boxShadow: index === 0 ? mainCardShadow : '0 8px 32px rgba(0,0,0,0.4)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
@@ -130,6 +131,18 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         touchAction: 'none',
       }}
     >
+      {/* Glass reflection effect */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '50%',
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)',
+        borderRadius: '24px 24px 0 0',
+        pointerEvents: 'none',
+      }} />
+
       {/* Swipe feedback left */}
       <div style={{
         position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
@@ -151,13 +164,13 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       </div>
 
       {/* Character */}
-      <div style={{ fontSize: 'clamp(100px, 28vw, 160px)', fontWeight: '200', lineHeight: 1, color: 'white', textAlign: 'center', marginBottom: '20px' }}>
+      <div style={{ fontSize: 'clamp(80px, 22vw, 140px)', fontWeight: '200', lineHeight: 1, color: 'white', textAlign: 'center', marginBottom: '16px' }}>
         {character}
       </div>
 
       {/* Romaji */}
       {(card.shownRomaji || card.romaji) && (
-        <div style={{ fontSize: '28px', color: '#ec4899', fontWeight: '500', letterSpacing: '4px', textTransform: 'lowercase' }}>
+        <div style={{ fontSize: '26px', color: '#ec4899', fontWeight: '500', letterSpacing: '4px', textTransform: 'lowercase' }}>
           {card.shownRomaji || card.romaji}
         </div>
       )}

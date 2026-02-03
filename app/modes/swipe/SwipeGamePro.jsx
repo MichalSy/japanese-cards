@@ -52,18 +52,18 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   }, [contentType, groupId])
 
   if (loading) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', backgroundColor: '#0f172a', color: 'rgba(255,255,255,0.6)' }}>Laden...</div>
+    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100dvh', backgroundColor: '#0f172a', color: 'rgba(255,255,255,0.6)' }}>Laden...</div>
   }
 
   if (error) {
-    return <div style={{ padding: '20px', height: '100vh', backgroundColor: '#0f172a' }}><div style={{ padding: '20px', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderRadius: '16px', color: '#ef4444' }}>Fehler: {error}</div></div>
+    return <div style={{ padding: '20px', minHeight: '100dvh', backgroundColor: '#0f172a' }}><div style={{ padding: '20px', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderRadius: '16px', color: '#ef4444' }}>Fehler: {error}</div></div>
   }
 
   if (game.gameState === 'finished') {
     const total = game.stats.correct + game.stats.incorrect
     const pct = total > 0 ? Math.round((game.stats.correct / total) * 100) : 0
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#0f172a', backgroundImage: 'url(/japanese-cards/images/swipe-bg.png)', backgroundSize: 'cover' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh', backgroundColor: '#0f172a', backgroundImage: 'url(/japanese-cards/images/swipe-bg.png)', backgroundSize: 'cover' }}>
         <ProHeaderBar title="Ergebnis" />
         <div style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
           <div style={{ background: 'rgba(30,41,59,0.8)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center', marginBottom: '20px' }}>
@@ -81,19 +81,32 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const progress = (game.currentIndex / game.totalCards) * 100
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', backgroundColor: '#0f172a', backgroundImage: 'url(/japanese-cards/images/swipe-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      minHeight: '100dvh',
+      height: '100dvh',
+      maxHeight: '100dvh',
+      overflow: 'hidden', 
+      backgroundColor: '#0f172a', 
+      backgroundImage: 'url(/japanese-cards/images/swipe-bg.png)', 
+      backgroundSize: 'cover', 
+      backgroundPosition: 'center' 
+    }}>
       
       {/* Header */}
-      <ProHeaderBar title="Swipe Game" />
+      <div style={{ flexShrink: 0 }}>
+        <ProHeaderBar title="Swipe Game" />
+      </div>
 
       {/* Question */}
-      <div style={{ textAlign: 'center', padding: '4px 20px 20px' }}>
-        <span style={{ fontSize: '20px', fontWeight: '500', color: 'white' }}>Ist die Kombination richtig?</span>
+      <div style={{ flexShrink: 0, textAlign: 'center', padding: '4px 20px 12px' }}>
+        <span style={{ fontSize: '18px', fontWeight: '500', color: 'white' }}>Ist die Kombination richtig?</span>
       </div>
 
       {/* Toast */}
       {toast && (
-        <div style={{ position: 'fixed', top: '140px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, opacity: toastVisible ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none' }}>
+        <div style={{ position: 'fixed', top: '120px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, opacity: toastVisible ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 24px', backgroundColor: toast.isCorrect ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)', backdropFilter: 'blur(10px)', borderRadius: '16px' }}>
             <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'white' }}>{toast.isCorrect ? '✓' : '✗'}</span>
             <span style={{ fontSize: '17px', fontWeight: '600', color: 'white' }}>{toast.character} = {toast.correctRomaji}</span>
@@ -101,8 +114,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Card Area */}
-      <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 24px', minHeight: 0 }}>
+      {/* Card Area - flex grow */}
+      <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden' }}>
         {game.cardStack.map((card, idx) => (
           <SwipeCardPro
             key={`${game.currentIndex + idx}`}
@@ -116,84 +129,89 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         ))}
       </div>
 
-      {/* Progress Section */}
-      <div style={{ padding: '16px 24px 8px', textAlign: 'center' }}>
-        <span style={{ fontSize: '15px', fontWeight: '500', color: 'rgba(255,255,255,0.6)' }}>{game.currentIndex + 1}/{game.totalCards}</span>
-      </div>
-      
-      <div style={{ padding: '0 24px 16px' }}>
-        <div style={{ height: '6px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #ec4899)', borderRadius: '3px', transition: 'width 0.3s' }} />
+      {/* Bottom Section - fixed at bottom */}
+      <div style={{ flexShrink: 0, padding: '12px 16px', paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))' }}>
+        {/* Progress */}
+        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+          <span style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255,255,255,0.6)' }}>{game.currentIndex + 1}/{game.totalCards}</span>
         </div>
-      </div>
+        
+        <div style={{ height: '5px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden', marginBottom: '16px' }}>
+          <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '3px', transition: 'width 0.3s' }} />
+        </div>
 
-      {/* Buttons - matching design exactly */}
-      <div style={{ padding: '8px 16px 32px', display: 'flex', gap: '12px' }}>
-        {/* Falsch Button */}
-        <button
-          onClick={() => handleButtonClick(false)}
-          style={{
-            flex: 1,
-            padding: '18px 24px',
-            borderRadius: '100px',
-            backgroundColor: 'rgba(55, 65, 81, 0.7)',
-            border: '2px solid rgba(239, 68, 68, 0.6)',
-            color: '#f87171',
-            fontSize: '17px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px',
-            boxShadow: '0 0 20px rgba(239, 68, 68, 0.2)',
-          }}
-        >
-          <span style={{ 
-            width: '28px', 
-            height: '28px', 
-            borderRadius: '50%', 
-            backgroundColor: 'rgba(239, 68, 68, 0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '16px',
-          }}>✗</span>
-          <span>Falsch</span>
-        </button>
+        {/* Buttons - matching design */}
+        <div style={{ display: 'flex', gap: '12px' }}>
+          {/* Falsch Button */}
+          <button
+            onClick={() => handleButtonClick(false)}
+            style={{
+              flex: 1,
+              padding: '14px 20px',
+              borderRadius: '100px',
+              background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.8) 0%, rgba(31, 41, 55, 0.9) 100%)',
+              backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(239, 68, 68, 0.5)',
+              color: '#f87171',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              boxShadow: '0 0 20px rgba(239, 68, 68, 0.15), 0 4px 12px rgba(0,0,0,0.3)',
+            }}
+          >
+            <span style={{ 
+              width: '26px', 
+              height: '26px', 
+              borderRadius: '50%', 
+              backgroundColor: 'rgba(239, 68, 68, 0.2)',
+              border: '1px solid rgba(239, 68, 68, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px',
+            }}>✗</span>
+            <span>Falsch</span>
+          </button>
 
-        {/* Richtig Button */}
-        <button
-          onClick={() => handleButtonClick(true)}
-          style={{
-            flex: 1,
-            padding: '18px 24px',
-            borderRadius: '100px',
-            backgroundColor: 'rgba(55, 65, 81, 0.7)',
-            border: '2px solid rgba(16, 185, 129, 0.6)',
-            color: '#34d399',
-            fontSize: '17px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px',
-            boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)',
-          }}
-        >
-          <span style={{ 
-            width: '28px', 
-            height: '28px', 
-            borderRadius: '50%', 
-            backgroundColor: 'rgba(16, 185, 129, 0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '16px',
-          }}>✓</span>
-          <span>Richtig</span>
-        </button>
+          {/* Richtig Button */}
+          <button
+            onClick={() => handleButtonClick(true)}
+            style={{
+              flex: 1,
+              padding: '14px 20px',
+              borderRadius: '100px',
+              background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.8) 0%, rgba(31, 41, 55, 0.9) 100%)',
+              backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(16, 185, 129, 0.5)',
+              color: '#34d399',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              boxShadow: '0 0 20px rgba(16, 185, 129, 0.15), 0 4px 12px rgba(0,0,0,0.3)',
+            }}
+          >
+            <span style={{ 
+              width: '26px', 
+              height: '26px', 
+              borderRadius: '50%', 
+              backgroundColor: 'rgba(16, 185, 129, 0.2)',
+              border: '1px solid rgba(16, 185, 129, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px',
+            }}>✓</span>
+            <span>Richtig</span>
+          </button>
+        </div>
       </div>
     </div>
   )
