@@ -1,31 +1,40 @@
-import { useNavigate, useParams, useLoaderData } from 'react-router'
-import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
+import { useState, useEffect } from 'react'
 import { fetchCategoryConfig, fetchGameModes } from '../config/api'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
-export async function loader({ params }) {
-  const { contentType, groupId } = params
-  const [categoryConfig, gameModeConfig] = await Promise.all([
-    fetchCategoryConfig(contentType),
-    fetchGameModes()
-  ])
-  return { categoryConfig, gameModeConfig, contentType, groupId }
-}
-
-export function meta({ data }) {
-  if (!data) return [{ title: "Japanese Cards" }];
-  const { categoryConfig, groupId } = data;
-  const groupName = categoryConfig?.groups?.find(g => g.id === groupId)?.name || 'Gruppe';
-  return [
-    { title: `${categoryConfig.name} - ${groupName} - Japanese Cards` },
-  ];
+export function meta() {
+  return [{ title: "Japanese Cards" }];
 }
 
 export default function GameModeSelector() {
-  const { categoryConfig, gameModeConfig, contentType, groupId } = useLoaderData()
+  const { contentType, groupId } = useParams()
   const navigate = useNavigate()
   const [cardCount, setCardCount] = useState(20)
+  const [categoryConfig, setCategoryConfig] = useState(null)
+  const [gameModeConfig, setGameModeConfig] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true)
+        const [catConfig, gameModes] = await Promise.all([
+          fetchCategoryConfig(contentType),
+          fetchGameModes()
+        ])
+        setCategoryConfig(catConfig)
+        setGameModeConfig(gameModes)
+      } catch (err) {
+        setError(err.message)
+        console.error('Failed to load configs:', err)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [contentType])
 
   // Build map of game modes from config
   const gameModeMap = {}

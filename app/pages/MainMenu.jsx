@@ -1,16 +1,9 @@
-import { useNavigate, useLoaderData } from 'react-router'
-import { useState } from 'react'
+import { useNavigate } from 'react-router'
+import { useState, useEffect } from 'react'
 import { fetchCategories } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
-
-export async function loader() {
-  const data = await fetchCategories()
-  return {
-    categories: data.categories.filter(cat => cat.enabled !== false)
-  }
-}
 
 export function meta() {
   return [
@@ -21,9 +14,26 @@ export function meta() {
 
 export default function MainMenu() {
   const navigate = useNavigate()
-  const { categories } = useLoaderData()
   const { language } = useLanguage()
   const [activeTab, setActiveTab] = useState('start')
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true)
+        const data = await fetchCategories()
+        setCategories(data.categories.filter(cat => cat.enabled !== false))
+      } catch (err) {
+        setError(err.message)
+        console.error('Failed to load categories:', err)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
 
   const tabs = [
     { id: 'start', labelDe: 'Start', labelEn: 'Start', icon: '🎮' },
@@ -57,40 +67,46 @@ export default function MainMenu() {
               {language === 'de' ? 'Kategorien' : 'Categories'}
             </h2>
             
-            <div className="grid-1 fade-in">
-              {categories.map((type) => (
-                <Card key={type.id} interactive onClick={() => navigate(`/content/${type.id}`)}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
-                    <div 
-                      style={{ 
-                        width: '60px',
-                        height: '60px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'var(--color-surface-light)', 
-                        borderRadius: '50%',
-                        flexShrink: 0,
-                        fontSize: '32px'
-                      }}
-                    >
-                      {type.emoji}
+            {loading && <div className="grid-1"><div style={{ padding: 'var(--spacing-4)', backgroundColor: 'var(--color-surface)', borderRadius: 'var(--radius-md)' }}>Laden...</div></div>}
+            
+            {error && <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>Fehler: {error}</div>}
+            
+            {!loading && !error && (
+              <div className="grid-1 fade-in">
+                {categories.map((type) => (
+                  <Card key={type.id} interactive onClick={() => navigate(`/content/${type.id}`)}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
+                      <div 
+                        style={{ 
+                          width: '60px',
+                          height: '60px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: 'var(--color-surface-light)', 
+                          borderRadius: '50%',
+                          flexShrink: 0,
+                          fontSize: '32px'
+                        }}
+                      >
+                        {type.emoji}
+                      </div>
+                      <div style={{ flex: 1, textAlign: 'left' }}>
+                        <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
+                          {getCategoryName(type)}
+                        </h3>
+                        {getCategoryDescription(type) && (
+                          <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: 'var(--spacing-1) 0 0 0' }}>
+                            {getCategoryDescription(type)}
+                          </p>
+                        )}
+                      </div>
+                      <span style={{ color: 'var(--color-text-secondary)', fontSize: '20px' }}>→</span>
                     </div>
-                    <div style={{ flex: 1, textAlign: 'left' }}>
-                      <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-                        {getCategoryName(type)}
-                      </h3>
-                      {getCategoryDescription(type) && (
-                        <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: 'var(--spacing-1) 0 0 0' }}>
-                          {getCategoryDescription(type)}
-                        </p>
-                      )}
-                    </div>
-                    <span style={{ color: 'var(--color-text-secondary)', fontSize: '20px' }}>→</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

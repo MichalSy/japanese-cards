@@ -1,27 +1,36 @@
-import { useNavigate, useParams, useLoaderData } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+import { useState, useEffect } from 'react'
 import { fetchCategoryConfig } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
-export async function loader({ params }) {
-  const { contentType } = params
-  const categoryConfig = await fetchCategoryConfig(contentType)
-  return { categoryConfig, contentType }
-}
-
-export function meta({ data }) {
-  if (!data) return [{ title: "Japanese Cards" }];
-  const { categoryConfig } = data;
-  return [
-    { title: `${categoryConfig.name} - Japanese Cards` },
-  ];
+export function meta() {
+  return [{ title: "Japanese Cards" }];
 }
 
 export default function ContentTypeView() {
-  const { categoryConfig, contentType } = useLoaderData()
+  const { contentType } = useParams()
   const navigate = useNavigate()
   const { language } = useLanguage()
+  const [categoryConfig, setCategoryConfig] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true)
+        const config = await fetchCategoryConfig(contentType)
+        setCategoryConfig(config)
+      } catch (err) {
+        setError(err.message)
+        console.error(`Failed to load category config for ${contentType}:`, err)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [contentType])
 
   const getLabel = (obj, key) => {
     if (!obj) return ''
