@@ -10,8 +10,16 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [toast, setToast] = useState(null)
 
   const game = useSwipeGame(items, cardCount)
+  
+  // Wrap handleSwipe to show toast
+  const handleSwipeWithToast = (isCorrect, direction, correctRomaji) => {
+    setToast({ isCorrect, correctRomaji })
+    setTimeout(() => setToast(null), 2000)
+    game.handleSwipe(isCorrect, direction)
+  }
 
   // Load game data
   useEffect(() => {
@@ -140,6 +148,54 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
 
   return (
     <AppContent>
+      {/* Toast Notification */}
+      {toast && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1000,
+          animation: 'toastFadeIn 0.3s ease-in',
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '20px',
+          }}>
+            {/* Circle with icon */}
+            <div style={{
+              width: '100px',
+              height: '100px',
+              borderRadius: '50%',
+              backgroundColor: toast.isCorrect ? '#10b981' : '#ef4444',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '50px',
+              color: 'white',
+              fontWeight: 'bold',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+            }}>
+              {toast.isCorrect ? '✓' : '✗'}
+            </div>
+            
+            {/* Correct romaji if wrong */}
+            {!toast.isCorrect && toast.correctRomaji && (
+              <div style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: '#10b981',
+                fontStyle: 'italic',
+              }}>
+                Richtig: {toast.correctRomaji}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Game Container */}
       <div style={{ position: 'relative', height: '600px', marginBottom: 'var(--spacing-6)' }}>
         {game.cardStack.map((card, idx) => (
@@ -148,7 +204,7 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
             card={card}
             index={idx}
             isActive={idx === 0}
-            onSwipe={game.handleSwipe}
+            onSwipe={handleSwipeWithToast}
             correctAnswer={idx === 0 ? game.correctAnswer : undefined}
           />
         ))}

@@ -59,28 +59,17 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     
     const isCorrect = userThinkCorrect === correctAnswer
     
-    // Flash animation
+    // Flash animation briefly
     setSwipeState(isCorrect ? 'correct' : 'incorrect')
     setFlashOpacity(1)
     
-    // Timing for different scenarios
-    let showTime = 0
+    // Buttons disappear immediately
+    setShowCorrection(true)
     
-    if (!isCorrect) {
-      // Wrong: Flash visible briefly, then show correction
-      await new Promise(resolve => setTimeout(resolve, 200))
-      setShowCorrection(true)
-      setFlashOpacity(0.3) // Keep red overlay lighter
-      showTime = 1500 // Total time to show correction
-    } else {
-      // Correct: Keep card visible with green flash
-      showTime = 800
-    }
+    // Brief flash (200ms) then fade out card
+    await new Promise(resolve => setTimeout(resolve, 200))
     
-    // Wait to show the card/correction
-    await new Promise(resolve => setTimeout(resolve, showTime))
-    
-    // Now animate out smoothly - this triggers the 600ms transition
+    // Animate out smoothly (no waiting for correction - that's in Toast now)
     setTranslateX(userThinkCorrect ? 500 : -500)
     setRotateZ(userThinkCorrect ? 45 : -45)
     setOpacity(0)
@@ -89,7 +78,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     // Wait for fade-out animation then call callback
     await new Promise(resolve => setTimeout(resolve, 600))
     
-    onSwipe(isCorrect, userThinkCorrect ? 'right' : 'left')
+    onSwipe(isCorrect, userThinkCorrect ? 'right' : 'left', card.correctRomaji)
   }
 
   const getBackgroundColor = () => {
@@ -253,77 +242,10 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           alignItems: 'center',
           minHeight: '90px',
         }}>
-          {/* Show correction when wrong answer and they're different */}
-          {showCorrection && card.correctRomaji && card.correctRomaji !== card.shownRomaji && (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 'var(--spacing-3)',
-              padding: '0 var(--spacing-4)',
-              width: '100%',
-              animation: 'fadeIn 0.3s ease-in',
-              pointerEvents: 'none',
-              zIndex: 20,
-            }}>
-              {/* Wrong answer struck through */}
-              <div style={{
-                fontSize: '18px',
-                color: '#ef4444',
-                textDecoration: 'line-through',
-                opacity: 0.7,
-                fontWeight: '600',
-              }}>
-                ✗ {card.shownRomaji}
-              </div>
-              {/* Correct answer in green */}
-              <div style={{
-                fontSize: '24px',
-                color: '#10b981',
-                fontWeight: '700',
-                letterSpacing: '0.5px',
-                fontStyle: 'italic',
-              }}>
-                ✓ Richtig: {card.correctRomaji}
-              </div>
-            </div>
-          )}
+          {/* Toast feedback is now in SwipeGame, not here */}
 
-          {/* Show "actually correct" when they were wrong but it was right */}
-          {showCorrection && card.correctRomaji && card.correctRomaji === card.shownRomaji && (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 'var(--spacing-3)',
-              padding: '0 var(--spacing-4)',
-              width: '100%',
-              animation: 'fadeIn 0.3s ease-in',
-              pointerEvents: 'none',
-              zIndex: 20,
-            }}>
-              <div style={{
-                fontSize: '20px',
-                color: '#10b981',
-                fontWeight: '700',
-                letterSpacing: '0.5px',
-              }}>
-                Das war eigentlich richtig! ✓
-              </div>
-              <div style={{
-                fontSize: '24px',
-                color: '#10b981',
-                fontWeight: '700',
-                letterSpacing: '0.5px',
-                fontStyle: 'italic',
-              }}>
-                {card.correctRomaji}
-              </div>
-            </div>
-          )}
-
-          {/* Show buttons when no correction needed */}
-          {!showCorrection && (
+          {/* Show buttons when active (hide during swipe) */}
+          {swipeState === null && (
             <>
               {/* Left Button - Falsch */}
           <button
