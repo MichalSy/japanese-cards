@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 
 export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswer }) {
   const [swipeState, setSwipeState] = useState(null) // null, swiping, correct, incorrect
+  const [showCorrection, setShowCorrection] = useState(false) // Show correction when wrong
   const [dragStart, setDragStart] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [rotateZ, setRotateZ] = useState(0)
@@ -69,6 +70,12 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
       }, 200)
       setTimeout(resolve, 300)
     })
+    
+    // If wrong: Show correction for 1.5 seconds before fading out
+    if (!isCorrect) {
+      setShowCorrection(true)
+      await new Promise(resolve => setTimeout(resolve, 1500))
+    }
     
     // Animate out
     setTranslateX(userThinkCorrect ? 500 : -500)
@@ -216,8 +223,8 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             )}
           </div>
 
-          {/* Romaji - Assertion */}
-          {card.romaji && (
+          {/* Romaji - What user sees */}
+          {(card.shownRomaji || card.romaji) && (
             <div style={{ 
               fontSize: '28px', 
               color: '#ec4899',
@@ -227,9 +234,56 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               padding: '0 var(--spacing-4)',
               textAlign: 'center',
             }}>
-              {card.romaji}
+              {card.shownRomaji || card.romaji}
             </div>
           )}
+
+          {/* Correction - Show when wrong */}
+          {showCorrection && card.correctRomaji && card.correctRomaji !== card.shownRomaji && (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 'var(--spacing-3)',
+              padding: '0 var(--spacing-4)',
+              animation: 'fadeIn 0.3s ease-in',
+            }}>
+              {/* Wrong answer struck through */}
+              <div style={{
+                fontSize: '16px',
+                color: '#ef4444',
+                textDecoration: 'line-through',
+                opacity: 0.7,
+                fontWeight: '600',
+              }}>
+                ✗ {card.shownRomaji}
+              </div>
+              {/* Correct answer in green */}
+              <div style={{
+                fontSize: '22px',
+                color: '#10b981',
+                fontWeight: '700',
+                letterSpacing: '0.5px',
+                fontStyle: 'italic',
+              }}>
+                ✓ Richtig: {card.correctRomaji}
+              </div>
+            </div>
+          )}
+          
+          {/* Add keyframe animation */}
+          <style>{`
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+                transform: translateY(-10px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
         </div>
 
         {/* Bottom Section: Buttons */}

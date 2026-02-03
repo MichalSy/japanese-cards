@@ -40,7 +40,11 @@ export function useSwipeGame(items, cardCount) {
       
       if (isCorrectMeaning) {
         // Show the real card with its correct romaji
-        display.push(card)
+        display.push({
+          ...card,
+          shownRomaji: card.romaji,    // What user sees (correct)
+          correctRomaji: card.romaji,  // The right answer
+        })
       } else {
         // Show the character but with a DIFFERENT wrong romaji
         let wrongCard
@@ -52,7 +56,8 @@ export function useSwipeGame(items, cardCount) {
         // Combine: show character from deck, romaji from random different item
         display.push({
           ...card,
-          romaji: wrongCard.romaji,
+          shownRomaji: wrongCard.romaji,  // What user sees (wrong)
+          correctRomaji: card.romaji,     // The right answer (hidden)
         })
       }
       
