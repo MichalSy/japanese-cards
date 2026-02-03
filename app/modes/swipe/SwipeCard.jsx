@@ -254,8 +254,8 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           alignItems: 'center',
           minHeight: '90px',
         }}>
-          {/* Show correction when wrong answer */}
-          {showCorrection && swipeState === 'incorrect' && card.correctRomaji && (
+          {/* Show correction when wrong answer and they're different */}
+          {showCorrection && swipeState === 'incorrect' && card.correctRomaji && card.correctRomaji !== card.shownRomaji && (
             <div style={{
               display: 'flex',
               flexDirection: 'column',
@@ -286,6 +286,39 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
                 fontStyle: 'italic',
               }}>
                 ✓ Richtig: {card.correctRomaji}
+              </div>
+            </div>
+          )}
+
+          {/* Show "actually correct" when they were wrong but it was right */}
+          {showCorrection && swipeState === 'incorrect' && card.correctRomaji && card.correctRomaji === card.shownRomaji && (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 'var(--spacing-3)',
+              padding: '0 var(--spacing-4)',
+              width: '100%',
+              animation: 'fadeIn 0.3s ease-in',
+              pointerEvents: 'none',
+              zIndex: 20,
+            }}>
+              <div style={{
+                fontSize: '20px',
+                color: '#10b981',
+                fontWeight: '700',
+                letterSpacing: '0.5px',
+              }}>
+                Das war eigentlich richtig! ✓
+              </div>
+              <div style={{
+                fontSize: '24px',
+                color: '#10b981',
+                fontWeight: '700',
+                letterSpacing: '0.5px',
+                fontStyle: 'italic',
+              }}>
+                {card.correctRomaji}
               </div>
             </div>
           )}
