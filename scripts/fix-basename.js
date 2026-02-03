@@ -17,19 +17,33 @@ function walk(dir, callback) {
   });
 }
 
-console.log("🛠️ Fixing basename in generated HTML files...");
+console.log("🛠️ Fixing basename, manifestPath, and routeDiscovery in generated HTML files...");
 
 walk(buildDir, (filePath) => {
   if (filePath.endsWith(".html")) {
     let content = fs.readFileSync(filePath, "utf-8");
+    let newContent = content;
+    let fixed = false;
     
-    // Fix the basename in the injected context
-    let newContent = content.replace(
-      /"basename":"\/"/g,
-      '"basename":"/japanese-cards/"'
-    );
+    // Fix the basename
+    if (newContent.includes('"basename":"/"')) {
+      newContent = newContent.replace(
+        /"basename":"\/"/g,
+        '"basename":"/japanese-cards/"'
+      );
+      fixed = true;
+    }
     
-    if (newContent !== content) {
+    // Fix the manifestPath
+    if (newContent.includes('"manifestPath":"/__manifest"')) {
+      newContent = newContent.replace(
+        /"manifestPath":"\/__manifest"/g,
+        '"manifestPath":"/japanese-cards/__manifest"'
+      );
+      fixed = true;
+    }
+    
+    if (fixed) {
       fs.writeFileSync(filePath, newContent);
       console.log(`✅ Fixed: ${path.relative(buildDir, filePath)}`);
     }
