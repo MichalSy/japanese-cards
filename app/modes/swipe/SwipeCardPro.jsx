@@ -102,22 +102,22 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Much lighter background for visible glass effect
-        background: 'linear-gradient(135deg, rgba(100, 116, 139, 0.55) 0%, rgba(71, 85, 105, 0.65) 50%, rgba(51, 65, 85, 0.75) 100%)',
-        backdropFilter: 'blur(32px) brightness(1.1)',
-        WebkitBackdropFilter: 'blur(32px) brightness(1.1)',
+        // MUCH lighter background - almost transparent glass look
+        background: 'linear-gradient(135deg, rgba(120, 140, 160, 0.4) 0%, rgba(90, 110, 140, 0.45) 50%, rgba(70, 90, 120, 0.55) 100%)',
+        backdropFilter: 'blur(40px) brightness(1.25) contrast(1.1)',
+        WebkitBackdropFilter: 'blur(40px) brightness(1.25) contrast(1.1)',
         borderRadius: '28px',
         // Strong pink border with tight glow
         border: index === 0 ? '2px solid rgba(236, 72, 153, 1)' : '1px solid rgba(100, 116, 139, 0.5)',
         boxShadow: index === 0 
           ? `
             0 0 2px rgba(236, 72, 153, 1),
-            0 0 8px rgba(236, 72, 153, 0.9),
-            0 0 16px rgba(236, 72, 153, 0.7),
-            0 0 32px rgba(236, 72, 153, 0.4),
-            0 0 48px rgba(236, 72, 153, 0.2),
-            inset 0 0 30px rgba(0, 0, 0, 0.2),
-            inset 0 0 60px rgba(236, 72, 153, 0.1)
+            0 0 8px rgba(236, 72, 153, 0.95),
+            0 0 16px rgba(236, 72, 153, 0.75),
+            0 0 32px rgba(236, 72, 153, 0.45),
+            0 0 48px rgba(236, 72, 153, 0.25),
+            inset 0 0 40px rgba(0, 0, 0, 0.15),
+            inset 0 0 80px rgba(236, 72, 153, 0.08)
           `
           : '0 8px 32px rgba(0,0,0,0.3)',
         zIndex: 100 - index,
@@ -135,14 +135,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
     >
-      {/* Strong diagonal glass reflection - very visible */}
+      {/* Strong diagonal glass reflection - VERY visible like spotlight */}
       <div style={{
         position: 'absolute',
-        top: '-40%',
-        left: '-40%',
-        width: '180%',
-        height: '180%',
-        background: 'linear-gradient(135deg, transparent 0%, transparent 30%, rgba(255,255,255,0.35) 45%, rgba(255,255,255,0.15) 60%, transparent 75%, transparent 100%)',
+        top: '-45%',
+        left: '-45%',
+        width: '190%',
+        height: '190%',
+        background: 'linear-gradient(135deg, transparent 0%, transparent 25%, rgba(255,255,255,0.5) 42%, rgba(255,255,255,0.25) 58%, transparent 75%, transparent 100%)',
         pointerEvents: 'none',
         transform: 'rotate(0deg)',
         zIndex: 1,
@@ -152,10 +152,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       <div style={{
         position: 'absolute',
         top: 0,
-        left: '15%',
-        right: '15%',
-        height: '3px',
-        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)',
+        left: '10%',
+        right: '10%',
+        height: '4px',
+        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
         pointerEvents: 'none',
         zIndex: 2,
       }} />
