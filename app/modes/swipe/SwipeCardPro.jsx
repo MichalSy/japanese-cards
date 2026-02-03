@@ -102,13 +102,13 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // MUCH lighter background - almost transparent glass look
-        background: 'linear-gradient(135deg, rgba(120, 140, 160, 0.4) 0%, rgba(90, 110, 140, 0.45) 50%, rgba(70, 90, 120, 0.55) 100%)',
-        backdropFilter: 'blur(40px) brightness(1.25) contrast(1.1)',
-        WebkitBackdropFilter: 'blur(40px) brightness(1.25) contrast(1.1)',
+        // TRULY transparent glass - minimal color overlay
+        background: 'linear-gradient(135deg, rgba(150, 160, 180, 0.15) 0%, rgba(120, 140, 170, 0.18) 50%, rgba(100, 130, 160, 0.2) 100%)',
+        backdropFilter: 'blur(50px) brightness(1.3) saturate(0.9)',
+        WebkitBackdropFilter: 'blur(50px) brightness(1.3) saturate(0.9)',
         borderRadius: '28px',
-        // Strong pink border with tight glow
-        border: index === 0 ? '2px solid rgba(236, 72, 153, 1)' : '1px solid rgba(100, 116, 139, 0.5)',
+        // Fine pink border with bright glow
+        border: index === 0 ? '2.5px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.3)',
         boxShadow: index === 0 
           ? `
             0 0 2px rgba(236, 72, 153, 1),
@@ -135,14 +135,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
     >
-      {/* Strong diagonal glass reflection - VERY visible like spotlight */}
+      {/* Strong diagonal glass reflection - spotlight effect */}
       <div style={{
         position: 'absolute',
-        top: '-45%',
-        left: '-45%',
-        width: '190%',
-        height: '190%',
-        background: 'linear-gradient(135deg, transparent 0%, transparent 25%, rgba(255,255,255,0.5) 42%, rgba(255,255,255,0.25) 58%, transparent 75%, transparent 100%)',
+        top: '-50%',
+        left: '-50%',
+        width: '200%',
+        height: '200%',
+        background: 'linear-gradient(135deg, transparent 0%, transparent 20%, rgba(255,255,255,0.65) 40%, rgba(255,255,255,0.35) 60%, transparent 80%, transparent 100%)',
         pointerEvents: 'none',
         transform: 'rotate(0deg)',
         zIndex: 1,
