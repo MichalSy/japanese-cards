@@ -52,6 +52,34 @@ export default function GameModeSelector() {
 
   const groupName = categoryConfig?.groups?.find(g => g.id === groupId)?.name || 'Gruppe'
 
+  if (loading) {
+    return (
+      <AppLayout>
+        <AppHeader>
+          <AppHeaderBar title="Laden..." />
+        </AppHeader>
+        <AppContent>
+          <div style={{ padding: 'var(--spacing-4)', backgroundColor: 'var(--color-surface)', borderRadius: 'var(--radius-md)' }}>Laden...</div>
+        </AppContent>
+      </AppLayout>
+    )
+  }
+
+  if (error || !categoryConfig || !gameModeConfig) {
+    return (
+      <AppLayout>
+        <AppHeader>
+          <AppHeaderBar title="Fehler" />
+        </AppHeader>
+        <AppContent>
+          <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
+            Fehler: {error || 'Konfiguration nicht geladen'}
+          </div>
+        </AppContent>
+      </AppLayout>
+    )
+  }
+
   return (
     <AppLayout>
       <AppHeader>
