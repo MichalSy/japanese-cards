@@ -128,7 +128,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       </div>
 
       {/* Buttons - matching design exactly */}
-      <div style={{ padding: '8px 24px', paddingBottom: 'max(24px, env(safe-area-inset-bottom))', display: 'flex', gap: '16px' }}>
+      <div style={{ padding: '8px 16px 32px', display: 'flex', gap: '12px' }}>
         {/* Falsch Button */}
         <button
           onClick={() => handleButtonClick(false)}
