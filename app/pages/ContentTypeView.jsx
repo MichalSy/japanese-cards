@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router'
 import { useState, useEffect } from 'react'
-import { fetchCategoryConfig } from '../config/api'
+import { fetchCategoryConfig, fetchGroupData, fetchAllItemsFromCategory } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
-import { getCategoryStats } from '../utils/progressStorage'
+import { getCategoryStats, getGroupProgress } from '../utils/progressStorage'
 import AppHeaderBar from '../components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '../components/Layout'
 
@@ -18,6 +18,7 @@ export default function ContentTypeView() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [stats, setStats] = useState(null)
+  const [groupData, setGroupData] = useState({}) // { groupId: items[] }
 
   useEffect(() => {
     (async () => {
@@ -29,6 +30,19 @@ export default function ContentTypeView() {
         // Load stats from storage
         const categoryStats = getCategoryStats(contentType)
         setStats(categoryStats)
+        
+        // Load group data
+        const groups = {}
+        for (const group of config.groups) {
+          try {
+            const data = await fetchGroupData(contentType, group.id)
+            groups[group.id] = data.items || []
+          } catch (e) {
+            console.error(`Failed to load group ${group.id}:`, e)
+            groups[group.id] = []
+          }
+        }
+        setGroupData(groups)
       } catch (err) {
         setError(err.message)
         console.error(`Failed to load category config for ${contentType}:`, err)
@@ -99,45 +113,53 @@ export default function ContentTypeView() {
             </div>
           </Card>
 
-          {categoryConfig.showAllOption && (
-            <Card interactive onClick={() => navigate(`/content/${contentType}/all`)}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div>
-                    <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-                      {language === 'de' ? 'Alle kombiniert' : 'All Combined'}
-                    </h3>
-                    <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: 'var(--spacing-1) 0 0 0' }}>
-                      {categoryConfig.groups.length} {language === 'de' ? 'Gruppen' : 'groups'}
-                    </p>
-                  </div>
-                  <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>0%</span>
-                </div>
-                <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
-                  <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', width: '0%' }}></div>
-                </div>
-              </div>
-            </Card>
-          )}
-
-          <div className="grid-1">
-            {categoryConfig.groups.map((group) => (
-              <Card key={group.id} interactive onClick={() => navigate(`/content/${contentType}/${group.id}`)}>
+          {categoryConfig.showAllOption && (() => {
+            const allItems = Object.values(groupData).flat()
+            const allProgress = getGroupProgress(allItems, contentType)
+            return (
+              <Card interactive onClick={() => navigate(`/content/${contentType}/all`)}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
                       <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-                        {group.name}
+                        {language === 'de' ? 'Alle kombiniert' : 'All Combined'}
                       </h3>
+                      <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: 'var(--spacing-1) 0 0 0' }}>
+                        {categoryConfig.groups.length} {language === 'de' ? 'Gruppen' : 'groups'}
+                      </p>
                     </div>
-                    <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>0%</span>
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>{allProgress}%</span>
                   </div>
                   <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
-                    <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', width: '0%' }}></div>
+                    <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', width: `${allProgress}%`, transition: 'width 0.3s ease' }}></div>
                   </div>
                 </div>
               </Card>
-            ))}
+            )
+          })()}
+
+          <div className="grid-1">
+            {categoryConfig.groups.map((group) => {
+              const items = groupData[group.id] || []
+              const groupProgress = getGroupProgress(items, contentType)
+              return (
+                <Card key={group.id} interactive onClick={() => navigate(`/content/${contentType}/${group.id}`)}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div>
+                        <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
+                          {group.name}
+                        </h3>
+                      </div>
+                      <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>{groupProgress}%</span>
+                    </div>
+                    <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
+                      <div style={{ background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`, height: '8px', borderRadius: '9999px', width: `${groupProgress}%`, transition: 'width 0.3s ease' }}></div>
+                    </div>
+                  </div>
+                </Card>
+              )
+            })}
           </div>
         </div>
       </AppContent>
