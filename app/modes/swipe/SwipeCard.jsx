@@ -73,22 +73,22 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
       // Wait 1.5 seconds total for correction to be visible
       await new Promise(resolve => setTimeout(resolve, 1500))
     } else {
-      // Correct answer: fade out flash quickly
+      // Correct answer: Keep card visible longer before fading
       await new Promise(resolve => {
         setTimeout(() => {
-          setFlashOpacity(0)
+          setFlashOpacity(0) // Fade out the green flash
         }, 200)
-        setTimeout(resolve, 300)
+        setTimeout(resolve, 800) // Keep card visible for 800ms total
       })
     }
     
-    // Animate out
+    // Now fade out the card smoothly (600ms transition)
     setTranslateX(userThinkCorrect ? 500 : -500)
     setRotateZ(userThinkCorrect ? 45 : -45)
     setOpacity(0)
     
-    // Wait for animation then call callback
-    await new Promise(resolve => setTimeout(resolve, 300))
+    // Wait for fade-out animation then call callback
+    await new Promise(resolve => setTimeout(resolve, 600))
     
     onSwipe(isCorrect, userThinkCorrect ? 'right' : 'left')
   }
@@ -138,7 +138,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         border: '1px solid var(--color-surface-light)',
         zIndex: getZIndex(),
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
-        transition: isDragging ? 'none' : 'transform 0.05s ease-out',
+        transition: isDragging ? 'none' : 'transform 0.05s ease-out, opacity 0.6s ease-out',
         padding: '0',
         display: 'flex',
         flexDirection: 'column',
