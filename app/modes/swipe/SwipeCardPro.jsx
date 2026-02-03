@@ -102,22 +102,22 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // TRULY transparent glass - minimal color overlay
-        background: 'linear-gradient(135deg, rgba(150, 160, 180, 0.15) 0%, rgba(120, 140, 170, 0.18) 50%, rgba(100, 130, 160, 0.2) 100%)',
-        backdropFilter: 'blur(50px) brightness(1.3) saturate(0.9)',
-        WebkitBackdropFilter: 'blur(50px) brightness(1.3) saturate(0.9)',
+        // Almost pure transparent - glass only
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
+        backdropFilter: 'blur(60px) brightness(1.4) saturate(0.8)',
+        WebkitBackdropFilter: 'blur(60px) brightness(1.4) saturate(0.8)',
         borderRadius: '28px',
-        // Fine pink border with bright glow
-        border: index === 0 ? '2.5px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.3)',
+        // Fine pink border
+        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.9)' : '1px solid rgba(100, 116, 139, 0.2)',
         boxShadow: index === 0 
           ? `
-            0 0 2px rgba(236, 72, 153, 1),
-            0 0 8px rgba(236, 72, 153, 0.95),
-            0 0 16px rgba(236, 72, 153, 0.75),
-            0 0 32px rgba(236, 72, 153, 0.45),
-            0 0 48px rgba(236, 72, 153, 0.25),
-            inset 0 0 40px rgba(0, 0, 0, 0.15),
-            inset 0 0 80px rgba(236, 72, 153, 0.08)
+            0 0 1px rgba(236, 72, 153, 0.8),
+            0 0 6px rgba(236, 72, 153, 0.9),
+            0 0 12px rgba(236, 72, 153, 0.7),
+            0 0 24px rgba(236, 72, 153, 0.4),
+            0 0 40px rgba(236, 72, 153, 0.2),
+            inset 0 0 30px rgba(0, 0, 0, 0.1),
+            inset 0 0 50px rgba(255, 255, 255, 0.05)
           `
           : '0 8px 32px rgba(0,0,0,0.3)',
         zIndex: 100 - index,
@@ -154,8 +154,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         top: 0,
         left: '10%',
         right: '10%',
-        height: '4px',
-        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
+        height: '2px',
+        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
         pointerEvents: 'none',
         zIndex: 2,
       }} />
