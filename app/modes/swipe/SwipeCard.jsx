@@ -63,29 +63,28 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     setSwipeState(isCorrect ? 'correct' : 'incorrect')
     setFlashOpacity(1)
     
-    // If wrong: Show correction
+    // Timing for different scenarios
+    let showTime = 0
+    
     if (!isCorrect) {
-      // Wait for flash to be visible (200ms)
+      // Wrong: Flash visible briefly, then show correction
       await new Promise(resolve => setTimeout(resolve, 200))
-      // Now show the correction text
       setShowCorrection(true)
-      setFlashOpacity(0.3) // Keep red overlay visible but lighter
-      // Wait 1.5 seconds total for correction to be visible
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      setFlashOpacity(0.3) // Keep red overlay lighter
+      showTime = 1500 // Total time to show correction
     } else {
-      // Correct answer: Keep card visible longer before fading
-      await new Promise(resolve => {
-        setTimeout(() => {
-          setFlashOpacity(0) // Fade out the green flash
-        }, 200)
-        setTimeout(resolve, 800) // Keep card visible for 800ms total
-      })
+      // Correct: Keep card visible with green flash
+      showTime = 800
     }
     
-    // Now fade out the card smoothly (600ms transition)
+    // Wait to show the card/correction
+    await new Promise(resolve => setTimeout(resolve, showTime))
+    
+    // Now animate out smoothly - this triggers the 600ms transition
     setTranslateX(userThinkCorrect ? 500 : -500)
     setRotateZ(userThinkCorrect ? 45 : -45)
     setOpacity(0)
+    setFlashOpacity(0)
     
     // Wait for fade-out animation then call callback
     await new Promise(resolve => setTimeout(resolve, 600))
@@ -255,7 +254,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           minHeight: '90px',
         }}>
           {/* Show correction when wrong answer and they're different */}
-          {showCorrection && swipeState === 'incorrect' && card.correctRomaji && card.correctRomaji !== card.shownRomaji && (
+          {showCorrection && card.correctRomaji && card.correctRomaji !== card.shownRomaji && (
             <div style={{
               display: 'flex',
               flexDirection: 'column',
@@ -291,7 +290,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           )}
 
           {/* Show "actually correct" when they were wrong but it was right */}
-          {showCorrection && swipeState === 'incorrect' && card.correctRomaji && card.correctRomaji === card.shownRomaji && (
+          {showCorrection && card.correctRomaji && card.correctRomaji === card.shownRomaji && (
             <div style={{
               display: 'flex',
               flexDirection: 'column',
