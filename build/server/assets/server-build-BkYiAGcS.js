@@ -1039,7 +1039,7 @@ const route3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   loader,
   meta: meta$1
 }, Symbol.toStringTag, { value: "Module" }));
-const SwipeGame = lazy(() => import("./SwipeGame-CwQb5wnV.js"));
+const SwipeGame = lazy(() => import("./SwipeGame-B9n27HoD.js"));
 const GAME_MODES = {
   swipe: SwipeGame,
   multiChoice: null,
@@ -1165,7 +1165,7 @@ const basename = "/";
 const future = { "unstable_optimizeDeps": false, "unstable_subResourceIntegrity": false, "unstable_trailingSlashAwareDataRequests": false, "v8_middleware": false, "v8_splitRouteModules": false, "v8_viteEnvironmentApi": false };
 const ssr = true;
 const isSpaMode = false;
-const prerender = ["/", "/content/hiragana", "/content/hiragana/a", "/game/hiragana/a/swipe", "/content/hiragana/ka", "/game/hiragana/ka/swipe", "/content/hiragana/sa", "/game/hiragana/sa/swipe", "/content/hiragana/ta", "/game/hiragana/ta/swipe", "/content/hiragana/na", "/game/hiragana/na/swipe", "/content/hiragana/ha", "/game/hiragana/ha/swipe", "/content/hiragana/ma", "/game/hiragana/ma/swipe", "/content/hiragana/ya", "/game/hiragana/ya/swipe", "/content/hiragana/ra", "/game/hiragana/ra/swipe", "/content/hiragana/wa", "/game/hiragana/wa/swipe", "/content/hiragana/ga", "/game/hiragana/ga/swipe", "/content/hiragana/za", "/game/hiragana/za/swipe", "/content/hiragana/da", "/game/hiragana/da/swipe", "/content/hiragana/ba", "/game/hiragana/ba/swipe", "/content/hiragana/pa", "/game/hiragana/pa/swipe", "/content/hiragana/all", "/game/hiragana/all/swipe", "/content/katakana", "/content/katakana/a", "/game/katakana/a/swipe", "/content/katakana/ka", "/game/katakana/ka/swipe", "/content/katakana/sa", "/game/katakana/sa/swipe", "/content/katakana/ta", "/game/katakana/ta/swipe", "/content/katakana/na", "/game/katakana/na/swipe", "/content/katakana/ha", "/game/katakana/ha/swipe", "/content/katakana/ma", "/game/katakana/ma/swipe", "/content/katakana/ya", "/game/katakana/ya/swipe", "/content/katakana/ra", "/game/katakana/ra/swipe", "/content/katakana/wa", "/game/katakana/wa/swipe", "/content/katakana/all", "/game/katakana/all/swipe", "/content/words", "/content/words/all", "/content/words/all", "/content/sentences", "/content/sentences/all", "/content/sentences/all"];
+const prerender = ["/"];
 const routeDiscovery = { "mode": "lazy", "manifestPath": "/__manifest" };
 const publicPath = "/japanese-cards/";
 const entry = { module: entryServer };
