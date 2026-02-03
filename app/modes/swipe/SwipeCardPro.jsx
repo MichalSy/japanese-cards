@@ -84,14 +84,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const stackScale = 1 - (index * 0.03)
   const stackOpacity = index === 0 ? 1 : Math.max(0.2, 0.6 - (index * 0.2))
 
-  // Neon glow effect for main card
+  // Neon glow effect for main card - very intense
   const mainCardShadow = `
-    0 0 20px rgba(236, 72, 153, 0.8),
-    0 0 40px rgba(236, 72, 153, 0.6),
-    0 0 60px rgba(236, 72, 153, 0.4),
-    0 0 80px rgba(236, 72, 153, 0.3),
-    0 0 100px rgba(236, 72, 153, 0.2),
-    inset 0 0 20px rgba(236, 72, 153, 0.05)
+    0 0 10px rgba(236, 72, 153, 1),
+    0 0 20px rgba(236, 72, 153, 0.9),
+    0 0 40px rgba(236, 72, 153, 0.7),
+    0 0 60px rgba(236, 72, 153, 0.5),
+    0 0 80px rgba(236, 72, 153, 0.4),
+    0 0 120px rgba(236, 72, 153, 0.2)
   `
 
   return (
