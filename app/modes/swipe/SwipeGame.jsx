@@ -24,16 +24,16 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
       toastTimeoutRef.current = null
     }
     
-    // Set toast content and show it immediately
+    // Set toast content - always show character = romaji
     const toastData = { isCorrect, correctRomaji, character, id: Date.now() }
     setToast(toastData)
     setToastVisible(true)
     
-    // Hide after delay
+    // Longer display time (2.5s)
     toastTimeoutRef.current = setTimeout(() => {
       setToastVisible(false)
       toastTimeoutRef.current = setTimeout(() => setToast(null), 300)
-    }, 1500)
+    }, 2500)
     
     game.handleSwipe(isCorrect, direction)
   }
@@ -174,46 +174,61 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
       overflow: 'hidden',
       position: 'relative',
     }}>
+      {/* Instruction Bar */}
+      <div style={{
+        padding: '12px 16px',
+        textAlign: 'center',
+        borderBottom: '1px solid var(--color-surface-light)',
+        backgroundColor: 'var(--color-bg-secondary)',
+      }}>
+        <span style={{
+          fontSize: '14px',
+          fontWeight: '500',
+          color: 'var(--color-text-secondary)',
+          letterSpacing: '0.3px',
+        }}>
+          Ist die Kombination richtig?
+        </span>
+      </div>
+
       {/* Toast Notification */}
       {toast && (
         <div 
           key={toast.id}
           style={{
             position: 'absolute',
-            top: '16px',
+            top: '60px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1000,
             opacity: toastVisible ? 1 : 0,
-            transition: 'opacity 0.25s ease-out',
+            transition: 'opacity 0.3s ease-out',
             pointerEvents: 'none',
           }}
         >
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
-            padding: '10px 16px',
+            gap: '12px',
+            padding: '12px 20px',
             backgroundColor: toast.isCorrect ? '#10b981' : '#ef4444',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
           }}>
             <span style={{ 
-              fontSize: '18px', 
+              fontSize: '20px', 
               fontWeight: 'bold',
               color: 'white' 
             }}>
               {toast.isCorrect ? '✓' : '✗'}
             </span>
             <span style={{ 
-              fontSize: '16px', 
+              fontSize: '17px', 
               fontWeight: '600', 
-              color: 'white' 
+              color: 'white',
+              letterSpacing: '0.5px',
             }}>
-              {toast.isCorrect 
-                ? 'Richtig!' 
-                : `${toast.character} = ${toast.correctRomaji}`
-              }
+              {toast.character} = {toast.correctRomaji}
             </span>
           </div>
         </div>
