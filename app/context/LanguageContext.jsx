@@ -1,32 +1,31 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 const LanguageContext = createContext()
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState(() => {
-    // Initialize from localStorage immediately
+  const [language, setLanguageState] = useState(() => {
     try {
-      return localStorage.getItem('language') || 'de'
+      return localStorage.getItem('language') || 'en'
     } catch {
-      return 'de'
+      return 'en'
     }
   })
 
-  // Save language to localStorage when it changes
+  const setLanguage = (lang) => {
+    setLanguageState(lang)
+    try {
+      localStorage.setItem('language', lang)
+    } catch (e) {
+      console.error('Failed to save language:', e)
+    }
+  }
+
   const toggleLanguage = () => {
-    setLanguage(prev => {
-      const newLanguage = prev === 'de' ? 'en' : 'de'
-      try {
-        localStorage.setItem('language', newLanguage)
-      } catch (e) {
-        console.error('Failed to save language:', e)
-      }
-      return newLanguage
-    })
+    setLanguage(language === 'de' ? 'en' : 'de')
   }
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage }}>
       {children}
     </LanguageContext.Provider>
   )

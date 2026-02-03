@@ -104,9 +104,9 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         background: 'rgba(30, 41, 59, 0.85)',
         backdropFilter: 'blur(20px)',
         borderRadius: '20px',
-        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.7)' : '1px solid rgba(100, 116, 139, 0.3)',
+        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.9)' : '1px solid rgba(100, 116, 139, 0.3)',
         boxShadow: index === 0 
-          ? '0 0 40px rgba(236, 72, 153, 0.5), 0 0 80px rgba(236, 72, 153, 0.3), 0 0 120px rgba(236, 72, 153, 0.15)'
+          ? '0 0 30px rgba(236, 72, 153, 0.7), 0 0 60px rgba(236, 72, 153, 0.5), 0 0 100px rgba(236, 72, 153, 0.3), inset 0 0 30px rgba(236, 72, 153, 0.1)'
           : '0 8px 32px rgba(0,0,0,0.3)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
