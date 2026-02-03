@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { fetchGroupData, fetchAllItemsFromCategory } from '../../config/api'
 import { useSwipeGame } from './useSwipeGame'
@@ -11,13 +11,29 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [toast, setToast] = useState(null)
+  const [toastVisible, setToastVisible] = useState(false)
+  const toastTimeoutRef = useRef(null)
 
   const game = useSwipeGame(items, cardCount)
   
   // Wrap handleSwipe to show toast
   const handleSwipeWithToast = (isCorrect, direction, correctRomaji) => {
-    setToast({ isCorrect, correctRomaji })
-    setTimeout(() => setToast(null), 2000)
+    // Clear any existing timeout
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current)
+    }
+    
+    // Set toast content and show it
+    setToast({ isCorrect, correctRomaji, id: Date.now() })
+    setToastVisible(true)
+    
+    // Hide after delay (fade out, then remove)
+    toastTimeoutRef.current = setTimeout(() => {
+      setToastVisible(false)
+      // Remove toast content after fade-out animation
+      setTimeout(() => setToast(null), 300)
+    }, 1500)
+    
     game.handleSwipe(isCorrect, direction)
   }
 
@@ -150,14 +166,19 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
     <AppContent>
       {/* Toast Notification - Top position under header */}
       {toast && (
-        <div style={{
-          position: 'fixed',
-          top: '80px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 1000,
-          animation: 'toastSlideIn 0.25s ease-out',
-        }}>
+        <div 
+          key={toast.id}
+          style={{
+            position: 'fixed',
+            top: '80px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            opacity: toastVisible ? 1 : 0,
+            transition: 'opacity 0.3s ease-out',
+            pointerEvents: 'none',
+          }}
+        >
           <div style={{
             display: 'flex',
             alignItems: 'center',
