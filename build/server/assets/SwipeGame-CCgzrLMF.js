@@ -1,7 +1,7 @@
 import { jsxs, jsx } from "react/jsx-runtime";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
-import { A as AppContent, C as Card, a as AppFooter, f as fetchAllItemsFromCategory, b as fetchGroupData } from "./server-build-B7Qybszt.js";
+import { A as AppContent, C as Card, a as AppFooter, f as fetchAllItemsFromCategory, b as fetchGroupData } from "./server-build-SPTnqq84.js";
 import "node:stream";
 import "@react-router/node";
 import "isbot";

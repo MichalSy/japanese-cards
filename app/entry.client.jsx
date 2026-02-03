@@ -2,7 +2,29 @@ import { HydratedRouter } from "react-router/dom";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 
-// Convert traditional URLs to hash-based routing for GitHub Pages compatibility
+// Override history API to automatically convert traditional URLs to hash URLs
+const originalPushState = window.history.pushState;
+const originalReplaceState = window.history.replaceState;
+
+window.history.pushState = function(state, title, url) {
+  if (url && typeof url === 'string' && !url.includes('#')) {
+    // Convert traditional URL to hash URL
+    const hashUrl = url.replace(/^\/japanese-cards\//, '/japanese-cards/#');
+    return originalPushState.call(this, state, title, hashUrl);
+  }
+  return originalPushState.call(this, state, title, url);
+};
+
+window.history.replaceState = function(state, title, url) {
+  if (url && typeof url === 'string' && !url.includes('#')) {
+    // Convert traditional URL to hash URL
+    const hashUrl = url.replace(/^\/japanese-cards\//, '/japanese-cards/#');
+    return originalReplaceState.call(this, state, title, hashUrl);
+  }
+  return originalReplaceState.call(this, state, title, url);
+};
+
+// Convert initial URL if needed
 const convertPathToHash = () => {
   const pathname = window.location.pathname;
   const search = window.location.search;
