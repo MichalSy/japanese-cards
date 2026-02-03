@@ -25,25 +25,18 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     }, 220)
   }, [card, correctAnswer, onSwipe, character, swipeState])
 
-  // Expose triggerSwipe to parent for button clicks
   useEffect(() => {
     if (onButtonClick && isActive) {
       onButtonClick.current = triggerSwipe
     }
   }, [onButtonClick, isActive, triggerSwipe])
 
-  // Keyboard support
   useEffect(() => {
     if (!isActive || swipeState || !card) return
     
     const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault()
-        triggerSwipe(false)
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault()
-        triggerSwipe(true)
-      }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); triggerSwipe(false) }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); triggerSwipe(true) }
     }
     
     window.addEventListener('keydown', handleKeyDown)
@@ -57,8 +50,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     e.preventDefault()
     setIsDragging(true)
     setSwipeState('swiping')
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX
-    setDragStart(clientX)
+    setDragStart(e.touches ? e.touches[0].clientX : e.clientX)
   }
 
   const handleDragMove = (e) => {
@@ -66,23 +58,15 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     e.preventDefault()
     const clientX = e.touches ? e.touches[0].clientX : e.clientX
     const diff = clientX - dragStart
-    const rotation = (diff / 300) * 6
-    setPosition({ x: diff, rotation: Math.max(-8, Math.min(8, rotation)) })
+    setPosition({ x: diff, rotation: Math.max(-8, Math.min(8, (diff / 300) * 6)) })
   }
 
   const handleDragEnd = () => {
     if (!isActive || !isDragging) return
     setIsDragging(false)
-
-    const threshold = 80
-    if (position.x < -threshold) {
-      triggerSwipe(false)
-    } else if (position.x > threshold) {
-      triggerSwipe(true)
-    } else {
-      setSwipeState(null)
-      setPosition({ x: 0, rotation: 0 })
-    }
+    if (position.x < -80) triggerSwipe(false)
+    else if (position.x > 80) triggerSwipe(true)
+    else { setSwipeState(null); setPosition({ x: 0, rotation: 0 }) }
   }
 
   const getTransition = () => {
@@ -95,10 +79,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const isSwipingRight = position.x > 0
   const isSwipingLeft = position.x < 0
 
-  // Stack effect for background cards
-  const stackOffset = index * 6
-  const stackScale = 1 - (index * 0.02)
-  const stackOpacity = index === 0 ? 1 : 0.5 - (index * 0.15)
+  // Stack styling
+  const stackOffset = index * 8
+  const stackScale = 1 - (index * 0.03)
+  const stackOpacity = index === 0 ? 1 : Math.max(0.2, 0.6 - (index * 0.2))
 
   return (
     <div
@@ -113,22 +97,17 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'absolute',
         left: '50%',
         top: '50%',
-        transform: `
-          translateX(calc(-50% + ${position.x}px))
-          translateY(calc(-50% + ${stackOffset}px))
-          rotate(${position.rotation}deg)
-          scale(${stackScale})
-        `,
+        transform: `translateX(calc(-50% + ${position.x}px)) translateY(calc(-50% + ${stackOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
         width: 'calc(100% - 48px)',
-        maxWidth: '340px',
+        maxWidth: '320px',
         aspectRatio: '3/4',
-        background: 'rgba(30, 41, 59, 0.8)',
-        backdropFilter: 'blur(24px)',
-        borderRadius: '24px',
-        border: '2px solid rgba(236, 72, 153, 0.5)',
+        background: 'rgba(30, 41, 59, 0.85)',
+        backdropFilter: 'blur(20px)',
+        borderRadius: '20px',
+        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.7)' : '1px solid rgba(100, 116, 139, 0.3)',
         boxShadow: index === 0 
-          ? '0 0 60px rgba(236, 72, 153, 0.4), 0 0 120px rgba(236, 72, 153, 0.2)'
-          : '0 8px 32px rgba(0,0,0,0.4)',
+          ? '0 0 40px rgba(236, 72, 153, 0.5), 0 0 80px rgba(236, 72, 153, 0.3), 0 0 120px rgba(236, 72, 153, 0.15)'
+          : '0 8px 32px rgba(0,0,0,0.3)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
@@ -143,75 +122,34 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         touchAction: 'none',
       }}
     >
-      {/* Swipe feedback - left */}
+      {/* Swipe feedback left */}
       <div style={{
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        width: '50%',
-        background: `linear-gradient(90deg, rgba(239, 68, 68, ${isSwipingLeft ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
-        pointerEvents: 'none',
-        transition: isDragging ? 'none' : 'background 0.2s',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingLeft: '24px',
+        position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
+        background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
+        pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
+        display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '24px',
       }}>
-        <span style={{
-          fontSize: '48px',
-          opacity: isSwipingLeft ? swipeProgress : 0,
-          transform: `scale(${0.6 + swipeProgress * 0.4})`,
-          transition: isDragging ? 'none' : 'all 0.2s',
-          color: '#ef4444',
-        }}>✗</span>
+        <span style={{ fontSize: '48px', opacity: isSwipingLeft ? swipeProgress : 0, color: '#ef4444' }}>✗</span>
       </div>
 
-      {/* Swipe feedback - right */}
+      {/* Swipe feedback right */}
       <div style={{
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        bottom: 0,
-        width: '50%',
-        background: `linear-gradient(-90deg, rgba(16, 185, 129, ${isSwipingRight ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
-        pointerEvents: 'none',
-        transition: isDragging ? 'none' : 'background 0.2s',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingRight: '24px',
+        position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%',
+        background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
+        pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
+        display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px',
       }}>
-        <span style={{
-          fontSize: '48px',
-          opacity: isSwipingRight ? swipeProgress : 0,
-          transform: `scale(${0.5 + swipeProgress * 0.5})`,
-          transition: isDragging ? 'none' : 'all 0.2s',
-          color: '#10b981',
-        }}>✓</span>
+        <span style={{ fontSize: '48px', opacity: isSwipingRight ? swipeProgress : 0, color: '#10b981' }}>✓</span>
       </div>
 
       {/* Character */}
-      <div style={{ 
-        fontSize: 'clamp(100px, 28vw, 180px)', 
-        fontWeight: '200', 
-        lineHeight: 1,
-        color: 'white',
-        textAlign: 'center',
-        marginBottom: '16px',
-      }}>
+      <div style={{ fontSize: 'clamp(100px, 28vw, 160px)', fontWeight: '200', lineHeight: 1, color: 'white', textAlign: 'center', marginBottom: '20px' }}>
         {character}
       </div>
 
       {/* Romaji */}
       {(card.shownRomaji || card.romaji) && (
-        <div style={{ 
-          fontSize: '28px', 
-          color: '#ec4899',
-          fontWeight: '500',
-          letterSpacing: '4px',
-          textTransform: 'lowercase',
-        }}>
+        <div style={{ fontSize: '28px', color: '#ec4899', fontWeight: '500', letterSpacing: '4px', textTransform: 'lowercase' }}>
           {card.shownRomaji || card.romaji}
         </div>
       )}

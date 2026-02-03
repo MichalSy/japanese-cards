@@ -9,104 +9,83 @@ export default function ProHeaderBar({ title }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '10px 12px',
-      background: 'rgba(55, 65, 81, 0.85)',
+      padding: '8px 10px',
+      background: 'rgba(107, 114, 128, 0.6)',
       backdropFilter: 'blur(20px)',
       borderRadius: '100px',
       margin: '12px 16px',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
     }}>
-      {/* Back Button */}
+      {/* Back Button - dark circle with < */}
       <button
         onClick={() => navigate(-1)}
         style={{
-          width: '40px',
-          height: '40px',
+          width: '44px',
+          height: '44px',
           borderRadius: '50%',
-          backgroundColor: 'rgba(75, 85, 99, 0.9)',
+          backgroundColor: 'rgba(55, 65, 81, 0.9)',
           border: 'none',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
           color: 'white',
-          fontSize: '18px',
-          transition: 'background-color 0.2s',
+          fontSize: '20px',
+          fontWeight: '300',
           flexShrink: 0,
         }}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(107, 114, 128, 0.9)'}
-        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.9)'}
       >
-        ←
+        ‹
       </button>
 
-      {/* Title */}
+      {/* Title - centered */}
       <span style={{
+        flex: 1,
         fontSize: '17px',
         fontWeight: '600',
         color: 'white',
-        letterSpacing: '0.3px',
-        flex: 1,
         textAlign: 'center',
+        paddingLeft: '8px',
       }}>
         {title}
       </span>
 
-      {/* Right side: Globe + Language Toggle */}
+      {/* Right side: Globe + DE + EN pill */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: '6px',
         flexShrink: 0,
       }}>
-        {/* Globe Icon */}
-        <span style={{ 
-          fontSize: '20px', 
-          color: 'rgba(255, 255, 255, 0.7)',
-        }}>
-          🌐
+        <span style={{ fontSize: '18px', opacity: 0.7 }}>🌐</span>
+        
+        <span 
+          onClick={() => setLanguage('de')}
+          style={{ 
+            fontSize: '14px', 
+            fontWeight: '600',
+            color: language === 'de' ? 'white' : 'rgba(255,255,255,0.5)',
+            cursor: 'pointer',
+            padding: '6px 8px',
+          }}
+        >
+          DE
         </span>
         
-        {/* Language Pills */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '2px',
-        }}>
-          <button
-            onClick={() => setLanguage('de')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '20px',
-              border: 'none',
-              fontSize: '13px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              backgroundColor: language === 'de' ? '#ec4899' : 'transparent',
-              color: language === 'de' ? 'white' : 'rgba(255, 255, 255, 0.6)',
-            }}
-          >
-            DE
-          </button>
-          <button
-            onClick={() => setLanguage('en')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '20px',
-              border: 'none',
-              fontSize: '13px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              backgroundColor: language === 'en' ? '#ec4899' : 'transparent',
-              color: language === 'en' ? 'white' : 'rgba(255, 255, 255, 0.6)',
-            }}
-          >
-            EN
-          </button>
-        </div>
+        <button
+          onClick={() => setLanguage('en')}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '20px',
+            border: 'none',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            backgroundColor: language === 'en' ? '#ec4899' : 'transparent',
+            color: 'white',
+          }}
+        >
+          EN
+        </button>
       </div>
     </div>
   )
