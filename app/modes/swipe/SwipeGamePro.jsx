@@ -140,39 +140,40 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '3px', transition: 'width 0.3s' }} />
         </div>
 
-        {/* Buttons - matching design */}
+        {/* Buttons - matching design exactly */}
         <div style={{ display: 'flex', gap: '12px' }}>
           {/* Falsch Button */}
           <button
             onClick={() => handleButtonClick(false)}
             style={{
               flex: 1,
-              padding: '14px 20px',
+              padding: '16px 24px',
               borderRadius: '100px',
-              background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.8) 0%, rgba(31, 41, 55, 0.9) 100%)',
+              background: 'linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%)',
               backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(239, 68, 68, 0.5)',
+              border: '2px solid rgba(239, 68, 68, 0.7)',
               color: '#f87171',
-              fontSize: '16px',
+              fontSize: '17px',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px',
-              boxShadow: '0 0 20px rgba(239, 68, 68, 0.15), 0 4px 12px rgba(0,0,0,0.3)',
+              gap: '12px',
+              boxShadow: '0 0 25px rgba(239, 68, 68, 0.3), 0 0 50px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255,255,255,0.05)',
             }}
           >
             <span style={{ 
-              width: '26px', 
-              height: '26px', 
+              width: '28px', 
+              height: '28px', 
               borderRadius: '50%', 
-              backgroundColor: 'rgba(239, 68, 68, 0.2)',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
+              backgroundColor: 'rgba(239, 68, 68, 0.25)',
+              border: '2px solid rgba(239, 68, 68, 0.6)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '14px',
+              fontSize: '15px',
+              fontWeight: 'bold',
             }}>✗</span>
             <span>Falsch</span>
           </button>
@@ -182,32 +183,33 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             onClick={() => handleButtonClick(true)}
             style={{
               flex: 1,
-              padding: '14px 20px',
+              padding: '16px 24px',
               borderRadius: '100px',
-              background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.8) 0%, rgba(31, 41, 55, 0.9) 100%)',
+              background: 'linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%)',
               backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(16, 185, 129, 0.5)',
+              border: '2px solid rgba(16, 185, 129, 0.7)',
               color: '#34d399',
-              fontSize: '16px',
+              fontSize: '17px',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px',
-              boxShadow: '0 0 20px rgba(16, 185, 129, 0.15), 0 4px 12px rgba(0,0,0,0.3)',
+              gap: '12px',
+              boxShadow: '0 0 25px rgba(16, 185, 129, 0.3), 0 0 50px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255,255,255,0.05)',
             }}
           >
             <span style={{ 
-              width: '26px', 
-              height: '26px', 
+              width: '28px', 
+              height: '28px', 
               borderRadius: '50%', 
-              backgroundColor: 'rgba(16, 185, 129, 0.2)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
+              backgroundColor: 'rgba(16, 185, 129, 0.25)',
+              border: '2px solid rgba(16, 185, 129, 0.6)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '14px',
+              fontSize: '15px',
+              fontWeight: 'bold',
             }}>✓</span>
             <span>Richtig</span>
           </button>
