@@ -63,14 +63,14 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     setSwipeState(isCorrect ? 'correct' : 'incorrect')
     setFlashOpacity(1)
     
-    // If wrong: Show correction (keep flash overlay)
+    // If wrong: Show correction
     if (!isCorrect) {
       // Wait for flash to be visible (200ms)
       await new Promise(resolve => setTimeout(resolve, 200))
-      // Show correction while keeping red overlay
+      // Now show the correction text
       setShowCorrection(true)
       setFlashOpacity(0.3) // Keep red overlay visible but lighter
-      // Wait 1.5 more seconds
+      // Wait 1.5 seconds total for correction to be visible
       await new Promise(resolve => setTimeout(resolve, 1500))
     } else {
       // Correct answer: fade out flash quickly
@@ -255,7 +255,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           minHeight: '90px',
         }}>
           {/* Show correction when wrong answer */}
-          {showCorrection && card.isWrongPairing && (
+          {showCorrection && swipeState === 'incorrect' && card.correctRomaji && (
             <div style={{
               display: 'flex',
               flexDirection: 'column',
@@ -264,6 +264,8 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               padding: '0 var(--spacing-4)',
               width: '100%',
               animation: 'fadeIn 0.3s ease-in',
+              pointerEvents: 'none',
+              zIndex: 20,
             }}>
               {/* Wrong answer struck through */}
               <div style={{
