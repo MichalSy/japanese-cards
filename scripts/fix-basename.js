@@ -17,29 +17,7 @@ function walk(dir, callback) {
   });
 }
 
-console.log("🛠️ Fixing basename in generated HTML files...");
-
-walk(buildDir, (filePath) => {
-  if (filePath.endsWith(".html")) {
-    let content = fs.readFileSync(filePath, "utf-8");
-    
-    // Fix the basename in the injected context
-    let newContent = content.replace(
-      /"basename":"\/"/g,
-      '"basename":"/japanese-cards/"'
-    );
-    
-    // Fix the manifestPath for lazy route discovery
-    newContent = newContent.replace(
-      /"manifestPath":"\/__manifest"/g,
-      '"manifestPath":"/japanese-cards/__manifest"'
-    );
-    
-    if (newContent !== content) {
-      fs.writeFileSync(filePath, newContent);
-      console.log(`✅ Fixed: ${path.relative(buildDir, filePath)}`);
-    }
-  }
-});
-
-console.log("✨ All HTML files fixed!");
+// NOTE: With hash-based routing (/# URLs), basename fixes are no longer needed
+// The entry.client.jsx converts traditional paths to hash routes automatically
+// This script is kept for reference but doesn't apply any transformations
+console.log("✨ Hash-based routing enabled - no basename fixes needed!");

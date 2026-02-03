@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 export default {
-  ssr: true, // Enable SSR for full HTML generation
+  ssr: true, // Keep SSR enabled for better initial load
   async prerender() {
     const routes = ["/"];
     const publicDir = path.join(process.cwd(), "public", "GameData");
