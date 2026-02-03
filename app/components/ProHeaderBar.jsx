@@ -10,21 +10,21 @@ export default function ProHeaderBar({ title }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '12px 16px',
-      background: 'rgba(30, 41, 59, 0.7)',
+      padding: '10px 12px',
+      background: 'rgba(55, 65, 81, 0.85)',
       backdropFilter: 'blur(20px)',
-      borderRadius: '16px',
+      borderRadius: '100px',
       margin: '12px 16px',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
     }}>
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
         style={{
-          width: '36px',
-          height: '36px',
+          width: '40px',
+          height: '40px',
           borderRadius: '50%',
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backgroundColor: 'rgba(75, 85, 99, 0.9)',
           border: 'none',
           display: 'flex',
           alignItems: 'center',
@@ -33,9 +33,10 @@ export default function ProHeaderBar({ title }) {
           color: 'white',
           fontSize: '18px',
           transition: 'background-color 0.2s',
+          flexShrink: 0,
         }}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}
-        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(107, 114, 128, 0.9)'}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(75, 85, 99, 0.9)'}
       >
         ←
       </button>
@@ -46,20 +47,23 @@ export default function ProHeaderBar({ title }) {
         fontWeight: '600',
         color: 'white',
         letterSpacing: '0.3px',
+        flex: 1,
+        textAlign: 'center',
       }}>
         {title}
       </span>
 
-      {/* Language Selector */}
+      {/* Right side: Globe + Language Toggle */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
+        flexShrink: 0,
       }}>
         {/* Globe Icon */}
         <span style={{ 
-          fontSize: '18px', 
-          color: 'rgba(255, 255, 255, 0.6)',
+          fontSize: '20px', 
+          color: 'rgba(255, 255, 255, 0.7)',
         }}>
           🌐
         </span>
@@ -67,15 +71,14 @@ export default function ProHeaderBar({ title }) {
         {/* Language Pills */}
         <div style={{
           display: 'flex',
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '20px',
-          padding: '3px',
+          alignItems: 'center',
+          gap: '2px',
         }}>
           <button
             onClick={() => setLanguage('de')}
             style={{
-              padding: '6px 12px',
-              borderRadius: '16px',
+              padding: '8px 14px',
+              borderRadius: '20px',
               border: 'none',
               fontSize: '13px',
               fontWeight: '600',
@@ -90,8 +93,8 @@ export default function ProHeaderBar({ title }) {
           <button
             onClick={() => setLanguage('en')}
             style={{
-              padding: '6px 12px',
-              borderRadius: '16px',
+              padding: '8px 14px',
+              borderRadius: '20px',
               border: 'none',
               fontSize: '13px',
               fontWeight: '600',

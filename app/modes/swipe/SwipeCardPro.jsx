@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 
-export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAnswer }) {
+export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAnswer, onButtonClick }) {
   const [swipeState, setSwipeState] = useState(null)
   const [dragStart, setDragStart] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -24,6 +24,13 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       onSwipe(isCorrect, direction, card.correctRomaji, character)
     }, 220)
   }, [card, correctAnswer, onSwipe, character, swipeState])
+
+  // Expose triggerSwipe to parent for button clicks
+  useEffect(() => {
+    if (onButtonClick && isActive) {
+      onButtonClick.current = triggerSwipe
+    }
+  }, [onButtonClick, isActive, triggerSwipe])
 
   // Keyboard support
   useEffect(() => {
@@ -78,11 +85,6 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     }
   }
 
-  const handleButtonClick = (isCorrect) => {
-    if (!isActive || swipeState === 'exit') return
-    triggerSwipe(isCorrect)
-  }
-
   const getTransition = () => {
     if (isDragging) return 'none'
     if (swipeState === 'exit') return 'all 0.22s ease-out'
@@ -120,12 +122,12 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '340px',
         aspectRatio: '3/4',
-        background: 'rgba(30, 41, 59, 0.75)',
+        background: 'rgba(30, 41, 59, 0.8)',
         backdropFilter: 'blur(24px)',
         borderRadius: '24px',
-        border: '2px solid rgba(236, 72, 153, 0.4)',
+        border: '2px solid rgba(236, 72, 153, 0.5)',
         boxShadow: index === 0 
-          ? '0 0 60px rgba(236, 72, 153, 0.35), 0 0 100px rgba(236, 72, 153, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)'
+          ? '0 0 60px rgba(236, 72, 153, 0.4), 0 0 120px rgba(236, 72, 153, 0.2)'
           : '0 8px 32px rgba(0,0,0,0.4)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
@@ -133,6 +135,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         willChange: 'transform, opacity',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         opacity: swipeState === 'exit' ? 0 : stackOpacity,
         userSelect: 'none',
         overflow: 'hidden',
@@ -155,7 +159,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         paddingLeft: '24px',
       }}>
         <span style={{
-          fontSize: '40px',
+          fontSize: '48px',
           opacity: isSwipingLeft ? swipeProgress : 0,
           transform: `scale(${0.6 + swipeProgress * 0.4})`,
           transition: isDragging ? 'none' : 'all 0.2s',
@@ -179,7 +183,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         paddingRight: '24px',
       }}>
         <span style={{
-          fontSize: '40px',
+          fontSize: '48px',
           opacity: isSwipingRight ? swipeProgress : 0,
           transform: `scale(${0.5 + swipeProgress * 0.5})`,
           transition: isDragging ? 'none' : 'all 0.2s',
@@ -187,115 +191,30 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         }}>✓</span>
       </div>
 
-      {/* Main Content */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-        padding: '32px 24px',
-        gap: '12px',
-      }}>
-        {/* Character */}
-        <div style={{ 
-          fontSize: 'clamp(90px, 26vw, 160px)', 
-          fontWeight: '200', 
-          lineHeight: 1,
-          color: 'white',
-          textAlign: 'center',
-        }}>
-          {character}
-        </div>
-
-        {/* Romaji */}
-        {(card.shownRomaji || card.romaji) && (
-          <div style={{ 
-            fontSize: '28px', 
-            color: '#ec4899',
-            fontWeight: '500',
-            letterSpacing: '4px',
-            textTransform: 'lowercase',
-          }}>
-            {card.shownRomaji || card.romaji}
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Buttons - inside card like the design */}
+      {/* Character */}
       <div style={{ 
-        display: 'flex', 
-        padding: '16px 20px',
-        paddingBottom: '24px',
-        gap: '12px',
-        opacity: swipeState === 'exit' ? 0 : 1,
+        fontSize: 'clamp(100px, 28vw, 180px)', 
+        fontWeight: '200', 
+        lineHeight: 1,
+        color: 'white',
+        textAlign: 'center',
+        marginBottom: '16px',
       }}>
-        {/* Falsch Button */}
-        <button
-          onClick={() => handleButtonClick(false)}
-          disabled={swipeState === 'exit'}
-          style={{
-            flex: 1,
-            padding: '16px 20px',
-            borderRadius: '16px',
-            backgroundColor: 'rgba(239, 68, 68, 0.12)',
-            border: '1.5px solid rgba(239, 68, 68, 0.5)',
-            color: '#f87171',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.15s',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)'
-            e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.7)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.12)'
-            e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.5)'
-          }}
-        >
-          <span>✗</span>
-          <span>Falsch</span>
-        </button>
-
-        {/* Richtig Button */}
-        <button
-          onClick={() => handleButtonClick(true)}
-          disabled={swipeState === 'exit'}
-          style={{
-            flex: 1,
-            padding: '16px 20px',
-            borderRadius: '16px',
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
-            border: '1.5px solid rgba(16, 185, 129, 0.5)',
-            color: '#34d399',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.15s',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.2)'
-            e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.7)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.12)'
-            e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.5)'
-          }}
-        >
-          <span>✓</span>
-          <span>Richtig</span>
-        </button>
+        {character}
       </div>
+
+      {/* Romaji */}
+      {(card.shownRomaji || card.romaji) && (
+        <div style={{ 
+          fontSize: '28px', 
+          color: '#ec4899',
+          fontWeight: '500',
+          letterSpacing: '4px',
+          textTransform: 'lowercase',
+        }}>
+          {card.shownRomaji || card.romaji}
+        </div>
+      )}
     </div>
   )
 }
