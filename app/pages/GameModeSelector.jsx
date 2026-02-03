@@ -114,22 +114,6 @@ export default function GameModeSelector() {
             </label>
           </div>
 
-          <Card>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
-              <h3 className="text-sm font-medium text-primary">Deine Statistik</h3>
-              <div className="grid-2">
-                <div>
-                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Korrekt</p>
-                  <p className="text-2xl font-bold" style={{ color: '#10b981', margin: 0 }}>14/15</p>
-                </div>
-                <div>
-                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Genauigkeit</p>
-                  <p className="text-2xl font-bold" style={{ color: '#3b82f6', margin: 0 }}>93%</p>
-                </div>
-              </div>
-            </div>
-          </Card>
-
           <div className="grid-1">
             {gameModes.map((mode) => (
               <Card key={mode.id} interactive onClick={() => navigate(`/game/${contentType}/${groupId}/${mode.id}?cards=${cardCount}`)}>

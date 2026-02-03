@@ -76,6 +76,23 @@ export default function ContentTypeView() {
 
       <AppContent>
         <div className="space-y-6 fade-in">
+          {/* Statistics Card */}
+          <Card>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
+              <h3 className="text-sm font-medium text-primary">Deine Statistik</h3>
+              <div className="grid-2">
+                <div>
+                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Korrekt</p>
+                  <p className="text-2xl font-bold" style={{ color: '#10b981', margin: 0 }}>—</p>
+                </div>
+                <div>
+                  <p className="text-sm text-tertiary" style={{ margin: 0 }}>Genauigkeit</p>
+                  <p className="text-2xl font-bold" style={{ color: '#3b82f6', margin: 0 }}>—</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {categoryConfig.showAllOption && (
             <Card interactive onClick={() => navigate(`/content/${contentType}/all`)}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
