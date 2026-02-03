@@ -81,12 +81,12 @@ export default function MainMenu() {
                         {getCategoryName(type)}
                       </h3>
                       {getCategoryDescription(type) && (
-                        <p className="text-sm" style={{ color: 'var(--color-text-tertiary)', margin: 'var(--spacing-1) 0 0 0' }}>
+                        <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: 'var(--spacing-1) 0 0 0' }}>
                           {getCategoryDescription(type)}
                         </p>
                       )}
                     </div>
-                    <span style={{ color: 'var(--color-text-tertiary)', fontSize: '20px' }}>→</span>
+                    <span style={{ color: 'var(--color-text-secondary)', fontSize: '20px' }}>→</span>
                   </div>
                 </Card>
               ))}
@@ -125,7 +125,7 @@ export default function MainMenu() {
             <div className="grid-2">
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: '0 0 var(--spacing-2) 0' }}>
                     {language === 'de' ? 'Tage aktiv' : 'Days active'}
                   </p>
                   <p className="text-3xl font-bold" style={{ color: 'var(--color-primary)', margin: 0 }}>12</p>
@@ -133,7 +133,7 @@ export default function MainMenu() {
               </Card>
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: '0 0 var(--spacing-2) 0' }}>
                     {language === 'de' ? 'Punkte' : 'Points'}
                   </p>
                   <p className="text-3xl font-bold" style={{ color: 'var(--color-secondary)', margin: 0 }}>1.2K</p>
@@ -141,7 +141,7 @@ export default function MainMenu() {
               </Card>
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: '0 0 var(--spacing-2) 0' }}>
                     {language === 'de' ? 'Genauigkeit' : 'Accuracy'}
                   </p>
                   <p className="text-3xl font-bold" style={{ color: '#3b82f6', margin: 0 }}>89%</p>
@@ -149,7 +149,7 @@ export default function MainMenu() {
               </Card>
               <Card>
                 <div style={{ textAlign: 'center' }}>
-                  <p className="text-sm text-tertiary" style={{ margin: '0 0 var(--spacing-2) 0' }}>
+                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: '0 0 var(--spacing-2) 0' }}>
                     {language === 'de' ? 'Streak' : 'Streak'}
                   </p>
                   <p className="text-3xl font-bold" style={{ color: '#10b981', margin: 0 }}>7</p>

@@ -428,14 +428,14 @@ const MainMenu = UNSAFE_withComponentProps(function MainMenu2() {
                 }), getCategoryDescription(type) && /* @__PURE__ */ jsx("p", {
                   className: "text-sm",
                   style: {
-                    color: "var(--color-text-tertiary)",
+                    color: "var(--color-text-secondary)",
                     margin: "var(--spacing-1) 0 0 0"
                   },
                   children: getCategoryDescription(type)
                 })]
               }), /* @__PURE__ */ jsx("span", {
                 style: {
-                  color: "var(--color-text-tertiary)",
+                  color: "var(--color-text-secondary)",
                   fontSize: "20px"
                 },
                 children: "→"
@@ -506,8 +506,9 @@ const MainMenu = UNSAFE_withComponentProps(function MainMenu2() {
                 textAlign: "center"
               },
               children: [/* @__PURE__ */ jsx("p", {
-                className: "text-sm text-tertiary",
+                className: "text-sm",
                 style: {
+                  color: "var(--color-text-secondary)",
                   margin: "0 0 var(--spacing-2) 0"
                 },
                 children: language === "de" ? "Tage aktiv" : "Days active"
@@ -526,8 +527,9 @@ const MainMenu = UNSAFE_withComponentProps(function MainMenu2() {
                 textAlign: "center"
               },
               children: [/* @__PURE__ */ jsx("p", {
-                className: "text-sm text-tertiary",
+                className: "text-sm",
                 style: {
+                  color: "var(--color-text-secondary)",
                   margin: "0 0 var(--spacing-2) 0"
                 },
                 children: language === "de" ? "Punkte" : "Points"
@@ -546,8 +548,9 @@ const MainMenu = UNSAFE_withComponentProps(function MainMenu2() {
                 textAlign: "center"
               },
               children: [/* @__PURE__ */ jsx("p", {
-                className: "text-sm text-tertiary",
+                className: "text-sm",
                 style: {
+                  color: "var(--color-text-secondary)",
                   margin: "0 0 var(--spacing-2) 0"
                 },
                 children: language === "de" ? "Genauigkeit" : "Accuracy"
@@ -566,8 +569,9 @@ const MainMenu = UNSAFE_withComponentProps(function MainMenu2() {
                 textAlign: "center"
               },
               children: [/* @__PURE__ */ jsx("p", {
-                className: "text-sm text-tertiary",
+                className: "text-sm",
                 style: {
+                  color: "var(--color-text-secondary)",
                   margin: "0 0 var(--spacing-2) 0"
                 },
                 children: language === "de" ? "Streak" : "Streak"
@@ -706,8 +710,9 @@ const ContentTypeView = UNSAFE_withComponentProps(function ContentTypeView2() {
                   },
                   children: language === "de" ? "Alle kombiniert" : "All Combined"
                 }), /* @__PURE__ */ jsxs("p", {
-                  className: "text-sm text-tertiary",
+                  className: "text-sm",
                   style: {
+                    color: "var(--color-text-secondary)",
                     margin: "var(--spacing-1) 0 0 0"
                   },
                   children: [categoryConfig.groups.length, " ", language === "de" ? "Gruppen" : "groups"]
@@ -1034,7 +1039,7 @@ const route3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   loader,
   meta: meta$1
 }, Symbol.toStringTag, { value: "Module" }));
-const SwipeGame = lazy(() => import("./SwipeGame-CgZmq8S0.js"));
+const SwipeGame = lazy(() => import("./SwipeGame-CwQb5wnV.js"));
 const GAME_MODES = {
   swipe: SwipeGame,
   multiChoice: null,
@@ -1154,7 +1159,7 @@ const route4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   default: GameScreen,
   meta
 }, Symbol.toStringTag, { value: "Module" }));
-const serverManifest = { "entry": { "module": "/japanese-cards/assets/entry.client-DpFTp2OA.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/root-pimIbd73.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js"], "css": ["/japanese-cards/assets/root-DbmuvHzL.css"], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/MainMenu": { "id": "pages/MainMenu", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/MainMenu-hvjdDELw.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js", "/japanese-cards/assets/Layout-BNKjru07.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/ContentTypeView": { "id": "pages/ContentTypeView", "parentId": "root", "path": "content/:contentType", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/ContentTypeView-DzqDNTsz.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js", "/japanese-cards/assets/Layout-BNKjru07.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/GameModeSelector": { "id": "pages/GameModeSelector", "parentId": "root", "path": "content/:contentType/:groupId", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/GameModeSelector-DSUtDqK5.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/Layout-BNKjru07.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/GameScreen": { "id": "pages/GameScreen", "parentId": "root", "path": "game/:contentType/:groupId/:modeId", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/GameScreen-D8ZuZpTa.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/Layout-BNKjru07.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 } }, "url": "/japanese-cards/assets/manifest-0cea4a87.js", "version": "0cea4a87", "sri": void 0 };
+const serverManifest = { "entry": { "module": "/japanese-cards/assets/entry.client-DpFTp2OA.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js"], "css": [] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/root-pimIbd73.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js"], "css": ["/japanese-cards/assets/root-DbmuvHzL.css"], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/MainMenu": { "id": "pages/MainMenu", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/MainMenu-BbLjVkvb.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js", "/japanese-cards/assets/Layout-BNKjru07.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/ContentTypeView": { "id": "pages/ContentTypeView", "parentId": "root", "path": "content/:contentType", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/ContentTypeView-pKWT54OS.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js", "/japanese-cards/assets/Layout-BNKjru07.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/GameModeSelector": { "id": "pages/GameModeSelector", "parentId": "root", "path": "content/:contentType/:groupId", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": true, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/GameModeSelector-DSUtDqK5.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/Layout-BNKjru07.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 }, "pages/GameScreen": { "id": "pages/GameScreen", "parentId": "root", "path": "game/:contentType/:groupId/:modeId", "index": void 0, "caseSensitive": void 0, "hasAction": false, "hasLoader": false, "hasClientAction": false, "hasClientLoader": false, "hasClientMiddleware": false, "hasErrorBoundary": false, "module": "/japanese-cards/assets/GameScreen-D8ZuZpTa.js", "imports": ["/japanese-cards/assets/chunk-JZWAC4HX-BOJ21O0C.js", "/japanese-cards/assets/Layout-BNKjru07.js", "/japanese-cards/assets/LanguageContext-BTeNvZwJ.js"], "css": [], "clientActionModule": void 0, "clientLoaderModule": void 0, "clientMiddlewareModule": void 0, "hydrateFallbackModule": void 0 } }, "url": "/japanese-cards/assets/manifest-fe60d341.js", "version": "fe60d341", "sri": void 0 };
 const assetsBuildDirectory = "build/client";
 const basename = "/";
 const future = { "unstable_optimizeDeps": false, "unstable_subResourceIntegrity": false, "unstable_trailingSlashAwareDataRequests": false, "v8_middleware": false, "v8_splitRouteModules": false, "v8_viteEnvironmentApi": false };

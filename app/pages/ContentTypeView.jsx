@@ -47,7 +47,7 @@ export default function ContentTypeView() {
                     <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
                       {language === 'de' ? 'Alle kombiniert' : 'All Combined'}
                     </h3>
-                    <p className="text-sm text-tertiary" style={{ margin: 'var(--spacing-1) 0 0 0' }}>
+                    <p className="text-sm" style={{ color: 'var(--color-text-secondary)', margin: 'var(--spacing-1) 0 0 0' }}>
                       {categoryConfig.groups.length} {language === 'de' ? 'Gruppen' : 'groups'}
                     </p>
                   </div>
