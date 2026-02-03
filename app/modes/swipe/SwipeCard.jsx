@@ -237,8 +237,19 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               {card.shownRomaji || card.romaji}
             </div>
           )}
+        </div>
 
-          {/* Correction - Show when wrong */}
+        {/* Bottom Section: Buttons or Correction */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          width: '100%',
+          gap: 'var(--spacing-4)',
+          flexDirection: showCorrection ? 'column' : 'row',
+          alignItems: 'center',
+          minHeight: '90px',
+        }}>
+          {/* Show correction when wrong answer */}
           {showCorrection && card.correctRomaji && card.correctRomaji !== card.shownRomaji && (
             <div style={{
               display: 'flex',
@@ -246,11 +257,12 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               alignItems: 'center',
               gap: 'var(--spacing-3)',
               padding: '0 var(--spacing-4)',
+              width: '100%',
               animation: 'fadeIn 0.3s ease-in',
             }}>
               {/* Wrong answer struck through */}
               <div style={{
-                fontSize: '16px',
+                fontSize: '18px',
                 color: '#ef4444',
                 textDecoration: 'line-through',
                 opacity: 0.7,
@@ -260,7 +272,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               </div>
               {/* Correct answer in green */}
               <div style={{
-                fontSize: '22px',
+                fontSize: '24px',
                 color: '#10b981',
                 fontWeight: '700',
                 letterSpacing: '0.5px',
@@ -270,33 +282,11 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               </div>
             </div>
           )}
-          
-          {/* Add keyframe animation */}
-          <style>{`
-            @keyframes fadeIn {
-              from {
-                opacity: 0;
-                transform: translateY(-10px);
-              }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-          `}</style>
-        </div>
 
-        {/* Bottom Section: Buttons */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          width: '100%',
-          gap: 'var(--spacing-4)',
-          opacity: swipeState ? 0 : 1,
-          transition: 'opacity 0.2s ease',
-          pointerEvents: swipeState ? 'none' : 'auto',
-        }}>
-          {/* Left Button - Falsch */}
+          {/* Show buttons when no correction needed */}
+          {!showCorrection && (
+            <>
+              {/* Left Button - Falsch */}
           <button
             onClick={() => handleButtonClick(false)}
             style={{
@@ -365,8 +355,24 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             →
             <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginTop: '2px' }}>Richtig</span>
           </button>
+            </>
+          )}
         </div>
       </div>
+
+      {/* CSS Animation */}
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   )
 }
