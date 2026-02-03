@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswer }) {
   const [swipeState, setSwipeState] = useState(null)
@@ -7,9 +7,45 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
   const [position, setPosition] = useState({ x: 0, rotation: 0 })
   const [exitDirection, setExitDirection] = useState(null)
 
-  if (!card) return null
+  const character = card?.character || card?.word || ''
 
-  const character = card.character || card.word || ''
+  const triggerSwipe = useCallback((userThinkCorrect) => {
+    if (!card || swipeState === 'exit') return
+    
+    const isCorrect = userThinkCorrect === correctAnswer
+    const direction = userThinkCorrect ? 'right' : 'left'
+    
+    setExitDirection(direction)
+    setSwipeState('exit')
+    setPosition({
+      x: direction === 'right' ? 300 : -300,
+      rotation: direction === 'right' ? 10 : -10
+    })
+    
+    setTimeout(() => {
+      onSwipe(isCorrect, direction, card.correctRomaji, character)
+    }, 220)
+  }, [card, correctAnswer, onSwipe, character, swipeState])
+
+  // Keyboard support for desktop
+  useEffect(() => {
+    if (!isActive || swipeState || !card) return
+    
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        triggerSwipe(false)
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        triggerSwipe(true)
+      }
+    }
+    
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isActive, swipeState, card, triggerSwipe])
+
+  if (!card) return null
 
   const handleDragStart = (e) => {
     if (!isActive || swipeState) return
@@ -49,29 +85,13 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
     triggerSwipe(isCorrect)
   }
 
-  const triggerSwipe = (userThinkCorrect) => {
-    const isCorrect = userThinkCorrect === correctAnswer
-    const direction = userThinkCorrect ? 'right' : 'left'
-    
-    setExitDirection(direction)
-    setSwipeState('exit')
-    setPosition({
-      x: direction === 'right' ? 300 : -300,
-      rotation: direction === 'right' ? 10 : -10
-    })
-    
-    setTimeout(() => {
-      onSwipe(isCorrect, direction, card.correctRomaji, character)
-    }, 220)
-  }
-
   const getTransition = () => {
     if (isDragging) return 'none'
     if (swipeState === 'exit') return 'all 0.22s ease-out'
     return 'all 0.28s cubic-bezier(0.34, 1.2, 0.64, 1)'
   }
 
-  const swipeProgress = Math.min(1, Math.abs(position.x) / 50) // Lower threshold for faster feedback
+  const swipeProgress = Math.min(1, Math.abs(position.x) / 50)
   const isSwipingRight = position.x > 0
   const isSwipingLeft = position.x < 0
 
@@ -223,7 +243,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.08)'
           }}
         >
-          Falsch
+          ← Falsch
         </button>
 
         <button
@@ -248,7 +268,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
             e.currentTarget.style.backgroundColor = 'rgba(16, 185, 129, 0.08)'
           }}
         >
-          Richtig
+          Richtig →
         </button>
       </div>
     </div>
