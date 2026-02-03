@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 import { fetchGroupData, fetchAllItemsFromCategory } from '../../config/api'
 import { useSwipeGame } from './useSwipeGame'
 import SwipeCard from './SwipeCard'
-import { AppContent, AppFooter, Card } from '../../components/Layout'
+import { AppContent, Card } from '../../components/Layout'
 
 export default function SwipeGame({ contentType, groupId, cardCount }) {
   const navigate = useNavigate()
@@ -29,11 +29,11 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
     setToast(toastData)
     setToastVisible(true)
     
-    // Hide after delay (fade out, then remove)
+    // Hide after delay
     toastTimeoutRef.current = setTimeout(() => {
       setToastVisible(false)
       toastTimeoutRef.current = setTimeout(() => setToast(null), 300)
-    }, 1200)
+    }, 1500)
     
     game.handleSwipe(isCorrect, direction)
   }
@@ -53,10 +53,8 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
       try {
         let data
         if (groupId === 'all') {
-          // Load all items from all groups in category
           data = await fetchAllItemsFromCategory(contentType)
         } else {
-          // Load single group
           data = await fetchGroupData(contentType, groupId)
         }
         setItems(data.items || [])
@@ -67,24 +65,33 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
         setLoading(false)
       }
     }
-
     loadData()
   }, [contentType, groupId])
 
   if (loading) {
     return (
-      <AppContent>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <p style={{ color: 'var(--color-text-tertiary)' }}>Spiel wird vorbereitet...</p>
-        </div>
-      </AppContent>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100%',
+        color: 'var(--color-text-tertiary)'
+      }}>
+        Spiel wird vorbereitet...
+      </div>
     )
   }
 
   if (error) {
     return (
       <AppContent>
-        <div style={{ padding: 'var(--spacing-4)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
+        <div style={{ 
+          padding: 'var(--spacing-4)', 
+          backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+          borderRadius: 'var(--radius-md)', 
+          color: '#ef4444',
+          border: '1px solid rgba(239, 68, 68, 0.3)'
+        }}>
           Fehler: {error}
         </div>
       </AppContent>
@@ -98,7 +105,6 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
     return (
       <AppContent>
         <div className="space-y-6">
-          {/* Result Summary */}
           <Card>
             <div style={{ textAlign: 'center' }}>
               <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: '0 0 var(--spacing-4) 0' }}>
@@ -121,45 +127,30 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
             </div>
           </Card>
 
-          {/* Mistakes List */}
           {game.stats.mistakes.length > 0 && (
             <div>
-              <h3 className="text-base font-medium text-primary" style={{ marginBottom: 'var(--spacing-3)' }}>
+              <h3 className="text-base font-medium" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-3)' }}>
                 Fehler ({game.stats.mistakes.length})
               </h3>
               <div className="space-y-3">
                 {game.stats.mistakes.map((mistake, idx) => (
                   <Card key={idx}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
-                      {/* Character */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <p className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-                          {mistake.realCard?.character || mistake.realCard?.word || '?'}
-                        </p>
-                        <span style={{ fontSize: '24px' }}>❌</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
+                      <div style={{ 
+                        fontSize: '32px', 
+                        fontWeight: '700',
+                        color: 'var(--color-text-primary)',
+                        minWidth: '50px'
+                      }}>
+                        {mistake.realCard?.character || mistake.realCard?.word || '?'}
                       </div>
-
-                      {/* What was shown */}
-                      <div style={{ padding: 'var(--spacing-2) var(--spacing-3)', backgroundColor: 'var(--color-surface-light)', borderRadius: 'var(--radius-md)' }}>
-                        <p className="text-xs text-tertiary" style={{ margin: '0 0 var(--spacing-1) 0' }}>Gezeigt:</p>
-                        <p className="text-sm font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>
-                          {mistake.displayedCard?.romaji || '?'}
-                        </p>
-                      </div>
-
-                      {/* Correct answer */}
-                      <div style={{ padding: 'var(--spacing-2) var(--spacing-3)', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderRadius: 'var(--radius-md)', border: '1px solid #10b981' }}>
-                        <p className="text-xs text-tertiary" style={{ margin: '0 0 var(--spacing-1) 0' }}>Korrekt:</p>
-                        <p className="text-sm font-medium" style={{ color: '#10b981', margin: 0 }}>
-                          {mistake.realCard?.romaji || '?'}
-                        </p>
-                      </div>
-
-                      {/* User action */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', fontSize: '12px', color: 'var(--color-text-tertiary)' }}>
-                        <span>Du: {mistake.userAction === 'right' ? '➡️ Richtig' : '⬅️ Falsch'}</span>
-                        <span>•</span>
-                        <span>{mistake.wasCorrectPairing ? 'War korrekt' : 'War falsch'}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '14px', color: '#ef4444', marginBottom: '2px' }}>
+                          ✗ {mistake.displayedCard?.romaji}
+                        </div>
+                        <div style={{ fontSize: '14px', color: '#10b981' }}>
+                          ✓ {mistake.realCard?.romaji}
+                        </div>
                       </div>
                     </div>
                   </Card>
@@ -172,15 +163,24 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
     )
   }
 
+  // Calculate progress
+  const progress = ((game.currentIndex) / game.totalCards) * 100
+
   return (
-    <AppContent>
-      {/* Toast Notification - Compact, under header */}
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      overflow: 'hidden',
+      position: 'relative',
+    }}>
+      {/* Toast Notification */}
       {toast && (
         <div 
           key={toast.id}
           style={{
-            position: 'fixed',
-            top: '72px',
+            position: 'absolute',
+            top: '16px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1000,
@@ -192,30 +192,43 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 'var(--spacing-2)',
-            padding: '6px 12px',
-            backgroundColor: toast.isCorrect ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+            gap: '10px',
+            padding: '10px 16px',
+            backgroundColor: toast.isCorrect ? '#10b981' : '#ef4444',
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
           }}>
-            {/* Icon */}
-            <span style={{ fontSize: '14px', color: 'white' }}>
+            <span style={{ 
+              fontSize: '18px', 
+              fontWeight: 'bold',
+              color: 'white' 
+            }}>
               {toast.isCorrect ? '✓' : '✗'}
             </span>
-            
-            {/* Text - show character for wrong answers */}
-            <span style={{ fontSize: '14px', fontWeight: '600', color: 'white' }}>
+            <span style={{ 
+              fontSize: '16px', 
+              fontWeight: '600', 
+              color: 'white' 
+            }}>
               {toast.isCorrect 
                 ? 'Richtig!' 
-                : `${toast.character || ''} = ${toast.correctRomaji}`
+                : `${toast.character} = ${toast.correctRomaji}`
               }
             </span>
           </div>
         </div>
       )}
 
-      {/* Game Container */}
-      <div style={{ position: 'relative', height: '480px', marginBottom: 'var(--spacing-4)', overflow: 'hidden' }}>
+      {/* Card Area - fills available space */}
+      <div style={{ 
+        flex: 1,
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+        minHeight: 0,
+      }}>
         {game.cardStack.map((card, idx) => (
           <SwipeCard
             key={`${game.currentIndex + idx}`}
@@ -228,48 +241,62 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
         ))}
       </div>
 
-      {/* Progress */}
-      <Card>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="text-sm font-medium text-primary">
-              Karte {game.currentIndex + 1} / {game.totalCards}
-            </span>
-            <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-primary)' }}>
-              {Math.round(((game.currentIndex + 1) / game.totalCards) * 100)}%
-            </span>
-          </div>
-          <div style={{ width: '100%', backgroundColor: 'var(--color-surface-light)', borderRadius: '9999px', height: '8px' }}>
+      {/* Bottom Bar - Progress + Stats */}
+      <div style={{
+        padding: '12px 16px',
+        paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+        backgroundColor: 'var(--color-surface)',
+        borderTop: '1px solid var(--color-surface-light)',
+      }}>
+        {/* Progress Bar */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '12px',
+          marginBottom: '8px'
+        }}>
+          <div style={{ 
+            flex: 1,
+            height: '6px',
+            backgroundColor: 'var(--color-surface-light)',
+            borderRadius: '3px',
+            overflow: 'hidden'
+          }}>
             <div style={{
-              background: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`,
-              height: '8px',
-              borderRadius: '9999px',
+              height: '100%',
+              width: `${progress}%`,
+              background: 'linear-gradient(90deg, var(--color-primary), var(--color-secondary))',
+              borderRadius: '3px',
               transition: 'width 0.3s ease',
-              width: `${((game.currentIndex + 1) / game.totalCards) * 100}%`
             }} />
           </div>
+          <span style={{ 
+            fontSize: '13px', 
+            fontWeight: '600',
+            color: 'var(--color-text-secondary)',
+            minWidth: '60px',
+            textAlign: 'right'
+          }}>
+            {game.currentIndex + 1} / {game.totalCards}
+          </span>
         </div>
-      </Card>
 
-      {/* Stats */}
-      <Card>
-        <div className="grid-2">
-          <div>
-            <p className="text-sm text-tertiary" style={{ margin: 0 }}>Richtig</p>
-            <p className="text-2xl font-bold" style={{ color: '#10b981', margin: 0 }}>{game.stats.correct}</p>
+        {/* Stats Row */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center',
+          gap: '24px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '13px', color: 'var(--color-text-tertiary)' }}>Richtig:</span>
+            <span style={{ fontSize: '15px', fontWeight: '700', color: '#10b981' }}>{game.stats.correct}</span>
           </div>
-          <div>
-            <p className="text-sm text-tertiary" style={{ margin: 0 }}>Falsch</p>
-            <p className="text-2xl font-bold" style={{ color: '#ef4444', margin: 0 }}>{game.stats.incorrect}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '13px', color: 'var(--color-text-tertiary)' }}>Falsch:</span>
+            <span style={{ fontSize: '15px', fontWeight: '700', color: '#ef4444' }}>{game.stats.incorrect}</span>
           </div>
         </div>
-      </Card>
-
-      <AppFooter>
-        <p className="text-sm text-tertiary" style={{ width: '100%', textAlign: 'center', margin: 0 }}>
-          Wische ➡️ richtig | Wische ⬅️ falsch
-        </p>
-      </AppFooter>
-    </AppContent>
+      </div>
+    </div>
   )
 }
