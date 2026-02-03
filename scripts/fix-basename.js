@@ -17,16 +17,23 @@ function walk(dir, callback) {
   });
 }
 
-console.log("🛠️ Fixing basename in generated HTML files for hash-based routing...");
+console.log("🛠️ Fixing basename and manifestPath in generated HTML files...");
 
 walk(buildDir, (filePath) => {
   if (filePath.endsWith(".html")) {
     let content = fs.readFileSync(filePath, "utf-8");
+    let newContent = content;
     
-    // Even with hash routing, we need basename in the context for React Router
-    let newContent = content.replace(
+    // Fix the basename in the injected context
+    newContent = newContent.replace(
       /"basename":"\/"/g,
       '"basename":"/japanese-cards/"'
+    );
+    
+    // Fix the manifestPath for lazy route discovery
+    newContent = newContent.replace(
+      /"manifestPath":"\/__manifest"/g,
+      '"manifestPath":"/japanese-cards/__manifest"'
     );
     
     if (newContent !== content) {

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "react-router dev",
-    "build": "react-router build && node scripts/fix-basename.js",
+    "build": "react-router build && node scripts/fix-basename.js && node scripts/hash-redirect.js",
     "start": "react-router-serve ./build/server/index.js",
     "lint": "eslint .",
     "preview": "vite preview"

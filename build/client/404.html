@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Page Not Found</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Redirect traditional path to hash-based route
+    const routePath = "/404.html";
+    window.location.replace("/japanese-cards/#" + routePath);
+  </script>
+  <title>Redirecting...</title>
 </head>
 <body>
-  <h1>404 - Page Not Found</h1>
-  <p>The page you're looking for doesn't exist.</p>
-  <p><a href="/japanese-cards/">Go back to home</a></p>
+  <p>Redirecting to hash-based routing...</p>
 </body>
 </html>
