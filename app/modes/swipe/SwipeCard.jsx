@@ -1,103 +1,93 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState } from 'react'
 
 export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswer }) {
-  const [swipeState, setSwipeState] = useState(null) // null, swiping, correct, incorrect
-  const [showCorrection, setShowCorrection] = useState(false) // Show correction when wrong
+  const [swipeState, setSwipeState] = useState(null) // null, 'swiping', 'exit'
   const [dragStart, setDragStart] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
-  const [rotateZ, setRotateZ] = useState(0)
-  const [translateX, setTranslateX] = useState(0)
-  const [opacity, setOpacity] = useState(1)
-  const [flashOpacity, setFlashOpacity] = useState(0)
+  const [position, setPosition] = useState({ x: 0, rotation: 0 })
+  const [exitDirection, setExitDirection] = useState(null) // 'left' or 'right'
 
   if (!card) return null
 
   // Handle Touch + Mouse drag
   const handleDragStart = (e) => {
     if (!isActive || swipeState) return
+    e.preventDefault()
     setIsDragging(true)
-    setDragStart(e.touches ? e.touches[0].clientX : e.clientX)
+    setSwipeState('swiping')
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX
+    setDragStart(clientX)
   }
 
   const handleDragMove = (e) => {
-    if (!isActive || swipeState || !isDragging) return
-    const currentX = e.touches ? e.touches[0].clientX : e.clientX
-    const diff = currentX - dragStart
-    const maxDiff = 150
-
-    if (Math.abs(diff) > 20) {
-      setRotateZ((diff / maxDiff) * 15)
-      setTranslateX(diff)
-    }
+    if (!isActive || !isDragging) return
+    e.preventDefault()
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX
+    const diff = clientX - dragStart
+    
+    // Smooth rotation based on drag distance
+    const rotation = (diff / 200) * 12
+    setPosition({ x: diff, rotation: Math.max(-15, Math.min(15, rotation)) })
   }
 
-  const handleDragEnd = async () => {
-    if (!isActive) return
+  const handleDragEnd = () => {
+    if (!isActive || !isDragging) return
     setIsDragging(false)
 
-    const threshold = 80
-    const isSwipedLeft = translateX < -threshold
-    const isSwipedRight = translateX > threshold
+    const threshold = 100
+    const isSwipedLeft = position.x < -threshold
+    const isSwipedRight = position.x > threshold
 
     if (isSwipedLeft || isSwipedRight) {
-      await triggerResponse(isSwipedRight)
+      triggerSwipe(isSwipedRight)
     } else {
-      // Snap back
-      setRotateZ(0)
-      setTranslateX(0)
+      // Snap back with spring animation
+      setSwipeState(null)
+      setPosition({ x: 0, rotation: 0 })
     }
   }
 
   // Handle Button Click
-  const handleButtonClick = async (isCorrect) => {
-    if (!isActive || swipeState) return
-    await triggerResponse(isCorrect)
+  const handleButtonClick = (isCorrect) => {
+    if (!isActive || swipeState === 'exit') return
+    triggerSwipe(isCorrect)
   }
 
-  const triggerResponse = async (userThinkCorrect) => {
-    if (!isActive) return
-    
+  const triggerSwipe = (userThinkCorrect) => {
     const isCorrect = userThinkCorrect === correctAnswer
+    const direction = userThinkCorrect ? 'right' : 'left'
     
-    // Flash animation briefly
-    setSwipeState(isCorrect ? 'correct' : 'incorrect')
-    setFlashOpacity(1)
+    // Set exit state for smooth fly-out
+    setExitDirection(direction)
+    setSwipeState('exit')
     
-    // Buttons disappear immediately
-    setShowCorrection(true)
+    // Animate to exit position
+    setPosition({
+      x: direction === 'right' ? 400 : -400,
+      rotation: direction === 'right' ? 20 : -20
+    })
     
-    // Brief flash (200ms) then fade out card
-    await new Promise(resolve => setTimeout(resolve, 200))
-    
-    // Animate out smoothly (no waiting for correction - that's in Toast now)
-    setTranslateX(userThinkCorrect ? 500 : -500)
-    setRotateZ(userThinkCorrect ? 45 : -45)
-    setOpacity(0)
-    setFlashOpacity(0)
-    
-    // Wait for fade-out animation then call callback
-    await new Promise(resolve => setTimeout(resolve, 600))
-    
-    onSwipe(isCorrect, userThinkCorrect ? 'right' : 'left', card.correctRomaji)
+    // Callback after animation completes
+    setTimeout(() => {
+      onSwipe(isCorrect, direction, card.correctRomaji)
+    }, 350)
   }
 
-  const getBackgroundColor = () => {
-    return 'var(--color-surface)'
+  const getTransitionStyle = () => {
+    if (isDragging) {
+      return 'none' // No transition while dragging for instant response
+    }
+    if (swipeState === 'exit') {
+      return 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.35s ease-out'
+    }
+    // Snap back animation
+    return 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' // Spring effect
   }
 
   const getFlashColor = () => {
-    if (swipeState === 'correct') return 'rgba(16, 185, 129, 0.8)' // Green
-    if (swipeState === 'incorrect') return 'rgba(239, 68, 68, 0.8)' // Red
-    return 'transparent'
-  }
-
-  const getZIndex = () => {
-    return 100 - index
-  }
-
-  const getOffset = () => {
-    // Cards exactly behind each other - no stack visual
-    return 0
+    if (swipeState !== 'exit') return 'transparent'
+    const isCorrect = (exitDirection === 'right') === correctAnswer
+    return isCorrect ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)'
   }
 
   return (
@@ -114,46 +104,77 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
         left: '50%',
         top: '50%',
         transform: `
-          translateX(calc(-50% + ${translateX}px))
+          translateX(calc(-50% + ${position.x}px))
           translateY(-50%)
-          rotateZ(${rotateZ}deg)
+          rotate(${position.rotation}deg)
         `,
+        transformOrigin: 'center center',
         width: '90%',
         maxWidth: '420px',
         height: '580px',
-        backgroundColor: getBackgroundColor(),
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '32px',
         border: '1px solid var(--color-surface-light)',
-        zIndex: getZIndex(),
+        zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
-        transition: isDragging ? 'none' : 'transform 0.05s ease-out, opacity 0.6s ease-out',
-        padding: '0',
+        transition: getTransitionStyle(),
+        willChange: 'transform, opacity',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         color: 'var(--color-text-primary)',
-        opacity: opacity,
+        opacity: swipeState === 'exit' ? 0 : 1,
         userSelect: 'none',
         overflow: 'hidden',
-        boxShadow: '0 24px 48px rgba(0,0,0,0.2)',
+        boxShadow: isDragging 
+          ? '0 32px 64px rgba(0,0,0,0.35)' 
+          : '0 24px 48px rgba(0,0,0,0.2)',
         touchAction: 'none',
       }}
     >
-      {/* Flash overlay */}
-      {swipeState && (
-        <div
-          style={{
+      {/* Flash overlay on exit */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundColor: getFlashColor(),
+          opacity: swipeState === 'exit' ? 1 : 0,
+          transition: 'opacity 0.15s ease',
+          pointerEvents: 'none',
+          zIndex: 10,
+          borderRadius: '32px',
+        }}
+      />
+
+      {/* Swipe Direction Indicators */}
+      {isDragging && (
+        <>
+          <div style={{
             position: 'absolute',
-            inset: 0,
-            backgroundColor: getFlashColor(),
-            opacity: flashOpacity,
-            transition: 'opacity 0.3s ease',
+            left: '20px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            fontSize: '48px',
+            opacity: Math.min(1, Math.max(0, -position.x / 100)),
+            transition: 'opacity 0.1s',
             pointerEvents: 'none',
-            zIndex: 10,
-            borderRadius: '32px',
-          }}
-        />
+          }}>
+            ✗
+          </div>
+          <div style={{
+            position: 'absolute',
+            right: '20px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            fontSize: '48px',
+            opacity: Math.min(1, Math.max(0, position.x / 100)),
+            transition: 'opacity 0.1s',
+            pointerEvents: 'none',
+          }}>
+            ✓
+          </div>
+        </>
       )}
 
       {/* Content Wrapper */}
@@ -232,24 +253,20 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           )}
         </div>
 
-        {/* Bottom Section: Buttons or Correction */}
+        {/* Bottom Section: Buttons */}
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between',
           width: '100%',
           gap: 'var(--spacing-4)',
-          flexDirection: showCorrection ? 'column' : 'row',
-          alignItems: 'center',
           minHeight: '90px',
+          opacity: swipeState === 'exit' ? 0 : 1,
+          transition: 'opacity 0.15s',
         }}>
-          {/* Toast feedback is now in SwipeGame, not here */}
-
-          {/* Show buttons when active (hide during swipe) */}
-          {swipeState === null && (
-            <>
-              {/* Left Button - Falsch */}
+          {/* Left Button - Falsch */}
           <button
             onClick={() => handleButtonClick(false)}
+            disabled={swipeState === 'exit'}
             style={{
               flex: 1,
               display: 'flex',
@@ -263,19 +280,21 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               color: '#ef4444',
               fontSize: '28px',
               fontWeight: 'bold',
-              cursor: 'pointer',
+              cursor: swipeState === 'exit' ? 'default' : 'pointer',
               transition: 'all 0.2s ease',
               lineHeight: 1,
             }}
             onMouseEnter={(e) => {
-              e.target.style.backgroundColor = 'rgba(239, 68, 68, 0.25)'
-              e.target.style.borderColor = 'rgba(239, 68, 68, 0.5)'
-              e.target.style.transform = 'scale(1.05)'
+              if (swipeState !== 'exit') {
+                e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.25)'
+                e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.5)'
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }
             }}
             onMouseLeave={(e) => {
-              e.target.style.backgroundColor = 'rgba(239, 68, 68, 0.15)'
-              e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)'
-              e.target.style.transform = 'scale(1)'
+              e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.15)'
+              e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)'
+              e.currentTarget.style.transform = 'scale(1)'
             }}
           >
             ←
@@ -285,6 +304,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
           {/* Right Button - Richtig */}
           <button
             onClick={() => handleButtonClick(true)}
+            disabled={swipeState === 'exit'}
             style={{
               flex: 1,
               display: 'flex',
@@ -298,42 +318,28 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
               color: '#ec4899',
               fontSize: '28px',
               fontWeight: 'bold',
-              cursor: 'pointer',
+              cursor: swipeState === 'exit' ? 'default' : 'pointer',
               transition: 'all 0.2s ease',
               lineHeight: 1,
             }}
             onMouseEnter={(e) => {
-              e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.3)'
-              e.target.style.borderColor = 'rgba(236, 72, 153, 0.6)'
-              e.target.style.transform = 'scale(1.05)'
+              if (swipeState !== 'exit') {
+                e.currentTarget.style.backgroundColor = 'rgba(236, 72, 153, 0.3)'
+                e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.6)'
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }
             }}
             onMouseLeave={(e) => {
-              e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.2)'
-              e.target.style.borderColor = 'rgba(236, 72, 153, 0.4)'
-              e.target.style.transform = 'scale(1)'
+              e.currentTarget.style.backgroundColor = 'rgba(236, 72, 153, 0.2)'
+              e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.4)'
+              e.currentTarget.style.transform = 'scale(1)'
             }}
           >
             →
             <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginTop: '2px' }}>Richtig</span>
           </button>
-            </>
-          )}
         </div>
       </div>
-
-      {/* CSS Animation */}
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   )
 }
