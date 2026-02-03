@@ -10,8 +10,9 @@ const convertPathToHash = () => {
   // Only convert if we're at /japanese-cards/* but not at /#/*
   if (pathname.startsWith('/japanese-cards/') && !window.location.hash) {
     // Extract the path after /japanese-cards/
-    const relativePath = pathname.replace(/^\/japanese-cards\/?/, '') || '/';
-    const newUrl = `${window.location.protocol}//${window.location.host}/japanese-cards/#${relativePath}${search}`;
+    const relativePath = pathname.replace(/^\/japanese-cards\/?/, '');
+    const hashPath = relativePath ? `/#${relativePath}` : `/#/`;
+    const newUrl = `${window.location.protocol}//${window.location.host}/japanese-cards/${hashPath}${search}`;
     window.history.replaceState(null, '', newUrl);
   }
 };

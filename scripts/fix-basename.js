@@ -17,7 +17,23 @@ function walk(dir, callback) {
   });
 }
 
-// NOTE: With hash-based routing (/# URLs), basename fixes are no longer needed
-// The entry.client.jsx converts traditional paths to hash routes automatically
-// This script is kept for reference but doesn't apply any transformations
-console.log("✨ Hash-based routing enabled - no basename fixes needed!");
+console.log("🛠️ Fixing basename in generated HTML files for hash-based routing...");
+
+walk(buildDir, (filePath) => {
+  if (filePath.endsWith(".html")) {
+    let content = fs.readFileSync(filePath, "utf-8");
+    
+    // Even with hash routing, we need basename in the context for React Router
+    let newContent = content.replace(
+      /"basename":"\/"/g,
+      '"basename":"/japanese-cards/"'
+    );
+    
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent);
+      console.log(`✅ Fixed: ${path.relative(buildDir, filePath)}`);
+    }
+  }
+});
+
+console.log("✨ All HTML files fixed!");
