@@ -127,53 +127,69 @@ export default function SwipeGame({ contentType, groupId, cardCount }) {
             </div>
           </Card>
 
-          {game.stats.mistakes.length > 0 && (
-            <div>
-              <h3 className="text-base font-medium" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-3)' }}>
-                📚 Nochmal üben
-              </h3>
-              <div style={{ 
-                display: 'flex', 
-                flexWrap: 'wrap', 
-                gap: '8px' 
-              }}>
-                {game.stats.mistakes.map((mistake, idx) => {
-                  const character = mistake.realCard?.character || mistake.realCard?.word || '?'
-                  const correctRomaji = mistake.realCard?.romaji
-                  
-                  return (
-                    <div 
-                      key={idx}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '10px 14px',
-                        backgroundColor: 'var(--color-surface)',
-                        borderRadius: '12px',
-                        border: '1px solid var(--color-surface-light)',
-                      }}
-                    >
-                      <span style={{ 
-                        fontSize: '24px', 
-                        fontWeight: '300',
-                        color: 'var(--color-text-primary)',
-                      }}>
-                        {character}
-                      </span>
-                      <span style={{ 
-                        fontSize: '15px', 
-                        color: 'var(--color-primary)',
-                        fontWeight: '500',
-                      }}>
-                        {correctRomaji}
-                      </span>
-                    </div>
-                  )
-                })}
+          {game.stats.mistakes.length > 0 && (() => {
+            // Deduplicate by character
+            const uniqueMistakes = []
+            const seen = new Set()
+            game.stats.mistakes.forEach(mistake => {
+              const char = mistake.realCard?.character || mistake.realCard?.word
+              if (char && !seen.has(char)) {
+                seen.add(char)
+                uniqueMistakes.push(mistake)
+              }
+            })
+            
+            return (
+              <div>
+                <h3 className="text-base font-medium" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-4)' }}>
+                  📚 Nochmal üben
+                </h3>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+                  gap: '12px' 
+                }}>
+                  {uniqueMistakes.map((mistake, idx) => {
+                    const character = mistake.realCard?.character || mistake.realCard?.word || '?'
+                    const correctRomaji = mistake.realCard?.romaji
+                    
+                    return (
+                      <div 
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '20px 16px',
+                          backgroundColor: 'var(--color-surface)',
+                          borderRadius: '16px',
+                          border: '1px solid var(--color-surface-light)',
+                        }}
+                      >
+                        <span style={{ 
+                          fontSize: '48px', 
+                          fontWeight: '300',
+                          color: 'var(--color-text-primary)',
+                          lineHeight: 1,
+                          marginBottom: '8px',
+                        }}>
+                          {character}
+                        </span>
+                        <span style={{ 
+                          fontSize: '16px', 
+                          color: 'var(--color-primary)',
+                          fontWeight: '600',
+                        }}>
+                          {correctRomaji}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            )
+          })()}
         </div>
       </AppContent>
     )
