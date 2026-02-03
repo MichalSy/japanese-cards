@@ -17,7 +17,7 @@ function walk(dir, callback) {
   });
 }
 
-console.log("🛠️ Fixing basename and manifestPath in generated HTML files...");
+console.log("🛠️ Fixing basename, manifestPath, and isSpaMode in generated HTML files...");
 
 walk(buildDir, (filePath) => {
   if (filePath.endsWith(".html")) {
@@ -30,11 +30,15 @@ walk(buildDir, (filePath) => {
       '"basename":"/japanese-cards/"'
     );
     
-    // Fix the manifestPath for lazy route discovery
+    // Fix the manifestPath for hash-based routing
     newContent = newContent.replace(
       /"manifestPath":"\/__manifest"/g,
       '"manifestPath":"/japanese-cards/__manifest"'
     );
+    
+    // Disable SPA mode for prerendered content
+    // (isSpaMode:false means SSR prerendered content is used, not SPA mode)
+    // Keep it false since we have prerendered pages
     
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent);
