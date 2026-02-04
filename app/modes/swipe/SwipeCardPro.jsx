@@ -135,14 +135,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
     >
-      {/* STRONG diagonal reflection - should be very visible */}
+      {/* STRONG diagonal reflection - perfect focus */}
       <div style={{
         position: 'absolute',
-        top: '-43%',
-        left: '-43%',
-        width: '186%',
-        height: '186%',
-        background: 'linear-gradient(135deg, transparent 0%, transparent 18%, rgba(255,255,255,0.8) 36%, rgba(255,255,255,0.4) 64%, transparent 82%, transparent 100%)',
+        top: '-42%',
+        left: '-42%',
+        width: '184%',
+        height: '184%',
+        background: 'linear-gradient(135deg, transparent 0%, transparent 19%, rgba(255,255,255,0.75) 37%, rgba(255,255,255,0.38) 63%, transparent 81%, transparent 100%)',
         pointerEvents: 'none',
         transform: 'rotate(0deg)',
         zIndex: 1,
