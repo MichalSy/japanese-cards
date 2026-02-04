@@ -102,10 +102,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Light glass with subtle warmth - minimal blur
-        background: 'rgba(230, 220, 240, 0.12)',
-        backdropFilter: 'blur(40px) brightness(1.22) contrast(1.02) saturate(0.95)',
-        WebkitBackdropFilter: 'blur(40px) brightness(1.22) contrast(1.02) saturate(0.95)',
+        // Frosted glass - semi-opaque dark for true glass effect
+        background: 'rgba(30, 40, 60, 0.45)',
+        backdropFilter: 'blur(35px) brightness(1.15)',
+        WebkitBackdropFilter: 'blur(35px) brightness(1.15)',
         borderRadius: '28px',
         // Fine pink border
         border: index === 0 ? '2px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.15)',
@@ -135,14 +135,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
     >
-      {/* STRONG diagonal reflection - perfect focus */}
+      {/* Subtle diagonal reflection for frosted glass */}
       <div style={{
         position: 'absolute',
-        top: '-42%',
-        left: '-42%',
-        width: '184%',
-        height: '184%',
-        background: 'linear-gradient(135deg, transparent 0%, transparent 19%, rgba(255,255,255,0.75) 37%, rgba(255,255,255,0.38) 63%, transparent 81%, transparent 100%)',
+        top: '-40%',
+        left: '-40%',
+        width: '180%',
+        height: '180%',
+        background: 'linear-gradient(135deg, transparent 0%, transparent 22%, rgba(255,255,255,0.65) 40%, rgba(255,255,255,0.3) 60%, transparent 78%, transparent 100%)',
         pointerEvents: 'none',
         transform: 'rotate(0deg)',
         zIndex: 1,
