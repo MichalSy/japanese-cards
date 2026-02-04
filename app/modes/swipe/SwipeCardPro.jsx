@@ -102,10 +102,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Ultra-light glass - minimal blur, maximum reflection visible
-        background: 'rgba(220, 220, 240, 0.1)',
-        backdropFilter: 'blur(35px) brightness(1.2) contrast(1.05)',
-        WebkitBackdropFilter: 'blur(35px) brightness(1.2) contrast(1.05)',
+        // Light glass with subtle warmth - minimal blur
+        background: 'rgba(230, 220, 240, 0.12)',
+        backdropFilter: 'blur(40px) brightness(1.22) contrast(1.02) saturate(0.95)',
+        WebkitBackdropFilter: 'blur(40px) brightness(1.22) contrast(1.02) saturate(0.95)',
         borderRadius: '28px',
         // Fine pink border
         border: index === 0 ? '2px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.15)',
