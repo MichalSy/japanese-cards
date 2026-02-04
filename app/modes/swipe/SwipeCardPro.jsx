@@ -103,24 +103,16 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Frosted glass - darker semi-opaque like reference
-        background: 'rgba(30, 35, 55, 0.6)',
-        backdropFilter: 'blur(35px) brightness(1.15)',
-        WebkitBackdropFilter: 'blur(35px) brightness(1.15)',
-        borderRadius: '28px',
-        // Fine pink border
-        border: index === 0 ? '2px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.15)',
+        // Apple glassmorphism: very light, subtle transparency with strong blur
+        background: 'rgba(255, 255, 255, 0.15)',
+        backdropFilter: 'blur(30px) saturate(1.3)',
+        WebkitBackdropFilter: 'blur(30px) saturate(1.3)',
+        borderRadius: '24px',
+        // Subtle border - barely visible
+        border: '1px solid rgba(255, 255, 255, 0.25)',
         boxShadow: index === 0 
-          ? `
-            0 0 3px rgba(236, 72, 153, 1),
-            0 0 12px rgba(236, 72, 153, 0.95),
-            0 0 25px rgba(236, 72, 153, 0.8),
-            0 0 50px rgba(236, 72, 153, 0.5),
-            0 0 90px rgba(236, 72, 153, 0.25),
-            inset 0 0 25px rgba(0, 0, 0, 0.06),
-            inset 0 0 120px rgba(255, 255, 255, 0.12)
-          `
-          : '0 8px 32px rgba(0,0,0,0.3)',
+          ? 'inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 20px 40px rgba(0, 0, 0, 0.15)'
+          : '0 8px 32px rgba(0, 0, 0, 0.1)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
@@ -136,77 +128,64 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
     >
-      {/* Subtle diagonal reflection for frosted glass */}
-      <div style={{
-        position: 'absolute',
-        top: '-40%',
-        left: '-40%',
-        width: '180%',
-        height: '180%',
-        background: 'linear-gradient(135deg, transparent 0%, transparent 22%, rgba(255,255,255,0.65) 40%, rgba(255,255,255,0.3) 60%, transparent 78%, transparent 100%)',
-        pointerEvents: 'none',
-        transform: 'rotate(0deg)',
-        zIndex: 1,
-      }} />
-
-      {/* Top bright edge highlight */}
+      {/* Subtle top rim light - Apple glass aesthetic */}
       <div style={{
         position: 'absolute',
         top: 0,
-        left: '10%',
-        right: '10%',
-        height: '2px',
-        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
         pointerEvents: 'none',
-        zIndex: 2,
+        zIndex: 1,
       }} />
 
       {/* Swipe feedback left */}
       <div style={{
         position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
-        background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
+        background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
         pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
         display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '24px',
-        zIndex: 3,
+        zIndex: 1,
       }}>
-        <span style={{ fontSize: '48px', opacity: isSwipingLeft ? swipeProgress : 0, color: '#ef4444' }}>✗</span>
+        <span style={{ fontSize: '44px', opacity: isSwipingLeft ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✗</span>
       </div>
 
       {/* Swipe feedback right */}
       <div style={{
         position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%',
-        background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.4 : 0}) 0%, transparent 100%)`,
+        background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
         pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
         display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px',
-        zIndex: 3,
+        zIndex: 1,
       }}>
-        <span style={{ fontSize: '48px', opacity: isSwipingRight ? swipeProgress : 0, color: '#10b981' }}>✓</span>
+        <span style={{ fontSize: '44px', opacity: isSwipingRight ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✓</span>
       </div>
 
-      {/* Content wrapper - positioned above reflection */}
-      <div style={{ position: 'relative', zIndex: 10, textAlign: 'center' }}>
+      {/* Content wrapper */}
+      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
         {/* Character */}
         <div style={{ 
           fontSize: 'clamp(100px, 28vw, 170px)', 
-          fontWeight: '200', 
+          fontWeight: '300', 
           lineHeight: 1, 
           color: 'white', 
           textAlign: 'center', 
           marginBottom: '24px',
-          textShadow: '0 2px 12px rgba(0,0,0,0.4)',
+          textShadow: '0 2px 8px rgba(0,0,0,0.2)',
         }}>
           {character}
         </div>
 
-        {/* Romaji - very large and bright */}
+        {/* Romaji - clean, no glow */}
         {(card.shownRomaji || card.romaji) && (
           <div style={{ 
-            fontSize: '44px', 
-            color: '#ff1493', 
-            fontWeight: '700', 
-            letterSpacing: '10px', 
+            fontSize: '40px', 
+            color: 'rgba(255, 255, 255, 0.95)', 
+            fontWeight: '600', 
+            letterSpacing: '2px', 
             textTransform: 'lowercase',
-            textShadow: '0 0 40px rgba(255, 20, 147, 0.7), 0 2px 8px rgba(0,0,0,0.4)',
+            textShadow: '0 1px 4px rgba(0,0,0,0.3)',
           }}>
             {card.shownRomaji || card.romaji}
           </div>
