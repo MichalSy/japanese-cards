@@ -79,11 +79,12 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const isSwipingRight = position.x > 0
   const isSwipingLeft = position.x < 0
 
-  // Stack styling - make stacked cards more visible with proper blur
-  const stackOffset = index * 5
-  const stackScale = 1 - (index * 0.015)
-  const stackOpacity = index === 0 ? 1 : Math.max(0.55, 0.8 - (index * 0.1))
-  const stackBlur = index === 0 ? 0 : index * 1.5
+  // Stack styling - side-by-side offset like reference design
+  const stackXOffset = index === 0 ? 0 : (index % 2 === 0 ? 20 : -20) // Left/right offset
+  const stackYOffset = index * 3
+  const stackScale = 1 - (index * 0.01)
+  const stackOpacity = index === 0 ? 1 : Math.max(0.45, 0.7 - (index * 0.08))
+  const stackBlur = index === 0 ? 0 : index * 0.8
 
   return (
     <div
@@ -98,12 +99,12 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'absolute',
         left: '50%',
         top: '50%',
-        transform: `translateX(calc(-50% + ${position.x}px)) translateY(calc(-50% + ${stackOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
+        transform: `translateX(calc(-50% + ${position.x}px + ${stackXOffset}px)) translateY(calc(-50% + ${stackYOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Frosted glass - semi-opaque dark for true glass effect
-        background: 'rgba(30, 40, 60, 0.45)',
+        // Frosted glass - darker semi-opaque like reference
+        background: 'rgba(30, 35, 55, 0.6)',
         backdropFilter: 'blur(35px) brightness(1.15)',
         WebkitBackdropFilter: 'blur(35px) brightness(1.15)',
         borderRadius: '28px',
