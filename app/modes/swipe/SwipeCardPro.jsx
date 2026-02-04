@@ -102,22 +102,22 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         width: 'calc(100% - 48px)',
         maxWidth: '320px',
         aspectRatio: '3/4',
-        // Light frosted glass - reduced blur for true glass look
-        background: 'rgba(200, 200, 220, 0.15)',
-        backdropFilter: 'blur(45px) brightness(1.25) saturate(0.85) opacity(0.95)',
-        WebkitBackdropFilter: 'blur(45px) brightness(1.25) saturate(0.85) opacity(0.95)',
+        // Ultra-light glass - minimal blur, maximum reflection visible
+        background: 'rgba(220, 220, 240, 0.1)',
+        backdropFilter: 'blur(35px) brightness(1.2) contrast(1.05)',
+        WebkitBackdropFilter: 'blur(35px) brightness(1.2) contrast(1.05)',
         borderRadius: '28px',
         // Fine pink border
         border: index === 0 ? '2px solid rgba(236, 72, 153, 0.95)' : '1px solid rgba(100, 116, 139, 0.15)',
         boxShadow: index === 0 
           ? `
             0 0 3px rgba(236, 72, 153, 1),
-            0 0 10px rgba(236, 72, 153, 0.92),
-            0 0 20px rgba(236, 72, 153, 0.75),
-            0 0 40px rgba(236, 72, 153, 0.45),
-            0 0 70px rgba(236, 72, 153, 0.2),
-            inset 0 0 30px rgba(0, 0, 0, 0.08),
-            inset 0 0 100px rgba(255, 255, 255, 0.1)
+            0 0 12px rgba(236, 72, 153, 0.95),
+            0 0 25px rgba(236, 72, 153, 0.8),
+            0 0 50px rgba(236, 72, 153, 0.5),
+            0 0 90px rgba(236, 72, 153, 0.25),
+            inset 0 0 25px rgba(0, 0, 0, 0.06),
+            inset 0 0 120px rgba(255, 255, 255, 0.12)
           `
           : '0 8px 32px rgba(0,0,0,0.3)',
         zIndex: 100 - index,
@@ -135,14 +135,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
     >
-      {/* Strong diagonal glass reflection - spotlight effect */}
+      {/* STRONG diagonal reflection - should be very visible */}
       <div style={{
         position: 'absolute',
-        top: '-45%',
-        left: '-45%',
-        width: '190%',
-        height: '190%',
-        background: 'linear-gradient(135deg, transparent 0%, transparent 20%, rgba(255,255,255,0.7) 38%, rgba(255,255,255,0.35) 62%, transparent 80%, transparent 100%)',
+        top: '-43%',
+        left: '-43%',
+        width: '186%',
+        height: '186%',
+        background: 'linear-gradient(135deg, transparent 0%, transparent 18%, rgba(255,255,255,0.8) 36%, rgba(255,255,255,0.4) 64%, transparent 82%, transparent 100%)',
         pointerEvents: 'none',
         transform: 'rotate(0deg)',
         zIndex: 1,
