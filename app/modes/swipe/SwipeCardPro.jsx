@@ -128,17 +128,18 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
     >
-      {/* Subtle top rim light - Apple glass aesthetic */}
+      {/* Large glass reflection stripe - creates the real glass effect */}
       <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+        height: '50%',
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.05) 50%, transparent 100%)',
         pointerEvents: 'none',
         zIndex: 1,
-      }} />
+        borderRadius: '24px 24px 0 0',
+      }}></div>
 
       {/* Swipe feedback left */}
       <div style={{
