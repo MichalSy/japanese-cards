@@ -132,88 +132,69 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       </div>
 
       {/* Bottom Section - fixed at bottom */}
-      <div style={{ flexShrink: 0, padding: '12px 16px', paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))' }}>
+      <div style={{ flexShrink: 0, padding: '16px 20px', paddingBottom: 'calc(16px + env(safe-area-inset-bottom, 0px))' }}>
         {/* Progress */}
-        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-          <span style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255,255,255,0.6)' }}>{game.currentIndex + 1}/{game.totalCards}</span>
+        <div style={{ textAlign: 'center', marginBottom: '12px' }}>
+          <span style={{ fontSize: '13px', fontWeight: '500', color: 'rgba(255,255,255,0.6)' }}>{game.currentIndex + 1}/{game.totalCards}</span>
         </div>
         
-        <div style={{ height: '5px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden', marginBottom: '16px' }}>
-          <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '3px', transition: 'width 0.3s' }} />
+        <div style={{ height: '4px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden', marginBottom: '20px' }}>
+          <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '2px', transition: 'width 0.3s' }} />
         </div>
 
-        {/* Buttons - matching design exactly */}
-        <div style={{ display: 'flex', gap: '12px' }}>
+        {/* Buttons - Large circular with icons only */}
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           {/* Falsch Button */}
           <button
             onClick={() => handleButtonClick(false)}
             style={{
-              flex: 1,
-              padding: '16px 24px',
-              borderRadius: '100px',
+              width: '68px',
+              height: '68px',
+              borderRadius: '50%',
               background: 'linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%)',
               backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(239, 68, 68, 0.7)',
+              border: '2.5px solid rgba(239, 68, 68, 0.8)',
               color: '#f87171',
-              fontSize: '17px',
-              fontWeight: '600',
+              fontSize: '32px',
+              fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '12px',
               boxShadow: '0 0 25px rgba(239, 68, 68, 0.3), 0 0 50px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255,255,255,0.05)',
+              transition: 'all 0.2s',
+              flexShrink: 0,
             }}
           >
-            <span style={{ 
-              width: '28px', 
-              height: '28px', 
-              borderRadius: '50%', 
-              backgroundColor: 'rgba(239, 68, 68, 0.25)',
-              border: '2px solid rgba(239, 68, 68, 0.6)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '15px',
-              fontWeight: 'bold',
-            }}>✗</span>
-            <span>Falsch</span>
+            ✗
           </button>
+
+          {/* Flex spacer */}
+          <div style={{ flex: 1 }} />
 
           {/* Richtig Button */}
           <button
             onClick={() => handleButtonClick(true)}
             style={{
-              flex: 1,
-              padding: '16px 24px',
-              borderRadius: '100px',
+              width: '68px',
+              height: '68px',
+              borderRadius: '50%',
               background: 'linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%)',
               backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(16, 185, 129, 0.7)',
+              border: '2.5px solid rgba(16, 185, 129, 0.8)',
               color: '#34d399',
-              fontSize: '17px',
-              fontWeight: '600',
+              fontSize: '32px',
+              fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '12px',
               boxShadow: '0 0 25px rgba(16, 185, 129, 0.3), 0 0 50px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255,255,255,0.05)',
+              transition: 'all 0.2s',
+              flexShrink: 0,
             }}
           >
-            <span style={{ 
-              width: '28px', 
-              height: '28px', 
-              borderRadius: '50%', 
-              backgroundColor: 'rgba(16, 185, 129, 0.25)',
-              border: '2px solid rgba(16, 185, 129, 0.6)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '15px',
-              fontWeight: 'bold',
-            }}>✓</span>
-            <span>Richtig</span>
+            ✓
           </button>
         </div>
       </div>

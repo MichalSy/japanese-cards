@@ -9,7 +9,7 @@ export default function ProHeaderBar({ title }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      padding: '8px 12px',
+      padding: '6px 10px',
       background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
@@ -17,6 +17,7 @@ export default function ProHeaderBar({ title }) {
       margin: '12px 16px',
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
       border: '1.5px solid rgba(255, 255, 255, 0.2)',
+      height: '44px',
     }}>
       {/* Back Button */}
       <button
@@ -45,13 +46,13 @@ export default function ProHeaderBar({ title }) {
 
       {/* Title */}
       <span style={{
-        flex: 1,
-        fontSize: '18px',
+        fontSize: '16px',
         fontWeight: '600',
         color: 'white',
-        textAlign: 'center',
         textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
         letterSpacing: '0.5px',
+        marginLeft: '8px',
+        marginRight: 'auto',
       }}>
         {title}
       </span>
@@ -75,21 +76,21 @@ export default function ProHeaderBar({ title }) {
           display: 'flex',
           alignItems: 'center',
           backgroundColor: 'rgba(255,255,255,0.05)',
-          borderRadius: '20px',
-          padding: '4px',
+          borderRadius: '18px',
+          padding: '3px',
           border: '1px solid rgba(255,255,255,0.1)',
-          gap: '2px',
+          gap: '1px',
         }}>
           {/* DE Button */}
           <button
             onClick={() => setLanguage('de')}
             style={{
-              fontSize: '13px',
+              fontSize: '11px',
               fontWeight: '700',
               color: language === 'de' ? 'white' : 'rgba(255,255,255,0.5)',
               cursor: 'pointer',
-              padding: '6px 14px',
-              borderRadius: '16px',
+              padding: '4px 10px',
+              borderRadius: '14px',
               backgroundColor: language === 'de' ? '#ec4899' : 'transparent',
               transition: 'all 0.2s ease-out',
               border: 'none',
@@ -103,11 +104,11 @@ export default function ProHeaderBar({ title }) {
           <button
             onClick={() => setLanguage('en')}
             style={{
-              fontSize: '13px',
+              fontSize: '11px',
               fontWeight: '700',
               cursor: 'pointer',
-              padding: '6px 14px',
-              borderRadius: '16px',
+              padding: '4px 10px',
+              borderRadius: '14px',
               backgroundColor: language === 'en' ? '#ec4899' : 'transparent',
               color: language === 'en' ? 'white' : 'rgba(255,255,255,0.5)',
               transition: 'all 0.2s ease-out',
