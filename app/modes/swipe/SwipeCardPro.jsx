@@ -87,6 +87,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const stackBlur = index === 0 ? 0 : index * 0.8
 
   return (
+    // OUTER CONTAINER: Gestures + Transforms + Neon Border + Padding Gap
     <div
       onTouchStart={handleDragStart}
       onTouchMove={handleDragMove}
@@ -97,7 +98,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       onMouseLeave={isDragging ? handleDragEnd : undefined}
       style={{
         position: 'absolute',
-        // Centering logic: use CSS transform to center in container
+        // Centering logic
         left: '50%',
         top: '50%',
         transform: `translate(-50%, -50%) translate(${position.x}px, ${stackYOffset}px) rotate(${position.rotation}deg) scale(${stackScale})`,
@@ -106,101 +107,123 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         maxWidth: '276px',
         aspectRatio: '9/12',
         
-        // --- Neon / Gap Design ---
-        background: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(30px) saturate(1.3)',
-        WebkitBackdropFilter: 'blur(30px) saturate(1.3)',
-        borderRadius: '24px',
+        // --- 1. THE OUTER NEON BORDER + GAP ---
+        // This container is TRANSPARENT but has the neon border and padding
+        backgroundColor: 'transparent',
+        padding: '6px', // THE TRANSPARENT GAP
+        borderRadius: '34px', // Outer radius (inner + gap)
         
-        // Neon Border with Gap via Box Shadow
-        // The first shadow (0 0 0 4px transparent) creates the gap
-        // The second shadow (0 0 0 6px color) draws the line outside the gap
+        // The Neon Border (simulated with box-shadow on the transparent outer box? 
+        // No, box-shadow on transparent box works if we use `inset` or just normal shadow.
+        // BUT better: use border + box-shadow for glow.
+        // Wait, if bg is transparent, border shows.
+        border: '2px solid rgba(236, 72, 153, 1)', // Sharp Neon Line
         boxShadow: `
-          0 0 0 4px rgba(0,0,0,0),         /* Transparent Gap (4px) */
-          0 0 0 6px rgba(236, 72, 153, 1), /* Sharp Neon Line (2px thick, starts at 4px) */
-          0 0 20px 6px rgba(236, 72, 153, 0.6), /* Glow radiating from the line */
-          0 10px 40px rgba(0, 0, 0, 0.3)   /* Drop Shadow for depth */
+          0 0 15px rgba(236, 72, 153, 0.8), /* Inner/Outer Glow around the line */
+          0 0 40px rgba(236, 72, 153, 0.4), /* Outer Glow */
+          0 10px 40px rgba(0, 0, 0, 0.3)    /* Drop Shadow for depth */
         `,
-        border: '1px solid rgba(255,255,255,0.1)', // Very subtle inner edge
 
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
         willChange: 'transform, opacity',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
         opacity: swipeState === 'exit' ? 0 : stackOpacity,
         userSelect: 'none',
         overflow: 'visible', // Allow glow to spill out
         touchAction: 'none',
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
+        boxSizing: 'border-box', // Padding included in width/height? 
+        // Actually, if we add padding, we might change size. 
+        // Let's keep box-sizing border-box so the card size stays consistent.
       }}
     >
-      {/* Large glass reflection stripe - creates the real glass effect */}
+      {/* --- 2. THE INNER CARD CONTENT --- */}
+      {/* This fills the padded area. The gap is the padding of the parent. */}
       <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '50%',
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.05) 50%, transparent 100%)',
-        pointerEvents: 'none',
-        zIndex: 1,
-        borderRadius: '24px 24px 0 0',
-      }}></div>
-
-      {/* Swipe feedback left */}
-      <div style={{
-        position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
-        background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
-        pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
-        display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '24px',
-        zIndex: 1,
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        borderRadius: '26px', // Inner radius matches outer-gap
+        
+        // Glassy Content Background
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(30px) saturate(1.3)',
+        WebkitBackdropFilter: 'blur(30px) saturate(1.3)',
+        
+        // Very subtle inner edge for the glass itself
+        border: '1px solid rgba(255,255,255,0.1)', 
+        
+        overflow: 'hidden', // Clip content (stripes etc) to inner radius
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}>
-        <span style={{ fontSize: '44px', opacity: isSwipingLeft ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✗</span>
-      </div>
 
-      {/* Swipe feedback right */}
-      <div style={{
-        position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%',
-        background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
-        pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
-        display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px',
-        zIndex: 1,
-      }}>
-        <span style={{ fontSize: '44px', opacity: isSwipingRight ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✓</span>
-      </div>
+        {/* Large glass reflection stripe */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '50%',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.05) 50%, transparent 100%)',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }}></div>
 
-      {/* Content wrapper */}
-      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-        {/* Character */}
-        <div style={{ 
-          fontSize: 'clamp(100px, 28vw, 170px)', 
-          fontWeight: '300', 
-          lineHeight: 1, 
-          color: 'white', 
-          textAlign: 'center', 
-          marginBottom: '24px',
-          textShadow: '0 2px 8px rgba(0,0,0,0.2)',
+        {/* Swipe feedback left */}
+        <div style={{
+          position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
+          background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
+          pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
+          display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '24px',
+          zIndex: 1,
         }}>
-          {character}
+          <span style={{ fontSize: '44px', opacity: isSwipingLeft ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✗</span>
         </div>
 
-        {/* Romaji - clean, no glow */}
-        {(card.shownRomaji || card.romaji) && (
+        {/* Swipe feedback right */}
+        <div style={{
+          position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%',
+          background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
+          pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
+          display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px',
+          zIndex: 1,
+        }}>
+          <span style={{ fontSize: '44px', opacity: isSwipingRight ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✓</span>
+        </div>
+
+        {/* Content wrapper */}
+        <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+          {/* Character */}
           <div style={{ 
-            fontSize: '40px', 
-            color: 'rgba(255, 255, 255, 0.95)', 
-            fontWeight: '600', 
-            letterSpacing: '2px', 
-            textTransform: 'lowercase',
-            textShadow: '0 1px 4px rgba(0,0,0,0.3)',
+            fontSize: 'clamp(100px, 28vw, 170px)', 
+            fontWeight: '300', 
+            lineHeight: 1, 
+            color: 'white', 
+            textAlign: 'center', 
+            marginBottom: '24px',
+            textShadow: '0 2px 8px rgba(0,0,0,0.2)',
           }}>
-            {card.shownRomaji || card.romaji}
+            {character}
           </div>
-        )}
+
+          {/* Romaji */}
+          {(card.shownRomaji || card.romaji) && (
+            <div style={{ 
+              fontSize: '40px', 
+              color: 'rgba(255, 255, 255, 0.95)', 
+              fontWeight: '600', 
+              letterSpacing: '2px', 
+              textTransform: 'lowercase',
+              textShadow: '0 1px 4px rgba(0,0,0,0.3)',
+            }}>
+              {card.shownRomaji || card.romaji}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
