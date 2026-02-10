@@ -62,13 +62,20 @@ export default function ProHeaderBar({ title }) {
         {title}
       </span>
 
-      {/* Language Toggle */}
+      {/* Language Toggle + Globe */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         flexShrink: 0,
         zIndex: 1,
+        gap: '6px', // Space between globe and toggle
       }}>
+        {/* Globe Icon */}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+
         {/* Language Toggle Container */}
         <div style={{
           display: 'flex',
