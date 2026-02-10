@@ -116,24 +116,6 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
 
       {/* Card Area - flex grow but limited */}
       <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden', maxHeight: '65vh' }}>
-        {/* Magenta border frame - follows the active card */}
-        {game.cardStack[0] && (
-          <div style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'calc(100% - 48px)',
-            maxWidth: '264px',
-            aspectRatio: '9/12',
-            border: '2.5px solid rgba(236, 72, 153, 0.9)',
-            borderRadius: '24px',
-            boxShadow: '0 0 30px rgba(236, 72, 153, 0.6), 0 0 50px rgba(236, 72, 153, 0.3)',
-            pointerEvents: 'none',
-            zIndex: 98,
-          }} />
-        )}
-        
         {game.cardStack.map((card, idx) => (
           <SwipeCardPro
             key={`${game.currentIndex + idx}`}
