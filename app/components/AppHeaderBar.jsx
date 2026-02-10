@@ -8,14 +8,15 @@ export default function AppHeaderBar({ title }) {
 
   return (
     <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
+      display: 'flex',
       alignItems: 'center',
+      justifyContent: 'space-between',
       width: '100%',
-      gap: 'var(--spacing-2)',
+      padding: '16px', // Equal padding top, left, bottom (and right)
+      boxSizing: 'border-box',
     }}>
-      {/* Left - Back Button */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', padding: '5px 0' }}>
+      {/* Left Group: Back Button + Title */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         {!isHome && (
           <button
             onClick={() => navigate(-1)}
@@ -23,17 +24,17 @@ export default function AppHeaderBar({ title }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '44px',
-              height: '44px',
+              width: '40px',
+              height: '40px',
               color: 'var(--color-text-primary)',
-              fontSize: '27px',
+              fontSize: '24px',
               cursor: 'pointer',
               border: 'none',
               borderRadius: '50%',
-              transition: 'all 0.2s',
+              transition: 'background-color 0.2s',
               backgroundColor: 'transparent',
-              lineHeight: 1,
-              padding: '0 0 5px 0',
+              padding: 0, // Reset padding for perfect centering
+              margin: 0,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = 'var(--color-surface-light)'
@@ -45,19 +46,19 @@ export default function AppHeaderBar({ title }) {
             ←
           </button>
         )}
+
+        <h1 className="text-lg font-bold" style={{
+          color: 'var(--color-text-primary)',
+          margin: 0,
+          textAlign: 'left',
+          lineHeight: 1,
+        }}>
+          {title || 'Japanese Cards'}
+        </h1>
       </div>
 
-      {/* Center - Title */}
-      <h1 className="text-lg font-bold" style={{
-        color: 'var(--color-text-primary)',
-        margin: 0,
-        textAlign: 'left',
-      }}>
-        {title || 'Japanese Cards'}
-      </h1>
-
       {/* Right - Language Toggle */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <LanguageToggle />
       </div>
     </div>
