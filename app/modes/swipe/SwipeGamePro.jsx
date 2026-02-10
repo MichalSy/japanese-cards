@@ -99,9 +99,23 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         <ProHeaderBar title="Swipe Game" />
       </div>
 
-      {/* Question */}
-      <div style={{ flexShrink: 0, textAlign: 'center', paddingTop: '12px', paddingBottom: '20px' }}>
-        <span style={{ fontSize: '18px', fontWeight: '500', color: 'white' }}>Ist die Kombination richtig?</span>
+      {/* Question - Vertically centered between header and cards */}
+      <div style={{ 
+        flex: '0 0 auto', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        padding: '2vh 0', // Responsive vertical padding
+        minHeight: '60px',
+      }}>
+        <span style={{ 
+          fontSize: '18px', 
+          fontWeight: '500', 
+          color: 'rgba(255, 255, 255, 0.9)',
+          textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+        }}>
+          Ist die Kombination richtig?
+        </span>
       </div>
 
       {/* Toast */}
