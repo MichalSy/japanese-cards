@@ -166,8 +166,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Modern gray gradient (top light → bottom darker)
-        background: 'linear-gradient(135deg, rgba(210, 210, 220, 0.75) 0%, rgba(170, 175, 195, 0.85) 100%)',
+        // Modern gray gradient (top light → bottom darker) - STRONG contrast
+        background: 'linear-gradient(135deg, rgba(230, 230, 240, 0.8) 0%, rgba(140, 150, 170, 0.95) 100%)',
         
         // Minimal inner glow - REDUCED
         boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2)',
