@@ -9,7 +9,8 @@ export default function ProHeaderBar({ title }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      padding: '6px 10px',
+      justifyContent: 'space-between',
+      padding: '8px 12px',
       background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
@@ -18,6 +19,7 @@ export default function ProHeaderBar({ title }) {
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
       border: '1.5px solid rgba(255, 255, 255, 0.2)',
       height: '44px',
+      gap: '8px',
     }}>
       {/* Back Button */}
       <button
@@ -51,8 +53,8 @@ export default function ProHeaderBar({ title }) {
         color: 'white',
         textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
         letterSpacing: '0.5px',
-        marginLeft: '8px',
-        marginRight: 'auto',
+        flex: 1,
+        textAlign: 'center',
       }}>
         {title}
       </span>
@@ -61,9 +63,8 @@ export default function ProHeaderBar({ title }) {
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: '6px',
         flexShrink: 0,
-        marginLeft: '8px',
       }}>
         {/* Globe */}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5">

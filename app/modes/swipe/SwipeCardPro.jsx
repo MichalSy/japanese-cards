@@ -101,19 +101,16 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         top: '50%',
         transform: `translateX(calc(-50% + ${position.x}px + ${stackXOffset}px)) translateY(calc(-50% + ${stackYOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
         width: 'calc(100% - 48px)',
-        maxWidth: '280px',
+        maxWidth: '264px',
         aspectRatio: '9/12',
         // Apple glassmorphism: very light, subtle transparency with strong blur
         background: 'rgba(255, 255, 255, 0.15)',
         backdropFilter: 'blur(30px) saturate(1.3)',
         WebkitBackdropFilter: 'blur(30px) saturate(1.3)',
         borderRadius: '24px',
-        // Red border with glow
-        border: '3px solid rgba(239, 68, 68, 0.9)',
-        padding: '6px',
-        boxShadow: index === 0 
-          ? 'inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 0 20px rgba(239, 68, 68, 0.4), 0 20px 40px rgba(0, 0, 0, 0.15)'
-          : '0 0 15px rgba(239, 68, 68, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1)',
+        // Subtle border only
+        border: '1px solid rgba(255, 255, 255, 0.25)',
+        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 20px 40px rgba(0, 0, 0, 0.15)',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
