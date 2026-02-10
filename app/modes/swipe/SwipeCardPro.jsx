@@ -87,18 +87,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const stackBlur = index === 0 ? 0 : index * 0.8
 
   return (
-    <>
-      {/* SVG Filters for Frosted Glass - Hidden but Referenced */}
-      <svg width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }}>
-        <defs>
-          <filter id="cardFrostedGlassFilter">
-            {/* Simple gaussian blur for frosted effect */}
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* OUTER CONTAINER: Gestures + Transforms + Neon Border + Padding Gap */}
+    // OUTER CONTAINER: Gestures + Transforms + Neon Border + Padding Gap
     <div
       onTouchStart={handleDragStart}
       onTouchMove={handleDragMove}
@@ -157,18 +146,16 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Light gray base with gradient (subtle, readable)
-        background: 'linear-gradient(180deg, rgba(220, 220, 230, 0.6) 0%, rgba(160, 170, 190, 0.7) 100%)',
-        
-        // CSS Backdrop blur for glassomorphism
-        backdropFilter: 'blur(40px) saturate(1.5)',
-        WebkitBackdropFilter: 'blur(40px) saturate(1.5)',
+        // SVG Gradient Background - Diagonal Light to Dark Gray
+        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 300 400%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cdefs%3E%3ClinearGradient id=%27cardGradient%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23D8D8E8;stop-opacity:1%27 /%3E%3Cstop offset=%2750%25%27 style=%27stop-color:%23C0C0D8;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23808098;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3ClinearGradient id=%27shimmer%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FFFFFF;stop-opacity:0.25%27 /%3E%3Cstop offset=%2730%25%27 style=%27stop-color:%23FFFFFF;stop-opacity:0.35%27 /%3E%3Cstop offset=%2770%25%27 style=%27stop-color:%23FFFFFF;stop-opacity:0.15%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FFFFFF;stop-opacity:0%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23cardGradient%29%27 /%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23shimmer%29%27 /%3E%3C/svg%3E")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         
         // Subtle inner glow
-        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.25)',
+        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.2)',
         
         // Subtle inner edge
-        border: '1px solid rgba(255,255,255,0.2)',
+        border: '1px solid rgba(255,255,255,0.15)',
         
         overflow: 'hidden', // Clip content (stripes etc) to inner radius
         display: 'flex',
@@ -242,6 +229,5 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         </div>
       </div>
     </div>
-    </>
   )
 }
