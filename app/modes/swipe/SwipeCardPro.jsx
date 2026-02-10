@@ -97,21 +97,32 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       onMouseLeave={isDragging ? handleDragEnd : undefined}
       style={{
         position: 'absolute',
+        // Centering logic: use CSS transform to center in container
         left: '50%',
         top: '50%',
-        transform: `translateX(calc(-50% + ${position.x}px + ${stackXOffset}px)) translateY(calc(-50% + ${stackYOffset}px)) rotate(${position.rotation}deg) scale(${stackScale})`,
+        transform: `translate(-50%, -50%) translate(${position.x}px, ${stackYOffset}px) rotate(${position.rotation}deg) scale(${stackScale})`,
+        
         width: 'calc(100% - 48px)',
         maxWidth: '276px',
         aspectRatio: '9/12',
-        // Apple glassmorphism: very light, subtle transparency with strong blur
-        background: 'rgba(255, 255, 255, 0.15)',
+        
+        // --- Neon / Gap Design ---
+        background: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(30px) saturate(1.3)',
         WebkitBackdropFilter: 'blur(30px) saturate(1.3)',
         borderRadius: '24px',
-        // Magenta border with glow + padding for gap
-        border: '2.5px solid rgba(236, 72, 153, 0.9)',
-        boxShadow: '0 0 30px rgba(236, 72, 153, 0.6), 0 0 50px rgba(236, 72, 153, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 20px 40px rgba(0, 0, 0, 0.15)',
-        padding: '4px',
+        
+        // Neon Border with Gap via Box Shadow
+        // 1. Transparent gap (simulated by not having a border here, but using outline/shadow)
+        // 2. Sharp Neon Line + Glow
+        boxShadow: `
+          0 0 0 4px rgba(0,0,0,0),         /* Transparent Gap */
+          0 0 0 6px rgba(236, 72, 153, 1), /* Sharp Neon Line (2px thick) */
+          0 0 15px 6px rgba(236, 72, 153, 0.6), /* Inner/Outer Glow around the line */
+          0 10px 40px rgba(0, 0, 0, 0.3)   /* Drop Shadow for depth */
+        `,
+        border: '1px solid rgba(255,255,255,0.1)', // Very subtle inner edge
+
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
@@ -122,7 +133,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         justifyContent: 'center',
         opacity: swipeState === 'exit' ? 0 : stackOpacity,
         userSelect: 'none',
-        overflow: 'hidden',
+        overflow: 'visible', // Allow glow to spill out
         touchAction: 'none',
         filter: stackBlur > 0 ? `blur(${stackBlur}px)` : 'none',
       }}
