@@ -113,16 +113,16 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         padding: '6px', // THE TRANSPARENT GAP
         borderRadius: '34px', // Outer radius (inner + gap)
         
-        // The Neon Border (simulated with box-shadow on the transparent outer box? 
-        // No, box-shadow on transparent box works if we use `inset` or just normal shadow.
-        // BUT better: use border + box-shadow for glow.
-        // Wait, if bg is transparent, border shows.
-        border: '2px solid rgba(236, 72, 153, 1)', // Sharp Neon Line
-        boxShadow: `
+        // The Neon Border - ONLY for the top card (index === 0)
+        border: index === 0 
+          ? '2px solid rgba(236, 72, 153, 1)' 
+          : '1px solid rgba(255, 255, 255, 0.1)', // Subtle border for stack cards
+          
+        boxShadow: index === 0 ? `
           0 0 15px rgba(236, 72, 153, 0.8), /* Inner/Outer Glow around the line */
           0 0 40px rgba(236, 72, 153, 0.4), /* Outer Glow */
-          0 10px 40px rgba(0, 0, 0, 0.3)    /* Drop Shadow for depth */
-        `,
+          0 10px 40px rgba(0, 0, 0, 0.5)    /* Strong Drop Shadow for depth */
+        ` : '0 4px 12px rgba(0, 0, 0, 0.3)', // Simple shadow for stack
 
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
@@ -146,13 +146,13 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Glassy Content Background
-        background: 'rgba(255, 255, 255, 0.1)',
+        // Background - Darker, more opaque glass to hide stack
+        background: 'rgba(30, 35, 50, 0.85)', // High opacity dark glass
         backdropFilter: 'blur(30px) saturate(1.3)',
         WebkitBackdropFilter: 'blur(30px) saturate(1.3)',
         
         // Very subtle inner edge for the glass itself
-        border: '1px solid rgba(255,255,255,0.1)', 
+        border: '1px solid rgba(255,255,255,0.08)', 
         
         overflow: 'hidden', // Clip content (stripes etc) to inner radius
         display: 'flex',
