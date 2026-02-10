@@ -91,20 +91,9 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       {/* SVG Filters for Frosted Glass - Hidden but Referenced */}
       <svg width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }}>
         <defs>
-          <filter id="cardFrostedGlassFilter" x="-50%" y="-50%" width="200%" height="200%">
-            {/* Strong turbulence for visible frosted texture */}
-            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="5" result="noise" seed="2" />
-            
-            {/* Very strong displacement for heavy blur */}
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced" />
-            
-            {/* Strong Gaussian blur */}
-            <feGaussianBlur in="displaced" stdDeviation="20" result="blurred" />
-            
-            {/* Overlay effect - darkens the blur for visibility */}
-            <feComponentTransfer in="blurred">
-              <feFuncA type="linear" slope="0.9" />
-            </feComponentTransfer>
+          <filter id="cardFrostedGlassFilter">
+            {/* Simple gaussian blur for frosted effect */}
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
           </filter>
         </defs>
       </svg>
@@ -168,23 +157,24 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Modern gray gradient (top light → bottom darker) - VERY STRONG contrast
-        background: 'linear-gradient(180deg, rgba(240, 240, 245, 0.85) 0%, rgba(120, 130, 160, 0.95) 100%)',
+        // Light gray base with gradient (subtle, readable)
+        background: 'linear-gradient(180deg, rgba(220, 220, 230, 0.6) 0%, rgba(160, 170, 190, 0.7) 100%)',
         
-        // Minimal inner glow - REDUCED
-        boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2)',
+        // CSS Backdrop blur for glassomorphism
+        backdropFilter: 'blur(40px) saturate(1.5)',
+        WebkitBackdropFilter: 'blur(40px) saturate(1.5)',
+        
+        // Subtle inner glow
+        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.25)',
         
         // Subtle inner edge
-        border: '1px solid rgba(255,255,255,0.15)',
+        border: '1px solid rgba(255,255,255,0.2)',
         
         overflow: 'hidden', // Clip content (stripes etc) to inner radius
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        
-        // Apply SVG filter directly to this element for frosted glass
-        filter: 'url(#cardFrostedGlassFilter)',
       }}>
 
         {/* Large glass reflection stripe */}
