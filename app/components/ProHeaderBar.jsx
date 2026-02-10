@@ -9,19 +9,19 @@ export default function ProHeaderBar({ title }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      padding: '8px 12px', // Consistent padding
-      background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
+      padding: '8px', // Equal padding 8px on all sides (Top/Bottom/Left/Right)
+      background: 'rgba(30, 30, 30, 0.6)', // More visible grey transparent
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
       borderRadius: '100px',
       margin: '12px 16px',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
-      border: '1.5px solid rgba(255, 255, 255, 0.2)',
-      height: '52px', // fixed height
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      height: '52px',
       position: 'relative',
       boxSizing: 'border-box',
     }}>
-      {/* Back Button */}
+      {/* Back Button - Flat Design */}
       <button
         onClick={() => navigate(-1)}
         style={{
@@ -30,8 +30,8 @@ export default function ProHeaderBar({ title }) {
           flexShrink: 0,
           zIndex: 1,
           borderRadius: '50%',
-          background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%)',
-          border: '1.5px solid rgba(255, 255, 255, 0.3)',
+          background: 'rgba(255, 255, 255, 0.1)', // Flat subtle background
+          border: 'none', // No border for flat look
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -39,11 +39,11 @@ export default function ProHeaderBar({ title }) {
           color: 'white',
           fontSize: '20px',
           fontWeight: '300',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
-          backdropFilter: 'blur(10px)',
-          transition: 'all 0.2s',
+          transition: 'background-color 0.2s',
           padding: 0,
         }}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
       >
         ‹
       </button>
