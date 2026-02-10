@@ -146,15 +146,15 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // SVG Frosted Glass Background - WHITE & TRANSPARENT
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 300 400%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cdefs%3E%3Cfilter id=%27frostedGlass%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.01%27 numOctaves=%273%27 result=%27noise%27 seed=%272%27 /%3E%3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27noise%27 scale=%2720%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 /%3E%3CfeGaussianBlur in=%27SourceGraphic%27 stdDeviation=%2712%27 result=%27blurred%27 /%3E%3C/filter%3E%3ClinearGradient id=%27shimmerGradient%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:rgba%28255,255,255,0.5%29;stop-opacity:0%27 /%3E%3Cstop offset=%2720%25%27 style=%27stop-color:rgba%28255,255,255,0.6%29;stop-opacity:1%27 /%3E%3Cstop offset=%2780%25%27 style=%27stop-color:rgba%28255,255,255,0.3%29;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:rgba%28255,255,255,0%29;stop-opacity:0%27 /%3E%3C/linearGradient%3E%3CradialGradient id=%27cardGradient%27 cx=%2750%25%27 cy=%2730%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:rgba%28255,255,255,0.5%29;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:rgba%28200,200,220,0.35%29;stop-opacity:1%27 /%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23cardGradient%29%27 filter=%27url%28%23frostedGlass%29%27 /%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23shimmerGradient%29%27 opacity=%270.5%27 transform=%27skewX%28-20%29%27 /%3E%3C/svg%3E")',
+        // SVG Frosted Glass Background - LIGHT GRAY & BLUR HEAVY
+        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 300 400%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cdefs%3E%3Cfilter id=%27frostedGlass%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.008%27 numOctaves=%274%27 result=%27noise%27 seed=%272%27 /%3E%3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27noise%27 scale=%2730%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 /%3E%3CfeGaussianBlur in=%27SourceGraphic%27 stdDeviation=%2720%27 result=%27blurred%27 /%3E%3C/filter%3E%3ClinearGradient id=%27shimmerGradient%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:rgba%28220,220,230,0.4%29;stop-opacity:0%27 /%3E%3Cstop offset=%2720%25%27 style=%27stop-color:rgba%28220,220,230,0.5%29;stop-opacity:1%27 /%3E%3Cstop offset=%2780%25%27 style=%27stop-color:rgba%28200,200,210,0.25%29;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:rgba%28200,200,210,0%29;stop-opacity:0%27 /%3E%3C/linearGradient%3E%3CradialGradient id=%27cardGradient%27 cx=%2750%25%27 cy=%2730%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:rgba%28200,200,210,0.4%29;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:rgba%28180,180,200,0.25%29;stop-opacity:1%27 /%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23cardGradient%29%27 filter=%27url%28%23frostedGlass%29%27 /%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23shimmerGradient%29%27 opacity=%270.5%27 transform=%27skewX%28-20%29%27 /%3E%3C/svg%3E")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         
-        // Fallback: WHITE glassmorphic background with STRONG BLUR
-        backgroundColor: 'rgba(255, 255, 255, 0.2)', // Very transparent white
-        backdropFilter: 'blur(60px) saturate(2) brightness(1.2)', // Maximum blur + boost
-        WebkitBackdropFilter: 'blur(60px) saturate(2) brightness(1.2)',
+        // Fallback: LIGHT GRAY glassmorphic background with EXTREME BLUR
+        backgroundColor: 'rgba(200, 200, 210, 0.25)', // Light gray, very transparent
+        backdropFilter: 'blur(80px) saturate(1.8)', // EXTREME blur for heavy blur effect
+        WebkitBackdropFilter: 'blur(80px) saturate(1.8)',
         
         // Subtle inner glow
         boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3)',
