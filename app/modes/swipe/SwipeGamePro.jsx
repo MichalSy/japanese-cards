@@ -99,14 +99,13 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         <ProHeaderBar title="Swipe Game" />
       </div>
 
-      {/* Question - Vertically centered between header and cards */}
+      {/* Question - Centered in remaining space */}
       <div style={{ 
-        flex: '0 0 auto', 
+        flex: 1, 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
-        padding: '2vh 0', // Responsive vertical padding
-        minHeight: '60px',
+        minHeight: '40px',
       }}>
         <span style={{ 
           fontSize: '18px', 
@@ -128,8 +127,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Card Area - flex grow but limited */}
-      <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden', maxHeight: '65vh' }}>
+      {/* Card Area - Larger flex grow to push Question up but keep ratio */}
+      <div style={{ flex: 4, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden', maxHeight: '65vh' }}>
         {game.cardStack.map((card, idx) => (
           <SwipeCardPro
             key={`${game.currentIndex + idx}`}
