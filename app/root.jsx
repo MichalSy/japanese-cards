@@ -5,7 +5,6 @@ import ContentTypeView from "./pages/ContentTypeView.jsx";
 import GameModeSelector from "./pages/GameModeSelector.jsx";
 import GameScreen from "./pages/GameScreen.jsx";
 import "./index.css";
-import "./App.css";
 
 export default function App() {
   return (
