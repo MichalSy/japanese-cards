@@ -93,13 +93,13 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         <defs>
           <filter id="cardFrostedGlassFilter" x="-50%" y="-50%" width="200%" height="200%">
             {/* Turbulence for frosted texture */}
-            <feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="5" result="noise" seed="2" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.003" numOctaves="6" result="noise" seed="2" />
             
-            {/* Strong displacement for blur effect */}
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="40" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+            {/* Extreme displacement for heavy blur effect */}
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="60" xChannelSelector="R" yChannelSelector="G" result="displaced" />
             
-            {/* Gaussian blur for frosted glass */}
-            <feGaussianBlur in="displaced" stdDeviation="15" result="blurred" />
+            {/* Very strong Gaussian blur for frosted glass */}
+            <feGaussianBlur in="displaced" stdDeviation="25" result="blurred" />
             
             {/* Blend back to enhance frosted look */}
             <feBlend in="blurred" in2="SourceGraphic" mode="multiply" />
@@ -166,8 +166,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Light gray base color
-        backgroundColor: 'rgba(200, 200, 210, 0.4)',
+        // Light gray base color - HIGHER opacity to reduce transparency
+        backgroundColor: 'rgba(200, 200, 210, 0.7)',
         
         // Subtle inner glow
         boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.4)',
