@@ -9,21 +9,24 @@ export default function ProHeaderBar({ title }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       padding: '8px 16px',
       background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
       borderRadius: '100px',
-      margin: '12px 0',
+      margin: '12px 16px',
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
       border: '1.5px solid rgba(255, 255, 255, 0.2)',
       height: '44px',
+      position: 'relative',
     }}>
-      {/* Back Button */}
+      {/* Back Button - absolutely positioned left */}
       <button
         onClick={() => navigate(-1)}
         style={{
+          position: 'absolute',
+          left: '8px',
           width: '36px',
           height: '36px',
           borderRadius: '50%',
@@ -46,23 +49,21 @@ export default function ProHeaderBar({ title }) {
         ‹
       </button>
 
-      {/* Title */}
+      {/* Title - centered */}
       <span style={{
         fontSize: '16px',
         fontWeight: '600',
         color: 'white',
         textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
         letterSpacing: '0.5px',
-        flex: 1,
-        textAlign: 'center',
-        marginLeft: '8px',
-        marginRight: '8px',
       }}>
         {title}
       </span>
 
-      {/* Globe + Language Toggle */}
+      {/* Globe + Language Toggle - absolutely positioned right */}
       <div style={{
+        position: 'absolute',
+        right: '8px',
         display: 'flex',
         alignItems: 'center',
         gap: '6px',

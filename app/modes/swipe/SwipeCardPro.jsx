@@ -111,7 +111,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         // Magenta border with glow + padding for gap
         border: '2.5px solid rgba(236, 72, 153, 0.9)',
         boxShadow: '0 0 30px rgba(236, 72, 153, 0.6), 0 0 50px rgba(236, 72, 153, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 20px 40px rgba(0, 0, 0, 0.15)',
-        padding: '6px',
+        padding: '4px',
         zIndex: 100 - index,
         cursor: isActive && !isDragging ? 'grab' : isDragging ? 'grabbing' : 'default',
         transition: getTransition(),
