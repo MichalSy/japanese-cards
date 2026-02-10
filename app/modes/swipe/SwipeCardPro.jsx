@@ -87,7 +87,27 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const stackBlur = index === 0 ? 0 : index * 0.8
 
   return (
-    // OUTER CONTAINER: Gestures + Transforms + Neon Border + Padding Gap
+    <>
+      {/* SVG Filters for Frosted Glass - Hidden but Referenced */}
+      <svg width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }}>
+        <defs>
+          <filter id="cardFrostedGlassFilter" x="-50%" y="-50%" width="200%" height="200%">
+            {/* Turbulence for frosted texture */}
+            <feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="5" result="noise" seed="2" />
+            
+            {/* Strong displacement for blur effect */}
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="40" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+            
+            {/* Gaussian blur for frosted glass */}
+            <feGaussianBlur in="displaced" stdDeviation="15" result="blurred" />
+            
+            {/* Blend back to enhance frosted look */}
+            <feBlend in="blurred" in2="SourceGraphic" mode="multiply" />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* OUTER CONTAINER: Gestures + Transforms + Neon Border + Padding Gap */}
     <div
       onTouchStart={handleDragStart}
       onTouchMove={handleDragMove}
@@ -146,18 +166,11 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // SVG Frosted Glass Background - LIGHT GRAY & BLUR HEAVY
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 300 400%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cdefs%3E%3Cfilter id=%27frostedGlass%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.008%27 numOctaves=%274%27 result=%27noise%27 seed=%272%27 /%3E%3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27noise%27 scale=%2730%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 /%3E%3CfeGaussianBlur in=%27SourceGraphic%27 stdDeviation=%2720%27 result=%27blurred%27 /%3E%3C/filter%3E%3ClinearGradient id=%27shimmerGradient%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:rgba%28220,220,230,0.4%29;stop-opacity:0%27 /%3E%3Cstop offset=%2720%25%27 style=%27stop-color:rgba%28220,220,230,0.5%29;stop-opacity:1%27 /%3E%3Cstop offset=%2780%25%27 style=%27stop-color:rgba%28200,200,210,0.25%29;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:rgba%28200,200,210,0%29;stop-opacity:0%27 /%3E%3C/linearGradient%3E%3CradialGradient id=%27cardGradient%27 cx=%2750%25%27 cy=%2730%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:rgba%28200,200,210,0.4%29;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:rgba%28180,180,200,0.25%29;stop-opacity:1%27 /%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23cardGradient%29%27 filter=%27url%28%23frostedGlass%29%27 /%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23shimmerGradient%29%27 opacity=%270.5%27 transform=%27skewX%28-20%29%27 /%3E%3C/svg%3E")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        
-        // Fallback: LIGHT GRAY glassmorphic background with EXTREME BLUR
-        backgroundColor: 'rgba(200, 200, 210, 0.25)', // Light gray, very transparent
-        backdropFilter: 'blur(80px) saturate(1.8)', // EXTREME blur for heavy blur effect
-        WebkitBackdropFilter: 'blur(80px) saturate(1.8)',
+        // Light gray base color
+        backgroundColor: 'rgba(200, 200, 210, 0.4)',
         
         // Subtle inner glow
-        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3)',
+        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.4)',
         
         // Crisp inner edge
         border: '1px solid rgba(255,255,255,0.3)',
@@ -167,6 +180,9 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        
+        // Apply SVG filter directly to this element for frosted glass
+        filter: 'url(#cardFrostedGlassFilter)',
       }}>
 
         {/* Large glass reflection stripe */}
@@ -234,5 +250,6 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         </div>
       </div>
     </div>
+    </>
   )
 }
