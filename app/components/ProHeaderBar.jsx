@@ -56,57 +56,68 @@ export default function ProHeaderBar({ title }) {
         {title}
       </span>
 
-      {/* Globe + Language */}
+      {/* Globe + Language Toggle */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '4px',
+        gap: '8px',
         flexShrink: 0,
         marginLeft: '8px',
       }}>
         {/* Globe */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" style={{ marginRight: '2px' }}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5">
           <circle cx="12" cy="12" r="10"/>
           <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
         
-        {/* DE */}
-        <span 
-          onClick={() => setLanguage('de')}
-          style={{ 
-            fontSize: '13px', 
-            fontWeight: '700',
-            color: language === 'de' ? 'white' : 'rgba(255,255,255,0.5)',
-            cursor: 'pointer',
-            padding: '6px 12px',
-            borderRadius: '18px',
-            backgroundColor: language === 'de' ? '#ec4899' : 'rgba(255,255,255,0.05)',
-            transition: 'all 0.2s ease-out',
-            border: language === 'de' ? 'none' : '1px solid rgba(255,255,255,0.1)',
-            boxShadow: language === 'de' ? '0 4px 12px rgba(236, 72, 153, 0.4)' : 'none',
-          }}
-        >
-          DE
-        </span>
-        
-        {/* EN */}
-        <span
-          onClick={() => setLanguage('en')}
-          style={{
-            fontSize: '13px',
-            fontWeight: '700',
-            cursor: 'pointer',
-            padding: '6px 12px',
-            borderRadius: '18px',
-            backgroundColor: language === 'en' ? '#ec4899' : 'rgba(255,255,255,0.05)',
-            color: language === 'en' ? 'white' : 'rgba(255,255,255,0.5)',
-            transition: 'all 0.2s ease-out',
-            border: language === 'en' ? 'none' : '1px solid rgba(255,255,255,0.1)',
-            boxShadow: language === 'en' ? '0 4px 12px rgba(236, 72, 153, 0.4)' : 'none',
-          }}
-        >
-          EN
-        </span>
+        {/* Language Toggle Container */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: 'rgba(255,255,255,0.05)',
+          borderRadius: '20px',
+          padding: '4px',
+          border: '1px solid rgba(255,255,255,0.1)',
+          gap: '2px',
+        }}>
+          {/* DE Button */}
+          <button
+            onClick={() => setLanguage('de')}
+            style={{
+              fontSize: '13px',
+              fontWeight: '700',
+              color: language === 'de' ? 'white' : 'rgba(255,255,255,0.5)',
+              cursor: 'pointer',
+              padding: '6px 14px',
+              borderRadius: '16px',
+              backgroundColor: language === 'de' ? '#ec4899' : 'transparent',
+              transition: 'all 0.2s ease-out',
+              border: 'none',
+              boxShadow: language === 'de' ? '0 4px 12px rgba(236, 72, 153, 0.4)' : 'none',
+            }}
+          >
+            DE
+          </button>
+          
+          {/* EN Button */}
+          <button
+            onClick={() => setLanguage('en')}
+            style={{
+              fontSize: '13px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              padding: '6px 14px',
+              borderRadius: '16px',
+              backgroundColor: language === 'en' ? '#ec4899' : 'transparent',
+              color: language === 'en' ? 'white' : 'rgba(255,255,255,0.5)',
+              transition: 'all 0.2s ease-out',
+              border: 'none',
+              boxShadow: language === 'en' ? '0 4px 12px rgba(236, 72, 153, 0.4)' : 'none',
+            }}
+          >
+            EN
+          </button>
+        </div>
       </div>
     </div>
   )
