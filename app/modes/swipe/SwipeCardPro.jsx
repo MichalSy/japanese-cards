@@ -146,8 +146,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // SVG with Frosted Texture + Gradient + Shimmer
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 300 400%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cdefs%3E%3Cfilter id=%27frostedNoise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.04%27 numOctaves=%273%27 result=%27noise%27 seed=%271%27 /%3E%3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27noise%27 scale=%272%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 /%3E%3C/filter%3E%3ClinearGradient id=%27frostGrad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23F0F0F5;stop-opacity:1%27 /%3E%3Cstop offset=%2740%25%27 style=%27stop-color:%23D8D8E8;stop-opacity:1%27 /%3E%3Cstop offset=%2770%25%27 style=%27stop-color:%23A0A8C0;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%237080A0;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3ClinearGradient id=%27shine%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%2780%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FFFFFF;stop-opacity:0.5%27 /%3E%3Cstop offset=%2720%25%27 style=%27stop-color:%23FFFFFF;stop-opacity:0.6%27 /%3E%3Cstop offset=%2750%25%27 style=%27stop-color:%23FFFFFF;stop-opacity:0.2%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23000000;stop-opacity:0%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23frostGrad%29%27 filter=%27url%28%23frostedNoise%29%27 /%3E%3Crect width=%27300%27 height=%27400%27 fill=%27url%28%23shine%29%27 opacity=%270.7%27 /%3E%3Crect width=%27300%27 height=%27400%27 fill=%27none%27 stroke=%27rgba%28255,255,255,0.1%29%27 stroke-width=%271%27 /%3E%3C/svg%3E")',
+        // External SVG with Frosted Texture + Gradient + Shimmer
+        backgroundImage: 'url(/card-frosted.svg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         
