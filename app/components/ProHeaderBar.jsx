@@ -19,7 +19,7 @@ export default function ProHeaderBar({ title }) {
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
       border: '1.5px solid rgba(255, 255, 255, 0.2)',
       height: '44px',
-      gap: '8px',
+      position: 'relative',
     }}>
       {/* Back Button */}
       <button
@@ -28,6 +28,7 @@ export default function ProHeaderBar({ title }) {
           width: '36px',
           height: '36px',
           flexShrink: 0,
+          zIndex: 1,
           borderRadius: '50%',
           background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%)',
           border: '1.5px solid rgba(255, 255, 255, 0.3)',
@@ -47,24 +48,17 @@ export default function ProHeaderBar({ title }) {
         ‹
       </button>
 
-      {/* Title - right next to back button, then flex */}
-      <span style={{
-        fontSize: '16px',
-        fontWeight: '600',
-        color: 'white',
-        textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
-        letterSpacing: '0.5px',
-        marginRight: 'auto',
-      }}>
-        {title}
-      </span>
+      {/* Spacer - pushes content left/right */}
+      <div style={{ flex: 1 }} />
 
-      {/* Globe + Language Toggle */}
+      {/* Title + Globe - Absolutely Centered */}
       <div style={{
+        position: 'absolute',
+        left: '50%',
+        transform: 'translateX(-50%)',
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        flexShrink: 0,
       }}>
         {/* Globe */}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5">
@@ -72,6 +66,26 @@ export default function ProHeaderBar({ title }) {
           <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
         
+        {/* Title */}
+        <span style={{
+          fontSize: '16px',
+          fontWeight: '600',
+          color: 'white',
+          textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+          letterSpacing: '0.5px',
+          whiteSpace: 'nowrap',
+        }}>
+          {title}
+        </span>
+      </div>
+
+      {/* Language Toggle */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexShrink: 0,
+        zIndex: 1,
+      }}>
         {/* Language Toggle Container */}
         <div style={{
           display: 'flex',
