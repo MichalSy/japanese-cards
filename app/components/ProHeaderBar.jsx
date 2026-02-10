@@ -9,8 +9,7 @@ export default function ProHeaderBar({ title }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 8px',
+      padding: '8px 12px', // Consistent padding
       background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
@@ -18,8 +17,9 @@ export default function ProHeaderBar({ title }) {
       margin: '12px 16px',
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
       border: '1.5px solid rgba(255, 255, 255, 0.2)',
-      height: '44px',
+      height: '52px', // fixed height
       position: 'relative',
+      boxSizing: 'border-box',
     }}>
       {/* Back Button */}
       <button
@@ -48,36 +48,19 @@ export default function ProHeaderBar({ title }) {
         ‹
       </button>
 
-      {/* Spacer - pushes content left/right */}
-      <div style={{ flex: 1 }} />
-
-      {/* Title + Globe - Absolutely Centered */}
-      <div style={{
-        position: 'absolute',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
+      {/* Title - Next to Back Button */}
+      <span style={{
+        fontSize: '18px',
+        fontWeight: '700',
+        color: 'white',
+        textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+        letterSpacing: '0.5px',
+        whiteSpace: 'nowrap',
+        marginLeft: '12px', // Space between back button and title
+        flex: 1, // Push language toggle to right
       }}>
-        {/* Globe */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        </svg>
-        
-        {/* Title */}
-        <span style={{
-          fontSize: '16px',
-          fontWeight: '600',
-          color: 'white',
-          textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
-          letterSpacing: '0.5px',
-          whiteSpace: 'nowrap',
-        }}>
-          {title}
-        </span>
-      </div>
+        {title}
+      </span>
 
       {/* Language Toggle */}
       <div style={{
