@@ -9,8 +9,8 @@ export default function ProHeaderBar({ title }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      padding: '8px 16px',
+      justifyContent: 'space-between',
+      padding: '0 8px',
       background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
@@ -19,16 +19,15 @@ export default function ProHeaderBar({ title }) {
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
       border: '1.5px solid rgba(255, 255, 255, 0.2)',
       height: '44px',
-      position: 'relative',
+      gap: '8px',
     }}>
-      {/* Back Button - absolutely positioned left */}
+      {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
         style={{
-          position: 'absolute',
-          left: '8px',
           width: '36px',
           height: '36px',
+          flexShrink: 0,
           borderRadius: '50%',
           background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%)',
           border: '1.5px solid rgba(255, 255, 255, 0.3)',
@@ -39,7 +38,6 @@ export default function ProHeaderBar({ title }) {
           color: 'white',
           fontSize: '20px',
           fontWeight: '300',
-          flexShrink: 0,
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
           backdropFilter: 'blur(10px)',
           transition: 'all 0.2s',
@@ -49,21 +47,20 @@ export default function ProHeaderBar({ title }) {
         ‹
       </button>
 
-      {/* Title - centered */}
+      {/* Title - right next to back button, then flex */}
       <span style={{
         fontSize: '16px',
         fontWeight: '600',
         color: 'white',
         textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
         letterSpacing: '0.5px',
+        marginRight: 'auto',
       }}>
         {title}
       </span>
 
-      {/* Globe + Language Toggle - absolutely positioned right */}
+      {/* Globe + Language Toggle */}
       <div style={{
-        position: 'absolute',
-        right: '8px',
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
