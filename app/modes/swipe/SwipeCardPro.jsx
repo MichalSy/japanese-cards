@@ -92,17 +92,19 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       <svg width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }}>
         <defs>
           <filter id="cardFrostedGlassFilter" x="-50%" y="-50%" width="200%" height="200%">
-            {/* Subtle turbulence for frosted texture - LESS aggressive */}
-            <feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="4" result="noise" seed="2" />
+            {/* Strong turbulence for visible frosted texture */}
+            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="5" result="noise" seed="2" />
             
-            {/* Moderate displacement for blur effect */}
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+            {/* Very strong displacement for heavy blur */}
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced" />
             
-            {/* Smooth Gaussian blur for frosted glass */}
-            <feGaussianBlur in="displaced" stdDeviation="18" result="blurred" />
+            {/* Strong Gaussian blur */}
+            <feGaussianBlur in="displaced" stdDeviation="20" result="blurred" />
             
-            {/* Blend back */}
-            <feBlend in="blurred" in2="SourceGraphic" mode="normal" result="final" />
+            {/* Overlay effect - darkens the blur for visibility */}
+            <feComponentTransfer in="blurred">
+              <feFuncA type="linear" slope="0.9" />
+            </feComponentTransfer>
           </filter>
         </defs>
       </svg>
@@ -166,8 +168,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Modern gray gradient (top light → bottom darker) - STRONG contrast
-        background: 'linear-gradient(135deg, rgba(230, 230, 240, 0.8) 0%, rgba(140, 150, 170, 0.95) 100%)',
+        // Modern gray gradient (top light → bottom darker) - VERY STRONG contrast
+        background: 'linear-gradient(180deg, rgba(240, 240, 245, 0.85) 0%, rgba(120, 130, 160, 0.95) 100%)',
         
         // Minimal inner glow - REDUCED
         boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2)',
