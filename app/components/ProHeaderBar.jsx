@@ -10,13 +10,13 @@ export default function ProHeaderBar({ title }) {
       display: 'flex',
       alignItems: 'center',
       padding: '8px', // Equal padding 8px on all sides (Top/Bottom/Left/Right)
-      background: 'rgba(30, 30, 30, 0.6)', // More visible grey transparent
-      backdropFilter: 'blur(20px)',
-      WebkitBackdropFilter: 'blur(20px)',
+      background: 'rgba(30, 30, 30, 0.3)', // Much more transparent (glassy)
+      backdropFilter: 'blur(10px)', // Softer blur
+      WebkitBackdropFilter: 'blur(10px)',
       borderRadius: '100px',
       margin: '12px 16px',
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', // Softer shadow
+      border: '1px solid rgba(255, 255, 255, 0.08)', // Very subtle border
       height: '52px',
       position: 'relative',
       boxSizing: 'border-box',
