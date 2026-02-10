@@ -92,17 +92,17 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
       <svg width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }}>
         <defs>
           <filter id="cardFrostedGlassFilter" x="-50%" y="-50%" width="200%" height="200%">
-            {/* Turbulence for frosted texture */}
-            <feTurbulence type="fractalNoise" baseFrequency="0.003" numOctaves="6" result="noise" seed="2" />
+            {/* Subtle turbulence for frosted texture - LESS aggressive */}
+            <feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="4" result="noise" seed="2" />
             
-            {/* Extreme displacement for heavy blur effect */}
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="60" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+            {/* Moderate displacement for blur effect */}
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" result="displaced" />
             
-            {/* Very strong Gaussian blur for frosted glass */}
-            <feGaussianBlur in="displaced" stdDeviation="25" result="blurred" />
+            {/* Smooth Gaussian blur for frosted glass */}
+            <feGaussianBlur in="displaced" stdDeviation="18" result="blurred" />
             
-            {/* Blend back to enhance frosted look */}
-            <feBlend in="blurred" in2="SourceGraphic" mode="multiply" />
+            {/* Blend back */}
+            <feBlend in="blurred" in2="SourceGraphic" mode="normal" result="final" />
           </filter>
         </defs>
       </svg>
@@ -166,14 +166,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Light gray base color - HIGHER opacity to reduce transparency
-        backgroundColor: 'rgba(200, 200, 210, 0.7)',
+        // Modern gray gradient (top light → bottom darker)
+        background: 'linear-gradient(135deg, rgba(210, 210, 220, 0.75) 0%, rgba(170, 175, 195, 0.85) 100%)',
         
-        // Subtle inner glow
-        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.4)',
+        // Minimal inner glow - REDUCED
+        boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2)',
         
-        // Crisp inner edge
-        border: '1px solid rgba(255,255,255,0.3)',
+        // Subtle inner edge
+        border: '1px solid rgba(255,255,255,0.15)',
         
         overflow: 'hidden', // Clip content (stripes etc) to inner radius
         display: 'flex',
