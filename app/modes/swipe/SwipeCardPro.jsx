@@ -113,12 +113,12 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         borderRadius: '24px',
         
         // Neon Border with Gap via Box Shadow
-        // 1. Transparent gap (simulated by not having a border here, but using outline/shadow)
-        // 2. Sharp Neon Line + Glow
+        // The first shadow (0 0 0 4px transparent) creates the gap
+        // The second shadow (0 0 0 6px color) draws the line outside the gap
         boxShadow: `
-          0 0 0 4px rgba(0,0,0,0),         /* Transparent Gap */
-          0 0 0 6px rgba(236, 72, 153, 1), /* Sharp Neon Line (2px thick) */
-          0 0 15px 6px rgba(236, 72, 153, 0.6), /* Inner/Outer Glow around the line */
+          0 0 0 4px rgba(0,0,0,0),         /* Transparent Gap (4px) */
+          0 0 0 6px rgba(236, 72, 153, 1), /* Sharp Neon Line (2px thick, starts at 4px) */
+          0 0 20px 6px rgba(236, 72, 153, 0.6), /* Glow radiating from the line */
           0 10px 40px rgba(0, 0, 0, 0.3)   /* Drop Shadow for depth */
         `,
         border: '1px solid rgba(255,255,255,0.1)', // Very subtle inner edge
