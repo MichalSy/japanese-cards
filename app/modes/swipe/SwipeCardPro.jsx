@@ -146,15 +146,14 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
         position: 'relative',
         borderRadius: '26px', // Inner radius matches outer-gap
         
-        // Background - White Frosted Glass (Opaque enough to hide stack)
-        // Using a high opacity white + strong blur
-        background: 'rgba(255, 255, 255, 0.15)', // Light base
-        boxShadow: 'inset 0 0 40px rgba(255, 255, 255, 0.1)', // Inner glow
-        backdropFilter: 'blur(40px) saturate(1.8) brightness(1.1)', // Strong blur + boost brightness
-        WebkitBackdropFilter: 'blur(40px) saturate(1.8) brightness(1.1)',
+        // Background - White Frosted Glass (HIGH OPACITY)
+        background: 'rgba(255, 255, 255, 0.5)', // 50% opacity – much more solid!
+        boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3)', // Subtle inner glow
+        backdropFilter: 'blur(30px) saturate(1.5)', // Strong blur to frost it
+        WebkitBackdropFilter: 'blur(30px) saturate(1.5)',
         
-        // Very subtle inner edge for the glass itself
-        border: '1px solid rgba(255,255,255,0.2)', 
+        // Crisp inner edge for glass
+        border: '1px solid rgba(255,255,255,0.3)', 
         
         overflow: 'hidden', // Clip content (stripes etc) to inner radius
         display: 'flex',
