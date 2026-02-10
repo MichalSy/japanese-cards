@@ -52,18 +52,18 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   }, [contentType, groupId])
 
   if (loading) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100dvh', backgroundColor: '#0f172a', color: 'rgba(255,255,255,0.6)' }}>Laden...</div>
+    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100dvh', background: 'radial-gradient(circle at 15% 10%, rgba(236, 72, 153, 0.4) 0%, transparent 50%), linear-gradient(135deg, #1a1a3e 0%, #0f172a 100%)', color: 'rgba(255,255,255,0.6)' }}>Laden...</div>
   }
 
   if (error) {
-    return <div style={{ padding: '20px', minHeight: '100dvh', backgroundColor: '#0f172a' }}><div style={{ padding: '20px', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderRadius: '16px', color: '#ef4444' }}>Fehler: {error}</div></div>
+    return <div style={{ padding: '20px', minHeight: '100dvh', background: 'radial-gradient(circle at 15% 10%, rgba(236, 72, 153, 0.4) 0%, transparent 50%), linear-gradient(135deg, #1a1a3e 0%, #0f172a 100%)' }}><div style={{ padding: '20px', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderRadius: '16px', color: '#ef4444' }}>Fehler: {error}</div></div>
   }
 
   if (game.gameState === 'finished') {
     const total = game.stats.correct + game.stats.incorrect
     const pct = total > 0 ? Math.round((game.stats.correct / total) * 100) : 0
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh', backgroundColor: '#0f172a', backgroundImage: 'url(/japanese-cards/images/swipe-bg.png)', backgroundSize: 'cover' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh', background: 'radial-gradient(circle at 15% 10%, rgba(236, 72, 153, 0.4) 0%, transparent 50%), linear-gradient(135deg, #1a1a3e 0%, #0f172a 100%)' }}>
         <ProHeaderBar title="Ergebnis" />
         <div style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
           <div style={{ background: 'rgba(30,41,59,0.8)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center', marginBottom: '20px' }}>
@@ -87,11 +87,13 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       minHeight: '100dvh',
       height: '100dvh',
       maxHeight: '100dvh',
-      overflow: 'hidden', 
-      backgroundColor: '#0f172a', 
-      backgroundImage: 'url(/japanese-cards/images/swipe-bg.png)', 
-      backgroundSize: 'cover', 
-      backgroundPosition: 'center' 
+      overflow: 'hidden',
+      background: `
+        radial-gradient(circle at 15% 10%, rgba(236, 72, 153, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 85% 95%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, #1a1a3e 0%, #2d1b4e 25%, #0f172a 50%, #0d1e3f 100%)
+      `,
+      backgroundAttachment: 'fixed'
     }}>
       
       {/* Header */}
