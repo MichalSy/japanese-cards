@@ -118,7 +118,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
 
       {/* Card Area - flex grow */}
       <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden' }}>
-        {/* Red border frame - only for active card */}
+        {/* Magenta border frame - follows the active card */}
         {game.cardStack[0] && (
           <div style={{
             position: 'absolute',
@@ -126,11 +126,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             top: '50%',
             transform: 'translate(-50%, -50%)',
             width: 'calc(100% - 48px)',
-            maxWidth: '300px',
+            maxWidth: '272px',
             aspectRatio: '9/12',
-            border: '3px solid rgba(239, 68, 68, 0.9)',
-            borderRadius: '28px',
-            boxShadow: '0 0 25px rgba(239, 68, 68, 0.4)',
+            border: '2px solid rgba(236, 72, 153, 0.85)',
+            borderRadius: '26px',
+            boxShadow: '0 0 20px rgba(236, 72, 153, 0.35)',
             pointerEvents: 'none',
             zIndex: 98,
           }} />
@@ -160,41 +160,42 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '2px', transition: 'width 0.3s' }} />
         </div>
 
-        {/* Buttons - Full buttons with icons and text */}
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
+        {/* Buttons - Outline style matching design */}
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'center' }}>
           {/* Falsch Button */}
           <button
             onClick={() => handleButtonClick(false)}
             style={{
-              padding: '12px 24px',
+              padding: '10px 20px',
               borderRadius: '100px',
-              background: 'linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(239, 68, 68, 0.8)',
+              background: 'transparent',
+              backdropFilter: 'none',
+              border: '2px solid rgba(239, 68, 68, 0.7)',
               color: '#f87171',
-              fontSize: '16px',
+              fontSize: '15px',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px',
-              boxShadow: '0 0 25px rgba(239, 68, 68, 0.3), 0 0 50px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255,255,255,0.05)',
+              gap: '8px',
+              boxShadow: 'none',
               transition: 'all 0.2s',
-              minWidth: '120px',
+              minWidth: '110px',
             }}
           >
             <span style={{
-              width: '24px',
-              height: '24px',
+              width: '20px',
+              height: '20px',
               borderRadius: '50%',
-              backgroundColor: 'rgba(239, 68, 68, 0.25)',
-              border: '1.5px solid rgba(239, 68, 68, 0.6)',
+              backgroundColor: 'transparent',
+              border: '1.5px solid rgba(239, 68, 68, 0.7)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: 'bold',
+              color: '#f87171',
             }}>✗</span>
             Falsch
           </button>
@@ -203,35 +204,36 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           <button
             onClick={() => handleButtonClick(true)}
             style={{
-              padding: '12px 24px',
+              padding: '10px 20px',
               borderRadius: '100px',
-              background: 'linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(16, 185, 129, 0.8)',
+              background: 'transparent',
+              backdropFilter: 'none',
+              border: '2px solid rgba(16, 185, 129, 0.7)',
               color: '#34d399',
-              fontSize: '16px',
+              fontSize: '15px',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px',
-              boxShadow: '0 0 25px rgba(16, 185, 129, 0.3), 0 0 50px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255,255,255,0.05)',
+              gap: '8px',
+              boxShadow: 'none',
               transition: 'all 0.2s',
-              minWidth: '120px',
+              minWidth: '110px',
             }}
           >
             <span style={{
-              width: '24px',
-              height: '24px',
+              width: '20px',
+              height: '20px',
               borderRadius: '50%',
-              backgroundColor: 'rgba(16, 185, 129, 0.25)',
-              border: '1.5px solid rgba(16, 185, 129, 0.6)',
+              backgroundColor: 'transparent',
+              border: '1.5px solid rgba(16, 185, 129, 0.7)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: 'bold',
+              color: '#34d399',
             }}>✓</span>
             Richtig
           </button>

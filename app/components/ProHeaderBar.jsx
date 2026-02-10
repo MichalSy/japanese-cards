@@ -25,8 +25,8 @@ export default function ProHeaderBar({ title }) {
       <button
         onClick={() => navigate(-1)}
         style={{
-          width: '44px',
-          height: '44px',
+          width: '36px',
+          height: '36px',
           borderRadius: '50%',
           background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%)',
           border: '1.5px solid rgba(255, 255, 255, 0.3)',
@@ -35,12 +35,13 @@ export default function ProHeaderBar({ title }) {
           justifyContent: 'center',
           cursor: 'pointer',
           color: 'white',
-          fontSize: '24px',
+          fontSize: '20px',
           fontWeight: '300',
           flexShrink: 0,
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
           backdropFilter: 'blur(10px)',
           transition: 'all 0.2s',
+          padding: 0,
         }}
       >
         ‹
