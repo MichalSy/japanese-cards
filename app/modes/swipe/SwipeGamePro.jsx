@@ -85,9 +85,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       display: 'flex', 
       flexDirection: 'column', 
       minHeight: '100dvh',
-      height: '100dvh',
-      maxHeight: '100dvh',
-      overflow: 'hidden',
+      overflow: 'auto',
       background: `
         radial-gradient(circle at 15% 10%, rgba(236, 72, 153, 0.4) 0%, transparent 50%),
         radial-gradient(circle at 85% 95%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
@@ -102,8 +100,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       </div>
 
       {/* Question */}
-      <div style={{ flexShrink: 0, textAlign: 'center', paddingTop: '8px', paddingBottom: '16px' }}>
-        <span style={{ fontSize: '17px', fontWeight: '400', color: 'white' }}>Ist die Kombination richtig?</span>
+      <div style={{ flexShrink: 0, textAlign: 'center', paddingTop: '12px', paddingBottom: '20px' }}>
+        <span style={{ fontSize: '18px', fontWeight: '500', color: 'white' }}>Ist die Kombination richtig?</span>
       </div>
 
       {/* Toast */}
@@ -116,8 +114,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Card Area - flex grow */}
-      <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden' }}>
+      {/* Card Area - flex grow but limited */}
+      <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden', maxHeight: '65vh' }}>
         {/* Magenta border frame - follows the active card */}
         {game.cardStack[0] && (
           <div style={{
@@ -126,11 +124,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             top: '50%',
             transform: 'translate(-50%, -50%)',
             width: 'calc(100% - 48px)',
-            maxWidth: '272px',
+            maxWidth: '264px',
             aspectRatio: '9/12',
-            border: '2px solid rgba(236, 72, 153, 0.85)',
-            borderRadius: '26px',
-            boxShadow: '0 0 20px rgba(236, 72, 153, 0.35)',
+            border: '2.5px solid rgba(236, 72, 153, 0.9)',
+            borderRadius: '24px',
+            boxShadow: '0 0 30px rgba(236, 72, 153, 0.6), 0 0 50px rgba(236, 72, 153, 0.3)',
             pointerEvents: 'none',
             zIndex: 98,
           }} />
@@ -150,52 +148,54 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       </div>
 
       {/* Bottom Section - fixed at bottom */}
-      <div style={{ flexShrink: 0, padding: '12px 20px', paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))' }}>
+      <div style={{ flexShrink: 0, padding: '8px 16px', paddingBottom: 'calc(40px + env(safe-area-inset-bottom, 20px))' }}>
         {/* Progress */}
-        <div style={{ textAlign: 'center', marginBottom: '12px' }}>
-          <span style={{ fontSize: '13px', fontWeight: '500', color: 'rgba(255,255,255,0.6)' }}>{game.currentIndex + 1}/{game.totalCards}</span>
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+          <span style={{ fontSize: '12px', fontWeight: '500', color: 'rgba(255,255,255,0.6)' }}>{game.currentIndex + 1}/{game.totalCards}</span>
         </div>
         
-        <div style={{ height: '4px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden', marginBottom: '16px' }}>
+        <div style={{ height: '3px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden', marginBottom: '12px' }}>
           <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '2px', transition: 'width 0.3s' }} />
         </div>
 
         {/* Buttons - Outline style matching design */}
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'center', width: '100%', paddingX: '16px' }}>
           {/* Falsch Button */}
           <button
             onClick={() => handleButtonClick(false)}
             style={{
-              padding: '10px 20px',
+              flex: 1,
+              padding: '12px 20px',
               borderRadius: '100px',
               background: 'transparent',
               backdropFilter: 'none',
-              border: '2px solid rgba(239, 68, 68, 0.7)',
+              border: '2.5px solid rgba(239, 68, 68, 0.8)',
               color: '#f87171',
-              fontSize: '15px',
+              fontSize: '16px',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
+              gap: '10px',
               boxShadow: 'none',
               transition: 'all 0.2s',
-              minWidth: '110px',
+              maxWidth: '180px',
             }}
           >
             <span style={{
-              width: '20px',
-              height: '20px',
+              width: '22px',
+              height: '22px',
               borderRadius: '50%',
               backgroundColor: 'transparent',
-              border: '1.5px solid rgba(239, 68, 68, 0.7)',
+              border: '1.5px solid rgba(239, 68, 68, 0.8)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '12px',
+              fontSize: '13px',
               fontWeight: 'bold',
               color: '#f87171',
+              flexShrink: 0,
             }}>✗</span>
             Falsch
           </button>
@@ -204,36 +204,38 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           <button
             onClick={() => handleButtonClick(true)}
             style={{
-              padding: '10px 20px',
+              flex: 1,
+              padding: '12px 20px',
               borderRadius: '100px',
               background: 'transparent',
               backdropFilter: 'none',
-              border: '2px solid rgba(16, 185, 129, 0.7)',
+              border: '2.5px solid rgba(16, 185, 129, 0.8)',
               color: '#34d399',
-              fontSize: '15px',
+              fontSize: '16px',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
+              gap: '10px',
               boxShadow: 'none',
               transition: 'all 0.2s',
-              minWidth: '110px',
+              maxWidth: '180px',
             }}
           >
             <span style={{
-              width: '20px',
-              height: '20px',
+              width: '22px',
+              height: '22px',
               borderRadius: '50%',
               backgroundColor: 'transparent',
-              border: '1.5px solid rgba(16, 185, 129, 0.7)',
+              border: '1.5px solid rgba(16, 185, 129, 0.8)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '12px',
+              fontSize: '13px',
               fontWeight: 'bold',
               color: '#34d399',
+              flexShrink: 0,
             }}>✓</span>
             Richtig
           </button>

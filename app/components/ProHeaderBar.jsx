@@ -10,16 +10,15 @@ export default function ProHeaderBar({ title }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '8px 12px',
+      padding: '8px 16px',
       background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
       borderRadius: '100px',
-      margin: '12px 16px',
+      margin: '12px 0',
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
       border: '1.5px solid rgba(255, 255, 255, 0.2)',
       height: '44px',
-      gap: '8px',
     }}>
       {/* Back Button */}
       <button
@@ -56,6 +55,8 @@ export default function ProHeaderBar({ title }) {
         letterSpacing: '0.5px',
         flex: 1,
         textAlign: 'center',
+        marginLeft: '8px',
+        marginRight: '8px',
       }}>
         {title}
       </span>
