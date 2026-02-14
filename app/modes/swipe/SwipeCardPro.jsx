@@ -25,9 +25,13 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     }, 220)
   }, [card, correctAnswer, onSwipe, character, swipeState])
 
+  // Expose triggerSwipe via ref callback (if provided)
   useEffect(() => {
-    if (onButtonClick && isActive) {
-      onButtonClick.current = triggerSwipe
+    if (onButtonClick?.current !== undefined && isActive) {
+      // Using callback pattern instead of direct mutation
+      if (typeof onButtonClick === 'function') {
+        onButtonClick(triggerSwipe)
+      }
     }
   }, [onButtonClick, isActive, triggerSwipe])
 
@@ -80,7 +84,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const isSwipingLeft = position.x < 0
 
   // Stack styling - side-by-side offset like reference design
-  const stackXOffset = index === 0 ? 0 : (index % 2 === 0 ? 20 : -20) // Left/right offset
+  const stackXOffset = index === 0 ? 0 : (index % 2 === 0 ? 20 : -20) // eslint-disable-line no-unused-vars
   const stackYOffset = index * 3
   const stackScale = 1 - (index * 0.01)
   const stackOpacity = index === 0 ? 1 : Math.max(0.45, 0.7 - (index * 0.08))

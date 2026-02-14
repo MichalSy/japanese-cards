@@ -5,7 +5,7 @@ export default function SwipeCard({ card, index, isActive, onSwipe, correctAnswe
   const [dragStart, setDragStart] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [position, setPosition] = useState({ x: 0, rotation: 0 })
-  const [exitDirection, setExitDirection] = useState(null)
+  const [, setExitDirection] = useState(null) // Track direction internally
 
   const character = card?.character || card?.word || ''
 

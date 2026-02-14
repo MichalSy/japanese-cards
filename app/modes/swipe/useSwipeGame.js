@@ -16,6 +16,8 @@ export function useSwipeGame(items, cardCount, category) {
   // Initialize game with shuffled items
   useEffect(() => {
     if (!items || items.length === 0) {
+      // Intentional: Set error state when no items available (initial load scenario)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGameState('error')
       return
     }
@@ -134,7 +136,7 @@ export function useSwipeGame(items, cardCount, category) {
     } else {
       setCurrentIndex(nextIndex)
     }
-  }, [currentIndex, cards, category])
+  }, [currentIndex, cards, category, displayCards, correctAnswers])
 
   const getCardStack = useCallback(() => {
     // Return 3-4 display cards for stack (what user sees)

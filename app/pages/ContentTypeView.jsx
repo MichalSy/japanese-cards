@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router'
 import { useState, useEffect } from 'react'
-import { fetchCategoryConfig, fetchGroupData, fetchAllItemsFromCategory } from '../config/api'
+import { fetchCategoryConfig, fetchGroupData } from '../config/api'
 import { useLanguage } from '../context/LanguageContext'
 import { getCategoryStats, getGroupProgress } from '../utils/progressStorage'
 import AppHeaderBar from '../components/AppHeaderBar'

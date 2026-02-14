@@ -1,12 +1,10 @@
 import { useEffect, useState, useRef } from 'react'
-import { useNavigate } from 'react-router'
 import { fetchGroupData, fetchAllItemsFromCategory } from '../../config/api'
 import { useSwipeGame } from './useSwipeGame'
 import SwipeCard from './SwipeCard'
 import { AppContent, Card } from '../../components/Layout'
 
 export default function SwipeGame({ contentType, groupId, cardCount }) {
-  const navigate = useNavigate()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)

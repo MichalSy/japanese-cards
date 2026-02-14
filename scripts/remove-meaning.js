@@ -17,7 +17,9 @@ function removeFromJSON(filePath) {
     // If it has items array, remove meaning from each item
     if (Array.isArray(content.items)) {
       content.items = content.items.map(item => {
-        const { meaning, ...rest } = item;
+        // Extract and ignore 'meaning' field, keep the rest
+        const rest = { ...item };
+        delete rest.meaning;
         return rest;
       });
       count++;
