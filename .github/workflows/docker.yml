@@ -56,11 +56,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Configure npm for GitHub Packages
-        run: |
-          echo "@michalsy:registry=https://npm.pkg.github.com" > .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@michalsy'
 
       - name: Create version env file
         run: |
@@ -69,6 +66,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build application
         env:
