@@ -1,0 +1,12 @@
+.git
+.github
+*.md
+.env*
+app/
+vite.config.js
+index.html
+scripts/
+tsconfig.json
+aikoapp.json
+.aiko/
+src/

@@ -1,0 +1,34 @@
+{
+  "app": {
+    "name": "Japanese Cards",
+    "app-name": "japanese-cards",
+    "url": "https://japanese-cards.sytko.de",
+    "description": "Learn Japanese characters playfully"
+  },
+  "auth": {
+    "enabled": true,
+    "provider": "google",
+    "loginTitle": "Irasshaimase! 🌸",
+    "loginSubtitle": "Learn Japanese Characters",
+    "loginButtonText": "Sign in with Google",
+    "successRedirect": "/"
+  },
+  "routes": {
+    "protected": ["/", "/content", "/game", "/api"],
+    "public": ["/login", "/auth/callback", "/no-access", "/start"]
+  },
+  "abilities": {
+    "enabled": true,
+    "list": [
+      {
+        "id": "access",
+        "name": "Passierschein",
+        "emoji": "🎫",
+        "description": "Zugang zu Japanese Cards",
+        "is_passierschein": true
+      }
+    ]
+  },
+  "pages": [],
+  "theme": {}
+}
