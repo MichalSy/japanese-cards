@@ -7,7 +7,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: japanese-cards.aikoapp
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   BASE_VERSION: "1.0"
 
 jobs:
@@ -61,7 +60,7 @@ jobs:
       - name: Configure npm for GitHub Packages
         run: |
           echo "@michalsy:registry=https://npm.pkg.github.com" > .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Create version env file
         run: |
