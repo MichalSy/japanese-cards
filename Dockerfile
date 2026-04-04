@@ -13,6 +13,10 @@ COPY public ./public
 COPY server.js ./
 COPY src/app ./app
 COPY next.config.js ./
+COPY aikoapp.json ./
+COPY package.json ./
+COPY package-lock.json ./
+COPY tsconfig.json ./
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
