@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "node server.js",
-    "prebuild": "npx @michalsy/aiko-webapp-core generate && cp -r .aiko/app/auth .aiko/app/login src/app/ && cp .aiko/middleware.ts .",
+    "prebuild": "npx @michalsy/aiko-webapp-core generate && cp -r .aiko/app/* src/app/ && cp .aiko/middleware.ts . && cp .aiko/contexts/* src/contexts/ 2>/dev/null || true",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
