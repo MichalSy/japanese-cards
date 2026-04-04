@@ -8,6 +8,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: japanese-cards.aikoapp
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
   BASE_VERSION: "1.0"
 
 jobs:
