@@ -29,6 +29,10 @@
       }
     ]
   },
-  "pages": [],
+  "pages": [
+    { "path": "/", "label": "Home", "icon": "🏠" },
+    { "path": "/content", "label": "Content", "icon": "📚" },
+    { "path": "/game", "label": "Game", "icon": "🎮" }
+  ],
   "theme": {}
 }
