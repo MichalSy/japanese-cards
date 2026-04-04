@@ -107,7 +107,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          git clone --depth 1 https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/MichalSy/gitops-config.git /tmp/gitops-config
+          git clone --depth 1 https://x-access-token:${{ secrets.NPM_TOKEN }}@github.com/MichalSy/gitops-config.git /tmp/gitops-config
           
           cd /tmp/gitops-config
           
