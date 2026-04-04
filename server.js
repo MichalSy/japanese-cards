@@ -10,8 +10,14 @@ const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
-  createServer(async (req, res) => {
+  const httpServer = createServer(async (req, res) => {
     try {
+      // Health endpoint
+      if (req.url === '/api/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() }))
+        return
+      }
       const parsedUrl = parse(req.url, true)
       await handle(req, res, parsedUrl)
     } catch (err) {
@@ -20,11 +26,13 @@ app.prepare().then(() => {
       res.end('internal server error')
     }
   })
+
+  httpServer
     .once('error', (err) => {
       console.error(err)
       process.exit(1)
     })
     .listen(port, () => {
-      console.log(`> Ready on http://${hostname}:${port}`)
+      console.log(`🚀 Ready on http://${hostname}:${port}`)
     })
 })
