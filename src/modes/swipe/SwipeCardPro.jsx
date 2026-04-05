@@ -128,15 +128,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
               rgba(239,68,68,${Math.min(swipeProgress * 0.25, 0.22)}) 60%,
               transparent 100%)`,
             transition: isDragging ? 'none' : 'opacity 0.2s',
-            display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '20px',
-          }}>
-            <span style={{
-              fontSize: '60px', fontWeight: '700', color: 'rgba(255,255,255,0.9)',
-              opacity: Math.min(swipeProgress * 2, 1),
-              filter: 'drop-shadow(0 2px 6px rgba(239,68,68,0.5))',
-              transition: isDragging ? 'none' : 'opacity 0.2s',
-            }}>✕</span>
-          </div>
+            display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
+          }} />
         )}
         {isSwipingRight && (
           <div style={{
@@ -146,15 +139,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
               rgba(16,185,129,${Math.min(swipeProgress * 0.25, 0.22)}) 60%,
               transparent 100%)`,
             transition: isDragging ? 'none' : 'opacity 0.2s',
-            display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '20px',
-          }}>
-            <span style={{
-              fontSize: '60px', fontWeight: '700', color: 'rgba(255,255,255,0.9)',
-              opacity: Math.min(swipeProgress * 2, 1),
-              filter: 'drop-shadow(0 2px 6px rgba(16,185,129,0.5))',
-              transition: isDragging ? 'none' : 'opacity 0.2s',
-            }}>✓</span>
-          </div>
+          }} />
         )}
 
         <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>

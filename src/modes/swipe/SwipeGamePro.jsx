@@ -139,15 +139,20 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
                 flex: 1,
                 height: '56px',
                 borderRadius: '100px',
-                background: `rgba(${r},${g},${b},0.12)`,
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: `1px solid rgba(${r},${g},${b},0.30)`,
+                /* Zwei Background-Layer: weißer Schimmer oben + Farb-Tint */
+                background: [
+                  `linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 55%)`,
+                  `rgba(${r},${g},${b},0.10)`,
+                ].join(', '),
+                backdropFilter: 'blur(24px) saturate(160%)',
+                WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+                border: `1px solid rgba(${r},${g},${b},0.28)`,
                 boxShadow: [
-                  `inset 0 0 12px rgba(${r},${g},${b},0.12)`,
-                  `inset 0 1px 0 rgba(255,255,255,0.12)`,
-                  `0 4px 16px rgba(${r},${g},${b},0.18)`,
-                  `0 1px 3px rgba(0,0,0,0.2)`,
+                  `inset 0 1px 0 rgba(255,255,255,0.20)`,   /* obere Kante hell */
+                  `inset 0 -1px 0 rgba(0,0,0,0.12)`,         /* untere Kante dunkel */
+                  `inset 0 0 16px rgba(${r},${g},${b},0.10)`,/* subtiler Farb-Glow */
+                  `0 4px 20px rgba(${r},${g},${b},0.20)`,    /* äußerer Schatten */
+                  `0 1px 4px rgba(0,0,0,0.18)`,
                 ].join(', '),
                 color: `rgba(${r},${g},${b},0.95)`,
                 fontSize: '16px',
