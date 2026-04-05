@@ -98,11 +98,28 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Text + Card + Progress zusammen zentriert */}
+      {/* Titel + Progress + Card zusammen zentriert */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0 }}>
-        <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '18px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+        <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '10px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
           Ist die Kombination richtig?
         </span>
+
+        {/* Progress zwischen Titel und Card — schmal */}
+        <div style={{ width: '160px', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(255,255,255,0.10)', overflow: 'hidden' }}>
+            <div style={{
+              height: '100%', width: `${progress}%`,
+              background: 'linear-gradient(90deg, #ec4899, #a855f7)',
+              borderRadius: '2px',
+              transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+              boxShadow: '0 0 6px rgba(236,72,153,0.6)',
+            }} />
+          </div>
+          <span style={{ fontSize: '11px', fontWeight: '500', color: 'rgba(255,255,255,0.35)', flexShrink: 0 }}>
+            {game.currentIndex + 1}/{game.totalCards}
+          </span>
+        </div>
+
         <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
           {game.cardStack.map((card, idx) => (
             <SwipeCardPro
@@ -114,33 +131,17 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             />
           ))}
         </div>
-
-        {/* Progress — selbe breite wie card */}
-        <div style={{ width: 'calc(100% - 48px)', maxWidth: '240px', marginTop: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(255,255,255,0.10)', overflow: 'hidden' }}>
-            <div style={{
-              height: '100%', width: `${progress}%`,
-              background: 'linear-gradient(90deg, #ec4899, #a855f7)',
-              borderRadius: '2px',
-              transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
-              boxShadow: '0 0 6px rgba(236,72,153,0.6)',
-            }} />
-          </div>
-          <span style={{ fontSize: '12px', fontWeight: '500', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.02em', flexShrink: 0 }}>
-            {game.currentIndex + 1}/{game.totalCards}
-          </span>
-        </div>
       </div>
 
-      {/* Bubble-Buttons */}
+      {/* Bubble-Buttons — nah an der Card */}
       <div style={{
         flexShrink: 0,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         gap: '48px',
-        padding: '16px 24px',
-        paddingBottom: 'calc(28px + env(safe-area-inset-bottom, 16px))',
+        padding: '12px 24px',
+        paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 16px))',
       }}>
         {[
           { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
