@@ -100,7 +100,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
 
       {/* Text + Card zusammen vertikal zentriert */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0 }}>
-        <span style={{ fontSize: '16px', fontWeight: '500', color: 'rgba(255,255,255,0.75)', marginBottom: '16px', letterSpacing: '0.01em' }}>
+        <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '18px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
           Ist die Kombination richtig?
         </span>
         <div style={{ position: 'relative', width: '100%', maxWidth: '300px', aspectRatio: '9/12', flexShrink: 0 }}>
@@ -126,44 +126,48 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             {game.currentIndex + 1}/{game.totalCards}
           </span>
         </div>
-        {/* Buttons — clean, minimal, kein Badge-Kreis */}
+        {/* Buttons — Topbar-Style: pill, blur, inset glow */}
         <div style={{ display: 'flex', gap: '10px' }}>
           {[
-            { isCorrect: false, label: 'Falsch', emoji: '✕', r: 255, g: 59,  b: 48  },
-            { isCorrect: true,  label: 'Richtig', emoji: '✓', r: 48,  g: 209, b: 88  },
-          ].map(({ isCorrect, label, emoji, r, g, b }) => (
+            { isCorrect: false, label: 'Falsch', icon: '✕', r: 255, g: 59,  b: 48  },
+            { isCorrect: true,  label: 'Richtig', icon: '✓', r: 48,  g: 209, b: 88  },
+          ].map(({ isCorrect, label, icon, r, g, b }) => (
             <button
               key={label}
               onClick={() => handleButtonClick(isCorrect)}
               style={{
                 flex: 1,
-                height: '60px',
-                borderRadius: '16px',
-                background: `rgba(${r},${g},${b},0.15)`,
+                height: '56px',
+                borderRadius: '100px',
+                background: `rgba(${r},${g},${b},0.12)`,
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                border: `1.5px solid rgba(${r},${g},${b},0.45)`,
-                boxShadow: `0 2px 12px rgba(${r},${g},${b},0.15), inset 0 1px 0 rgba(255,255,255,0.12)`,
-                color: `rgb(${r},${g},${b})`,
-                fontSize: '17px',
+                border: `1px solid rgba(${r},${g},${b},0.30)`,
+                boxShadow: [
+                  `inset 0 0 12px rgba(${r},${g},${b},0.12)`,
+                  `inset 0 1px 0 rgba(255,255,255,0.12)`,
+                  `0 4px 16px rgba(${r},${g},${b},0.18)`,
+                  `0 1px 3px rgba(0,0,0,0.2)`,
+                ].join(', '),
+                color: `rgba(${r},${g},${b},0.95)`,
+                fontSize: '16px',
                 fontWeight: '600',
                 cursor: 'pointer',
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '2px',
-                transition: 'transform 0.12s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s',
+                gap: '8px',
+                transition: 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s',
                 fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
                 letterSpacing: '-0.01em',
               }}
-              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.75' }}
+              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.7' }}
               onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
-              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.75' }}
+              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.7' }}
               onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
             >
-              <span style={{ fontSize: '20px', lineHeight: 1 }}>{emoji}</span>
-              <span style={{ fontSize: '12px', fontWeight: '500', opacity: 0.85 }}>{label}</span>
+              <span style={{ fontSize: '18px', lineHeight: 1, fontWeight: '700' }}>{icon}</span>
+              <span>{label}</span>
             </button>
           ))}
         </div>

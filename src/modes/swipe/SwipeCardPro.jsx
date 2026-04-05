@@ -119,29 +119,43 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
           pointerEvents: 'none', zIndex: 1,
         }} />
 
-        {/* Vollflächiger Farbwechsel beim Drag — schnell und klar */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: isSwipingLeft
-            ? `rgba(239,68,68,${Math.min(swipeProgress * 0.55, 0.55)})`
-            : isSwipingRight
-            ? `rgba(16,185,129,${Math.min(swipeProgress * 0.55, 0.55)})`
-            : 'transparent',
-          pointerEvents: 'none',
-          transition: isDragging ? 'none' : 'background 0.15s',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3,
-        }}>
-          {(isSwipingLeft || isSwipingRight) && (
+        {/* Seitlich-Füllung beim Drag — von der Seite fließend, subtil */}
+        {isSwipingLeft && (
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 3,
+            background: `linear-gradient(90deg,
+              rgba(239,68,68,${Math.min(swipeProgress * 0.45, 0.40)}) 0%,
+              rgba(239,68,68,${Math.min(swipeProgress * 0.25, 0.22)}) 60%,
+              transparent 100%)`,
+            transition: isDragging ? 'none' : 'opacity 0.2s',
+            display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '20px',
+          }}>
             <span style={{
-              fontSize: '80px', fontWeight: '700', color: 'white',
-              opacity: Math.min(swipeProgress * 1.8, 1),
-              filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.4))',
-              transition: isDragging ? 'none' : 'opacity 0.15s',
-            }}>
-              {isSwipingLeft ? '✕' : '✓'}
-            </span>
-          )}
-        </div>
+              fontSize: '60px', fontWeight: '700', color: 'rgba(255,255,255,0.9)',
+              opacity: Math.min(swipeProgress * 2, 1),
+              filter: 'drop-shadow(0 2px 6px rgba(239,68,68,0.5))',
+              transition: isDragging ? 'none' : 'opacity 0.2s',
+            }}>✕</span>
+          </div>
+        )}
+        {isSwipingRight && (
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 3,
+            background: `linear-gradient(-90deg,
+              rgba(16,185,129,${Math.min(swipeProgress * 0.45, 0.40)}) 0%,
+              rgba(16,185,129,${Math.min(swipeProgress * 0.25, 0.22)}) 60%,
+              transparent 100%)`,
+            transition: isDragging ? 'none' : 'opacity 0.2s',
+            display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '20px',
+          }}>
+            <span style={{
+              fontSize: '60px', fontWeight: '700', color: 'rgba(255,255,255,0.9)',
+              opacity: Math.min(swipeProgress * 2, 1),
+              filter: 'drop-shadow(0 2px 6px rgba(16,185,129,0.5))',
+              transition: isDragging ? 'none' : 'opacity 0.2s',
+            }}>✓</span>
+          </div>
+        )}
 
         <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
           <div style={{ fontSize: 'clamp(100px, 28vw, 170px)', fontWeight: '300', lineHeight: 1, color: 'white', textAlign: 'center', marginBottom: '24px', textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
