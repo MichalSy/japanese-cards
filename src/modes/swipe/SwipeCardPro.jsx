@@ -119,22 +119,28 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
           pointerEvents: 'none', zIndex: 1,
         }} />
 
+        {/* Vollflächiger Farbwechsel beim Drag — schnell und klar */}
         <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
-          background: `linear-gradient(90deg, rgba(239,68,68,${isSwipingLeft ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
-          pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
-          display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '24px', zIndex: 1,
+          position: 'absolute', inset: 0,
+          background: isSwipingLeft
+            ? `rgba(239,68,68,${Math.min(swipeProgress * 0.55, 0.55)})`
+            : isSwipingRight
+            ? `rgba(16,185,129,${Math.min(swipeProgress * 0.55, 0.55)})`
+            : 'transparent',
+          pointerEvents: 'none',
+          transition: isDragging ? 'none' : 'background 0.15s',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3,
         }}>
-          <span style={{ fontSize: '44px', opacity: isSwipingLeft ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✗</span>
-        </div>
-
-        <div style={{
-          position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%',
-          background: `linear-gradient(-90deg, rgba(16,185,129,${isSwipingRight ? swipeProgress * 0.25 : 0}) 0%, transparent 100%)`,
-          pointerEvents: 'none', transition: isDragging ? 'none' : 'background 0.2s',
-          display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px', zIndex: 1,
-        }}>
-          <span style={{ fontSize: '44px', opacity: isSwipingRight ? swipeProgress : 0, color: 'white', fontWeight: '700' }}>✓</span>
+          {(isSwipingLeft || isSwipingRight) && (
+            <span style={{
+              fontSize: '80px', fontWeight: '700', color: 'white',
+              opacity: Math.min(swipeProgress * 1.8, 1),
+              filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.4))',
+              transition: isDragging ? 'none' : 'opacity 0.15s',
+            }}>
+              {isSwipingLeft ? '✕' : '✓'}
+            </span>
+          )}
         </div>
 
         <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>

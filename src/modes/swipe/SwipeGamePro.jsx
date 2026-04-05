@@ -89,12 +89,6 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         <ProHeaderBar title="Swipe Game" />
       </div>
 
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '40px' }}>
-        <span style={{ fontSize: '18px', fontWeight: '500', color: 'rgba(255,255,255,0.9)', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
-          Ist die Kombination richtig?
-        </span>
-      </div>
-
       {toast && (
         <div style={{ position: 'fixed', top: '120px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, opacity: toastVisible ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 24px', backgroundColor: toast.isCorrect ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)', backdropFilter: 'blur(10px)', borderRadius: '16px' }}>
@@ -104,16 +98,22 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      <div style={{ flex: 4, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0, overflow: 'hidden', maxHeight: '65vh' }}>
-        {game.cardStack.map((card, idx) => (
-          <SwipeCardPro
-            key={`${game.currentIndex + idx}`}
-            card={card} index={idx} isActive={idx === 0}
-            onSwipe={handleSwipeWithToast}
-            correctAnswer={idx === 0 ? game.correctAnswer : undefined}
-            onButtonClick={idx === 0 ? buttonClickRef : undefined}
-          />
-        ))}
+      {/* Text + Card zusammen vertikal zentriert */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0 }}>
+        <span style={{ fontSize: '16px', fontWeight: '500', color: 'rgba(255,255,255,0.75)', marginBottom: '16px', letterSpacing: '0.01em' }}>
+          Ist die Kombination richtig?
+        </span>
+        <div style={{ position: 'relative', width: '100%', maxWidth: '300px', aspectRatio: '9/12', flexShrink: 0 }}>
+          {game.cardStack.map((card, idx) => (
+            <SwipeCardPro
+              key={`${game.currentIndex + idx}`}
+              card={card} index={idx} isActive={idx === 0}
+              onSwipe={handleSwipeWithToast}
+              correctAnswer={idx === 0 ? game.correctAnswer : undefined}
+              onButtonClick={idx === 0 ? buttonClickRef : undefined}
+            />
+          ))}
+        </div>
       </div>
 
       <div style={{ flexShrink: 0, padding: '12px 20px', paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 16px))' }}>
@@ -126,62 +126,44 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             {game.currentIndex + 1}/{game.totalCards}
           </span>
         </div>
-        {/* Buttons — iOS 17 Liquid Glass */}
+        {/* Buttons — clean, minimal, kein Badge-Kreis */}
         <div style={{ display: 'flex', gap: '10px' }}>
           {[
-            { isCorrect: false, label: 'Falsch', symbol: '✕', r: 255, g: 59, b: 48 },
-            { isCorrect: true,  label: 'Richtig', symbol: '✓', r: 48,  g: 209, b: 88 },
-          ].map(({ isCorrect, label, symbol, r, g, b }) => (
+            { isCorrect: false, label: 'Falsch', emoji: '✕', r: 255, g: 59,  b: 48  },
+            { isCorrect: true,  label: 'Richtig', emoji: '✓', r: 48,  g: 209, b: 88  },
+          ].map(({ isCorrect, label, emoji, r, g, b }) => (
             <button
               key={label}
               onClick={() => handleButtonClick(isCorrect)}
               style={{
                 flex: 1,
-                height: '64px',
-                borderRadius: '20px',
-                /* Glass: top-sheen als zweite bg-layer (volle Breite) + color tint */
-                background: [
-                  `linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 50%)`,
-                  `linear-gradient(160deg, rgba(${r},${g},${b},0.32) 0%, rgba(${r},${g},${b},0.13) 100%)`,
-                ].join(', '),
-                backdropFilter: 'blur(20px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                border: `1px solid rgba(${r},${g},${b},0.40)`,
-                boxShadow: [
-                  `0 4px 16px rgba(${r},${g},${b},0.20)`,
-                  `0 1px 4px rgba(0,0,0,0.15)`,
-                  `inset 0 1px 0 rgba(255,255,255,0.18)`,  /* top highlight */
-                  `inset 0 -1px 0 rgba(0,0,0,0.08)`,       /* bottom shadow */
-                ].join(', '),
+                height: '60px',
+                borderRadius: '16px',
+                background: `rgba(${r},${g},${b},0.15)`,
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: `1.5px solid rgba(${r},${g},${b},0.45)`,
+                boxShadow: `0 2px 12px rgba(${r},${g},${b},0.15), inset 0 1px 0 rgba(255,255,255,0.12)`,
                 color: `rgb(${r},${g},${b})`,
-                fontSize: '15px',
-                fontWeight: '650',
+                fontSize: '17px',
+                fontWeight: '600',
                 cursor: 'pointer',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '9px',
-                transition: 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s ease',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-                letterSpacing: '-0.02em',
-                position: 'relative',
-                overflow: 'hidden',
+                gap: '2px',
+                transition: 'transform 0.12s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s',
+                fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+                letterSpacing: '-0.01em',
               }}
-              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.94)'; e.currentTarget.style.opacity = '0.8' }}
+              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.75' }}
               onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
-              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.94)'; e.currentTarget.style.opacity = '0.8' }}
+              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.75' }}
               onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
             >
-              <span style={{
-                width: '30px', height: '30px',
-                borderRadius: '50%',
-                background: `rgba(${r},${g},${b},0.20)`,
-                border: `1px solid rgba(${r},${g},${b},0.35)`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '15px', fontWeight: '700', lineHeight: 1,
-                flexShrink: 0, zIndex: 1,
-              }}>{symbol}</span>
-              <span style={{ zIndex: 1 }}>{label}</span>
+              <span style={{ fontSize: '20px', lineHeight: 1 }}>{emoji}</span>
+              <span style={{ fontSize: '12px', fontWeight: '500', opacity: 0.85 }}>{label}</span>
             </button>
           ))}
         </div>
