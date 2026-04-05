@@ -126,60 +126,66 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             {game.currentIndex + 1}/{game.totalCards}
           </span>
         </div>
-        {/* Buttons — Apple iOS style */}
+        {/* Buttons — iOS 17 Liquid Glass */}
         <div style={{ display: 'flex', gap: '10px' }}>
           {[
-            {
-              isCorrect: false,
-              label: 'Falsch',
-              symbol: '×',
-              tint: '255,59,48',
-            },
-            {
-              isCorrect: true,
-              label: 'Richtig',
-              symbol: '✓',
-              tint: '52,199,89',
-            },
-          ].map(({ isCorrect, label, symbol, tint }) => (
+            { isCorrect: false, label: 'Falsch', symbol: '✕', r: 255, g: 59, b: 48 },
+            { isCorrect: true,  label: 'Richtig', symbol: '✓', r: 48,  g: 209, b: 88 },
+          ].map(({ isCorrect, label, symbol, r, g, b }) => (
             <button
               key={label}
               onClick={() => handleButtonClick(isCorrect)}
               style={{
                 flex: 1,
-                height: '62px',
-                borderRadius: '18px',
-                background: `rgba(${tint},0.18)`,
+                height: '64px',
+                borderRadius: '20px',
+                /* Layered glass: color tint base + light gradient overlay */
+                background: `linear-gradient(160deg, rgba(${r},${g},${b},0.30) 0%, rgba(${r},${g},${b},0.12) 100%)`,
                 backdropFilter: 'blur(20px) saturate(180%)',
                 WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                border: `1px solid rgba(${tint},0.35)`,
-                boxShadow: `0 2px 12px rgba(${tint},0.2), inset 0 1px 0 rgba(255,255,255,0.1)`,
-                color: `rgb(${tint})`,
-                fontSize: '16px',
-                fontWeight: '600',
+                border: `1px solid rgba(${r},${g},${b},0.40)`,
+                boxShadow: [
+                  `0 4px 16px rgba(${r},${g},${b},0.20)`,
+                  `0 1px 4px rgba(0,0,0,0.15)`,
+                  `inset 0 1px 0 rgba(255,255,255,0.18)`,  /* top highlight */
+                  `inset 0 -1px 0 rgba(0,0,0,0.08)`,       /* bottom shadow */
+                ].join(', '),
+                color: `rgb(${r},${g},${b})`,
+                fontSize: '15px',
+                fontWeight: '650',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                transition: 'transform 0.12s ease, opacity 0.12s ease',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
-                letterSpacing: '-0.01em',
+                gap: '9px',
+                transition: 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s ease',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+                letterSpacing: '-0.02em',
+                position: 'relative',
+                overflow: 'hidden',
               }}
-              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.95)'; e.currentTarget.style.opacity = '0.85' }}
+              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.94)'; e.currentTarget.style.opacity = '0.8' }}
               onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
-              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.95)'; e.currentTarget.style.opacity = '0.85' }}
+              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.94)'; e.currentTarget.style.opacity = '0.8' }}
               onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
             >
+              {/* Specular highlight auf der button-oberfläche */}
               <span style={{
-                width: '28px', height: '28px',
+                position: 'absolute', top: 0, left: '15%', right: '15%', height: '50%',
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, transparent 100%)',
+                borderRadius: '20px 20px 0 0',
+                pointerEvents: 'none',
+              }} />
+              <span style={{
+                width: '30px', height: '30px',
                 borderRadius: '50%',
-                background: `rgba(${tint},0.25)`,
+                background: `rgba(${r},${g},${b},0.20)`,
+                border: `1px solid rgba(${r},${g},${b},0.35)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '16px', fontWeight: '700', lineHeight: 1,
-                flexShrink: 0,
+                fontSize: '15px', fontWeight: '700', lineHeight: 1,
+                flexShrink: 0, zIndex: 1,
               }}>{symbol}</span>
-              {label}
+              <span style={{ zIndex: 1 }}>{label}</span>
             </button>
           ))}
         </div>

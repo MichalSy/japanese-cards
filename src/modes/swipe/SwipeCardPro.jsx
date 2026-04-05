@@ -99,15 +99,27 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative', borderRadius: '26px',
-        background: 'rgba(255,255,255,0.07)',
-        backdropFilter: 'blur(48px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.1)',
-        border: '1px solid rgba(255,255,255,0.13)',
+        /* Dunkel genug um gestapelte Karten zu verstecken, transparent genug für Gradient-Background */
+        background: 'rgba(14, 9, 38, 0.82)',
+        backdropFilter: 'blur(24px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+        /* Glas-Look: Highlight oben, shadow unten */
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.2), inset 1px 0 rgba(255,255,255,0.06), inset -1px 0 rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.10)',
         overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
-        {/* subtle top sheen — very thin, not white wash */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '35%', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 1, borderRadius: '26px 26px 0 0' }} />
+        {/* Glass top-sheen: licht-reflektion auf der oberfläche */}
+        <div style={{
+          position: 'absolute', top: 0, left: '10%', right: '10%', height: '45%',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 60%, transparent 100%)',
+          pointerEvents: 'none', zIndex: 1,
+        }} />
+        {/* Bottom glow */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '30%',
+          background: 'linear-gradient(0deg, rgba(236,72,153,0.08) 0%, transparent 100%)',
+          pointerEvents: 'none', zIndex: 1,
+        }} />
 
         <div style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
