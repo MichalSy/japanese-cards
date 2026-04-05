@@ -20,8 +20,8 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   }, [card, correctAnswer, onSwipe, character, swipeState])
 
   useEffect(() => {
-    if (onButtonClick?.current !== undefined && isActive) {
-      if (typeof onButtonClick === 'function') onButtonClick(triggerSwipe)
+    if (onButtonClick && isActive) {
+      onButtonClick.current = triggerSwipe
     }
   }, [onButtonClick, isActive, triggerSwipe])
 

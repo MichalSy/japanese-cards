@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@michalsy/aiko-webapp-core": "^1.1.4",
+    "@michalsy/aiko-webapp-core": "^1.1.5",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
     "lucide-react": "^0.563.0",
