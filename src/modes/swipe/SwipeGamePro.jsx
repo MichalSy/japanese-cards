@@ -126,50 +126,59 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             {game.currentIndex + 1}/{game.totalCards}
           </span>
         </div>
-        {/* Buttons */}
-        <div style={{ display: 'flex', gap: '12px' }}>
+        {/* Buttons — Apple iOS style */}
+        <div style={{ display: 'flex', gap: '10px' }}>
           {[
             {
-              isCorrect: false, label: 'Falsch', icon: '✗',
-              bg: 'linear-gradient(135deg, rgba(239,68,68,0.85), rgba(220,38,38,0.75))',
-              shadow: '0 4px 20px rgba(239,68,68,0.35)',
-              border: '1px solid rgba(239,68,68,0.5)',
+              isCorrect: false,
+              label: 'Falsch',
+              symbol: '×',
+              tint: '255,59,48',
             },
             {
-              isCorrect: true, label: 'Richtig', icon: '✓',
-              bg: 'linear-gradient(135deg, rgba(16,185,129,0.85), rgba(5,150,105,0.75))',
-              shadow: '0 4px 20px rgba(16,185,129,0.35)',
-              border: '1px solid rgba(16,185,129,0.5)',
+              isCorrect: true,
+              label: 'Richtig',
+              symbol: '✓',
+              tint: '52,199,89',
             },
-          ].map(({ isCorrect, label, icon, bg, shadow, border }) => (
+          ].map(({ isCorrect, label, symbol, tint }) => (
             <button
               key={label}
               onClick={() => handleButtonClick(isCorrect)}
               style={{
                 flex: 1,
-                padding: '16px 12px',
-                borderRadius: '20px',
-                background: bg,
-                border,
-                boxShadow: shadow,
-                backdropFilter: 'blur(12px)',
-                color: 'white',
-                fontSize: '17px',
-                fontWeight: '700',
+                height: '62px',
+                borderRadius: '18px',
+                background: `rgba(${tint},0.18)`,
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                border: `1px solid rgba(${tint},0.35)`,
+                boxShadow: `0 2px 12px rgba(${tint},0.2), inset 0 1px 0 rgba(255,255,255,0.1)`,
+                color: `rgb(${tint})`,
+                fontSize: '16px',
+                fontWeight: '600',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '10px',
-                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                letterSpacing: '0.02em',
+                gap: '8px',
+                transition: 'transform 0.12s ease, opacity 0.12s ease',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+                letterSpacing: '-0.01em',
               }}
-              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.96)'}
-              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-              onTouchStart={e => e.currentTarget.style.transform = 'scale(0.96)'}
-              onTouchEnd={e => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.95)'; e.currentTarget.style.opacity = '0.85' }}
+              onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
+              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.95)'; e.currentTarget.style.opacity = '0.85' }}
+              onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
             >
-              <span style={{ fontSize: '20px', lineHeight: 1 }}>{icon}</span>
+              <span style={{
+                width: '28px', height: '28px',
+                borderRadius: '50%',
+                background: `rgba(${tint},0.25)`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '16px', fontWeight: '700', lineHeight: 1,
+                flexShrink: 0,
+              }}>{symbol}</span>
               {label}
             </button>
           ))}

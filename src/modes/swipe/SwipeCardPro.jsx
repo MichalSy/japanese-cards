@@ -99,12 +99,15 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative', borderRadius: '26px',
-        backgroundImage: 'url(/card-frosted.svg)', backgroundSize: 'cover', backgroundPosition: 'center',
-        boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2)',
-        border: '1px solid rgba(255,255,255,0.15)',
+        background: 'rgba(255,255,255,0.07)',
+        backdropFilter: 'blur(48px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.1)',
+        border: '1px solid rgba(255,255,255,0.13)',
         overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.05) 50%, transparent 100%)', pointerEvents: 'none', zIndex: 1 }} />
+        {/* subtle top sheen — very thin, not white wash */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '35%', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 1, borderRadius: '26px 26px 0 0' }} />
 
         <div style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: '50%',
