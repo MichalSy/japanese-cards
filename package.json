@@ -4,13 +4,13 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "node server.js",
-    "prebuild": "npx @michalsy/aiko-webapp-core generate && cp -r .aiko/app/api .aiko/app/auth .aiko/app/login .aiko/app/no-access .aiko/app/start src/app/ && mkdir -p src/contexts && cp -r .aiko/contexts/* src/contexts/ && cp .aiko/middleware.ts . && cp .aiko/pages.ts src/pages.ts 2>/dev/null || true",
+    "prebuild": "npx @michalsy/aiko-webapp-core generate && cp -r .aiko/app/api .aiko/app/auth .aiko/app/login .aiko/app/no-access .aiko/app/start src/app/ && cp .aiko/app/layout.tsx src/app/layout.tsx && mkdir -p src/contexts && cp -r .aiko/contexts/* src/contexts/ && cp .aiko/middleware.ts . && cp .aiko/pages.ts src/pages.ts 2>/dev/null || true",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
-    "@michalsy/aiko-webapp-core": "^1.1.1",
+    "@michalsy/aiko-webapp-core": "^1.1.2",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
     "lucide-react": "^0.563.0",
