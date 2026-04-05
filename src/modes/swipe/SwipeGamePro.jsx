@@ -115,8 +115,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           ))}
         </div>
 
-        {/* Progress direkt unter der Card */}
-        <div style={{ width: '100%', maxWidth: '290px', marginTop: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        {/* Progress — selbe breite wie card */}
+        <div style={{ width: 'calc(100% - 48px)', maxWidth: '240px', marginTop: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(255,255,255,0.10)', overflow: 'hidden' }}>
             <div style={{
               height: '100%', width: `${progress}%`,
@@ -150,25 +150,21 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             key={icon}
             onClick={() => handleButtonClick(isCorrect)}
             style={{
-              width: '72px',
-              height: '72px',
+              width: '84px',
+              height: '84px',
               borderRadius: '50%',
-              background: [
-                `radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%)`,
-                `rgba(${r},${g},${b},0.16)`,
-              ].join(', '),
-              backdropFilter: 'blur(20px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-              border: `1.5px solid rgba(${r},${g},${b},0.35)`,
+              /* Glass wie die Card: dunkle Basis + Farb-Tint, inset highlights */
+              background: `linear-gradient(160deg, rgba(${r},${g},${b},0.20) 0%, rgba(${r},${g},${b},0.08) 100%)`,
+              backdropFilter: 'blur(24px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+              border: `1px solid rgba(${r},${g},${b},0.25)`,
               boxShadow: [
-                `0 0 0 1px rgba(${r},${g},${b},0.08)`,
-                `0 8px 24px rgba(${r},${g},${b},0.25)`,
-                `0 2px 6px rgba(0,0,0,0.25)`,
-                `inset 0 1px 0 rgba(255,255,255,0.22)`,
-                `inset 0 -1px 0 rgba(0,0,0,0.10)`,
+                `inset 0 1px 0 rgba(255,255,255,0.18)`,  /* obere Glas-Kante */
+                `inset 0 -1px 0 rgba(0,0,0,0.15)`,        /* untere Kante */
+                `0 2px 8px rgba(0,0,0,0.20)`,              /* kein starker 3D-Glow */
               ].join(', '),
               color: `rgb(${r},${g},${b})`,
-              fontSize: '26px',
+              fontSize: '28px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
