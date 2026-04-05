@@ -98,12 +98,12 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Text + Card zusammen vertikal zentriert */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 16px', minHeight: 0 }}>
+      {/* Text + Card + Progress zusammen zentriert */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0 }}>
         <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '18px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
           Ist die Kombination richtig?
         </span>
-        <div style={{ position: 'relative', width: '100%', maxWidth: '300px', aspectRatio: '9/12', flexShrink: 0 }}>
+        <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
           {game.cardStack.map((card, idx) => (
             <SwipeCardPro
               key={`${game.currentIndex + idx}`}
@@ -114,68 +114,76 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             />
           ))}
         </div>
-      </div>
 
-      <div style={{ flexShrink: 0, padding: '12px 20px', paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 16px))' }}>
-        {/* Progress */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-          <div style={{ flex: 1, height: '4px', backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: '2px', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '2px', transition: 'width 0.3s ease' }} />
+        {/* Progress direkt unter der Card */}
+        <div style={{ width: '100%', maxWidth: '290px', marginTop: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(255,255,255,0.10)', overflow: 'hidden' }}>
+            <div style={{
+              height: '100%', width: `${progress}%`,
+              background: 'linear-gradient(90deg, #ec4899, #a855f7)',
+              borderRadius: '2px',
+              transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+              boxShadow: '0 0 6px rgba(236,72,153,0.6)',
+            }} />
           </div>
-          <span style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.5)', minWidth: '42px', textAlign: 'right' }}>
+          <span style={{ fontSize: '12px', fontWeight: '500', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.02em', flexShrink: 0 }}>
             {game.currentIndex + 1}/{game.totalCards}
           </span>
         </div>
-        {/* Buttons — Topbar-Style: pill, blur, inset glow */}
-        <div style={{ display: 'flex', gap: '10px' }}>
-          {[
-            { isCorrect: false, label: 'Falsch', icon: '✕', r: 255, g: 59,  b: 48  },
-            { isCorrect: true,  label: 'Richtig', icon: '✓', r: 48,  g: 209, b: 88  },
-          ].map(({ isCorrect, label, icon, r, g, b }) => (
-            <button
-              key={label}
-              onClick={() => handleButtonClick(isCorrect)}
-              style={{
-                flex: 1,
-                height: '56px',
-                borderRadius: '100px',
-                /* Zwei Background-Layer: weißer Schimmer oben + Farb-Tint */
-                background: [
-                  `linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 55%)`,
-                  `rgba(${r},${g},${b},0.10)`,
-                ].join(', '),
-                backdropFilter: 'blur(24px) saturate(160%)',
-                WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-                border: `1px solid rgba(${r},${g},${b},0.28)`,
-                boxShadow: [
-                  `inset 0 1px 0 rgba(255,255,255,0.20)`,   /* obere Kante hell */
-                  `inset 0 -1px 0 rgba(0,0,0,0.12)`,         /* untere Kante dunkel */
-                  `inset 0 0 16px rgba(${r},${g},${b},0.10)`,/* subtiler Farb-Glow */
-                  `0 4px 20px rgba(${r},${g},${b},0.20)`,    /* äußerer Schatten */
-                  `0 1px 4px rgba(0,0,0,0.18)`,
-                ].join(', '),
-                color: `rgba(${r},${g},${b},0.95)`,
-                fontSize: '16px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                transition: 'transform 0.14s cubic-bezier(0.34,1.56,0.64,1), opacity 0.1s',
-                fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-                letterSpacing: '-0.01em',
-              }}
-              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.7' }}
-              onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
-              onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.93)'; e.currentTarget.style.opacity = '0.7' }}
-              onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
-            >
-              <span style={{ fontSize: '18px', lineHeight: 1, fontWeight: '700' }}>{icon}</span>
-              <span>{label}</span>
-            </button>
-          ))}
-        </div>
+      </div>
+
+      {/* Bubble-Buttons */}
+      <div style={{
+        flexShrink: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '48px',
+        padding: '16px 24px',
+        paddingBottom: 'calc(28px + env(safe-area-inset-bottom, 16px))',
+      }}>
+        {[
+          { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
+          { isCorrect: true,  icon: '✓', r: 52,  g: 199, b: 89  },
+        ].map(({ isCorrect, icon, r, g, b }) => (
+          <button
+            key={icon}
+            onClick={() => handleButtonClick(isCorrect)}
+            style={{
+              width: '72px',
+              height: '72px',
+              borderRadius: '50%',
+              background: [
+                `radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%)`,
+                `rgba(${r},${g},${b},0.16)`,
+              ].join(', '),
+              backdropFilter: 'blur(20px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+              border: `1.5px solid rgba(${r},${g},${b},0.35)`,
+              boxShadow: [
+                `0 0 0 1px rgba(${r},${g},${b},0.08)`,
+                `0 8px 24px rgba(${r},${g},${b},0.25)`,
+                `0 2px 6px rgba(0,0,0,0.25)`,
+                `inset 0 1px 0 rgba(255,255,255,0.22)`,
+                `inset 0 -1px 0 rgba(0,0,0,0.10)`,
+              ].join(', '),
+              color: `rgb(${r},${g},${b})`,
+              fontSize: '26px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'transform 0.16s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.16s ease',
+              flexShrink: 0,
+            }}
+            onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.88)' }}
+            onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)' }}
+            onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.88)' }}
+            onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)' }}
+          >
+            {icon}
+          </button>
+        ))}
       </div>
     </div>
   )
