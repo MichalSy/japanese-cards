@@ -12,18 +12,18 @@ import { useAbilities } from '@/contexts/AbilitiesContext'
 const PAGES = [
   {
     "path": "/",
-    "ability": "Passierschein"
+    "ability": "access"
   },
   {
     "path": "/content",
-    "ability": "Passierschein"
+    "ability": "access"
   },
   {
     "path": "/game",
-    "ability": "Passierschein"
+    "ability": "access"
   }
 ] as const
-const PASSIERSCHEIN = 'Passierschein'
+const PASSIERSCHEIN = 'access'
 
 export default function StartPage() {
   const router = useRouter()
