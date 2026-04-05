@@ -22,19 +22,32 @@ let lastRegister = 0
 
 async function selfRegister() {
   const now = Date.now()
-  if (now - lastRegister < 5 * 60 * 1000) return // max alle 5 min
+  if (now - lastRegister < 5 * 60 * 1000) {
+    console.log('[HEALTH] Skipping registration (rate limit)')
+    return { skipped: true }
+  }
   lastRegister = now
 
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    if (!supabaseUrl || !serviceKey) return
+    
+    console.log('[HEALTH] Starting registration...', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!serviceKey,
+      keyLength: serviceKey?.length
+    })
+    
+    if (!supabaseUrl || !serviceKey) {
+      console.warn('[HEALTH] Missing env vars')
+      return { error: 'missing_env' }
+    }
 
     const { createClient } = await import('@supabase/supabase-js')
     const supabase = createClient(supabaseUrl, serviceKey)
 
     // App registrieren
-    await supabase
+    const { error: appError } = await supabase
       .from('guild_apps')
       .upsert({
         name: APP_NAME,
@@ -43,10 +56,15 @@ async function selfRegister() {
         description: APP_DESCRIPTION,
         last_seen: new Date().toISOString(),
       }, { onConflict: 'name' })
+    
+    if (appError) {
+      console.error('[HEALTH] App registration failed:', appError)
+      return { error: appError.message }
+    }
 
     // Fähigkeiten registrieren (mit ID)
     for (const ability of APP_ABILITIES) {
-      await supabase
+      const { error: abilityError } = await supabase
         .from('guild_abilities')
         .upsert({
           id: ability.id,
@@ -56,21 +74,28 @@ async function selfRegister() {
           description: ability.description || '',
           is_passierschein: (ability as any).is_passierschein ?? false,
         }, { onConflict: 'id,app_name' })
+      
+      if (abilityError) {
+        console.error(`[HEALTH] Ability ${ability.id} registration failed:`, abilityError)
+      }
     }
 
-    console.log(`[HEALTH] Registered ${APP_NAME} with ${APP_ABILITIES.length} abilities`)
-  } catch (e) {
-    console.warn('[HEALTH] Self-register failed:', e)
+    console.log(`[HEALTH] Successfully registered ${APP_NAME} with ${APP_ABILITIES.length} abilities`)
+    return { success: true }
+  } catch (e: any) {
+    console.error('[HEALTH] Self-register exception:', e)
+    return { error: e.message }
   }
 }
 
 export async function GET() {
-  selfRegister() // fire-and-forget
+  const registerResult = await selfRegister()
 
   return NextResponse.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
     app: APP_NAME,
     version: process.env.NEXT_PUBLIC_APP_VERSION || '0.0.0',
+    registration: registerResult,
   })
 }
