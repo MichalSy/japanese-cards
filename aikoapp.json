@@ -31,8 +31,8 @@
     ]
   },
   "pages": [
-    { "path": "/game", "label": "Game", "icon": "🎮" },
-    { "path": "/content", "label": "Content", "icon": "📚" }
+    { "path": "/content/hiragana", "label": "Hiragana", "icon": "あ" },
+    { "path": "/content/words", "label": "Wörter", "icon": "📚" }
   ],
   "theme": {}
 }
