@@ -11,11 +11,12 @@
     "loginTitle": "Irasshaimase! 🌸",
     "loginSubtitle": "Learn Japanese Characters",
     "loginButtonText": "Sign in with Google",
-    "successRedirect": "/start"
+    "successRedirect": "/start",
+    "needAccessAbility": true
   },
   "routes": {
-    "protected": ["/", "/content", "/game", "/api"],
-    "public": ["/login", "/auth/callback", "/no-access", "/start"]
+    "protected": ["/content", "/game", "/api"],
+    "public": ["/", "/login", "/auth/callback", "/no-access", "/start"]
   },
   "abilities": {
     "enabled": true,
@@ -30,9 +31,8 @@
     ]
   },
   "pages": [
-    { "path": "/", "label": "Home", "icon": "🏠" },
-    { "path": "/content", "label": "Content", "icon": "📚" },
-    { "path": "/game", "label": "Game", "icon": "🎮" }
+    { "path": "/game", "label": "Game", "icon": "🎮" },
+    { "path": "/content", "label": "Content", "icon": "📚" }
   ],
   "theme": {}
 }

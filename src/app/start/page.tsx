@@ -11,15 +11,11 @@ import { useAbilities } from '@/contexts/AbilitiesContext'
 // Page config from aikoapp.json
 const PAGES = [
   {
-    "path": "/",
+    "path": "/game",
     "ability": "access"
   },
   {
     "path": "/content",
-    "ability": "access"
-  },
-  {
-    "path": "/game",
     "ability": "access"
   }
 ] as const
