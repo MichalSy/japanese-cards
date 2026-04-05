@@ -139,8 +139,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
                 flex: 1,
                 height: '64px',
                 borderRadius: '20px',
-                /* Layered glass: color tint base + light gradient overlay */
-                background: `linear-gradient(160deg, rgba(${r},${g},${b},0.30) 0%, rgba(${r},${g},${b},0.12) 100%)`,
+                /* Glass: top-sheen als zweite bg-layer (volle Breite) + color tint */
+                background: [
+                  `linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 50%)`,
+                  `linear-gradient(160deg, rgba(${r},${g},${b},0.32) 0%, rgba(${r},${g},${b},0.13) 100%)`,
+                ].join(', '),
                 backdropFilter: 'blur(20px) saturate(180%)',
                 WebkitBackdropFilter: 'blur(20px) saturate(180%)',
                 border: `1px solid rgba(${r},${g},${b},0.40)`,
@@ -169,13 +172,6 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
               onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.94)'; e.currentTarget.style.opacity = '0.8' }}
               onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.opacity = '1' }}
             >
-              {/* Specular highlight auf der button-oberfläche */}
-              <span style={{
-                position: 'absolute', top: 0, left: '15%', right: '15%', height: '50%',
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, transparent 100%)',
-                borderRadius: '20px 20px 0 0',
-                pointerEvents: 'none',
-              }} />
               <span style={{
                 width: '30px', height: '30px',
                 borderRadius: '50%',

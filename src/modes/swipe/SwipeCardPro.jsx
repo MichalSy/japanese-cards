@@ -99,12 +99,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative', borderRadius: '26px',
-        /* Dunkel genug um gestapelte Karten zu verstecken, transparent genug für Gradient-Background */
-        background: 'rgba(14, 9, 38, 0.82)',
-        backdropFilter: 'blur(24px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-        /* Glas-Look: Highlight oben, shadow unten */
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.2), inset 1px 0 rgba(255,255,255,0.06), inset -1px 0 rgba(255,255,255,0.06)',
+        /* Solide dunkle Basis — kein backdrop-filter (der würde gestapelte Karten durchblenden) */
+        background: 'linear-gradient(160deg, rgba(28,16,60,1) 0%, rgba(12,8,34,1) 100%)',
+        /* Glas-Look durch inset highlights + border */
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.25)',
         border: '1px solid rgba(255,255,255,0.10)',
         overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
