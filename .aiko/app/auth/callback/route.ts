@@ -5,6 +5,6 @@ import { handleAuthCallback } from '@michalsy/aiko-webapp-core/auth/callback'
 
 export const GET = (req: Request) =>
   handleAuthCallback(req, {
-    successRedirect: '/',
+    successRedirect: '/start',
     errorRedirect: '/login?error=auth_failed',
   })

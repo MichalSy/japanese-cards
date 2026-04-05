@@ -11,7 +11,7 @@
     "loginTitle": "Irasshaimase! 🌸",
     "loginSubtitle": "Learn Japanese Characters",
     "loginButtonText": "Sign in with Google",
-    "successRedirect": "/"
+    "successRedirect": "/start"
   },
   "routes": {
     "protected": ["/", "/content", "/game", "/api"],
