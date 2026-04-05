@@ -1,22 +1,17 @@
-import type { Metadata } from 'next'
-import './globals.css'
-import '@michalsy/aiko-webapp-core/core.css'
-import { AuthProvider } from '@michalsy/aiko-webapp-core'
 import { AbilitiesProvider } from '@/contexts/AbilitiesContext'
+import { AuthProvider } from '@michalsy/aiko-webapp-core'
 import { LanguageProvider } from '@/context/LanguageContext'
+import '@michalsy/aiko-webapp-core/core.css'
 
-export const metadata: Metadata = {
-  title: "Japanese Cards - Learn Japanese Characters",
+export const metadata = {
+  title: 'Japanese Cards',
   description: 'Learn Japanese characters playfully',
 }
-
-// Pages that should show sidebar (all authenticated pages)
-const SIDEBAR_PATHS = ['/', '/content', '/game']
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
-      <body>
+      <body className="antialiased">
         <AuthProvider>
           <AbilitiesProvider>
             <LanguageProvider>
