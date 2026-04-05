@@ -116,30 +116,60 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         ))}
       </div>
 
-      <div style={{ flexShrink: 0, padding: '8px 16px', paddingBottom: 'calc(40px + env(safe-area-inset-bottom, 20px))' }}>
-        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-          <span style={{ fontSize: '12px', fontWeight: '500', color: 'rgba(255,255,255,0.6)' }}>{game.currentIndex + 1}/{game.totalCards}</span>
+      <div style={{ flexShrink: 0, padding: '12px 20px', paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 16px))' }}>
+        {/* Progress */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+          <div style={{ flex: 1, height: '4px', backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: '2px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '2px', transition: 'width 0.3s ease' }} />
+          </div>
+          <span style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.5)', minWidth: '42px', textAlign: 'right' }}>
+            {game.currentIndex + 1}/{game.totalCards}
+          </span>
         </div>
-        <div style={{ height: '3px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden', marginBottom: '12px' }}>
-          <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, #ec4899, #d946ef)', borderRadius: '2px', transition: 'width 0.3s' }} />
-        </div>
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        {/* Buttons */}
+        <div style={{ display: 'flex', gap: '12px' }}>
           {[
-            { isCorrect: false, label: 'Falsch', icon: '✗', color: 'rgba(239,68,68,0.8)', textColor: '#f87171' },
-            { isCorrect: true, label: 'Richtig', icon: '✓', color: 'rgba(16,185,129,0.8)', textColor: '#34d399' },
-          ].map(({ isCorrect, label, icon, color, textColor }) => (
+            {
+              isCorrect: false, label: 'Falsch', icon: '✗',
+              bg: 'linear-gradient(135deg, rgba(239,68,68,0.85), rgba(220,38,38,0.75))',
+              shadow: '0 4px 20px rgba(239,68,68,0.35)',
+              border: '1px solid rgba(239,68,68,0.5)',
+            },
+            {
+              isCorrect: true, label: 'Richtig', icon: '✓',
+              bg: 'linear-gradient(135deg, rgba(16,185,129,0.85), rgba(5,150,105,0.75))',
+              shadow: '0 4px 20px rgba(16,185,129,0.35)',
+              border: '1px solid rgba(16,185,129,0.5)',
+            },
+          ].map(({ isCorrect, label, icon, bg, shadow, border }) => (
             <button
               key={label}
               onClick={() => handleButtonClick(isCorrect)}
               style={{
-                flex: 1, padding: '12px 20px', borderRadius: '100px',
-                background: 'transparent', border: `2.5px solid ${color}`,
-                color: textColor, fontSize: '16px', fontWeight: '600', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-                transition: 'all 0.2s', maxWidth: '180px',
+                flex: 1,
+                padding: '16px 12px',
+                borderRadius: '20px',
+                background: bg,
+                border,
+                boxShadow: shadow,
+                backdropFilter: 'blur(12px)',
+                color: 'white',
+                fontSize: '17px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                letterSpacing: '0.02em',
               }}
+              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.96)'}
+              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+              onTouchStart={e => e.currentTarget.style.transform = 'scale(0.96)'}
+              onTouchEnd={e => e.currentTarget.style.transform = 'scale(1)'}
             >
-              <span style={{ width: '22px', height: '22px', borderRadius: '50%', border: `1.5px solid ${color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 'bold', color: textColor, flexShrink: 0 }}>{icon}</span>
+              <span style={{ fontSize: '20px', lineHeight: 1 }}>{icon}</span>
               {label}
             </button>
           ))}
