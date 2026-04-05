@@ -4,6 +4,7 @@
 import { AbilitiesProvider } from '@/contexts/AbilitiesContext'
 import { AuthProvider, LanguageProvider } from '@michalsy/aiko-webapp-core'
 import '@michalsy/aiko-webapp-core/core.css'
+import './globals.css'
 
 export const metadata = {
   title: 'Japanese Cards',
