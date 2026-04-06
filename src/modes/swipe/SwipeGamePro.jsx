@@ -104,22 +104,6 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           Ist die Kombination richtig?
         </span>
 
-        {/* Progress zwischen Titel und Card — schmal */}
-        <div style={{ width: '160px', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(255,255,255,0.10)', overflow: 'hidden' }}>
-            <div style={{
-              height: '100%', width: `${progress}%`,
-              background: 'linear-gradient(90deg, #ec4899, #a855f7)',
-              borderRadius: '2px',
-              transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
-              boxShadow: '0 0 6px rgba(236,72,153,0.6)',
-            }} />
-          </div>
-          <span style={{ fontSize: '11px', fontWeight: '500', color: 'rgba(255,255,255,0.35)', flexShrink: 0 }}>
-            {game.currentIndex + 1}/{game.totalCards}
-          </span>
-        </div>
-
         <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
           {game.cardStack.map((card, idx) => (
             <SwipeCardPro
@@ -131,6 +115,22 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             />
           ))}
         </div>
+      </div>
+
+      {/* Bottom progress bar */}
+      <div style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0,
+        height: 'calc(3px + env(safe-area-inset-bottom, 0px))',
+        backgroundColor: 'rgba(255,255,255,0.08)',
+        zIndex: 200,
+      }}>
+        <div style={{
+          height: '3px',
+          width: `${progress}%`,
+          background: 'linear-gradient(90deg, #ec4899, #a855f7)',
+          transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+          boxShadow: '0 0 6px rgba(236,72,153,0.6)',
+        }} />
       </div>
 
       {/* Bubble-Buttons — nah an der Card */}
