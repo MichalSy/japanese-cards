@@ -154,11 +154,6 @@ body {
   transform: translateY(-1px);
 }
 
-.button-outline {
-  background: rgba(236,72,153,0.1);
-  border: 1.5px solid rgba(236,72,153,0.4);
-  color: var(--color-primary);
-}
 
 /* Grid helpers */
 .grid-1 {
@@ -200,12 +195,3 @@ body {
 }
 
 .fade-in { animation: fadeIn 0.3s ease-out; }
-.fade-in-content { animation: fadeIn 0.2s ease-out; }
-
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  color: var(--color-text-primary);
-}

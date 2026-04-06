@@ -50,10 +50,3 @@ export function Card({ children, interactive, onClick }) {
   )
 }
 
-export function Button({ children, variant = 'filled', onClick }) {
-  return (
-    <button onClick={onClick} className={`button button-${variant}`} style={{ width: '100%' }}>
-      {children}
-    </button>
-  )
-}

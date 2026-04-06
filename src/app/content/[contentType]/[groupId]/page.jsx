@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { fetchCategoryConfig, fetchGameModes } from '@/config/api'
 import AppHeaderBar from '@/components/AppHeaderBar'
-import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
+import { AppLayout, AppHeader, AppContent, Card } from '@/components/Layout'
 
 export default function GameModeSelector({ params }) {
   const { contentType, groupId } = params

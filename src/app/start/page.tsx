@@ -51,13 +51,10 @@ export default function StartPage() {
 
   return (
     <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
       height: '100vh',
-      background: '#0a0a0a',
-      fontSize: '1.2rem',
-      color: '#666'
+      background: 'radial-gradient(circle at 15% 10%, rgba(236,72,153,0.4) 0%, transparent 50%), radial-gradient(circle at 85% 95%, rgba(236,72,153,0.3) 0%, transparent 50%), linear-gradient(135deg, #1a1a3e 0%, #2d1b4e 25%, #0f172a 50%, #0d1e3f 100%)',
+      fontSize: '15px', color: 'rgba(255,255,255,0.5)', fontFamily: "'Outfit', system-ui, sans-serif",
     }}>
       Prüfe Passierschein...
     </div>
