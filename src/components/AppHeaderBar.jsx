@@ -3,26 +3,29 @@
 import { useRouter, usePathname } from 'next/navigation'
 import { useLanguage } from '@/context/LanguageContext'
 
-export default function AppHeaderBar({ title }) {
+export default function AppHeaderBar({ title, onBack }) {
   const router = useRouter()
   const pathname = usePathname()
-  const isHome = pathname === '/'
+  const isHome = !onBack && pathname === '/'
   const { language, setLanguage } = useLanguage()
+
+  const handleBack = onBack || (() => router.back())
 
   return (
     <div style={{
       display: 'flex', alignItems: 'center',
-      padding: '0 16px',
+      padding: '0 12px',
       background: 'rgba(255,255,255,0.08)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
-      borderBottom: '1px solid rgba(255,255,255,0.1)',
-      boxShadow: 'inset 0 -1px 0 rgba(0,0,0,0.1), 0 4px 20px rgba(0,0,0,0.15)',
-      height: '60px', boxSizing: 'border-box', width: '100%',
+      boxShadow: 'inset 0 0 12px rgba(255,255,255,0.1), 0 4px 20px rgba(0,0,0,0.15)',
+      borderBottom: '1px solid rgba(255,255,255,0.12)',
+      height: '60px', width: '100%', boxSizing: 'border-box',
+      flexShrink: 0,
     }}>
       {!isHome ? (
         <button
-          onClick={() => router.back()}
+          onClick={handleBack}
           style={{
             width: '36px', height: '36px', flexShrink: 0,
             borderRadius: '50%', background: 'rgba(255,255,255,0.1)',

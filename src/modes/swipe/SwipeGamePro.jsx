@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { fetchGroupData, fetchAllItemsFromCategory } from '@/config/api'
 import { useSwipeGame } from './useSwipeGame'
 import SwipeCardPro from './SwipeCardPro'
-import ProHeaderBar from '@/components/ProHeaderBar'
+import AppHeaderBar from '@/components/AppHeaderBar'
 
 export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const [items, setItems] = useState([])
@@ -67,7 +67,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
     const pct = total > 0 ? Math.round((game.stats.correct / total) * 100) : 0
     return (
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh', ...bgStyle }}>
-        <ProHeaderBar title="Ergebnis" />
+        <AppHeaderBar title="Ergebnis" />
         <div style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
           <div style={{ background: 'rgba(30,41,59,0.8)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center', marginBottom: '20px' }}>
             <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'white', margin: '0 0 24px' }}>Spiel beendet! 🎉</h2>
@@ -86,7 +86,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden', ...bgStyle }}>
       <div style={{ flexShrink: 0 }}>
-        <ProHeaderBar title="Swipe Game" />
+        <AppHeaderBar title="Swipe Game" />
       </div>
 
       {toast && (
