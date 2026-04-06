@@ -30,12 +30,16 @@ export default function AppHeaderBar({ title, onBack }) {
             width: '36px', height: '36px', flexShrink: 0,
             borderRadius: '50%', background: 'rgba(255,255,255,0.1)',
             border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', color: 'white', fontSize: '20px', fontWeight: '300',
+            cursor: 'pointer', color: 'white',
             transition: 'background-color 0.2s', padding: 0,
           }}
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)' }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)' }}
-        >‹</button>
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
       ) : (
         <div style={{ width: '36px', height: '36px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <span style={{ fontSize: '20px' }}>🌸</span>
