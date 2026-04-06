@@ -84,7 +84,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const progress = (game.currentIndex / game.totalCards) * 100
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh', overflow: 'auto', ...bgStyle }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden', ...bgStyle }}>
       <div style={{ flexShrink: 0 }}>
         <ProHeaderBar title="Swipe Game" />
       </div>
@@ -98,8 +98,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Titel + Progress + Card zusammen zentriert */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0 }}>
+      {/* Titel + Card zentriert */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0, overflow: 'hidden' }}>
         <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '10px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
           Ist die Kombination richtig?
         </span>
@@ -117,31 +117,14 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       </div>
 
-      {/* Bottom progress bar */}
-      <div style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0,
-        height: 'calc(3px + env(safe-area-inset-bottom, 0px))',
-        backgroundColor: 'rgba(255,255,255,0.08)',
-        zIndex: 200,
-      }}>
-        <div style={{
-          height: '3px',
-          width: `${progress}%`,
-          background: 'linear-gradient(90deg, #ec4899, #a855f7)',
-          transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
-          boxShadow: '0 0 6px rgba(236,72,153,0.6)',
-        }} />
-      </div>
-
-      {/* Bubble-Buttons — nah an der Card */}
+      {/* Bubble-Buttons — zentriert zwischen Karte und Progress-Bar */}
       <div style={{
         flexShrink: 0,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         gap: '48px',
-        padding: '12px 24px',
-        paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 16px))',
+        padding: '16px 24px',
       }}>
         {[
           { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
@@ -181,6 +164,21 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             {icon}
           </button>
         ))}
+      </div>
+
+      {/* Bottom progress bar */}
+      <div style={{
+        flexShrink: 0,
+        height: 'calc(3px + env(safe-area-inset-bottom, 0px))',
+        backgroundColor: 'rgba(255,255,255,0.08)',
+      }}>
+        <div style={{
+          height: '3px',
+          width: `${progress}%`,
+          background: 'linear-gradient(90deg, #ec4899, #a855f7)',
+          transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+          boxShadow: '0 0 6px rgba(236,72,153,0.6)',
+        }} />
       </div>
     </div>
   )
