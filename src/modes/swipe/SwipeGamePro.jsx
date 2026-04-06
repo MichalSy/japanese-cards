@@ -98,15 +98,16 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Karte: zentriert in flex:1. Titel hängt per absolute direkt über der Karte → Card selbst ist der Mittelpunkt */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0, overflow: 'hidden' }}>
-        <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
-          {/* Titel schwebt über der Karte, ohne deren Zentrierung zu stören */}
-          <div style={{ position: 'absolute', bottom: '100%', left: 0, right: 0, textAlign: 'center', paddingBottom: '12px', pointerEvents: 'none' }}>
-            <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)', whiteSpace: 'nowrap' }}>
-              Ist die Kombination richtig?
-            </span>
-          </div>
+      {/* Titel-Zone: flex:1, Titel hängt an der Unterkante */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px', minHeight: 0 }}>
+        <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+          Ist die Kombination richtig?
+        </span>
+      </div>
+
+      {/* Karte: auto-Höhe, direkt zwischen den beiden flex:1 Zonen */}
+      <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'center', padding: '0 20px' }}>
+        <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12' }}>
           {game.cardStack.map((card, idx) => (
             <SwipeCardPro
               key={`${game.currentIndex + idx}`}
@@ -119,14 +120,14 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       </div>
 
-      {/* Buttons: eigener flexShrink:0 Bereich → zentriert zwischen Karte und ProgressBar */}
+      {/* Button-Zone: flex:1, Buttons vertikal zentriert */}
       <div style={{
-        flexShrink: 0,
+        flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         gap: '48px',
-        padding: '20px 24px',
+        minHeight: 0,
       }}>
         {[
           { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
