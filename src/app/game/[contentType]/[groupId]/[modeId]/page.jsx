@@ -6,30 +6,26 @@ import { useSearchParams } from 'next/navigation'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent } from '@/components/Layout'
 
-const SwipeGame = dynamic(() => import('@/modes/swipe/SwipeGame'), { ssr: false })
-const SwipeGamePro = dynamic(() => import('@/modes/swipe/SwipeGamePro'), { ssr: false })
+const SwipeGame = dynamic(() => import('@/modes/swipe/SwipeGamePro'), { ssr: false })
 
 const GAME_MODES = {
   swipe: SwipeGame,
-  swipePro: SwipeGamePro,
   multiChoice: null,
   flashcard: null,
   typing: null,
 }
 
-const FULLSCREEN_MODES = ['swipePro']
+const FULLSCREEN_MODES = ['swipe']
 
 const modeNames = {
   swipe: 'Swipe Game',
-  swipePro: 'Swipe Pro ✨',
   multiChoice: 'Multiple Choice',
   flashcard: 'Flashcard',
   typing: 'Typing Challenge',
 }
 
 const modeEmojis = {
-  swipe: '👆',
-  swipePro: '🌟',
+  swipe: '🃏',
   multiChoice: '🎯',
   flashcard: '🃏',
   typing: '⌨️',
@@ -50,7 +46,7 @@ export default function GameScreen({ params }) {
           <AppHeaderBar title={modeNames[modeId] || 'Unbekannter Modus'} />
         </AppHeader>
         <AppContent>
-          <div style={{ padding: 'var(--spacing-4)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
+          <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>
             Dieser Modus ist noch nicht verfügbar.
           </div>
         </AppContent>
@@ -60,22 +56,19 @@ export default function GameScreen({ params }) {
 
   if (isFullscreen) {
     return (
-      <Suspense
-        fallback={
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            height: '100vh', backgroundColor: '#0f172a', color: 'white',
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '60px', marginBottom: '20px' }}>{modeEmojis[modeId]}</div>
-              <h2 style={{ fontSize: '24px', fontWeight: '700', margin: '0 0 8px 0' }}>Wird geladen...</h2>
-              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', margin: 0 }}>
-                {modeNames[modeId]} wird vorbereitet
-              </p>
-            </div>
+      <Suspense fallback={
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          height: '100vh',
+          background: 'radial-gradient(circle at 15% 10%, rgba(236,72,153,0.4) 0%, transparent 50%), radial-gradient(circle at 85% 95%, rgba(236,72,153,0.3) 0%, transparent 50%), linear-gradient(135deg, #1a1a3e 0%, #2d1b4e 25%, #0f172a 50%, #0d1e3f 100%)',
+          color: 'rgba(255,255,255,0.5)', fontFamily: "'Outfit', system-ui, sans-serif",
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '56px', marginBottom: '16px' }}>{modeEmojis[modeId]}</div>
+            <p style={{ fontSize: '16px' }}>{modeNames[modeId]} wird geladen...</p>
           </div>
-        }
-      >
+        </div>
+      }>
         <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} />
       </Suspense>
     )
@@ -86,25 +79,16 @@ export default function GameScreen({ params }) {
       <AppHeader>
         <AppHeaderBar title={modeNames[modeId]} />
       </AppHeader>
-
-      <Suspense
-        fallback={
-          <AppContent>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '60px', marginBottom: 'var(--spacing-5)' }}>{modeEmojis[modeId]}</div>
-                <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)', margin: '0 0 var(--spacing-2) 0' }}>Wird geladen...</h2>
-                <p className="text-base text-secondary" style={{ margin: '0 0 var(--spacing-3) 0' }}>
-                  {modeNames[modeId]} wird vorbereitet
-                </p>
-                <p className="text-sm text-tertiary" style={{ margin: 0 }}>
-                  Karten: {cardCount === 'all' ? 'Alle' : cardCount}
-                </p>
-              </div>
+      <Suspense fallback={
+        <AppContent>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '56px', marginBottom: '16px' }}>{modeEmojis[modeId]}</div>
+              <p style={{ color: 'rgba(255,255,255,0.6)' }}>{modeNames[modeId]} wird geladen...</p>
             </div>
-          </AppContent>
-        }
-      >
+          </div>
+        </AppContent>
+      }>
         <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} />
       </Suspense>
     </AppLayout>

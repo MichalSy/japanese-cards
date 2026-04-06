@@ -3,15 +3,8 @@
     {
       "id": "swipe",
       "name": "Swipe Game",
-      "emoji": "👆",
+      "emoji": "🃏",
       "description": "Wische links oder rechts um zu antworten",
-      "enabled": true
-    },
-    {
-      "id": "swipePro",
-      "name": "Swipe Pro ✨",
-      "emoji": "🌟",
-      "description": "Premium Design mit Glow-Effekten",
       "enabled": true
     },
     {
