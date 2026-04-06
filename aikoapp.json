@@ -12,7 +12,7 @@
     "loginSubtitle": "Learn Japanese Characters",
     "loginButtonText": "Sign in with Google",
     "successRedirect": "/",
-    "needAccessAbility": true
+    "needAccessAbility": false
   },
   "routes": {
     "protected": ["/", "/content", "/game", "/api"],
