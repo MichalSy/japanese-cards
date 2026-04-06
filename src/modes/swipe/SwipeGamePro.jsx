@@ -98,34 +98,36 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Titel + Card zentriert */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0, overflow: 'hidden' }}>
-        <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '10px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
-          Ist die Kombination richtig?
-        </span>
+      {/* Titel + Card + Buttons im flex:1 Bereich */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
 
-        <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
-          {game.cardStack.map((card, idx) => (
-            <SwipeCardPro
-              key={`${game.currentIndex + idx}`}
-              card={card} index={idx} isActive={idx === 0}
-              onSwipe={handleSwipeWithToast}
-              correctAnswer={idx === 0 ? game.correctAnswer : undefined}
-              onButtonClick={idx === 0 ? buttonClickRef : undefined}
-            />
-          ))}
+        {/* Karte — nimmt 2/3 des Platzes, Card zentriert darin */}
+        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0, overflow: 'hidden' }}>
+          <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '10px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+            Ist die Kombination richtig?
+          </span>
+
+          <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
+            {game.cardStack.map((card, idx) => (
+              <SwipeCardPro
+                key={`${game.currentIndex + idx}`}
+                card={card} index={idx} isActive={idx === 0}
+                onSwipe={handleSwipeWithToast}
+                correctAnswer={idx === 0 ? game.correctAnswer : undefined}
+                onButtonClick={idx === 0 ? buttonClickRef : undefined}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Bubble-Buttons — zentriert zwischen Karte und Progress-Bar */}
-      <div style={{
-        flexShrink: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '48px',
-        padding: '16px 24px',
-      }}>
+        {/* Buttons — 1/3 des Platzes, zentriert darin = zentriert zwischen Card und ProgressBar */}
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '48px',
+        }}>
         {[
           { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
           { isCorrect: true,  icon: '✓', r: 52,  g: 199, b: 89  },
@@ -164,7 +166,9 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             {icon}
           </button>
         ))}
-      </div>
+        </div>
+
+      </div>{/* Ende flex:1 Hauptbereich */}
 
       {/* Bottom progress bar */}
       <div style={{
