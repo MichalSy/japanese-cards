@@ -98,8 +98,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Titel-Zone: flex:1, Titel hängt an der Unterkante */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px', minHeight: 0 }}>
+      {/* Titel-Zone: flex:2 */}
+      <div style={{ flex: 2, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px', minHeight: 0 }}>
         <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
           Ist die Kombination richtig?
         </span>
@@ -120,9 +120,9 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       </div>
 
-      {/* Button-Zone: flex:1, Buttons vertikal zentriert */}
+      {/* Button-Zone: flex:3, Buttons vertikal zentriert */}
       <div style={{
-        flex: 1,
+        flex: 3,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
