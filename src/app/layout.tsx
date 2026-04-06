@@ -9,6 +9,7 @@ import './globals.css'
 export const metadata = {
   title: 'Japanese Cards',
   description: 'Learn Japanese characters playfully',
+  themeColor: '#0f172a',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

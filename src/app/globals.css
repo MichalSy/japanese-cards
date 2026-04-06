@@ -55,7 +55,12 @@
   box-sizing: border-box;
 }
 
-html, body {
+html {
+  height: 100%;
+  background-color: #0f172a;
+}
+
+body {
   height: 100%;
   overflow: hidden;
   overflow-x: hidden;
