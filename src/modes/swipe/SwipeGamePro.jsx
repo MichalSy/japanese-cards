@@ -84,15 +84,10 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const progress = (game.currentIndex / game.totalCards) * 100
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateRows: 'auto 1fr auto 1fr auto',
-      height: '100dvh',
-      overflow: 'hidden',
-      ...bgStyle
-    }}>
-      {/* Zeile 1: Header */}
-      <ProHeaderBar title="Swipe Game" />
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden', ...bgStyle }}>
+      <div style={{ flexShrink: 0 }}>
+        <ProHeaderBar title="Swipe Game" />
+      </div>
 
       {toast && (
         <div style={{ position: 'fixed', top: '120px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, opacity: toastVisible ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none' }}>
@@ -103,16 +98,15 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Zeile 2: oberer Freiraum (1fr) — symmetrisch zu Zeile 4 → Karte visuell zentriert */}
-      <div />
-
-      {/* Zeile 3: Titel + Karte (natürliche Höhe) */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px', overflow: 'hidden' }}>
-        <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '10px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
-          Ist die Kombination richtig?
-        </span>
-
+      {/* Karte: zentriert in flex:1. Titel hängt per absolute direkt über der Karte → Card selbst ist der Mittelpunkt */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0, overflow: 'hidden' }}>
         <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
+          {/* Titel schwebt über der Karte, ohne deren Zentrierung zu stören */}
+          <div style={{ position: 'absolute', bottom: '100%', left: 0, right: 0, textAlign: 'center', paddingBottom: '12px', pointerEvents: 'none' }}>
+            <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)', whiteSpace: 'nowrap' }}>
+              Ist die Kombination richtig?
+            </span>
+          </div>
           {game.cardStack.map((card, idx) => (
             <SwipeCardPro
               key={`${game.currentIndex + idx}`}
@@ -125,12 +119,14 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       </div>
 
-      {/* Zeile 4: unterer Freiraum (1fr) — Buttons zentriert darin = zentriert zwischen Card und ProgressBar */}
+      {/* Buttons: eigener flexShrink:0 Bereich → zentriert zwischen Karte und ProgressBar */}
       <div style={{
+        flexShrink: 0,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         gap: '48px',
+        padding: '20px 24px',
       }}>
         {[
           { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
@@ -140,25 +136,19 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             key={icon}
             onClick={() => handleButtonClick(isCorrect)}
             style={{
-              width: '84px',
-              height: '84px',
-              borderRadius: '50%',
-              /* Glass wie die Card: dunkle Basis + Farb-Tint, inset highlights */
+              width: '84px', height: '84px', borderRadius: '50%',
               background: `linear-gradient(160deg, rgba(${r},${g},${b},0.20) 0%, rgba(${r},${g},${b},0.08) 100%)`,
               backdropFilter: 'blur(24px) saturate(160%)',
               WebkitBackdropFilter: 'blur(24px) saturate(160%)',
               border: `1px solid rgba(${r},${g},${b},0.25)`,
               boxShadow: [
-                `inset 0 1px 0 rgba(255,255,255,0.18)`,  /* obere Glas-Kante */
-                `inset 0 -1px 0 rgba(0,0,0,0.15)`,        /* untere Kante */
-                `0 2px 8px rgba(0,0,0,0.20)`,              /* kein starker 3D-Glow */
+                `inset 0 1px 0 rgba(255,255,255,0.18)`,
+                `inset 0 -1px 0 rgba(0,0,0,0.15)`,
+                `0 2px 8px rgba(0,0,0,0.20)`,
               ].join(', '),
               color: `rgb(${r},${g},${b})`,
-              fontSize: '28px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              fontSize: '28px', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'transform 0.16s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.16s ease',
               flexShrink: 0,
             }}
@@ -172,14 +162,10 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         ))}
       </div>
 
-      {/* Zeile 5: Progress Bar */}
-      <div style={{
-        height: 'calc(3px + env(safe-area-inset-bottom, 0px))',
-        backgroundColor: 'rgba(255,255,255,0.08)',
-      }}>
+      {/* Progress Bar */}
+      <div style={{ flexShrink: 0, height: 'calc(3px + env(safe-area-inset-bottom, 0px))', backgroundColor: 'rgba(255,255,255,0.08)' }}>
         <div style={{
-          height: '3px',
-          width: `${progress}%`,
+          height: '3px', width: `${progress}%`,
           background: 'linear-gradient(90deg, #ec4899, #a855f7)',
           transition: 'width 0.4s cubic-bezier(0.34,1.56,0.64,1)',
           boxShadow: '0 0 6px rgba(236,72,153,0.6)',
