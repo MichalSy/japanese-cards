@@ -3,37 +3,27 @@
 
 export const PAGES = [
   {
-    "path": "/",
-    "label": "Home",
-    "icon": "🏠"
+    "path": "/content/hiragana",
+    "label": "Hiragana",
+    "icon": "あ"
   },
   {
-    "path": "/content",
-    "label": "Content",
+    "path": "/content/words",
+    "label": "Wörter",
     "icon": "📚"
-  },
-  {
-    "path": "/game",
-    "label": "Game",
-    "icon": "🎮"
   }
 ] as const
 
 export const SIDEBAR_PAGES = [
   {
-    "path": "/",
-    "label": "Home",
-    "icon": "🏠"
+    "path": "/content/hiragana",
+    "label": "Hiragana",
+    "icon": "あ"
   },
   {
-    "path": "/content",
-    "label": "Content",
+    "path": "/content/words",
+    "label": "Wörter",
     "icon": "📚"
-  },
-  {
-    "path": "/game",
-    "label": "Game",
-    "icon": "🎮"
   }
 ] as const
 

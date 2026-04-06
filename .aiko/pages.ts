@@ -6,16 +6,6 @@ export const PAGES = [
     "path": "/",
     "label": "Home",
     "icon": "🏠"
-  },
-  {
-    "path": "/content",
-    "label": "Content",
-    "icon": "📚"
-  },
-  {
-    "path": "/game",
-    "label": "Game",
-    "icon": "🎮"
   }
 ] as const
 
@@ -24,16 +14,6 @@ export const SIDEBAR_PAGES = [
     "path": "/",
     "label": "Home",
     "icon": "🏠"
-  },
-  {
-    "path": "/content",
-    "label": "Content",
-    "icon": "📚"
-  },
-  {
-    "path": "/game",
-    "label": "Game",
-    "icon": "🎮"
   }
 ] as const
 

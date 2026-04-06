@@ -13,14 +13,6 @@ const PAGES = [
   {
     "path": "/",
     "ability": "access"
-  },
-  {
-    "path": "/content",
-    "ability": "access"
-  },
-  {
-    "path": "/game",
-    "ability": "access"
   }
 ] as const
 const PASSIERSCHEIN = 'access'

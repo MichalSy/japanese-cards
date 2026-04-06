@@ -5,9 +5,9 @@ import { createServerClient } from '@supabase/ssr'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const protectedPaths = ["/","/content","/game"]
-const publicPaths = ["/","/login","/auth/callback","/no-access","/start"]
-const needAccessAbility = false
+const protectedPaths = ["/","/content","/game","/api"]
+const publicPaths = ["/login","/auth/callback","/no-access","/start","/api/dev-login"]
+const needAccessAbility = true
 const passierscheinId = 'access'
 const pageAbilities = {} as Record<string, string>
 const APP_NAME = 'japanese-cards'

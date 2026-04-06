@@ -11,7 +11,7 @@ export default function LoginPage() {
       title="Irasshaimase! 🌸"
       subtitle="Learn Japanese Characters"
       buttonText="Sign in with Google"
-      redirectUrl="/start"
+      redirectUrl="/"
       
       
       

@@ -27,7 +27,6 @@ export default function GameModeSelector({ params }) {
         setGameModeConfig(gameModes)
       } catch (err) {
         setError(err.message)
-        console.error('Failed to load configs:', err)
       } finally {
         setLoading(false)
       }
@@ -40,35 +39,29 @@ export default function GameModeSelector({ params }) {
   }
 
   const availableGameModes = categoryConfig?.gameModes || []
-  const gameModes = availableGameModes
-    .map(modeId => gameModeMap[modeId])
-    .filter(mode => mode && mode.enabled)
-
+  const gameModes = availableGameModes.map(modeId => gameModeMap[modeId]).filter(mode => mode && mode.enabled)
   const groupName = categoryConfig?.groups?.find(g => g.id === groupId)?.name || 'Gruppe'
 
-  if (loading) {
-    return (
-      <AppLayout>
-        <AppHeader><AppHeaderBar title="Laden..." /></AppHeader>
-        <AppContent>
-          <div style={{ padding: 'var(--spacing-4)', backgroundColor: 'var(--color-surface)', borderRadius: 'var(--radius-md)' }}>Laden...</div>
-        </AppContent>
-      </AppLayout>
-    )
-  }
+  if (loading) return (
+    <AppLayout>
+      <AppHeader><AppHeaderBar title="Laden..." /></AppHeader>
+      <AppContent><div className="card" style={{ color: 'rgba(255,255,255,0.5)' }}>Laden...</div></AppContent>
+    </AppLayout>
+  )
 
-  if (error || !categoryConfig || !gameModeConfig) {
-    return (
-      <AppLayout>
-        <AppHeader><AppHeaderBar title="Fehler" /></AppHeader>
-        <AppContent>
-          <div style={{ padding: 'var(--spacing-3)', backgroundColor: '#fee2e2', borderRadius: 'var(--radius-md)', color: '#991b1b' }}>
-            Fehler: {error || 'Konfiguration nicht geladen'}
-          </div>
-        </AppContent>
-      </AppLayout>
-    )
-  }
+  if (error || !categoryConfig || !gameModeConfig) return (
+    <AppLayout>
+      <AppHeader><AppHeaderBar title="Fehler" /></AppHeader>
+      <AppContent><div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>Fehler: {error || 'Konfiguration nicht geladen'}</div></AppContent>
+    </AppLayout>
+  )
+
+  const countOptions = [
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' },
+    { value: 'all', label: 'Alle' },
+  ]
 
   return (
     <AppLayout>
@@ -78,48 +71,67 @@ export default function GameModeSelector({ params }) {
 
       <AppContent>
         <div className="space-y-6 fade-in">
-          <div style={{ padding: 'var(--spacing-3)', backgroundColor: 'var(--color-surface)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-surface-light)' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-3)', color: 'var(--color-text-primary)', fontWeight: '500' }}>
-              <span>Kartenanzahl:</span>
-              <select
-                value={cardCount}
-                onChange={(e) => setCardCount(e.target.value === 'all' ? 'all' : parseInt(e.target.value))}
-                style={{
-                  padding: 'var(--spacing-2) var(--spacing-3)',
-                  backgroundColor: 'var(--color-surface-light)',
-                  color: 'var(--color-text-primary)',
-                  border: '1px solid var(--color-surface-dark)',
-                  borderRadius: 'var(--radius-md)',
-                  fontSize: '14px', fontWeight: '600', cursor: 'pointer',
-                }}
-              >
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="all">Alle</option>
-              </select>
-            </label>
-          </div>
+          {/* Card count selector */}
+          <Card>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                Kartenanzahl
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {countOptions.map(({ value, label }) => (
+                  <button
+                    key={value}
+                    onClick={() => setCardCount(value)}
+                    style={{
+                      flex: 1, padding: '10px 4px',
+                      borderRadius: '12px', border: 'none', cursor: 'pointer',
+                      fontSize: '14px', fontWeight: '700',
+                      transition: 'all 0.2s',
+                      background: cardCount === value
+                        ? 'linear-gradient(135deg, #ec4899, #a855f7)'
+                        : 'rgba(255,255,255,0.06)',
+                      color: cardCount === value ? 'white' : 'rgba(255,255,255,0.5)',
+                      boxShadow: cardCount === value ? '0 4px 12px rgba(236,72,153,0.35)' : 'none',
+                    }}
+                  >{label}</button>
+                ))}
+              </div>
+            </div>
+          </Card>
 
-          <div className="grid-1">
-            {gameModes.map((mode) => (
-              <Card key={mode.id} interactive onClick={() => router.push(`/game/${contentType}/${groupId}/${mode.id}?cards=${cardCount}`)}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
-                  <span style={{ fontSize: '32px', flexShrink: 0 }}>{mode.emoji}</span>
-                  <div style={{ flex: 1, textAlign: 'left' }}>
-                    <h3 className="text-base font-medium" style={{ color: 'var(--color-text-primary)', margin: 0 }}>{mode.name}</h3>
-                    <p className="text-sm text-tertiary" style={{ margin: 'var(--spacing-1) 0 0 0' }}>{mode.description}</p>
+          {/* Game modes */}
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
+              Spielmodus wählen
+            </div>
+            <div className="grid-1">
+              {gameModes.map((mode) => (
+                <Card key={mode.id} interactive onClick={() => router.push(`/game/${contentType}/${groupId}/${mode.id}?cards=${cardCount}`)}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{
+                      width: '52px', height: '52px', flexShrink: 0,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: 'rgba(236,72,153,0.12)',
+                      border: '1px solid rgba(236,72,153,0.2)',
+                      borderRadius: '14px', fontSize: '26px',
+                    }}>
+                      {mode.emoji}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '16px', fontWeight: '600', color: 'white', marginBottom: '3px' }}>{mode.name}</div>
+                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>{mode.description}</div>
+                    </div>
+                    <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px' }}>›</span>
                   </div>
-                  <span style={{ color: 'var(--color-text-tertiary)' }}>→</span>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </AppContent>
 
       <AppFooter>
-        <p className="text-sm text-tertiary" style={{ width: '100%', textAlign: 'center', margin: 0 }}>
+        <p style={{ width: '100%', textAlign: 'center', margin: 0, fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
           Wähle einen Modus zum Spielen
         </p>
       </AppFooter>
