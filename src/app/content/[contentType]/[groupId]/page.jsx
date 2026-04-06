@@ -6,6 +6,40 @@ import { fetchCategoryConfig, fetchGameModes } from '@/config/api'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
 
+function ModeIcon({ id }) {
+  const s = { width: 28, height: 28, strokeWidth: 1.8, fill: 'none', stroke: '#ec4899', strokeLinecap: 'round', strokeLinejoin: 'round' }
+  if (id === 'swipe') return (
+    <svg viewBox="0 0 24 24" {...s}>
+      {/* card */}
+      <rect x="5" y="3" width="14" height="18" rx="2.5"/>
+      {/* left arrow */}
+      <path d="M2 12 L5 9M2 12 L5 15" stroke="rgba(168,85,247,0.9)"/>
+      {/* right arrow */}
+      <path d="M22 12 L19 9M22 12 L19 15" stroke="rgba(168,85,247,0.9)"/>
+    </svg>
+  )
+  if (id === 'multiChoice') return (
+    <svg viewBox="0 0 24 24" {...s}>
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M9 12l2 2 4-4"/>
+    </svg>
+  )
+  if (id === 'flashcard') return (
+    <svg viewBox="0 0 24 24" {...s}>
+      <rect x="3" y="5" width="18" height="13" rx="2"/>
+      <path d="M8 19h8"/>
+      <path d="M12 17v2"/>
+    </svg>
+  )
+  if (id === 'typing') return (
+    <svg viewBox="0 0 24 24" {...s}>
+      <rect x="2" y="6" width="20" height="13" rx="2"/>
+      <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/>
+    </svg>
+  )
+  return <span style={{ fontSize: '26px' }}>{id}</span>
+}
+
 export default function GameModeSelector({ params }) {
   const { contentType, groupId } = params
   const router = useRouter()
@@ -113,9 +147,9 @@ export default function GameModeSelector({ params }) {
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       background: 'rgba(236,72,153,0.12)',
                       border: '1px solid rgba(236,72,153,0.2)',
-                      borderRadius: '14px', fontSize: '26px',
+                      borderRadius: '14px',
                     }}>
-                      {mode.emoji}
+                      <ModeIcon id={mode.id} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: '16px', fontWeight: '600', color: 'white', marginBottom: '3px' }}>{mode.name}</div>
