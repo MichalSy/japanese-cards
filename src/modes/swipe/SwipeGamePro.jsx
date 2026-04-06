@@ -84,10 +84,15 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const progress = (game.currentIndex / game.totalCards) * 100
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden', ...bgStyle }}>
-      <div style={{ flexShrink: 0 }}>
-        <ProHeaderBar title="Swipe Game" />
-      </div>
+    <div style={{
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr auto 1fr auto',
+      height: '100dvh',
+      overflow: 'hidden',
+      ...bgStyle
+    }}>
+      {/* Zeile 1: Header */}
+      <ProHeaderBar title="Swipe Game" />
 
       {toast && (
         <div style={{ position: 'fixed', top: '120px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, opacity: toastVisible ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none' }}>
@@ -98,36 +103,35 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Titel + Card + Buttons im flex:1 Bereich */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
+      {/* Zeile 2: oberer Freiraum (1fr) — symmetrisch zu Zeile 4 → Karte visuell zentriert */}
+      <div />
 
-        {/* Karte — nimmt 2/3 des Platzes, Card zentriert darin */}
-        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 20px', minHeight: 0, overflow: 'hidden' }}>
-          <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '10px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
-            Ist die Kombination richtig?
-          </span>
+      {/* Zeile 3: Titel + Karte (natürliche Höhe) */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px', overflow: 'hidden' }}>
+        <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', marginBottom: '10px', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+          Ist die Kombination richtig?
+        </span>
 
-          <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
-            {game.cardStack.map((card, idx) => (
-              <SwipeCardPro
-                key={`${game.currentIndex + idx}`}
-                card={card} index={idx} isActive={idx === 0}
-                onSwipe={handleSwipeWithToast}
-                correctAnswer={idx === 0 ? game.correctAnswer : undefined}
-                onButtonClick={idx === 0 ? buttonClickRef : undefined}
-              />
-            ))}
-          </div>
+        <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12', flexShrink: 0 }}>
+          {game.cardStack.map((card, idx) => (
+            <SwipeCardPro
+              key={`${game.currentIndex + idx}`}
+              card={card} index={idx} isActive={idx === 0}
+              onSwipe={handleSwipeWithToast}
+              correctAnswer={idx === 0 ? game.correctAnswer : undefined}
+              onButtonClick={idx === 0 ? buttonClickRef : undefined}
+            />
+          ))}
         </div>
+      </div>
 
-        {/* Buttons — 1/3 des Platzes, zentriert darin = zentriert zwischen Card und ProgressBar */}
-        <div style={{
-          flex: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '48px',
-        }}>
+      {/* Zeile 4: unterer Freiraum (1fr) — Buttons zentriert darin = zentriert zwischen Card und ProgressBar */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '48px',
+      }}>
         {[
           { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
           { isCorrect: true,  icon: '✓', r: 52,  g: 199, b: 89  },
@@ -166,13 +170,10 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             {icon}
           </button>
         ))}
-        </div>
+      </div>
 
-      </div>{/* Ende flex:1 Hauptbereich */}
-
-      {/* Bottom progress bar */}
+      {/* Zeile 5: Progress Bar */}
       <div style={{
-        flexShrink: 0,
         height: 'calc(3px + env(safe-area-inset-bottom, 0px))',
         backgroundColor: 'rgba(255,255,255,0.08)',
       }}>
