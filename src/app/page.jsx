@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { fetchCategories } from '@/config/api'
 import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
@@ -47,6 +47,39 @@ export default function MainMenu() {
   const [daily, setDaily] = useState([])
   const [statInfo, setStatInfo] = useState(null)
 
+  const tabs = [
+    { id: 'start',    key: 'nav.start',    icon: '🎮' },
+    { id: 'progress', key: 'nav.progress', icon: '📊' },
+    { id: 'stats',    key: 'nav.stats',    icon: '🏆' },
+  ]
+
+  const tabContainerRef = useRef(null)
+  const [indicatorLeft, setIndicatorLeft] = useState(0)
+  const [indicatorWidth, setIndicatorWidth] = useState(0)
+  const [indicatorDuration, setIndicatorDuration] = useState(0)
+  const [indicatorReady, setIndicatorReady] = useState(false)
+
+  const handleTabChange = (newTabId) => {
+    if (newTabId === activeTab) return
+    const fromIndex = tabs.findIndex(t => t.id === activeTab)
+    const toIndex = tabs.findIndex(t => t.id === newTabId)
+    const distance = Math.abs(toIndex - fromIndex)
+    setIndicatorDuration(200 + distance * 80)
+    setActiveTab(newTabId)
+  }
+
+  useEffect(() => {
+    if (!tabContainerRef.current) return
+    const buttons = tabContainerRef.current.querySelectorAll('[data-tab-btn]')
+    const idx = tabs.findIndex(t => t.id === activeTab)
+    const btn = buttons[idx]
+    if (btn) {
+      setIndicatorLeft(btn.offsetLeft)
+      setIndicatorWidth(btn.offsetWidth)
+      setIndicatorReady(true)
+    }
+  }, [activeTab])
+
   useEffect(() => {
     (async () => {
       try {
@@ -66,12 +99,6 @@ export default function MainMenu() {
       }
     })()
   }, [])
-
-  const tabs = [
-    { id: 'start',    key: 'nav.start',    icon: '🎮' },
-    { id: 'progress', key: 'nav.progress', icon: '📊' },
-    { id: 'stats',    key: 'nav.stats',    icon: '🏆' },
-  ]
 
   return (
     <AppLayout>
@@ -212,12 +239,15 @@ export default function MainMenu() {
       {statInfo && <StatInfoPopup info={statInfo} onClose={() => setStatInfo(null)} />}
 
       <AppFooter>
-        <div style={{ display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', padding: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div ref={tabContainerRef} style={{ position: 'relative', display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', padding: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
+          {indicatorReady && (
+            <div style={{ position: 'absolute', top: '4px', bottom: '4px', left: `${indicatorLeft}px`, width: `${indicatorWidth}px`, background: 'linear-gradient(135deg, #ec4899, #a855f7)', borderRadius: '100px', boxShadow: '0 4px 12px rgba(236,72,153,0.35)', transition: `left ${indicatorDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`, pointerEvents: 'none', zIndex: 0 }} />
+          )}
           {tabs.map(tab => {
             const isActive = activeTab === tab.id
             return (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px', padding: '8px 4px', borderRadius: '100px', border: 'none', cursor: 'pointer', transition: 'all 0.2s', background: isActive ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'transparent', boxShadow: isActive ? '0 4px 12px rgba(236,72,153,0.35)' : 'none', color: isActive ? 'white' : 'rgba(255,255,255,0.45)' }}
+              <button key={tab.id} data-tab-btn onClick={() => handleTabChange(tab.id)}
+                style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px', padding: '8px 4px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: 'transparent', color: isActive ? 'white' : 'rgba(255,255,255,0.45)', transition: 'color 0.2s ease' }}
               >
                 <span style={{ fontSize: '20px', lineHeight: 1 }}>{tab.icon}</span>
                 <span style={{ fontSize: '11px', fontWeight: '600' }}>{t(tab.key)}</span>
