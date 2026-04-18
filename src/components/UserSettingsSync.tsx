@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { useAuth, useLanguage } from '@michalsy/aiko-webapp-core'
 import { useSettings } from '@/components/SettingsContext'
 import { useSetStrings } from '@/components/I18nContext'
+import { translations } from '@/lib/translations'
 
 export default function UserSettingsSync() {
   const { user } = useAuth()
@@ -43,6 +44,9 @@ export default function UserSettingsSync() {
     if (!user?.id || !fetchedForUserRef.current) return
     if (language === prevLangRef.current) return
     prevLangRef.current = language
+
+    // Update strings immediately from bundled translations (no API round-trip needed)
+    setStrings(translations[language as keyof typeof translations] ?? translations.en)
 
     fetch('/api/settings', {
       method: 'POST',

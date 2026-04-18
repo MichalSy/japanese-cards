@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/context/LanguageContext'
 import { useSettings } from '@/components/SettingsContext'
-import { useT } from '@/components/I18nContext'
+import { useT, useSetStrings } from '@/components/I18nContext'
+import { translations } from '@/lib/translations'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
 
@@ -29,6 +30,7 @@ export default function SettingsPage() {
   const { setLanguage } = useLanguage()
   const { settings, setSettings } = useSettings()
   const t = useT()
+  const setStrings = useSetStrings()
 
   const [uiLanguage, setUiLanguage] = useState(settings.uiLanguage)
   const [learnLanguageId, setLearnLanguageId] = useState(settings.learnLanguageId)
@@ -49,6 +51,7 @@ export default function SettingsPage() {
     try {
       await fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ui_language: uiLanguage, learn_language_id: learnLanguageId }) })
       const learnLang = learnLanguages.find(l => l.id === learnLanguageId)
+      setStrings(translations[uiLanguage] ?? translations.en)
       setLanguage(uiLanguage)
       setSettings({ uiLanguage, learnLanguageId, appIcon: learnLang?.app_icon ?? settings.appIcon, appTitle: `${learnLang?.name_en ?? learnLang?.name ?? 'Japanese'} Cards` })
       router.push('/')
