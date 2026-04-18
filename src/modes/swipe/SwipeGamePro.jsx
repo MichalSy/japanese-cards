@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { fetchGroupData, fetchAllItemsFromCategory, fetchCategoryConfig } from '@/config/api'
-import { syncProgressToServer } from '@/utils/progressStorage'
 import { useT } from '@/components/I18nContext'
 import { useSetBackHandler } from '@/components/BackHandlerContext'
 import { useSwipeGame } from './useSwipeGame'
@@ -84,13 +83,18 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   // Override back button while this game component is mounted
   useSetBackHandler(() => router.push(`/content/${contentType}`))
 
-  // Batch-sync results to Supabase when game ends
-  useEffect(() => {
-    if (game.gameState !== 'finished') return
-    syncProgressToServer(contentType, game.stats.results).catch(() => {})
-  }, [game.gameState])
 
   const handleSwipeWithToast = (isCorrect, direction, correctTransliteration, native) => {
+    // Fire-and-forget: record answer + update snapshot server-side
+    const cardSlug = game.currentCard?.id
+    if (cardSlug) {
+      fetch(`/api/progress/${contentType}/answer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cardSlug, isCorrect }),
+      }).catch(() => {})
+    }
+
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
     setToast({ isCorrect, correctTransliteration, native, id: Date.now() })
     setToastVisible(true)
