@@ -1,91 +1,63 @@
-# Japanese Cards 🗾
+# Japanese Cards
 
-Ein modernes Lernspiel zum Lernen von Japanisch, mit Fokus auf Hiragana-Zeichen und deren Romanisierung.
+Lernspiel für japanische Schriftsysteme (Hiragana, Katakana) und Vokabeln.
 
-## 📋 Überblick
+## Features
 
-**Japanese Cards** ist eine interaktive Web-Anwendung, die japanische Schriftsysteme (Hiragana, Katakana) und Vokabeln durch spielerische Modi trainiert.
+- **Swipe Game**: Zeichen + Romaji-Paarung bewerten (Tinder-Style)
+- **JSON-basierte Daten**: Lerninhalte in `public/GameData/`
+- **Mehrsprachig**: Deutsch und Englisch
+- **Responsive**: Mobile (Touch) und Desktop
 
-### ✨ Features
+## Technologien
 
-- **Swipe Game** (Hauptmodus): Zeichen + Romaji-Paarung bewerten (Tinder-Style)
-- **Pro Mode**: Erweiterte Ansicht für Power-User
-- **JSON-basierte Daten**: Alle Lerninhalte liegen in `public/GameData/`
-- **Mehrsprachig**: Deutsch (DE) und Englisch (EN)
-- **Responsive**: Optimiert für Mobile (Touch) und Desktop
+- **Framework**: Next.js 14 (App Router)
+- **Auth**: `@michalsy/aiko-webapp-core` (Google OAuth via Supabase)
+- **Styling**: Tailwind CSS v3
+- **Icons**: Lucide React
+- **Deployment**: Docker + Kubernetes via GitOps
 
-## 🛠️ Technologien
-
-Das Projekt verwendet moderne Web-Technologien:
-
-- **Frontend**: [React 19](https://react.dev/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Routing**: [React Router v7](https://reactrouter.com/) (im SPA Mode)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-
-## 📁 Projektstruktur
-
-Der Quellcode befindet sich hauptsächlich im `app/` Verzeichnis:
+## Projektstruktur
 
 ```
 japanese-cards/
-├── app/
-│   ├── components/      # Wiederverwendbare UI-Komponenten
-│   ├── config/          # Konfigurationen (z.B. API)
-│   ├── context/         # React Context (z.B. LanguageContext)
-│   ├── hooks/           # Custom Hooks
-│   ├── modes/           # Spielmodi (z.B. SwipeGame)
-│   ├── pages/           # Seiten-Views (MainMenu, GameScreen)
-│   ├── utils/           # Hilfsfunktionen
-│   ├── root.jsx         # Haupt-Layout und Routing
-│   └── index.css        # Globale Styles & Tailwind
-├── public/
-│   └── GameData/        # JSON-Daten für Kategorien und Karten
 ├── src/
-│   └── main.jsx         # Einstiegspunkt für Vite
-└── vite.config.js       # Vite Konfiguration
+│   ├── app/               # Next.js App Router (pages & API routes)
+│   │   ├── content/       # Kategorie- und Gruppenauswahl
+│   │   ├── game/          # Spielmodi
+│   │   └── page.jsx       # Hauptmenü
+│   ├── components/        # Wiederverwendbare UI-Komponenten
+│   ├── context/           # React Context (LanguageContext)
+│   ├── modes/             # Spielmodi-Implementierungen (z.B. SwipeGame)
+│   ├── config/            # Konfigurationen
+│   └── utils/             # Hilfsfunktionen
+├── public/
+│   └── GameData/          # JSON-Daten für Kategorien und Karten
+└── .aiko/                 # Generierte Auth-Dateien (nicht manuell bearbeiten)
 ```
 
-## 🚀 Installation & Start
+## Installation & Start
 
-Voraussetzung: Node.js (Version 18+ empfohlen).
-
-1. **Repository klonen**
-   ```bash
-   git clone <repository-url>
-   cd japanese-cards
-   ```
-
-2. **Abhängigkeiten installieren**
-   ```bash
-   npm install
-   ```
-
-3. **Entwicklungsserver starten**
-   ```bash
-   npm run dev
-   ```
-   Die App ist nun unter `http://localhost:5173/japanese-cards/` erreichbar.
-
-## 🏗️ Build & Deployment
-
-Das Projekt ist für **GitHub Pages** optimiert.
+Voraussetzung: Node.js 20+
 
 ```bash
-npm run build
+npm install
+npm run dev
 ```
 
-Der Build-Output landet in `build/client`.
+Die App ist unter `http://localhost:3001` erreichbar.
 
-## 🧹 Code-Status
+## Build & Deployment
 
-Das Projekt befindet sich in aktiver Entwicklung.
-- **Einstiegspunkt**: `src/main.jsx` -> `app/root.jsx`
-- **Daten**: Werden dynamisch aus `public/GameData` geladen (oder via GitHub Raw API in Production).
+```bash
+npm run build    # prebuild generiert Auth-Dateien + next build
+```
 
----
+Das Docker-Image wird via GitHub Actions gebaut und in der K8s-Umgebung deployed.
+Domain: `japanese-cards.sytko.de`
 
-## 👤 Autor
+## Auth
 
-Michal
+Auth wird von `@michalsy/aiko-webapp-core` verwaltet. Der `prebuild`-Script generiert
+die nötigen Auth-Dateien automatisch. Geschützte Routen werden via Next.js Middleware
+abgesichert (Google OAuth erforderlich).
