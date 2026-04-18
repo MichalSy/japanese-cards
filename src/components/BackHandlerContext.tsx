@@ -27,7 +27,8 @@ export function useSetBackHandler(fn: Handler) {
   fnRef.current = fn
 
   useEffect(() => {
-    setHandler(() => fnRef.current())
+    const wrapped = () => fnRef.current()
+    setHandler(() => wrapped)  // double-wrap: outer fn is the updater, returns wrapped as new state
     return () => setHandler(null)
   }, [])
 }
