@@ -2,8 +2,6 @@ import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
 import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
 
-const MIN_SCORE = -5
-
 function computeScore(correct: number, incorrect: number): number {
   return correct - incorrect
 }
@@ -14,7 +12,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const supabase = await createServerSupabaseClient()
 
   const { data: cat } = await supabase
-    .from('categories')
+    .from('language_cards_categories')
     .select('id')
     .eq('slug', categorySlug)
     .single()
@@ -22,14 +20,14 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   if (!cat) return NextResponse.json({ progress: {} })
 
   const { data: progressRows } = await supabase
-    .from('user_card_progress')
-    .select('card_id, correct_count, incorrect_count, last_reviewed_at, cards!inner(slug, groups!inner(category_id))')
+    .from('language_cards_user_card_progress')
+    .select('card_id, correct_count, incorrect_count, last_reviewed_at, language_cards_cards!inner(slug, language_cards_groups!inner(category_id))')
     .eq('user_id', user.id)
-    .eq('cards.groups.category_id', cat.id)
+    .eq('language_cards_cards.language_cards_groups.category_id', cat.id)
 
   const progress: Record<string, { score: number; learned: boolean }> = {}
   for (const row of progressRows ?? []) {
-    const slug = (row.cards as any)?.slug
+    const slug = (row as any).language_cards_cards?.slug
     if (slug) {
       progress[slug] = {
         score: computeScore(row.correct_count, row.incorrect_count),
@@ -49,10 +47,9 @@ export const POST = requireAuth(async (req: Request, context: any) => {
 
   const supabase = await createServerSupabaseClient()
 
-  // Get card IDs by slug
   const slugs = results.map((r) => r.cardSlug)
   const { data: cards } = await supabase
-    .from('cards')
+    .from('language_cards_cards')
     .select('id, slug')
     .in('slug', slugs)
 
@@ -63,7 +60,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
     if (!cardId) continue
 
     const { data: existing } = await supabase
-      .from('user_card_progress')
+      .from('language_cards_user_card_progress')
       .select('id, correct_count, incorrect_count')
       .eq('user_id', user.id)
       .eq('card_id', cardId)
@@ -75,7 +72,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
       const score = computeScore(correct, incorrect)
       const mastery = Math.min(Math.max(score / 10, 0), 1)
       await supabase
-        .from('user_card_progress')
+        .from('language_cards_user_card_progress')
         .update({ correct_count: correct, incorrect_count: incorrect, mastery_level: mastery, last_reviewed_at: new Date().toISOString(), updated_at: new Date().toISOString() })
         .eq('id', existing.id)
     } else {
@@ -83,7 +80,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
       const incorrect = isCorrect ? 0 : 1
       const mastery = isCorrect ? 0.1 : 0
       await supabase
-        .from('user_card_progress')
+        .from('language_cards_user_card_progress')
         .insert({ user_id: user.id, card_id: cardId, correct_count: correct, incorrect_count: incorrect, mastery_level: mastery, last_reviewed_at: new Date().toISOString() })
     }
   }

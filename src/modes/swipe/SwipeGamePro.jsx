@@ -16,9 +16,9 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
 
   const game = useSwipeGame(items, cardCount, contentType)
 
-  const handleSwipeWithToast = (isCorrect, direction, correctRomaji, character) => {
+  const handleSwipeWithToast = (isCorrect, direction, correctTransliteration, native) => {
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
-    setToast({ isCorrect, correctRomaji, character, id: Date.now() })
+    setToast({ isCorrect, correctTransliteration, native, id: Date.now() })
     setToastVisible(true)
     toastTimeoutRef.current = setTimeout(() => {
       setToastVisible(false)
@@ -94,7 +94,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         <div style={{ position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, opacity: toastVisible ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 24px', backgroundColor: toast.isCorrect ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)', backdropFilter: 'blur(10px)', borderRadius: '16px' }}>
             <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'white' }}>{toast.isCorrect ? '✓' : '✗'}</span>
-            <span style={{ fontSize: '17px', fontWeight: '600', color: 'white' }}>{toast.character} = {toast.correctRomaji}</span>
+            <span style={{ fontSize: '17px', fontWeight: '600', color: 'white' }}>{toast.native} = {toast.correctTransliteration}</span>
           </div>
         </div>
       )}

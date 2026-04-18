@@ -8,7 +8,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const [isDragging, setIsDragging] = useState(false)
   const [position, setPosition] = useState({ x: 0, rotation: 0 })
 
-  const character = card?.character || card?.word || ''
+  const character = card?.native || ''
 
   const triggerSwipe = useCallback((userThinkCorrect) => {
     if (!card || swipeState === 'exit') return
@@ -16,7 +16,7 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     const direction = userThinkCorrect ? 'right' : 'left'
     setSwipeState('exit')
     setPosition({ x: direction === 'right' ? 300 : -300, rotation: direction === 'right' ? 10 : -10 })
-    setTimeout(() => { onSwipe(isCorrect, direction, card.correctRomaji, character) }, 220)
+    setTimeout(() => { onSwipe(isCorrect, direction, card.correctTransliteration, character) }, 220)
   }, [card, correctAnswer, onSwipe, character, swipeState])
 
   useEffect(() => {
@@ -146,9 +146,9 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
           <div style={{ fontSize: 'clamp(100px, 28vw, 170px)', fontWeight: '300', lineHeight: 1, color: 'white', textAlign: 'center', marginBottom: '24px', textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
             {character}
           </div>
-          {(card.shownRomaji || card.romaji) && (
+          {(card.shownTransliteration || card.transliteration) && (
             <div style={{ fontSize: '40px', color: 'rgba(255,255,255,0.95)', fontWeight: '600', letterSpacing: '2px', textTransform: 'lowercase', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
-              {card.shownRomaji || card.romaji}
+              {card.shownTransliteration || card.transliteration}
             </div>
           )}
         </div>

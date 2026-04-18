@@ -74,7 +74,8 @@ export default function GameModeSelector({ params }) {
 
   const availableGameModes = categoryConfig?.gameModes || []
   const gameModes = availableGameModes.map(modeId => gameModeMap[modeId]).filter(mode => mode && mode.enabled)
-  const groupName = categoryConfig?.groups?.find(g => g.id === groupId)?.name || 'Gruppe'
+  const foundGroup = categoryConfig?.groups?.find(g => g.id === groupId)
+  const groupName = foundGroup?.translations?.de?.name ?? foundGroup?.translations?.en?.name ?? foundGroup?.id ?? 'Gruppe'
 
   if (loading) return (
     <AppLayout>

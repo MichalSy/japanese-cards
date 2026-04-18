@@ -36,19 +36,19 @@ export function useSwipeGame(items, cardCount, category) {
       const isCorrectMeaning = correctnessArray[idx]
 
       if (isCorrectMeaning) {
-        display.push({ ...card, shownRomaji: card.romaji, correctRomaji: card.romaji, isWrongPairing: false })
+        display.push({ ...card, shownTransliteration: card.transliteration, correctTransliteration: card.transliteration, isWrongPairing: false })
       } else {
         let wrongCard
         let attempts = 0
         do {
           wrongCard = items[Math.floor(Math.random() * items.length)]
           attempts++
-        } while (wrongCard.romaji === card.romaji && attempts < 20)
+        } while (wrongCard.romaji === card.transliteration && attempts < 20)
 
-        if (wrongCard.romaji === card.romaji) {
-          display.push({ ...card, shownRomaji: card.romaji, correctRomaji: card.romaji, isWrongPairing: false })
+        if (wrongCard.romaji === card.transliteration) {
+          display.push({ ...card, shownTransliteration: card.transliteration, correctTransliteration: card.transliteration, isWrongPairing: false })
         } else {
-          display.push({ ...card, shownRomaji: wrongCard.romaji, correctRomaji: card.romaji, isWrongPairing: true })
+          display.push({ ...card, shownTransliteration: wrongCard.romaji, correctTransliteration: card.transliteration, isWrongPairing: true })
         }
       }
 

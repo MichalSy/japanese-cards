@@ -42,13 +42,10 @@ export default function ContentTypeView({ params }) {
     })()
   }, [contentType])
 
-  const getLabel = (obj, key) => {
-    if (!obj) return ''
-    const fieldKey = language === 'de' ? `${key}De` : `${key}En`
-    return obj[fieldKey] || obj[key] || ''
-  }
+  const t = (obj, key) =>
+    obj?.translations?.[language]?.[key] ?? obj?.translations?.en?.[key] ?? obj?.native_name ?? ''
 
-  const categoryName = categoryConfig ? (getLabel(categoryConfig, 'name') || categoryConfig.name) : ''
+  const categoryName = categoryConfig ? (t(categoryConfig, 'name') || categoryConfig.native_name || '') : ''
 
   if (loading) return (
     <AppLayout>
@@ -131,7 +128,7 @@ export default function ContentTypeView({ params }) {
                   <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}`)}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '16px', fontWeight: '600', color: 'white' }}>{group.name}</span>
+                        <span style={{ fontSize: '16px', fontWeight: '600', color: 'white' }}>{t(group, 'name') || group.id}</span>
                         <span style={{ fontSize: '14px', fontWeight: '700', color: '#ec4899' }}>{groupProgress}%</span>
                       </div>
                       <div style={{ height: '6px', borderRadius: '9999px', backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>

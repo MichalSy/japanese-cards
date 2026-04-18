@@ -35,13 +35,11 @@ export default function MainMenu() {
     { id: 'stats',    labelDe: 'Statistiken', labelEn: 'Stats',    icon: '🏆' },
   ]
 
-  const getLabel = (obj, key) => {
-    const fieldKey = language === 'de' ? `${key}De` : `${key}En`
-    return obj[fieldKey] || obj[key]
-  }
+  const t = (obj, key) =>
+    obj?.translations?.[language]?.[key] ?? obj?.translations?.en?.[key] ?? obj?.native_name ?? ''
 
-  const getCategoryName = (category) => getLabel(category, 'name') || category.name
-  const getCategoryDescription = (category) => getLabel(category, 'description')
+  const getCategoryName = (category) => t(category, 'name') || category.native_name || category.id
+  const getCategoryDescription = (category) => t(category, 'description')
 
   return (
     <AppLayout>
