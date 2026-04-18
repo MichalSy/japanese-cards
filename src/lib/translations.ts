@@ -52,6 +52,9 @@ export const translations: Record<string, Record<string, string>> = {
     'settings.title': 'Einstellungen',
     'settings.motherTongue': 'Muttersprache',
     'settings.learnLang': 'Lernsprache',
+    'settings.resetProgress': 'Fortschritt zurücksetzen',
+    'settings.resetConfirm': 'Wirklich zurücksetzen?',
+    'settings.resetDone': 'Fortschritt wurde zurückgesetzt.',
   },
   en: {
     'loading': 'Loading...',
@@ -106,6 +109,9 @@ export const translations: Record<string, Record<string, string>> = {
     'settings.title': 'Settings',
     'settings.motherTongue': 'Mother tongue',
     'settings.learnLang': 'Learning language',
+    'settings.resetProgress': 'Reset progress',
+    'settings.resetConfirm': 'Really reset?',
+    'settings.resetDone': 'Progress has been reset.',
   },
 }
 

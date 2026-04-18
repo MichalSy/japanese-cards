@@ -37,6 +37,8 @@ export default function SettingsPage() {
   const [learnLanguages, setLearnLanguages] = useState([])
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [resetConfirm, setResetConfirm] = useState(false)
+  const [resetting, setResetting] = useState(false)
 
   useEffect(() => {
     fetch('/api/data/languages')
@@ -99,6 +101,31 @@ export default function SettingsPage() {
           >
             {saving ? t('saving') : t('save')}
           </button>
+          {/* Reset progress */}
+          {!resetConfirm ? (
+            <button onClick={() => setResetConfirm(true)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.25)', fontSize: '13px', padding: '4px', textDecoration: 'underline' }}>
+              {t('settings.resetProgress')}
+            </button>
+          ) : (
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={() => setResetConfirm(false)}
+                style={{ flex: 1, padding: '11px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', fontWeight: '600', fontSize: '14px' }}>
+                {t('settings.resetProgress').split(' ')[0] === 'Reset' ? 'Cancel' : 'Abbrechen'}
+              </button>
+              <button disabled={resetting} onClick={async () => {
+                setResetting(true)
+                await fetch('/api/progress/reset', { method: 'DELETE' }).catch(() => {})
+                setResetting(false)
+                setResetConfirm(false)
+                router.push('/')
+              }}
+                style={{ flex: 1, padding: '11px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.2)', color: '#ef4444', fontWeight: '700', fontSize: '14px', outline: '1px solid rgba(239,68,68,0.3)' }}>
+                {resetting ? '...' : t('settings.resetConfirm')}
+              </button>
+            </div>
+          )}
+
           {process.env.NEXT_PUBLIC_APP_VERSION && (
             <p style={{ margin: 0, textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
               v{process.env.NEXT_PUBLIC_APP_VERSION}
