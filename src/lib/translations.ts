@@ -35,6 +35,10 @@ export const translations: Record<string, Record<string, string>> = {
     'game.correct': 'Richtig',
     'game.percent': 'Prozent',
     'game.all': 'Alle',
+    'game.playAgain': 'Nochmal',
+    'game.toCategory': 'Zur Kategorie',
+    'game.nextGroup': 'Nächste Gruppe →',
+    'game.toHome': 'Hauptmenü',
 
     'settings.title': 'Einstellungen',
     'settings.motherTongue': 'Muttersprache',
@@ -76,6 +80,10 @@ export const translations: Record<string, Record<string, string>> = {
     'game.correct': 'Correct',
     'game.percent': 'Percent',
     'game.all': 'All',
+    'game.playAgain': 'Play again',
+    'game.toCategory': 'Back to category',
+    'game.nextGroup': 'Next group →',
+    'game.toHome': 'Main menu',
 
     'settings.title': 'Settings',
     'settings.motherTongue': 'Mother tongue',

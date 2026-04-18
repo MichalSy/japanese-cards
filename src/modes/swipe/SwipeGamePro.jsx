@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { fetchGroupData, fetchAllItemsFromCategory } from '@/config/api'
+import { useRouter } from 'next/navigation'
+import { fetchGroupData, fetchAllItemsFromCategory, fetchCategoryConfig } from '@/config/api'
 import { useT } from '@/components/I18nContext'
 import { useSwipeGame } from './useSwipeGame'
 import SwipeCardPro from './SwipeCardPro'
@@ -63,12 +64,14 @@ function HelpModal({ items, onClose, t }) {
 
 export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const t = useT()
+  const router = useRouter()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [toast, setToast] = useState(null)
   const [toastVisible, setToastVisible] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
+  const [nextGroupId, setNextGroupId] = useState(null)
   const toastTimeoutRef = useRef(null)
   const buttonClickRef = useRef(null)
 
@@ -107,6 +110,18 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
     loadData()
   }, [contentType, groupId])
 
+  // Determine next group when game ends (not for 'all')
+  useEffect(() => {
+    if (game.gameState !== 'finished' || groupId === 'all') return
+    fetchCategoryConfig(contentType)
+      .then(config => {
+        const groups = config.groups || []
+        const idx = groups.findIndex(g => g.id === groupId)
+        if (idx >= 0 && idx < groups.length - 1) setNextGroupId(groups[idx + 1].id)
+      })
+      .catch(() => {})
+  }, [game.gameState])
+
   if (loading) return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.6)' }}>{t('loading')}</div>
   )
@@ -119,14 +134,39 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   if (game.gameState === 'finished') {
     const total = game.stats.correct + game.stats.incorrect
     const pct = total > 0 ? Math.round((game.stats.correct / total) * 100) : 0
+    const btn = (label, onClick, primary = false) => (
+      <button onClick={onClick} style={{
+        padding: primary ? '14px 24px' : '11px 20px',
+        borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700',
+        fontSize: primary ? '16px' : '14px', transition: 'all 0.2s',
+        background: primary ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'rgba(255,255,255,0.08)',
+        color: 'white',
+        boxShadow: primary ? '0 4px 16px rgba(236,72,153,0.35)' : 'none',
+        flex: primary ? undefined : 1,
+      }}>{label}</button>
+    )
     return (
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
-        <div style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'white', margin: '0 0 24px' }}>{t('game.finished')}</h2>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px', gap: '16px' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center', gap: '24px' }}>
+          <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'white', margin: 0 }}>{t('game.finished')}</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
             <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#10b981', margin: '8px 0 0' }}>{game.stats.correct}/{total}</p></div>
             <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.percent')}</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#ec4899', margin: '8px 0 0' }}>{pct}%</p></div>
           </div>
+        </div>
+
+        {/* Primary action: next group (if available) */}
+        {nextGroupId && (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {btn(t('game.nextGroup'), () => router.push(`/content/${contentType}/${nextGroupId}`), true)}
+          </div>
+        )}
+
+        {/* Secondary actions */}
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {btn(t('game.playAgain'), () => router.push(`/content/${contentType}/${groupId}`))}
+          {btn(t('game.toCategory'), () => router.push(`/content/${contentType}`))}
+          {btn(t('game.toHome'), () => router.push('/'))}
         </div>
       </div>
     )
