@@ -30,6 +30,14 @@ function StatInfoPopup({ info, onClose }) {
 export default function MainMenu() {
   const router = useRouter()
   const t = useT()
+
+  useEffect(() => {
+    history.pushState({ homeGuard: true }, '')
+    const onPop = () => { history.pushState({ homeGuard: true }, '') }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
   const [activeTab, setActiveTab] = useState('start')
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
