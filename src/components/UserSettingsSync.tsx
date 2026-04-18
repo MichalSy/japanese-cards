@@ -38,11 +38,11 @@ export default function UserSettingsSync() {
       .catch(() => {})
   }, [user?.id])
 
-  // Save language changes to DB when user manually switches
+  // Save language changes to DB — skipped if settings page already saved (prevLangRef stays in sync)
   useEffect(() => {
     if (!user?.id || !fetchedForUserRef.current) return
     if (language === prevLangRef.current) return
-    prevLangRef.current = language
+    prevLangRef.current = language  // update first so settings page save doesn't cause re-fire
 
     fetch('/api/settings', {
       method: 'POST',

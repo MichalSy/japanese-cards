@@ -9,7 +9,7 @@ import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/
 
 export default function SettingsPage() {
   const router = useRouter()
-  const { language } = useLanguage()
+  const { language, setLanguage } = useLanguage()
   const { settings, setSettings } = useSettings()
 
   const [uiLanguage, setUiLanguage] = useState(settings.uiLanguage)
@@ -44,6 +44,9 @@ export default function SettingsPage() {
 
       const learnLang = learnLanguages.find(l => l.id === learnLanguageId)
       const langName = uiLanguage === 'de' ? (learnLang?.name_de ?? learnLang?.name) : (learnLang?.name_en ?? learnLang?.name)
+
+      // Update both contexts immediately so the UI switches live
+      setLanguage(uiLanguage)
       setSettings({
         uiLanguage,
         learnLanguageId,
