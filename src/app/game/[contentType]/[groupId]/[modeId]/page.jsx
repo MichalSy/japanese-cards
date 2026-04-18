@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader } from '@/components/Layout'
@@ -28,12 +28,13 @@ export default function GameScreen({ params }) {
   const searchParams = useSearchParams()
   const cardCount = searchParams.get('cards') || 'all'
   const t = useT()
+  const router = useRouter()
   const GameComponent = GAME_MODES[modeId]
 
   return (
     <AppLayout>
       <AppHeader>
-        <AppHeaderBar title={modeNames[modeId] || modeId} />
+        <AppHeaderBar title={modeNames[modeId] || modeId} onBack={() => router.push(`/content/${contentType}`)} />
       </AppHeader>
 
       {!GameComponent ? (
