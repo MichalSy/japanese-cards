@@ -10,7 +10,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   const { data, error } = await supabase
     .from('language_cards_languages')
-    .select('id, name_en, name_de, name_native, flag_emoji, is_ui_language, is_learn_language')
+    .select('id, name_en, name_de, name_native, flag_emoji, app_icon, is_ui_language, is_learn_language')
     .eq('is_active', true)
     .order('sort_order')
 
@@ -20,11 +20,11 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   const ui_languages = data
     .filter((r) => r.is_ui_language)
-    .map((r) => ({ id: r.id, name: getName(r), native_name: r.name_native, flag: r.flag_emoji }))
+    .map((r) => ({ id: r.id, name: getName(r), native_name: r.name_native, flag: r.flag_emoji, app_icon: r.app_icon }))
 
   const learn_languages = data
     .filter((r) => r.is_learn_language)
-    .map((r) => ({ id: r.id, name: getName(r), native_name: r.name_native, flag: r.flag_emoji }))
+    .map((r) => ({ id: r.id, name: getName(r), native_name: r.name_native, flag: r.flag_emoji, app_icon: r.app_icon }))
 
   return NextResponse.json({ ui_languages, learn_languages })
 })

@@ -7,7 +7,14 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
   const supabase = await createServerSupabaseClient()
   const settings = await resolveSettings(user.id, supabase)
-  return NextResponse.json(settings)
+
+  const { data: lang } = await supabase
+    .from('language_cards_languages')
+    .select('name_en, name_de, app_icon, flag_emoji')
+    .eq('id', settings.learn_language_id)
+    .single()
+
+  return NextResponse.json({ ...settings, learn_language: lang ?? null })
 })
 
 export const POST = requireAuth(async (req: Request, context: any) => {
