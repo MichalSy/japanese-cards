@@ -38,7 +38,7 @@ function HelpModal({ items, onClose }) {
             <div style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 20px 8px' }}>
               {name}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))', gap: '8px', padding: '0 20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px', padding: '0 16px' }}>
               {groupItems.map(item => (
                 <div key={item.id} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '10px 8px', textAlign: 'center' }}>
                   <div style={{ fontSize: '28px', fontWeight: '300', color: 'white', lineHeight: 1.1 }}>{item.native}</div>
@@ -139,18 +139,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
       )}
 
-      {/* Titel-Zone mit Info-Button */}
-      <div style={{ flex: 2, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px', minHeight: 0, position: 'relative' }}>
+      {/* Titel-Zone */}
+      <div style={{ flex: 2, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px', minHeight: 0 }}>
         <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
           Ist die Kombination richtig?
         </span>
-        <button
-          onClick={() => setShowHelp(true)}
-          title="Alle Zeichen anzeigen"
-          style={{ position: 'absolute', right: '16px', bottom: '10px', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.6)', fontSize: '15px', fontWeight: '700', transition: 'background 0.2s' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.2)' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
-        >?</button>
       </div>
 
       {/* Karte */}
@@ -169,7 +162,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       </div>
 
       {/* Button-Zone */}
-      <div style={{ flex: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '48px', minHeight: 0 }}>
+      <div style={{ flex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', minHeight: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '48px' }}>
         {[
           { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
           { isCorrect: true,  icon: '✓', r: 52,  g: 199, b: 89  },
@@ -193,6 +187,20 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)' }}
           >{icon}</button>
         ))}
+        </div>
+
+        {/* Hilfe-Button unter den Swipe-Buttons */}
+        <button
+          onClick={() => setShowHelp(true)}
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '7px 16px', cursor: 'pointer', color: 'rgba(255,255,255,0.45)', fontSize: '13px', transition: 'all 0.2s' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'rgba(255,255,255,0.45)' }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          Zeichen nachschlagen
+        </button>
       </div>
 
       {/* Progress Bar */}
