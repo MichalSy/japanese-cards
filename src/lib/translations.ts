@@ -1,0 +1,86 @@
+export const translations: Record<string, Record<string, string>> = {
+  de: {
+    'loading': 'Laden...',
+    'error': 'Fehler',
+    'play': 'Spielen →',
+    'save': 'Speichern',
+    'saving': 'Speichern...',
+
+    'nav.categories': 'Kategorien',
+    'nav.progress': 'Fortschritt',
+    'nav.stats': 'Statistiken',
+    'nav.start': 'Start',
+
+    'stats.title': 'Deine Statistik',
+    'stats.learned': 'Gelernt',
+    'stats.mastered': 'Beherrscht',
+    'stats.learning': 'Lernend',
+    'stats.struggling': 'Schwierig',
+
+    'groups.title': 'Gruppen',
+    'groups.chars': 'Zeichen',
+    'groups.chars.short': 'Zeichen',
+    'groups.all': '✨ Alle kombiniert',
+    'groups.all.sub': 'Zeichen',
+
+    'game.cardCount': 'Kartenanzahl',
+    'game.selectMode': 'Spielmodus wählen',
+    'game.chooseMode': 'Wähle einen Modus zum Spielen',
+    'game.notAvailable': 'Dieser Modus ist noch nicht verfügbar.',
+    'game.loadingMode': 'wird geladen...',
+    'game.question': 'Ist die Kombination richtig?',
+    'game.lookup': 'Zeichen nachschlagen',
+    'game.charsInGame': 'Zeichen im Spiel',
+    'game.finished': 'Spiel beendet! 🎉',
+    'game.correct': 'Richtig',
+    'game.percent': 'Prozent',
+    'game.all': 'Alle',
+
+    'settings.title': 'Einstellungen',
+    'settings.motherTongue': 'Muttersprache',
+    'settings.learnLang': 'Lernsprache',
+  },
+  en: {
+    'loading': 'Loading...',
+    'error': 'Error',
+    'play': 'Play →',
+    'save': 'Save',
+    'saving': 'Saving...',
+
+    'nav.categories': 'Categories',
+    'nav.progress': 'Progress',
+    'nav.stats': 'Statistics',
+    'nav.start': 'Start',
+
+    'stats.title': 'Your Stats',
+    'stats.learned': 'Learned',
+    'stats.mastered': 'Mastered',
+    'stats.learning': 'Learning',
+    'stats.struggling': 'Struggling',
+
+    'groups.title': 'Groups',
+    'groups.chars': 'characters',
+    'groups.chars.short': 'chars',
+    'groups.all': '✨ All Combined',
+    'groups.all.sub': 'characters',
+
+    'game.cardCount': 'Number of cards',
+    'game.selectMode': 'Select game mode',
+    'game.chooseMode': 'Choose a mode to play',
+    'game.notAvailable': 'This mode is not available yet.',
+    'game.loadingMode': 'loading...',
+    'game.question': 'Is the combination correct?',
+    'game.lookup': 'Look up characters',
+    'game.charsInGame': 'Characters in game',
+    'game.finished': 'Game over! 🎉',
+    'game.correct': 'Correct',
+    'game.percent': 'Percent',
+    'game.all': 'All',
+
+    'settings.title': 'Settings',
+    'settings.motherTongue': 'Mother tongue',
+    'settings.learnLang': 'Learning language',
+  },
+}
+
+export type TranslationKey = keyof typeof translations.en

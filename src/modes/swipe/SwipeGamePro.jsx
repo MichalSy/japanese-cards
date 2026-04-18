@@ -2,10 +2,11 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { fetchGroupData, fetchAllItemsFromCategory } from '@/config/api'
+import { useT } from '@/components/I18nContext'
 import { useSwipeGame } from './useSwipeGame'
 import SwipeCardPro from './SwipeCardPro'
 
-function HelpModal({ items, onClose }) {
+function HelpModal({ items, onClose, t }) {
   // Group items by group_name
   const groups = []
   const seen = new Map()
@@ -15,22 +16,29 @@ function HelpModal({ items, onClose }) {
     seen.get(name).push(item)
   }
 
+  const [visible, setVisible] = useState(false)
+  useEffect(() => { requestAnimationFrame(() => setVisible(true)) }, [])
+
+  const handleClose = () => {
+    setVisible(false)
+    setTimeout(onClose, 320)
+  }
+
   return (
     <div
-      onClick={onClose}
-      style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-end' }}
+      onClick={handleClose}
+      style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-end', opacity: visible ? 1 : 0, transition: 'opacity 0.3s' }}
     >
       <div
         onClick={e => e.stopPropagation()}
-        style={{ width: '100%', maxHeight: '75vh', background: 'linear-gradient(180deg, rgba(28,16,60,0.98) 0%, rgba(12,8,34,0.99) 100%)', borderRadius: '20px 20px 0 0', border: '1px solid rgba(255,255,255,0.12)', overflowY: 'auto', paddingBottom: 'env(safe-area-inset-bottom, 16px)' }}
+        style={{ width: '100%', maxHeight: '75vh', background: 'linear-gradient(180deg, rgba(28,16,60,0.98) 0%, rgba(12,8,34,0.99) 100%)', borderRadius: '20px 20px 0 0', border: '1px solid rgba(255,255,255,0.12)', overflowY: 'auto', paddingBottom: 'env(safe-area-inset-bottom, 16px)', transform: visible ? 'translateY(0)' : 'translateY(100%)', transition: 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)' }}
       >
-        {/* Handle */}
         <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
           <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.2)' }} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 20px 16px' }}>
-          <span style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>Zeichen im Spiel</span>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', fontSize: '22px', lineHeight: 1, padding: '4px' }}>✕</button>
+          <span style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>{t('game.charsInGame')}</span>
+          <button onClick={handleClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', fontSize: '22px', lineHeight: 1, padding: '4px' }}>✕</button>
         </div>
 
         {groups.map(({ name, items: groupItems }) => (
@@ -54,6 +62,7 @@ function HelpModal({ items, onClose }) {
 }
 
 export default function SwipeGamePro({ contentType, groupId, cardCount }) {
+  const t = useT()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -99,11 +108,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   }, [contentType, groupId])
 
   if (loading) return (
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.6)' }}>Laden...</div>
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.6)' }}>{t('loading')}</div>
   )
   if (error) return (
     <div style={{ flex: 1, padding: '20px' }}>
-      <div style={{ padding: '20px', backgroundColor: 'rgba(239,68,68,0.1)', borderRadius: '16px', color: '#ef4444' }}>Fehler: {error}</div>
+      <div style={{ padding: '20px', backgroundColor: 'rgba(239,68,68,0.1)', borderRadius: '16px', color: '#ef4444' }}>{t('error')}: {error}</div>
     </div>
   )
 
@@ -113,10 +122,10 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
     return (
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
         <div style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'white', margin: '0 0 24px' }}>Spiel beendet! 🎉</h2>
+          <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'white', margin: '0 0 24px' }}>{t('game.finished')}</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
-            <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>Richtig</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#10b981', margin: '8px 0 0' }}>{game.stats.correct}/{total}</p></div>
-            <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>Prozent</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#ec4899', margin: '8px 0 0' }}>{pct}%</p></div>
+            <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#10b981', margin: '8px 0 0' }}>{game.stats.correct}/{total}</p></div>
+            <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.percent')}</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#ec4899', margin: '8px 0 0' }}>{pct}%</p></div>
           </div>
         </div>
       </div>
@@ -128,7 +137,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
 
-      {showHelp && <HelpModal items={items} onClose={() => setShowHelp(false)} />}
+      {showHelp && <HelpModal items={items} onClose={() => setShowHelp(false)} t={t} />}
 
       {toast && (
         <div style={{ position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, opacity: toastVisible ? 1 : 0, transition: 'opacity 0.3s', pointerEvents: 'none' }}>
@@ -142,7 +151,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       {/* Titel-Zone */}
       <div style={{ flex: 2, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px', minHeight: 0 }}>
         <span style={{ fontSize: '19px', fontWeight: '500', color: 'rgba(255,255,255,0.85)', letterSpacing: '0.01em', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
-          Ist die Kombination richtig?
+          {t('game.question')}
         </span>
       </div>
 
@@ -199,7 +208,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
           </svg>
-          Zeichen nachschlagen
+          {t('game.lookup')}
         </button>
       </div>
 

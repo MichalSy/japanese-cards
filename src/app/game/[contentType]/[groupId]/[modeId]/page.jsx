@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader } from '@/components/Layout'
 
@@ -25,8 +26,8 @@ const modeNames = {
 export default function GameScreen({ params }) {
   const { contentType, groupId, modeId } = params
   const searchParams = useSearchParams()
-  const cardCount = searchParams.get('cards') || 20
-
+  const cardCount = searchParams.get('cards') || 'all'
+  const t = useT()
   const GameComponent = GAME_MODES[modeId]
 
   return (
@@ -38,15 +39,13 @@ export default function GameScreen({ params }) {
       {!GameComponent ? (
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>
-            Dieser Modus ist noch nicht verfügbar.
+            {t('game.notAvailable')}
           </div>
         </div>
       ) : (
         <Suspense fallback={
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)' }}>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '16px' }}>{modeNames[modeId]} wird geladen...</p>
-            </div>
+            <p style={{ fontSize: '16px' }}>{modeNames[modeId]} {t('game.loadingMode')}</p>
           </div>
         }>
           <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} />

@@ -4,6 +4,7 @@
 import { AuthProvider, LanguageProvider } from '@michalsy/aiko-webapp-core'
 import UserSettingsSync from '@/components/UserSettingsSync'
 import { SettingsProvider } from '@/components/SettingsContext'
+import { I18nProvider } from '@/components/I18nContext'
 import '@michalsy/aiko-webapp-core/core.css'
 import './globals.css'
 
@@ -20,8 +21,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <LanguageProvider>
             <SettingsProvider>
-              <UserSettingsSync />
-              {children}
+              <I18nProvider>
+                <UserSettingsSync />
+                {children}
+              </I18nProvider>
             </SettingsProvider>
           </LanguageProvider>
         </AuthProvider>
