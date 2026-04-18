@@ -130,7 +130,7 @@ export default function MainMenu() {
                   { label: t('stats.mastered'), value: totalMastered, color: '#10b981' },
                   { label: t('stats.learned'), value: totalSeen, color: '#3b82f6' },
                   { label: t('stats.accuracy'), value: `${accuracy}%`, color: '#ec4899' },
-                  { label: t('stats.totalCards'), value: totalCards, color: '#a855f7' },
+                  { label: t('stats.totalCards'), value: totalCards > 0 ? `${Math.round((totalSeen / totalCards) * 100)}%` : '0%', color: '#a855f7' },
                 ].map(({ label, value, color }) => (
                   <Card key={label}>
                     <div style={{ textAlign: 'center' }}>
