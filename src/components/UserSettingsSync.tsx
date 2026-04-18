@@ -13,33 +13,32 @@ export default function UserSettingsSync() {
   const fetchedForUserRef = useRef<string | null>(null)
   const prevLangRef = useRef(language)
 
+  // One request on login: loads settings + translations
   useEffect(() => {
     if (!user?.id) return
     if (fetchedForUserRef.current === user.id) return
     fetchedForUserRef.current = user.id
 
-    Promise.all([
-      fetch('/api/settings').then((r) => (r.ok ? r.json() : null)),
-      fetch('/api/i18n').then((r) => (r.ok ? r.json() : null)),
-    ]).then(([settingsData, i18nData]) => {
-      if (settingsData) {
-        if (settingsData.ui_language && settingsData.ui_language !== language)
-          setLanguage(settingsData.ui_language)
-        prevLangRef.current = settingsData.ui_language ?? language
+    fetch('/api/i18n')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return
+        if (data.ui_language && data.ui_language !== language) setLanguage(data.ui_language)
+        prevLangRef.current = data.ui_language ?? language
+        if (data.strings) setStrings(data.strings)
 
-        const lang = settingsData.learn_language ?? {}
-        const uiLang = settingsData.ui_language ?? 'en'
+        const lang = data.learn_language ?? {}
         setSettings({
-          uiLanguage: uiLang,
-          learnLanguageId: settingsData.learn_language_id ?? 'ja',
+          uiLanguage: data.ui_language ?? 'en',
+          learnLanguageId: data.learn_language_id ?? 'ja',
           appIcon: lang.app_icon ?? '🌸',
           appTitle: `${lang.name_en ?? 'Japanese'} Cards`,
         })
-      }
-      if (i18nData) setStrings(i18nData)
-    }).catch(() => {})
+      })
+      .catch(() => {})
   }, [user?.id])
 
+  // Save language changes to DB when user switches in settings
   useEffect(() => {
     if (!user?.id || !fetchedForUserRef.current) return
     if (language === prevLangRef.current) return
