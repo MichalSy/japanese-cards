@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react'
 import { useAuth, useLanguage } from '@michalsy/aiko-webapp-core'
 import { useSettings } from '@/components/SettingsContext'
 import { useSetStrings } from '@/components/I18nContext'
-import { translations } from '@/lib/translations'
 
 export default function UserSettingsSync() {
   const { user } = useAuth()
@@ -14,7 +13,7 @@ export default function UserSettingsSync() {
   const fetchedForUserRef = useRef<string | null>(null)
   const prevLangRef = useRef(language)
 
-  // One request on login: loads settings + translations
+  // On login: load settings + translations from backend (one request, no params needed)
   useEffect(() => {
     if (!user?.id) return
     if (fetchedForUserRef.current === user.id) return
@@ -39,14 +38,12 @@ export default function UserSettingsSync() {
       .catch(() => {})
   }, [user?.id])
 
-  // Save language changes to DB when user switches in settings
+  // When language changes (e.g. set by settings page): save to DB only
+  // Translations are reloaded by the settings page via /api/i18n after saving
   useEffect(() => {
     if (!user?.id || !fetchedForUserRef.current) return
     if (language === prevLangRef.current) return
     prevLangRef.current = language
-
-    // Update strings immediately from bundled translations (no API round-trip needed)
-    setStrings(translations[language as keyof typeof translations] ?? translations.en)
 
     fetch('/api/settings', {
       method: 'POST',

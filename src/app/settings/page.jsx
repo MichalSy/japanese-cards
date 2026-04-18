@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/context/LanguageContext'
 import { useSettings } from '@/components/SettingsContext'
 import { useT, useSetStrings } from '@/components/I18nContext'
-import { translations } from '@/lib/translations'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
 
@@ -50,8 +49,12 @@ export default function SettingsPage() {
     setSaving(true)
     try {
       await fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ui_language: uiLanguage, learn_language_id: learnLanguageId }) })
+
+      // Reload translations from backend — it knows the new language via user settings
+      const i18nData = await fetch('/api/i18n').then(r => r.ok ? r.json() : null)
+      if (i18nData?.strings) setStrings(i18nData.strings)
+
       const learnLang = learnLanguages.find(l => l.id === learnLanguageId)
-      setStrings(translations[uiLanguage] ?? translations.en)
       setLanguage(uiLanguage)
       setSettings({ uiLanguage, learnLanguageId, appIcon: learnLang?.app_icon ?? settings.appIcon, appTitle: `${learnLang?.name_en ?? learnLang?.name ?? 'Japanese'} Cards` })
       router.push('/')
