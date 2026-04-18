@@ -23,6 +23,10 @@ export const translations: Record<string, Record<string, string>> = {
     'stats.days5': '5 Tage',
     'stats.days30': '30 Tage',
     'stats.noChart': 'Noch keine Zeichen beherrscht.',
+    'stats.info.mastered': 'Zeichen die du mindestens 3 Mal korrekt beantwortet hast. Diese Zeichen gelten als sicher gelernt.',
+    'stats.info.learned': 'Einzigartige Zeichen die du bereits mindestens einmal gesehen und beantwortet hast.',
+    'stats.info.accuracy': 'Verhältnis von beherrschten zu gesehenen Zeichen. Je höher, desto effizienter lernst du.',
+    'stats.info.discovered': 'Anteil aller verfügbaren Zeichen die du bereits entdeckt hast. Wächst mit jeder neuen Karte die du spielst.',
     'progress.mastered': 'beherrscht',
     'progress.of': 'von',
 
@@ -80,6 +84,10 @@ export const translations: Record<string, Record<string, string>> = {
     'stats.days5': '5 days',
     'stats.days30': '30 days',
     'stats.noChart': 'No characters mastered yet.',
+    'stats.info.mastered': 'Characters you answered correctly at least 3 times. These are considered securely learned.',
+    'stats.info.learned': 'Unique characters you have seen and answered at least once.',
+    'stats.info.accuracy': 'Ratio of mastered to seen characters. The higher, the more efficiently you learn.',
+    'stats.info.discovered': 'Percentage of all available characters you have already encountered. Grows with every new card you play.',
     'progress.mastered': 'mastered',
     'progress.of': 'of',
 

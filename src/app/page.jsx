@@ -17,6 +17,7 @@ export default function MainMenu() {
   const [overview, setOverview] = useState([])
   const [chartDays, setChartDays] = useState(5)
   const [daily, setDaily] = useState([])
+  const [statInfo, setStatInfo] = useState(null)
 
   useEffect(() => {
     (async () => {
@@ -127,12 +128,12 @@ export default function MainMenu() {
 
               <div className="grid-2">
                 {[
-                  { label: t('stats.mastered'), value: totalMastered, color: '#10b981' },
-                  { label: t('stats.learned'), value: totalSeen, color: '#3b82f6' },
-                  { label: t('stats.accuracy'), value: `${accuracy}%`, color: '#ec4899' },
-                  { label: t('stats.totalCards'), value: totalCards > 0 ? `${Math.round((totalSeen / totalCards) * 100)}%` : '0%', color: '#a855f7' },
-                ].map(({ label, value, color }) => (
-                  <Card key={label}>
+                  { label: t('stats.mastered'), value: totalMastered, color: '#10b981', infoKey: 'stats.info.mastered' },
+                  { label: t('stats.learned'), value: totalSeen, color: '#3b82f6', infoKey: 'stats.info.learned' },
+                  { label: t('stats.accuracy'), value: `${accuracy}%`, color: '#ec4899', infoKey: 'stats.info.accuracy' },
+                  { label: t('stats.totalCards'), value: totalCards > 0 ? `${Math.round((totalSeen / totalCards) * 100)}%` : '0%', color: '#a855f7', infoKey: 'stats.info.discovered' },
+                ].map(({ label, value, color, infoKey }) => (
+                  <Card key={label} interactive onClick={() => setStatInfo({ label, value, color, info: t(infoKey) })}>
                     <div style={{ textAlign: 'center' }}>
                       <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', margin: '0 0 8px', fontWeight: '500' }}>{label}</p>
                       <p style={{ fontSize: '32px', fontWeight: '700', color, margin: 0 }}>{value}</p>
@@ -177,6 +178,19 @@ export default function MainMenu() {
           )
         })()}
       </AppContent>
+
+      {statInfo && (
+        <div onClick={() => setStatInfo(null)} style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'linear-gradient(160deg, rgba(28,16,60,0.98), rgba(12,8,34,0.99))', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.12)', padding: '28px 24px', maxWidth: '340px', width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '36px', fontWeight: '700', color: statInfo.color }}>{statInfo.value}</span>
+              <span style={{ fontSize: '18px', fontWeight: '600', color: 'white' }}>{statInfo.label}</span>
+            </div>
+            <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.65)', lineHeight: '1.6' }}>{statInfo.info}</p>
+            <button onClick={() => setStatInfo(null)} style={{ alignSelf: 'flex-end', background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: '20px', padding: '8px 18px', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>OK</button>
+          </div>
+        </div>
+      )}
 
       <AppFooter>
         <div style={{ display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', padding: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
