@@ -16,6 +16,11 @@ export const translations: Record<string, Record<string, string>> = {
     'stats.mastered': 'Beherrscht',
     'stats.learning': 'Lernend',
     'stats.struggling': 'Schwierig',
+    'stats.totalMastered': 'Gesamt beherrscht',
+    'stats.totalSeen': 'Gesamt gesehen',
+    'stats.noProgress': 'Noch keine Daten. Starte ein Spiel!',
+    'progress.mastered': 'beherrscht',
+    'progress.of': 'von',
 
     'groups.title': 'Gruppen',
     'groups.chars': 'Zeichen',
@@ -61,6 +66,11 @@ export const translations: Record<string, Record<string, string>> = {
     'stats.mastered': 'Mastered',
     'stats.learning': 'Learning',
     'stats.struggling': 'Struggling',
+    'stats.totalMastered': 'Total mastered',
+    'stats.totalSeen': 'Total seen',
+    'stats.noProgress': 'No data yet. Start a game!',
+    'progress.mastered': 'mastered',
+    'progress.of': 'of',
 
     'groups.title': 'Groups',
     'groups.chars': 'characters',

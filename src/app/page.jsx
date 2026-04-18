@@ -14,13 +14,18 @@ export default function MainMenu() {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [overview, setOverview] = useState([])
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true)
-        const data = await fetchCategories()
-        setCategories(data.categories.filter(cat => cat.enabled !== false))
+        const [catData, ovData] = await Promise.all([
+          fetchCategories(),
+          fetch('/api/progress/overview').then(r => r.ok ? r.json() : { overview: [] }),
+        ])
+        setCategories(catData.categories.filter(cat => cat.enabled !== false))
+        setOverview(ovData.overview ?? [])
       } catch (err) {
         setError(err.message)
       } finally {
@@ -70,29 +75,62 @@ export default function MainMenu() {
         {activeTab === 'progress' && (
           <div className="space-y-6 fade-in">
             <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('nav.progress')}</h2>
+            {overview.length === 0 && !loading && (
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', textAlign: 'center', padding: '24px 0' }}>{t('stats.noProgress')}</div>
+            )}
             <div className="grid-1">
-              {categories.map(type => (
-                <Card key={type.id}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{type.name || type.native_name}</span>
-                      <span style={{ fontSize: '14px', fontWeight: '700', color: '#ec4899' }}>42%</span>
+              {categories.map(cat => {
+                const stat = overview.find(o => o.category_slug === cat.id)
+                const total = Number(stat?.total ?? 0)
+                const mastered = Number(stat?.mastered ?? 0)
+                const pct = total > 0 ? Math.round((mastered / total) * 100) : 0
+                return (
+                  <Card key={cat.id} interactive onClick={() => router.push(`/content/${cat.id}`)}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <span style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{cat.name || cat.native_name}</span>
+                          <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginLeft: '8px' }}>{mastered} {t('progress.of')} {total}</span>
+                        </div>
+                        <span style={{ fontSize: '14px', fontWeight: '700', color: '#ec4899' }}>{pct}%</span>
+                      </div>
+                      <div style={{ width: '100%', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '9999px', height: '6px', overflow: 'hidden' }}>
+                        <div style={{ background: 'linear-gradient(90deg, #ec4899, #a855f7)', height: '6px', borderRadius: '9999px', width: `${pct}%`, transition: 'width 0.4s ease' }} />
+                      </div>
                     </div>
-                    <div style={{ width: '100%', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '9999px', height: '6px', overflow: 'hidden' }}>
-                      <div style={{ background: 'linear-gradient(90deg, #ec4899, #a855f7)', height: '6px', borderRadius: '9999px', width: '42%' }} />
-                    </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                )
+              })}
             </div>
           </div>
         )}
 
-        {activeTab === 'stats' && (
-          <div className="space-y-6 fade-in">
-            <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('nav.stats')}</h2>
-          </div>
-        )}
+        {activeTab === 'stats' && (() => {
+          const totalMastered = overview.reduce((s, o) => s + Number(o.mastered ?? 0), 0)
+          const totalSeen = overview.reduce((s, o) => s + Number(o.seen ?? 0), 0)
+          const totalCards = overview.reduce((s, o) => s + Number(o.total ?? 0), 0)
+          const accuracy = totalSeen > 0 ? Math.round((totalMastered / totalSeen) * 100) : 0
+          return (
+            <div className="space-y-6 fade-in">
+              <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('nav.stats')}</h2>
+              <div className="grid-2">
+                {[
+                  { label: t('stats.mastered'), value: totalMastered, color: '#10b981' },
+                  { label: t('stats.learned'), value: totalSeen, color: '#3b82f6' },
+                  { label: t('stats.totalMastered'), value: `${accuracy}%`, color: '#ec4899' },
+                  { label: t('stats.totalSeen'), value: totalCards, color: '#a855f7' },
+                ].map(({ label, value, color }) => (
+                  <Card key={label}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', margin: '0 0 8px', fontWeight: '500' }}>{label}</p>
+                      <p style={{ fontSize: '32px', fontWeight: '700', color, margin: 0 }}>{value}</p>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
       </AppContent>
 
       <AppFooter>
