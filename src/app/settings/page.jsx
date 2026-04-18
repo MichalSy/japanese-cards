@@ -24,6 +24,49 @@ function LangButton({ lang, selected, onClick, icon }) {
   )
 }
 
+function ResetModal({ onClose, onConfirm, resetting, t }) {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => { requestAnimationFrame(() => setVisible(true)) }, [])
+
+  const handleClose = () => {
+    setVisible(false)
+    setTimeout(onClose, 320)
+  }
+
+  return (
+    <div onClick={handleClose} style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-end', opacity: visible ? 1 : 0, transition: 'opacity 0.3s' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: '100%', background: 'linear-gradient(180deg, rgba(28,16,60,0.98) 0%, rgba(12,8,34,0.99) 100%)', borderRadius: '20px 20px 0 0', border: '1px solid rgba(255,255,255,0.12)', padding: '0 0 env(safe-area-inset-bottom, 20px)', transform: visible ? 'translateY(0)' : 'translateY(100%)', transition: 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
+          <div style={{ width: '36px', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.2)' }} />
+        </div>
+
+        <div style={{ padding: '16px 24px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize: '16px', fontWeight: '700', color: 'white' }}>{t('settings.resetProgress')}</div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px' }}>{t('settings.resetConfirm')}</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button onClick={handleClose} style={{ flex: 1, padding: '13px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)', fontWeight: '600', fontSize: '15px' }}>
+              {t('settings.resetProgress').startsWith('Reset') ? 'Cancel' : 'Abbrechen'}
+            </button>
+            <button disabled={resetting} onClick={onConfirm} style={{ flex: 1, padding: '13px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: resetting ? 'rgba(239,68,68,0.1)' : 'rgba(239,68,68,0.85)', color: 'white', fontWeight: '700', fontSize: '15px', transition: 'all 0.2s' }}>
+              {resetting ? '...' : t('settings.resetConfirm')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function SettingsPage() {
   const router = useRouter()
   const { setLanguage } = useLanguage()
@@ -37,7 +80,7 @@ export default function SettingsPage() {
   const [learnLanguages, setLearnLanguages] = useState([])
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [resetConfirm, setResetConfirm] = useState(false)
+  const [showReset, setShowReset] = useState(false)
   const [resetting, setResetting] = useState(false)
 
   useEffect(() => {
@@ -51,11 +94,8 @@ export default function SettingsPage() {
     setSaving(true)
     try {
       await fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ui_language: uiLanguage, learn_language_id: learnLanguageId }) })
-
-      // Reload translations from backend — it knows the new language via user settings
       const i18nData = await fetch('/api/i18n').then(r => r.ok ? r.json() : null)
       if (i18nData?.strings) setStrings(i18nData.strings)
-
       const learnLang = learnLanguages.find(l => l.id === learnLanguageId)
       setLanguage(uiLanguage)
       setSettings({ uiLanguage, learnLanguageId, appIcon: learnLang?.app_icon ?? settings.appIcon, appTitle: `${learnLang?.name_en ?? learnLang?.name ?? 'Japanese'} Cards` })
@@ -63,6 +103,14 @@ export default function SettingsPage() {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleReset = async () => {
+    setResetting(true)
+    await fetch('/api/progress/reset', { method: 'DELETE' }).catch(() => {})
+    setResetting(false)
+    setShowReset(false)
+    router.push('/')
   }
 
   const hasChanges = uiLanguage !== settings.uiLanguage || learnLanguageId !== settings.learnLanguageId
@@ -83,6 +131,7 @@ export default function SettingsPage() {
                 </div>
               </div>
             </Card>
+
             <Card>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('settings.learnLang')}</div>
@@ -91,41 +140,27 @@ export default function SettingsPage() {
                 </div>
               </div>
             </Card>
+
+            <Card>
+              <button onClick={() => setShowReset(true)} style={{ display: 'flex', alignItems: 'center', gap: '14px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                  </svg>
+                </div>
+                <span style={{ fontSize: '15px', fontWeight: '600', color: '#ef4444' }}>{t('settings.resetProgress')}</span>
+              </button>
+            </Card>
           </div>
         )}
       </AppContent>
+
       <AppFooter>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
           <button onClick={handleSave} disabled={!hasChanges || saving}
-            style={{ width: '100%', padding: '14px', background: hasChanges ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'rgba(255,255,255,0.08)', color: hasChanges ? 'white' : 'rgba(255,255,255,0.3)', border: 'none', borderRadius: '100px', fontWeight: '700', fontSize: '16px', cursor: hasChanges ? 'pointer' : 'default', boxShadow: hasChanges ? '0 4px 16px rgba(236,72,153,0.35)' : 'none', transition: 'all 0.2s' }}
-          >
+            style={{ width: '100%', padding: '14px', background: hasChanges ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'rgba(255,255,255,0.08)', color: hasChanges ? 'white' : 'rgba(255,255,255,0.3)', border: 'none', borderRadius: '100px', fontWeight: '700', fontSize: '16px', cursor: hasChanges ? 'pointer' : 'default', boxShadow: hasChanges ? '0 4px 16px rgba(236,72,153,0.35)' : 'none', transition: 'all 0.2s' }}>
             {saving ? t('saving') : t('save')}
           </button>
-          {/* Reset progress */}
-          {!resetConfirm ? (
-            <button onClick={() => setResetConfirm(true)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.25)', fontSize: '13px', padding: '4px', textDecoration: 'underline' }}>
-              {t('settings.resetProgress')}
-            </button>
-          ) : (
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button onClick={() => setResetConfirm(false)}
-                style={{ flex: 1, padding: '11px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', fontWeight: '600', fontSize: '14px' }}>
-                {t('settings.resetProgress').split(' ')[0] === 'Reset' ? 'Cancel' : 'Abbrechen'}
-              </button>
-              <button disabled={resetting} onClick={async () => {
-                setResetting(true)
-                await fetch('/api/progress/reset', { method: 'DELETE' }).catch(() => {})
-                setResetting(false)
-                setResetConfirm(false)
-                router.push('/')
-              }}
-                style={{ flex: 1, padding: '11px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: 'rgba(239,68,68,0.2)', color: '#ef4444', fontWeight: '700', fontSize: '14px', outline: '1px solid rgba(239,68,68,0.3)' }}>
-                {resetting ? '...' : t('settings.resetConfirm')}
-              </button>
-            </div>
-          )}
-
           {process.env.NEXT_PUBLIC_APP_VERSION && (
             <p style={{ margin: 0, textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
               v{process.env.NEXT_PUBLIC_APP_VERSION}
@@ -134,6 +169,8 @@ export default function SettingsPage() {
           )}
         </div>
       </AppFooter>
+
+      {showReset && <ResetModal onClose={() => setShowReset(false)} onConfirm={handleReset} resetting={resetting} t={t} />}
     </AppLayout>
   )
 }
