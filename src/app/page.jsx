@@ -7,6 +7,26 @@ import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
 
+function StatInfoPopup({ info, onClose }) {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => { requestAnimationFrame(() => setVisible(true)) }, [])
+
+  const close = () => { setVisible(false); setTimeout(onClose, 250) }
+
+  return (
+    <div onClick={close} style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', background: `rgba(0,0,0,${visible ? 0.5 : 0})`, backdropFilter: visible ? 'blur(8px)' : 'none', transition: 'background 0.25s, backdrop-filter 0.25s' }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: '24px', padding: '28px 24px', maxWidth: '320px', width: '100%', display: 'flex', flexDirection: 'column', gap: '14px', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', transform: visible ? 'scale(1) translateY(0)' : 'scale(0.92) translateY(12px)', opacity: visible ? 1 : 0, transition: 'transform 0.28s cubic-bezier(0.34,1.2,0.64,1), opacity 0.22s ease' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+          <span style={{ fontSize: '40px', fontWeight: '700', color: info.color, lineHeight: 1 }}>{info.value}</span>
+          <span style={{ fontSize: '16px', fontWeight: '600', color: 'rgba(255,255,255,0.85)' }}>{info.label}</span>
+        </div>
+        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.65' }}>{info.info}</p>
+        <button onClick={close} style={{ alignSelf: 'center', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '20px', padding: '8px 22px', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', fontSize: '13px', fontWeight: '600', marginTop: '2px' }}>OK</button>
+      </div>
+    </div>
+  )
+}
+
 export default function MainMenu() {
   const router = useRouter()
   const t = useT()
@@ -179,18 +199,7 @@ export default function MainMenu() {
         })()}
       </AppContent>
 
-      {statInfo && (
-        <div onClick={() => setStatInfo(null)} style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'linear-gradient(160deg, rgba(28,16,60,0.98), rgba(12,8,34,0.99))', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.12)', padding: '28px 24px', maxWidth: '340px', width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '36px', fontWeight: '700', color: statInfo.color }}>{statInfo.value}</span>
-              <span style={{ fontSize: '18px', fontWeight: '600', color: 'white' }}>{statInfo.label}</span>
-            </div>
-            <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.65)', lineHeight: '1.6' }}>{statInfo.info}</p>
-            <button onClick={() => setStatInfo(null)} style={{ alignSelf: 'flex-end', background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: '20px', padding: '8px 18px', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>OK</button>
-          </div>
-        </div>
-      )}
+      {statInfo && <StatInfoPopup info={statInfo} onClose={() => setStatInfo(null)} />}
 
       <AppFooter>
         <div style={{ display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', padding: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
