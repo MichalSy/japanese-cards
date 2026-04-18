@@ -1,33 +1,25 @@
 import { useState, useEffect, useCallback } from 'react'
-import { recordCorrect, recordWrong } from '@/utils/progressStorage'
 
-export function useSwipeGame(items, cardCount, category) {
+export function useSwipeGame(items, cardCount) {
   const [gameState, setGameState] = useState('loading')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cards, setCards] = useState([])
   const [correctAnswers, setCorrectAnswers] = useState({})
   const [displayCards, setDisplayCards] = useState([])
-  const [stats, setStats] = useState({ correct: 0, incorrect: 0, mistakes: [] })
+  const [stats, setStats] = useState({ correct: 0, incorrect: 0, mistakes: [], results: [] })
 
   useEffect(() => {
-    if (!items || items.length === 0) {
-      setGameState('error')
-      return
-    }
+    if (!items || items.length === 0) { setGameState('error'); return }
 
     const count = cardCount === 'all' ? items.length : parseInt(cardCount)
-
     let deck = []
     while (deck.length < count) {
       const remaining = count - deck.length
-      const itemsToAdd = [...items].sort(() => Math.random() - 0.5).slice(0, remaining)
-      deck = [...deck, ...itemsToAdd]
+      deck = [...deck, ...[...items].sort(() => Math.random() - 0.5).slice(0, remaining)]
     }
 
     const answers = {}
     const display = []
-
-    // 75% correct pairings, 25% wrong — better for learning
     const wrongCount = Math.max(1, Math.round(deck.length * 0.25))
     const correctnessArray = [
       ...Array(deck.length - wrongCount).fill(true),
@@ -35,71 +27,53 @@ export function useSwipeGame(items, cardCount, category) {
     ].sort(() => Math.random() - 0.5)
 
     deck.forEach((card, idx) => {
-      const isCorrectMeaning = correctnessArray[idx]
-
-      if (isCorrectMeaning) {
+      const isCorrect = correctnessArray[idx]
+      if (isCorrect) {
         display.push({ ...card, shownTransliteration: card.transliteration, correctTransliteration: card.transliteration, isWrongPairing: false })
       } else {
-        let wrongCard
-        let attempts = 0
-        do {
-          wrongCard = items[Math.floor(Math.random() * items.length)]
-          attempts++
-        } while (wrongCard.transliteration === card.transliteration && attempts < 20)
-
+        let wrongCard, attempts = 0
+        do { wrongCard = items[Math.floor(Math.random() * items.length)]; attempts++ }
+        while (wrongCard.transliteration === card.transliteration && attempts < 20)
         if (wrongCard.transliteration === card.transliteration) {
           display.push({ ...card, shownTransliteration: card.transliteration, correctTransliteration: card.transliteration, isWrongPairing: false })
         } else {
           display.push({ ...card, shownTransliteration: wrongCard.transliteration, correctTransliteration: card.transliteration, isWrongPairing: true })
         }
       }
-
-      answers[`${idx}-${card.id}`] = isCorrectMeaning
+      answers[`${idx}-${card.id}`] = isCorrect
     })
 
     setCards(deck)
     setDisplayCards(display)
     setCorrectAnswers(answers)
+    setStats({ correct: 0, incorrect: 0, mistakes: [], results: [] })
     setGameState('playing')
   }, [items, cardCount])
 
   const handleSwipe = useCallback((isCorrect, swipeDirection) => {
-    const nextIndex = currentIndex + 1
     const currentCard = cards[currentIndex]
+    const nextIndex = currentIndex + 1
 
-    if (category && currentCard) {
-      if (isCorrect) recordCorrect(category, currentCard.id)
-      else recordWrong(category, currentCard.id)
-    }
-
-    if (!isCorrect) {
-      setStats(prev => ({
-        ...prev,
-        incorrect: prev.incorrect + 1,
-        mistakes: [...prev.mistakes, {
-          realCard: cards[currentIndex],
-          displayedCard: displayCards[currentIndex],
-          userAction: swipeDirection,
-          wasCorrectPairing: correctAnswers[`${currentIndex}-${cards[currentIndex].id}`],
-        }]
-      }))
-    } else {
-      setStats(prev => ({ ...prev, correct: prev.correct + 1 }))
-    }
+    setStats(prev => ({
+      correct: prev.correct + (isCorrect ? 1 : 0),
+      incorrect: prev.incorrect + (isCorrect ? 0 : 1),
+      results: [...prev.results, { cardSlug: currentCard?.id, isCorrect }],
+      mistakes: isCorrect ? prev.mistakes : [...prev.mistakes, {
+        realCard: cards[currentIndex],
+        displayedCard: displayCards[currentIndex],
+        userAction: swipeDirection,
+        wasCorrectPairing: correctAnswers[`${currentIndex}-${cards[currentIndex]?.id}`],
+      }],
+    }))
 
     if (nextIndex >= cards.length) setGameState('finished')
     else setCurrentIndex(nextIndex)
-  }, [currentIndex, cards, category, displayCards, correctAnswers])
-
-  const getCardStack = useCallback(() => {
-    return displayCards.slice(currentIndex, currentIndex + 4)
-  }, [displayCards, currentIndex])
+  }, [currentIndex, cards, displayCards, correctAnswers])
 
   return {
     gameState,
     currentCard: displayCards[currentIndex],
-    realCard: cards[currentIndex],
-    cardStack: getCardStack(),
+    cardStack: displayCards.slice(currentIndex, currentIndex + 4),
     currentIndex,
     totalCards: cards.length,
     stats,

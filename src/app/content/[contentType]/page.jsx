@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { fetchCategoryWithItems } from '@/config/api'
 import { useLanguage } from '@/context/LanguageContext'
-import { getCategoryStats, getGroupProgress } from '@/utils/progressStorage'
+import { fetchProgressFromServer, computeGroupProgress, computeCategoryStats } from '@/utils/progressStorage'
 import { useSetBackHandler } from '@/components/BackHandlerContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
@@ -26,6 +26,7 @@ export default function ContentTypeView({ params }) {
   const [error, setError] = useState(null)
   const [stats, setStats] = useState(null)
   const [groupData, setGroupData] = useState({})
+  const [progress, setProgress] = useState({})
 
   const t = (de, en) => language === 'de' ? de : en
 
@@ -35,9 +36,13 @@ export default function ContentTypeView({ params }) {
     (async () => {
       try {
         setLoading(true)
-        const config = await fetchCategoryWithItems(contentType)
+        const [config, serverProgress] = await Promise.all([
+          fetchCategoryWithItems(contentType),
+          fetchProgressFromServer(contentType),
+        ])
         setCategoryConfig(config)
-        setStats(getCategoryStats(contentType))
+        setProgress(serverProgress)
+        setStats(computeCategoryStats(serverProgress))
         const groups = {}
         for (const group of config.groups) groups[group.id] = group.items || []
         setGroupData(groups)
@@ -63,7 +68,7 @@ export default function ContentTypeView({ params }) {
   )
 
   const allItems = Object.values(groupData).flat()
-  const allProgress = getGroupProgress(allItems, contentType)
+  const allProgress = computeGroupProgress(allItems, progress)
 
   return (
     <AppLayout>
@@ -113,7 +118,7 @@ export default function ContentTypeView({ params }) {
             <div className="grid-1">
               {categoryConfig.groups.map(group => {
                 const items = groupData[group.id] || []
-                const groupProgress = getGroupProgress(items, contentType)
+                const groupProgress = computeGroupProgress(items, progress)
                 return (
                   <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}`)}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
