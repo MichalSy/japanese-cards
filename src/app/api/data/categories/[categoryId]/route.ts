@@ -68,10 +68,10 @@ export const GET = requireAuth(async (req: Request, context: any) => {
     description: ct.description ?? '',
     emoji: cat.emoji,
     color: cat.color,
-    card_type: cat.card_type,
+    cardType: cat.card_type,
     enabled: cat.is_active,
-    show_all_option: cat.show_all_option,
-    game_modes: cat.game_modes ?? [],
+    showAllOption: cat.show_all_option,
+    gameModes: cat.game_modes ?? [],
     groups,
   })
 })
