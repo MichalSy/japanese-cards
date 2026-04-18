@@ -35,7 +35,7 @@ export default function MainMenu() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [overview, setOverview] = useState([])
-  const [chartDays, setChartDays] = useState(5)
+  const [chartMode, setChartMode] = useState('days')
   const [daily, setDaily] = useState([])
   const [statInfo, setStatInfo] = useState(null)
 
@@ -136,11 +136,12 @@ export default function MainMenu() {
           const totalCards = overview.reduce((s, o) => s + Number(o.total ?? 0), 0)
           const accuracy = totalSeen > 0 ? Math.round((totalMastered / totalSeen) * 100) : 0
           const maxCount = Math.max(...daily.map(d => d.mastered ?? 0), 1)
+          const isWeeks = chartMode === 'weeks'
           const fmt = (iso) => {
             const d = new Date(iso)
-            return chartDays <= 5
-              ? d.toLocaleDateString(undefined, { weekday: 'short' })
-              : `${d.getDate()}.${d.getMonth() + 1}.`
+            return isWeeks
+              ? `${d.getDate()}.${d.getMonth() + 1}.`
+              : d.toLocaleDateString(undefined, { weekday: 'short' })
           }
           return (
             <div className="space-y-6 fade-in">
@@ -167,12 +168,13 @@ export default function MainMenu() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.6)' }}>{t('stats.chartTitle')}</span>
                     <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '20px', padding: '3px' }}>
-                      {[5, 30].map(d => (
-                        <button key={d} onClick={() => {
-                          setChartDays(d)
-                          fetch(`/api/progress/daily?days=${d}`).then(r => r.ok ? r.json() : null).then(data => { if (data) setDaily(data.daily ?? []) })
-                        }} style={{ padding: '4px 10px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: '600', background: chartDays === d ? 'linear-gradient(135deg,#ec4899,#a855f7)' : 'transparent', color: chartDays === d ? 'white' : 'rgba(255,255,255,0.45)', transition: 'all 0.2s' }}>
-                          {d === 5 ? t('stats.days5') : t('stats.days30')}
+                      {['days', 'weeks'].map(mode => (
+                        <button key={mode} onClick={() => {
+                          setChartMode(mode)
+                          const url = mode === 'weeks' ? '/api/progress/daily?weeks=10' : '/api/progress/daily?days=5'
+                          fetch(url).then(r => r.ok ? r.json() : null).then(data => { if (data) setDaily(data.daily ?? []) })
+                        }} style={{ padding: '4px 10px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: '600', background: chartMode === mode ? 'linear-gradient(135deg,#ec4899,#a855f7)' : 'transparent', color: chartMode === mode ? 'white' : 'rgba(255,255,255,0.45)', transition: 'all 0.2s' }}>
+                          {mode === 'days' ? t('stats.days5') : t('stats.weeks10')}
                         </button>
                       ))}
                     </div>
@@ -181,13 +183,13 @@ export default function MainMenu() {
                   {daily.every(d => d.mastered === 0 && !d.active) ? (
                     <p style={{ margin: 0, textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.3)', padding: '16px 0' }}>{t('stats.noChart')}</p>
                   ) : (
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: chartDays <= 5 ? '8px' : '3px', height: '110px' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: isWeeks ? '3px' : '8px', height: '110px' }}>
                       {daily.map(({ date, mastered: m, active: isActive }) => (
                         <div key={date} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', height: '100%', justifyContent: 'flex-end' }}>
                           <span style={{ fontSize: '11px', fontWeight: '700', color: m > 0 ? 'rgba(255,255,255,0.8)' : 'transparent' }}>{m || ''}</span>
                           <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: m > 0 ? 'linear-gradient(180deg,#a855f7,#ec4899)' : isActive ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.04)', height: `${Math.max((m / maxCount) * 72, m > 0 ? 8 : isActive ? 4 : 3)}px`, transition: 'height 0.4s ease' }} />
                           <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: isActive ? '#10b981' : 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
-                          <span style={{ fontSize: chartDays <= 5 ? '11px' : '9px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{fmt(date)}</span>
+                          <span style={{ fontSize: isWeeks ? '9px' : '11px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{fmt(date)}</span>
                         </div>
                       ))}
                     </div>
