@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { fetchGroupData, fetchAllItemsFromCategory, fetchCategoryConfig } from '@/config/api'
 import { useT } from '@/components/I18nContext'
+import { useSetBackHandler } from '@/components/BackHandlerContext'
 import { useSwipeGame } from './useSwipeGame'
 import SwipeCardPro from './SwipeCardPro'
 
@@ -62,9 +63,10 @@ function HelpModal({ items, onClose, t }) {
   )
 }
 
-export default function SwipeGamePro({ contentType, groupId, cardCount, onGameEnd }) {
+export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const t = useT()
   const router = useRouter()
+
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -76,6 +78,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount, onGameEn
   const buttonClickRef = useRef(null)
 
   const game = useSwipeGame(items, cardCount, contentType)
+
+  // Override back button only while actively playing
+  useSetBackHandler(
+    game.gameState === 'playing' ? () => router.push(`/content/${contentType}`) : null
+  )
 
   const handleSwipeWithToast = (isCorrect, direction, correctTransliteration, native) => {
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
@@ -110,11 +117,9 @@ export default function SwipeGamePro({ contentType, groupId, cardCount, onGameEn
     loadData()
   }, [contentType, groupId])
 
-  // Notify parent + determine next group when game ends
+  // Determine next group when game ends
   useEffect(() => {
-    if (game.gameState !== 'finished') return
-    onGameEnd?.()
-    if (groupId === 'all') return
+    if (game.gameState !== 'finished' || groupId === 'all') return
     fetchCategoryConfig(contentType)
       .then(config => {
         const groups = config.groups || []

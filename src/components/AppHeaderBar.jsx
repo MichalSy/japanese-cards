@@ -2,14 +2,16 @@
 
 import { useRouter, usePathname } from 'next/navigation'
 import { useSettings } from '@/components/SettingsContext'
+import { useBackHandler } from '@/components/BackHandlerContext'
 
-export default function AppHeaderBar({ title, onBack }) {
+export default function AppHeaderBar({ title }) {
   const router = useRouter()
   const pathname = usePathname()
-  const isHome = !onBack && pathname === '/'
   const { settings } = useSettings()
+  const contextHandler = useBackHandler()
 
-  const handleBack = onBack || (() => router.back())
+  const isHome = pathname === '/'
+  const handleBack = contextHandler ?? (() => router.back())
 
   return (
     <div style={{

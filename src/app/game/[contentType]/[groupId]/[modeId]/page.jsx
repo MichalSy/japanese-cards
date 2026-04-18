@@ -1,8 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Suspense, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader } from '@/components/Layout'
@@ -28,17 +28,12 @@ export default function GameScreen({ params }) {
   const searchParams = useSearchParams()
   const cardCount = searchParams.get('cards') || 'all'
   const t = useT()
-  const router = useRouter()
-  const [isPlaying, setIsPlaying] = useState(true)
   const GameComponent = GAME_MODES[modeId]
 
   return (
     <AppLayout>
       <AppHeader>
-        <AppHeaderBar
-          title={modeNames[modeId] || modeId}
-          onBack={isPlaying ? () => router.push(`/content/${contentType}`) : undefined}
-        />
+        <AppHeaderBar title={modeNames[modeId] || modeId} />
       </AppHeader>
 
       {!GameComponent ? (
@@ -53,7 +48,7 @@ export default function GameScreen({ params }) {
             <p style={{ fontSize: '16px' }}>{modeNames[modeId]} {t('game.loadingMode')}</p>
           </div>
         }>
-          <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} onGameEnd={() => setIsPlaying(false)} />
+          <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} />
         </Suspense>
       )}
     </AppLayout>
