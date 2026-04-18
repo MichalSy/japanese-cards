@@ -103,31 +103,27 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = groupId === 'all'
-          ? await fetchAllItemsFromCategory(contentType)
-          : await fetchGroupData(contentType, groupId)
+        const [data, config] = await Promise.all([
+          groupId === 'all' ? fetchAllItemsFromCategory(contentType) : fetchGroupData(contentType, groupId),
+          groupId !== 'all' ? fetchCategoryConfig(contentType) : null,
+        ])
         setItems(data.items || [])
+        if (config) {
+          const groups = config.groups || []
+          const idx = groups.findIndex(g => g.id === groupId)
+          setNextGroupId(idx >= 0 && idx < groups.length - 1 ? groups[idx + 1].id : null)
+        } else {
+          setNextGroupId(null)
+        }
       } catch (err) {
         setError(err.message)
+        setNextGroupId(null)
       } finally {
         setLoading(false)
       }
     }
     loadData()
   }, [contentType, groupId])
-
-  // Determine next group when game ends (null = no next, undefined = loading)
-  useEffect(() => {
-    if (game.gameState !== 'finished') return
-    if (groupId === 'all') { setNextGroupId(null); return }
-    fetchCategoryConfig(contentType)
-      .then(config => {
-        const groups = config.groups || []
-        const idx = groups.findIndex(g => g.id === groupId)
-        setNextGroupId(idx >= 0 && idx < groups.length - 1 ? groups[idx + 1].id : null)
-      })
-      .catch(() => setNextGroupId(null))
-  }, [game.gameState])
 
   if (loading) return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.6)' }}>{t('loading')}</div>
@@ -141,39 +137,34 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   if (game.gameState === 'finished') {
     const total = game.stats.correct + game.stats.incorrect
     const pct = total > 0 ? Math.round((game.stats.correct / total) * 100) : 0
-    const stillLoading = nextGroupId === undefined && groupId !== 'all'
     return (
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px', gap: '16px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px 20px', gap: '20px' }}>
 
-        {/* Stats */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center', gap: '24px' }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'white', margin: 0 }}>{t('game.finished')}</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
-            <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#10b981', margin: '8px 0 0' }}>{game.stats.correct}/{total}</p></div>
-            <div><p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.percent')}</p><p style={{ fontSize: '36px', fontWeight: '700', color: '#ec4899', margin: '8px 0 0' }}>{pct}%</p></div>
+        {/* Compact stats card */}
+        <div style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '28px 24px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: '700', color: 'white', margin: '0 0 20px' }}>{t('game.finished')}</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '48px' }}>
+            <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#10b981', margin: '6px 0 0', lineHeight: 1 }}>{game.stats.correct}/{total}</p></div>
+            <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.percent')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#ec4899', margin: '6px 0 0', lineHeight: 1 }}>{pct}%</p></div>
           </div>
         </div>
 
-        {/* Fixed bottom section — reserved space prevents layout jump */}
+        {/* Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-
-          {/* Next group — full width, reserved even while loading */}
-          <div style={{ minHeight: '50px', display: 'flex' }}>
-            {nextGroupId && (
-              <button onClick={() => router.push(`/content/${contentType}/${nextGroupId}`)} style={{ flex: 1, padding: '14px', borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700', fontSize: '16px', background: 'linear-gradient(135deg, #ec4899, #a855f7)', color: 'white', boxShadow: '0 4px 16px rgba(236,72,153,0.35)', transition: 'all 0.2s' }}>
-                {t('game.nextGroup')}
-              </button>
-            )}
-          </div>
-
-          {/* Secondary actions */}
+          {nextGroupId && (
+            <button onClick={() => router.push(`/content/${contentType}/${nextGroupId}`)}
+              style={{ width: '100%', padding: '16px', borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700', fontSize: '16px', background: 'linear-gradient(135deg, #ec4899, #a855f7)', color: 'white', boxShadow: '0 4px 16px rgba(236,72,153,0.35)' }}>
+              {t('game.nextGroup')}
+            </button>
+          )}
           <div style={{ display: 'flex', gap: '8px' }}>
             {[
               [t('game.playAgain'), () => router.push(`/content/${contentType}/${groupId}`)],
               [t('game.toCategory'), () => router.push(`/content/${contentType}`)],
               [t('game.toHome'), () => router.push('/')],
             ].map(([label, onClick]) => (
-              <button key={label} onClick={onClick} style={{ flex: 1, padding: '11px 8px', borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700', fontSize: '13px', background: 'rgba(255,255,255,0.08)', color: 'white', transition: 'all 0.2s' }}>
+              <button key={label} onClick={onClick}
+                style={{ flex: 1, padding: '14px 8px', borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '13px', background: 'rgba(255,255,255,0.09)', color: 'rgba(255,255,255,0.85)' }}>
                 {label}
               </button>
             ))}
