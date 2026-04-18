@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { fetchCategoryWithItems } from '@/config/api'
 import { useLanguage } from '@/context/LanguageContext'
 import { getCategoryStats, getGroupProgress } from '@/utils/progressStorage'
+import { useSetBackHandler } from '@/components/BackHandlerContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
 
@@ -27,6 +28,8 @@ export default function ContentTypeView({ params }) {
   const [groupData, setGroupData] = useState({})
 
   const t = (de, en) => language === 'de' ? de : en
+
+  useSetBackHandler(() => router.push('/'))
 
   useEffect(() => {
     (async () => {
