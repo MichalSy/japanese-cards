@@ -1,11 +1,13 @@
 import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { cookies } from 'next/headers'
+import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
+import { resolveSettings } from '@/lib/settingsCache'
 
-export async function GET(_req: Request, { params }: { params: Promise<{ categoryId: string }> }) {
-  const { categoryId } = await params
-  const lang = (await cookies()).get('jc_lang')?.value ?? 'de'
+export const GET = requireAuth(async (_req: Request, context: any) => {
+  const { user } = context
+  const { categoryId } = await context.params
   const supabase = await createServerSupabaseClient()
+  const { ui_language: lang } = await resolveSettings(user.id, supabase)
 
   const { data: cat, error } = await supabase
     .from('language_cards_categories')
@@ -21,7 +23,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ categor
   if (error || !cat) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const pick = (arr: any[]) => arr?.find((x) => x.lang_code === lang) ?? arr?.find((x) => x.lang_code === 'en') ?? {}
-
   const ct = pick((cat as any).language_cards_category_translations ?? [])
 
   const groups = ((cat as any).language_cards_groups ?? [])
@@ -44,4 +45,4 @@ export async function GET(_req: Request, { params }: { params: Promise<{ categor
     game_modes: cat.game_modes ?? [],
     groups,
   })
-}
+})

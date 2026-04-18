@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { cookies } from 'next/headers'
+import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
+import { resolveSettings } from '@/lib/settingsCache'
 
 function mapCard(card: any, lang: string) {
   const pick = (arr: any[]) => arr?.find((x: any) => x.lang_code === lang) ?? arr?.find((x: any) => x.lang_code === 'en') ?? {}
@@ -18,13 +19,11 @@ function mapCard(card: any, lang: string) {
   }
 }
 
-export async function GET(
-  _req: Request,
-  { params }: { params: Promise<{ categoryId: string; groupId: string }> }
-) {
-  const { categoryId, groupId } = await params
-  const lang = (await cookies()).get('jc_lang')?.value ?? 'de'
+export const GET = requireAuth(async (_req: Request, context: any) => {
+  const { user } = context
+  const { categoryId, groupId } = await context.params
   const supabase = await createServerSupabaseClient()
+  const { ui_language: lang } = await resolveSettings(user.id, supabase)
 
   if (groupId === 'all') {
     const { data: cat } = await supabase
@@ -80,4 +79,4 @@ export async function GET(
     card_type: cardType,
     items,
   })
-}
+})

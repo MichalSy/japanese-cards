@@ -1,10 +1,12 @@
 import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { cookies } from 'next/headers'
+import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
+import { resolveSettings } from '@/lib/settingsCache'
 
-export async function GET() {
-  const lang = (await cookies()).get('jc_lang')?.value ?? 'de'
+export const GET = requireAuth(async (_req: Request, context: any) => {
+  const { user } = context
   const supabase = await createServerSupabaseClient()
+  const { ui_language: lang } = await resolveSettings(user.id, supabase)
 
   const { data, error } = await supabase
     .from('language_cards_categories')
@@ -14,9 +16,10 @@ export async function GET() {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
+  const pick = (arr: any[]) => arr?.find((x) => x.lang_code === lang) ?? arr?.find((x) => x.lang_code === 'en') ?? {}
+
   const categories = data.map((cat) => {
-    const translations: any[] = (cat as any).language_cards_category_translations ?? []
-    const t = translations.find((x) => x.lang_code === lang) ?? translations.find((x) => x.lang_code === 'en') ?? {}
+    const t = pick((cat as any).language_cards_category_translations ?? [])
     return {
       id: cat.slug,
       native_name: cat.native_name,
@@ -29,4 +32,4 @@ export async function GET() {
   })
 
   return NextResponse.json({ categories })
-}
+})

@@ -9,6 +9,7 @@ export default function UserSettingsSync() {
   const initializedRef = useRef(false)
   const prevLangRef = useRef(language)
 
+  // On login: load settings from DB and sync to LanguageContext
   useEffect(() => {
     if (!user) { initializedRef.current = false; return }
     if (initializedRef.current) return
@@ -16,15 +17,14 @@ export default function UserSettingsSync() {
     fetch('/api/settings')
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (data?.ui_language && data.ui_language !== language) {
-          setLanguage(data.ui_language)
-        }
-        initializedRef.current = true
+        if (data?.ui_language && data.ui_language !== language) setLanguage(data.ui_language)
         prevLangRef.current = data?.ui_language ?? language
+        initializedRef.current = true
       })
       .catch(() => { initializedRef.current = true })
   }, [user])
 
+  // On language change: save to DB (backend invalidates its cache)
   useEffect(() => {
     if (!user || !initializedRef.current) return
     if (language === prevLangRef.current) return
