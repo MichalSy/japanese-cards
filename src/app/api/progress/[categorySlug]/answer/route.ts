@@ -35,8 +35,10 @@ export const POST = requireAuth(async (req: Request, context: any) => {
     const correct   = existing.correct_count   + (isCorrect ? 1 : 0)
     const incorrect = existing.incorrect_count + (isCorrect ? 0 : 1)
     const score     = correct - incorrect
-    // Set first_mastered_at the first time the card reaches the mastery threshold (score >= 3)
-    const justMastered = correct >= 3 && existing.correct_count < 3 && !existing.first_mastered_at
+    // Set first_mastered_at the first time net score (correct - incorrect) reaches 3
+    const prevScore = existing.correct_count - existing.incorrect_count
+    const newScore = correct - incorrect
+    const justMastered = newScore >= 3 && prevScore < 3 && !existing.first_mastered_at
     await supabase
       .from('language_cards_user_card_progress')
       .update({

@@ -24,9 +24,12 @@ export async function fetchProgressFromServer(category) {
 
 export function computeGroupProgress(groupItems, progress) {
   if (!groupItems?.length) return 0
+  // score = correct_count - incorrect_count, threshold = 3
   const mastered = groupItems.filter(item => (progress[item.id]?.score ?? 0) >= 3).length
   return Math.round((mastered / groupItems.length) * 100)
 }
+
+export const MASTERY_THRESHOLD = 3  // net score (correct - incorrect) needed to be "mastered"
 
 export function computeCategoryStats(progress) {
   const terms = Object.values(progress)
