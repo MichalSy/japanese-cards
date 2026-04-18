@@ -79,10 +79,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
 
   const game = useSwipeGame(items, cardCount, contentType)
 
-  // Override back button only while actively playing
-  useSetBackHandler(
-    game.gameState === 'playing' ? () => router.push(`/content/${contentType}`) : null
-  )
+  // Override back button while this game component is mounted
+  useSetBackHandler(() => router.push(`/content/${contentType}`))
 
   const handleSwipeWithToast = (isCorrect, direction, correctTransliteration, native) => {
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
