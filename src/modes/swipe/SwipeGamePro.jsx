@@ -73,7 +73,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const [toast, setToast] = useState(null)
   const [toastVisible, setToastVisible] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
-  const [nextGroupId, setNextGroupId] = useState(null)
+  // undefined = not yet checked, null = no next group, string = next group id
+  const [nextGroupId, setNextGroupId] = useState(undefined)
   const toastTimeoutRef = useRef(null)
   const buttonClickRef = useRef(null)
 
@@ -115,16 +116,17 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
     loadData()
   }, [contentType, groupId])
 
-  // Determine next group when game ends
+  // Determine next group when game ends (null = no next, undefined = loading)
   useEffect(() => {
-    if (game.gameState !== 'finished' || groupId === 'all') return
+    if (game.gameState !== 'finished') return
+    if (groupId === 'all') { setNextGroupId(null); return }
     fetchCategoryConfig(contentType)
       .then(config => {
         const groups = config.groups || []
         const idx = groups.findIndex(g => g.id === groupId)
-        if (idx >= 0 && idx < groups.length - 1) setNextGroupId(groups[idx + 1].id)
+        setNextGroupId(idx >= 0 && idx < groups.length - 1 ? groups[idx + 1].id : null)
       })
-      .catch(() => {})
+      .catch(() => setNextGroupId(null))
   }, [game.gameState])
 
   if (loading) return (
@@ -139,19 +141,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   if (game.gameState === 'finished') {
     const total = game.stats.correct + game.stats.incorrect
     const pct = total > 0 ? Math.round((game.stats.correct / total) * 100) : 0
-    const btn = (label, onClick, primary = false) => (
-      <button onClick={onClick} style={{
-        padding: primary ? '14px 24px' : '11px 20px',
-        borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700',
-        fontSize: primary ? '16px' : '14px', transition: 'all 0.2s',
-        background: primary ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'rgba(255,255,255,0.08)',
-        color: 'white',
-        boxShadow: primary ? '0 4px 16px rgba(236,72,153,0.35)' : 'none',
-        flex: primary ? undefined : 1,
-      }}>{label}</button>
-    )
+    const stillLoading = nextGroupId === undefined && groupId !== 'all'
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px', gap: '16px' }}>
+
+        {/* Stats */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '32px 24px', textAlign: 'center', gap: '24px' }}>
           <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'white', margin: 0 }}>{t('game.finished')}</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
@@ -160,18 +154,30 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
           </div>
         </div>
 
-        {/* Primary action: next group (if available) */}
-        {nextGroupId && (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {btn(t('game.nextGroup'), () => router.push(`/content/${contentType}/${nextGroupId}`), true)}
-          </div>
-        )}
+        {/* Fixed bottom section — reserved space prevents layout jump */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-        {/* Secondary actions */}
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {btn(t('game.playAgain'), () => router.push(`/content/${contentType}/${groupId}`))}
-          {btn(t('game.toCategory'), () => router.push(`/content/${contentType}`))}
-          {btn(t('game.toHome'), () => router.push('/'))}
+          {/* Next group — full width, reserved even while loading */}
+          <div style={{ minHeight: '50px', display: 'flex' }}>
+            {nextGroupId && (
+              <button onClick={() => router.push(`/content/${contentType}/${nextGroupId}`)} style={{ flex: 1, padding: '14px', borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700', fontSize: '16px', background: 'linear-gradient(135deg, #ec4899, #a855f7)', color: 'white', boxShadow: '0 4px 16px rgba(236,72,153,0.35)', transition: 'all 0.2s' }}>
+                {t('game.nextGroup')}
+              </button>
+            )}
+          </div>
+
+          {/* Secondary actions */}
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {[
+              [t('game.playAgain'), () => router.push(`/content/${contentType}/${groupId}`)],
+              [t('game.toCategory'), () => router.push(`/content/${contentType}`)],
+              [t('game.toHome'), () => router.push('/')],
+            ].map(([label, onClick]) => (
+              <button key={label} onClick={onClick} style={{ flex: 1, padding: '11px 8px', borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700', fontSize: '13px', background: 'rgba(255,255,255,0.08)', color: 'white', transition: 'all 0.2s' }}>
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     )
