@@ -62,7 +62,7 @@ function HelpModal({ items, onClose, t }) {
   )
 }
 
-export default function SwipeGamePro({ contentType, groupId, cardCount }) {
+export default function SwipeGamePro({ contentType, groupId, cardCount, onGameEnd }) {
   const t = useT()
   const router = useRouter()
   const [items, setItems] = useState([])
@@ -110,9 +110,11 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
     loadData()
   }, [contentType, groupId])
 
-  // Determine next group when game ends (not for 'all')
+  // Notify parent + determine next group when game ends
   useEffect(() => {
-    if (game.gameState !== 'finished' || groupId === 'all') return
+    if (game.gameState !== 'finished') return
+    onGameEnd?.()
+    if (groupId === 'all') return
     fetchCategoryConfig(contentType)
       .then(config => {
         const groups = config.groups || []
