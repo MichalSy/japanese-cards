@@ -15,17 +15,21 @@ export default function MainMenu() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [overview, setOverview] = useState([])
+  const [chartDays, setChartDays] = useState(5)
+  const [daily, setDaily] = useState([])
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true)
-        const [catData, ovData] = await Promise.all([
+        const [catData, ovData, dailyData] = await Promise.all([
           fetchCategories(),
           fetch('/api/progress/overview').then(r => r.ok ? r.json() : { overview: [] }),
+          fetch('/api/progress/daily?days=5').then(r => r.ok ? r.json() : { daily: [] }),
         ])
         setCategories(catData.categories.filter(cat => cat.enabled !== false))
         setOverview(ovData.overview ?? [])
+        setDaily(dailyData.daily ?? [])
       } catch (err) {
         setError(err.message)
       } finally {
@@ -110,9 +114,17 @@ export default function MainMenu() {
           const totalSeen = overview.reduce((s, o) => s + Number(o.seen ?? 0), 0)
           const totalCards = overview.reduce((s, o) => s + Number(o.total ?? 0), 0)
           const accuracy = totalSeen > 0 ? Math.round((totalMastered / totalSeen) * 100) : 0
+          const maxCount = Math.max(...daily.map(d => d.count), 1)
+          const fmt = (iso) => {
+            const d = new Date(iso)
+            return chartDays <= 5
+              ? d.toLocaleDateString(undefined, { weekday: 'short' })
+              : `${d.getDate()}.${d.getMonth() + 1}.`
+          }
           return (
             <div className="space-y-6 fade-in">
               <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('nav.stats')}</h2>
+
               <div className="grid-2">
                 {[
                   { label: t('stats.mastered'), value: totalMastered, color: '#10b981' },
@@ -128,6 +140,38 @@ export default function MainMenu() {
                   </Card>
                 ))}
               </div>
+
+              <Card>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.6)' }}>{t('stats.chartTitle')}</span>
+                    <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '20px', padding: '3px' }}>
+                      {[5, 30].map(d => (
+                        <button key={d} onClick={() => {
+                          setChartDays(d)
+                          fetch(`/api/progress/daily?days=${d}`).then(r => r.ok ? r.json() : null).then(data => { if (data) setDaily(data.daily ?? []) })
+                        }} style={{ padding: '4px 10px', borderRadius: '14px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: '600', background: chartDays === d ? 'linear-gradient(135deg,#ec4899,#a855f7)' : 'transparent', color: chartDays === d ? 'white' : 'rgba(255,255,255,0.45)', transition: 'all 0.2s' }}>
+                          {d === 5 ? t('stats.days5') : t('stats.days30')}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {daily.every(d => d.count === 0) ? (
+                    <p style={{ margin: 0, textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.3)', padding: '16px 0' }}>{t('stats.noChart')}</p>
+                  ) : (
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: chartDays <= 5 ? '8px' : '3px', height: '100px' }}>
+                      {daily.map(({ date, count }) => (
+                        <div key={date} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', height: '100%', justifyContent: 'flex-end' }}>
+                          <span style={{ fontSize: '11px', fontWeight: '700', color: count > 0 ? 'rgba(255,255,255,0.8)' : 'transparent' }}>{count || ''}</span>
+                          <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: count > 0 ? 'linear-gradient(180deg,#a855f7,#ec4899)' : 'rgba(255,255,255,0.06)', height: `${Math.max((count / maxCount) * 72, count > 0 ? 8 : 4)}px`, transition: 'height 0.4s ease' }} />
+                          <span style={{ fontSize: chartDays <= 5 ? '11px' : '9px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{fmt(date)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Card>
             </div>
           )
         })()}

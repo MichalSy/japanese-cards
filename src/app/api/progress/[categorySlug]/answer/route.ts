@@ -11,7 +11,6 @@ export const POST = requireAuth(async (req: Request, context: any) => {
 
   const supabase = await createServerSupabaseClient()
 
-  // Get category + card IDs in one query
   const { data: card } = await supabase
     .from('language_cards_cards')
     .select('id, language_cards_groups!inner(category_id, language_cards_categories!inner(id, slug))')
@@ -23,11 +22,11 @@ export const POST = requireAuth(async (req: Request, context: any) => {
 
   const categoryId = (card as any).language_cards_groups?.language_cards_categories?.id
   const cardId = card.id
+  const now = new Date().toISOString()
 
-  // Upsert card progress
   const { data: existing } = await supabase
     .from('language_cards_user_card_progress')
-    .select('id, correct_count, incorrect_count')
+    .select('id, correct_count, incorrect_count, first_mastered_at')
     .eq('user_id', user.id)
     .eq('card_id', cardId)
     .single()
@@ -36,17 +35,33 @@ export const POST = requireAuth(async (req: Request, context: any) => {
     const correct   = existing.correct_count   + (isCorrect ? 1 : 0)
     const incorrect = existing.incorrect_count + (isCorrect ? 0 : 1)
     const score     = correct - incorrect
+    // Set first_mastered_at the first time the card reaches the mastery threshold (score >= 3)
+    const justMastered = correct >= 3 && existing.correct_count < 3 && !existing.first_mastered_at
     await supabase
       .from('language_cards_user_card_progress')
-      .update({ correct_count: correct, incorrect_count: incorrect, mastery_level: Math.min(Math.max(score / 10, 0), 1), last_reviewed_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .update({
+        correct_count: correct,
+        incorrect_count: incorrect,
+        mastery_level: Math.min(Math.max(score / 10, 0), 1),
+        last_reviewed_at: now,
+        updated_at: now,
+        ...(justMastered ? { first_mastered_at: now } : {}),
+      })
       .eq('id', existing.id)
   } else {
+    const justMastered = isCorrect && 1 >= 3 // only if threshold is 1 (not the case here)
     await supabase
       .from('language_cards_user_card_progress')
-      .insert({ user_id: user.id, card_id: cardId, correct_count: isCorrect ? 1 : 0, incorrect_count: isCorrect ? 0 : 1, mastery_level: isCorrect ? 0.1 : 0, last_reviewed_at: new Date().toISOString() })
+      .insert({
+        user_id: user.id,
+        card_id: cardId,
+        correct_count: isCorrect ? 1 : 0,
+        incorrect_count: isCorrect ? 0 : 1,
+        mastery_level: isCorrect ? 0.1 : 0,
+        last_reviewed_at: now,
+      })
   }
 
-  // Update category snapshot async (fire and don't await in response — still awaited for correctness)
   await supabase.rpc('update_category_snapshot', { p_user_id: user.id, p_category_id: categoryId })
 
   return NextResponse.json({ ok: true })

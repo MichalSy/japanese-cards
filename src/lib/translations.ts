@@ -19,6 +19,10 @@ export const translations: Record<string, Record<string, string>> = {
     'stats.totalMastered': 'Gesamt beherrscht',
     'stats.totalSeen': 'Gesamt gesehen',
     'stats.noProgress': 'Noch keine Daten. Starte ein Spiel!',
+    'stats.chartTitle': 'Neue Zeichen beherrscht',
+    'stats.days5': '5 Tage',
+    'stats.days30': '30 Tage',
+    'stats.noChart': 'Noch keine Zeichen beherrscht.',
     'progress.mastered': 'beherrscht',
     'progress.of': 'von',
 
@@ -69,6 +73,10 @@ export const translations: Record<string, Record<string, string>> = {
     'stats.totalMastered': 'Total mastered',
     'stats.totalSeen': 'Total seen',
     'stats.noProgress': 'No data yet. Start a game!',
+    'stats.chartTitle': 'New characters mastered',
+    'stats.days5': '5 days',
+    'stats.days30': '30 days',
+    'stats.noChart': 'No characters mastered yet.',
     'progress.mastered': 'mastered',
     'progress.of': 'of',
 
