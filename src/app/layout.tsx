@@ -3,6 +3,7 @@
 
 import { AbilitiesProvider } from '@/contexts/AbilitiesContext'
 import { AuthProvider, LanguageProvider } from '@michalsy/aiko-webapp-core'
+import UserSettingsSync from '@/components/UserSettingsSync'
 import '@michalsy/aiko-webapp-core/core.css'
 import './globals.css'
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         <AuthProvider>
           <LanguageProvider>
+            <UserSettingsSync />
             <AbilitiesProvider>
               {children}
             </AbilitiesProvider>
