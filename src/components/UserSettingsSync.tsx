@@ -34,7 +34,9 @@ export default function UserSettingsSync() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ui_language: language }),
-    }).catch(() => {})
+    })
+      .then((r) => { if (r.ok) window.location.reload() })
+      .catch(() => {})
   }, [user, language])
 
   return null
