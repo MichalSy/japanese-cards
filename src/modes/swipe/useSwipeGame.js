@@ -27,9 +27,11 @@ export function useSwipeGame(items, cardCount, category) {
     const answers = {}
     const display = []
 
+    // 75% correct pairings, 25% wrong — better for learning
+    const wrongCount = Math.max(1, Math.round(deck.length * 0.25))
     const correctnessArray = [
-      ...Array(Math.ceil(deck.length / 2)).fill(true),
-      ...Array(Math.floor(deck.length / 2)).fill(false)
+      ...Array(deck.length - wrongCount).fill(true),
+      ...Array(wrongCount).fill(false),
     ].sort(() => Math.random() - 0.5)
 
     deck.forEach((card, idx) => {
