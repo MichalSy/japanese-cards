@@ -43,7 +43,6 @@ export default function SettingsPage() {
       })
 
       const learnLang = learnLanguages.find(l => l.id === learnLanguageId)
-      const langName = uiLanguage === 'de' ? (learnLang?.name_de ?? learnLang?.name) : (learnLang?.name_en ?? learnLang?.name)
 
       // Update both contexts immediately so the UI switches live
       setLanguage(uiLanguage)
@@ -51,7 +50,7 @@ export default function SettingsPage() {
         uiLanguage,
         learnLanguageId,
         appIcon: learnLang?.app_icon ?? settings.appIcon,
-        appTitle: `${langName} Cards`,
+        appTitle: `${learnLang?.name_en ?? learnLang?.name ?? 'Japanese'} Cards`,
       })
 
       router.push('/')

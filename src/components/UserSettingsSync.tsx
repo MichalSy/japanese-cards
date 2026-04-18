@@ -27,12 +27,11 @@ export default function UserSettingsSync() {
 
         const lang = data.learn_language ?? {}
         const uiLang = data.ui_language ?? 'en'
-        const langName = uiLang === 'de' ? (lang.name_de ?? 'Japanese') : (lang.name_en ?? 'Japanese')
         setSettings({
           uiLanguage: uiLang,
           learnLanguageId: data.learn_language_id ?? 'ja',
           appIcon: lang.app_icon ?? '🌸',
-          appTitle: `${langName} Cards`,
+          appTitle: `${lang.name_en ?? 'Japanese'} Cards`,
         })
       })
       .catch(() => {})
