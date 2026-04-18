@@ -3,7 +3,7 @@ import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
 import { resolveSettings } from '@/lib/settingsCache'
 
-function mapCard(card: any, lang: string) {
+function mapCard(card: any, lang: string, groupName?: string) {
   const pick = (arr: any[]) => arr?.find((x: any) => x.lang_code === lang) ?? arr?.find((x: any) => x.lang_code === 'en') ?? {}
   const ct = pick(card.language_cards_card_translations ?? [])
   return {
@@ -16,6 +16,7 @@ function mapCard(card: any, lang: string) {
     example_translation: ct.example_translation ?? null,
     difficulty: card.difficulty ?? null,
     context: card.context ?? null,
+    group_name: groupName ?? null,
   }
 }
 
@@ -24,40 +25,79 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const { categoryId, groupId } = await context.params
   const supabase = await createServerSupabaseClient()
   const { ui_language: lang } = await resolveSettings(user.id, supabase)
+  const pick = (arr: any[]) => arr?.find((x: any) => x.lang_code === lang) ?? arr?.find((x: any) => x.lang_code === 'en') ?? {}
 
+  // Fetch category for all/section queries
+  const { data: cat } = await supabase
+    .from('language_cards_categories')
+    .select('id, native_name, card_type')
+    .eq('language_id', 'ja')
+    .eq('slug', categoryId)
+    .single()
+
+  if (!cat) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  // --- ALL ---
   if (groupId === 'all') {
-    const { data: cat } = await supabase
-      .from('language_cards_categories')
-      .select('id, native_name, card_type')
-      .eq('language_id', 'ja')
-      .eq('slug', categoryId)
-      .single()
-
-    if (!cat) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-
-    const { data: cards } = await supabase
-      .from('language_cards_cards')
-      .select('slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, language_cards_card_translations (lang_code, translation, example_translation), language_cards_groups!inner(category_id)')
-      .eq('language_cards_groups.category_id', cat.id)
-      .eq('is_active', true)
+    const { data: groups } = await supabase
+      .from('language_cards_groups')
+      .select(`slug, sort_order, language_cards_group_translations (lang_code, name),
+               language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation))`)
+      .eq('category_id', cat.id)
       .order('sort_order')
+
+    const items = (groups ?? []).flatMap((g: any) => {
+      const gName = pick(g.language_cards_group_translations ?? []).name ?? g.slug
+      return (g.language_cards_cards ?? [])
+        .filter((c: any) => c.is_active)
+        .sort((a: any, b: any) => a.sort_order - b.sort_order)
+        .map((c: any) => mapCard(c, lang, gName))
+    })
 
     return NextResponse.json({
       id: `${categoryId}-all`,
       name: lang === 'de' ? 'Alle kombiniert' : 'All combined',
       card_type: cat.card_type,
-      items: (cards ?? []).map((c) => mapCard(c, lang)),
+      items,
     })
   }
 
+  // --- SECTION (check if groupId is a section slug) ---
+  const { data: section } = await supabase
+    .from('language_cards_sections')
+    .select(`id, slug, language_cards_section_translations (lang_code, name),
+             language_cards_groups (slug, sort_order, language_cards_group_translations (lang_code, name),
+               language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation)))`)
+    .eq('category_id', cat.id)
+    .eq('slug', groupId)
+    .single()
+
+  if (section) {
+    const st = pick((section as any).language_cards_section_translations ?? [])
+    const items = ((section as any).language_cards_groups ?? [])
+      .sort((a: any, b: any) => a.sort_order - b.sort_order)
+      .flatMap((g: any) => {
+        const gName = pick(g.language_cards_group_translations ?? []).name ?? g.slug
+        return (g.language_cards_cards ?? [])
+          .filter((c: any) => c.is_active)
+          .sort((a: any, b: any) => a.sort_order - b.sort_order)
+          .map((c: any) => mapCard(c, lang, gName))
+      })
+
+    return NextResponse.json({
+      id: `${categoryId}-${groupId}`,
+      name: st.name ?? groupId,
+      card_type: cat.card_type,
+      items,
+    })
+  }
+
+  // --- SINGLE GROUP ---
   const { data: group, error } = await supabase
     .from('language_cards_groups')
-    .select(`
-      slug,
-      language_cards_group_translations (lang_code, name),
-      language_cards_categories!inner (slug, card_type),
-      language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation))
-    `)
+    .select(`slug, language_cards_group_translations (lang_code, name),
+             language_cards_categories!inner (slug, card_type),
+             language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation))`)
     .eq('slug', groupId)
     .eq('language_cards_categories.slug', categoryId)
     .single()
@@ -65,17 +105,17 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   if (error || !group) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const cardType = (group as any).language_cards_categories?.card_type ?? 'character'
-  const pick = (arr: any[]) => arr?.find((x: any) => x.lang_code === lang) ?? arr?.find((x: any) => x.lang_code === 'en') ?? {}
   const gt = pick((group as any).language_cards_group_translations ?? [])
+  const groupName = gt.name ?? groupId
 
   const items = ((group as any).language_cards_cards ?? [])
     .filter((c: any) => c.is_active)
     .sort((a: any, b: any) => a.sort_order - b.sort_order)
-    .map((c: any) => mapCard(c, lang))
+    .map((c: any) => mapCard(c, lang, groupName))
 
   return NextResponse.json({
     id: `${categoryId}-${groupId}`,
-    name: gt.name ?? groupId,
+    name: groupName,
     card_type: cardType,
     items,
   })
