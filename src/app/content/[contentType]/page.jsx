@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { fetchCategoryConfig, fetchGroupData } from '@/config/api'
+import { fetchCategoryWithItems } from '@/config/api'
 import { useLanguage } from '@/context/LanguageContext'
 import { getCategoryStats, getGroupProgress } from '@/utils/progressStorage'
 import AppHeaderBar from '@/components/AppHeaderBar'
@@ -22,16 +22,12 @@ export default function ContentTypeView({ params }) {
     (async () => {
       try {
         setLoading(true)
-        const config = await fetchCategoryConfig(contentType)
+        const config = await fetchCategoryWithItems(contentType)
         setCategoryConfig(config)
-        const categoryStats = getCategoryStats(contentType)
-        setStats(categoryStats)
+        setStats(getCategoryStats(contentType))
         const groups = {}
         for (const group of config.groups) {
-          try {
-            const data = await fetchGroupData(contentType, group.id)
-            groups[group.id] = data.items || []
-          } catch (e) { groups[group.id] = [] }
+          groups[group.id] = group.items || []
         }
         setGroupData(groups)
       } catch (err) {

@@ -10,6 +10,13 @@ export const fetchCategoryConfig = async (categoryId) => {
   return res.json()
 }
 
+// Returns category config + all group items in one request (avoids N+1 calls)
+export const fetchCategoryWithItems = async (categoryId) => {
+  const res = await fetch(`/api/data/categories/${categoryId}?items=true`)
+  if (!res.ok) throw new Error(`Failed to fetch ${categoryId} with items`)
+  return res.json()
+}
+
 export const fetchGroupData = async (categoryId, groupId) => {
   const res = await fetch(`/api/data/categories/${categoryId}/groups/${groupId}`)
   if (!res.ok) throw new Error('Failed to fetch group data')

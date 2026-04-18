@@ -1,5 +1,6 @@
 // Server-side in-memory cache for user settings, keyed by user ID.
-// TTL: 5 min. Single-replica deployment (K8s), so cross-instance sync is not needed.
+// TTL: 5 min. Single-replica K8s deployment, so cross-instance sync is not needed.
+// Promise coalescing prevents thundering herd when multiple requests arrive simultaneously.
 
 interface UserSettings {
   ui_language: string
@@ -11,9 +12,10 @@ interface CacheEntry extends UserSettings {
 }
 
 const cache = new Map<string, CacheEntry>()
+const pending = new Map<string, Promise<UserSettings>>()
 const TTL_MS = 5 * 60 * 1000
 
-export function getCachedSettings(userId: string): UserSettings | null {
+function getCached(userId: string): UserSettings | null {
   const entry = cache.get(userId)
   if (!entry) return null
   if (Date.now() - entry.cachedAt > TTL_MS) { cache.delete(userId); return null }
@@ -26,25 +28,37 @@ export function setCachedSettings(userId: string, settings: UserSettings) {
 
 export function invalidateCache(userId: string) {
   cache.delete(userId)
+  pending.delete(userId)
 }
 
 export async function resolveSettings(userId: string, supabase: any): Promise<UserSettings> {
-  const cached = getCachedSettings(userId)
+  const cached = getCached(userId)
   if (cached) return cached
 
-  let { data } = await supabase
-    .from('language_cards_user_settings')
-    .select('ui_language, learn_language_id')
-    .eq('user_id', userId)
-    .single()
+  // Coalesce: if a DB request for this user is already in-flight, reuse it
+  const inflight = pending.get(userId)
+  if (inflight) return inflight
 
-  if (!data) {
-    data = { ui_language: 'en', learn_language_id: 'ja' }
-    await supabase
-      .from('language_cards_user_settings')
-      .insert({ user_id: userId, ...data })
-  }
+  const promise = (async (): Promise<UserSettings> => {
+    try {
+      let { data } = await supabase
+        .from('language_cards_user_settings')
+        .select('ui_language, learn_language_id')
+        .eq('user_id', userId)
+        .single()
 
-  setCachedSettings(userId, data)
-  return data
+      if (!data) {
+        data = { ui_language: 'en', learn_language_id: 'ja' }
+        await supabase.from('language_cards_user_settings').insert({ user_id: userId, ...data })
+      }
+
+      setCachedSettings(userId, data)
+      return data
+    } finally {
+      pending.delete(userId)
+    }
+  })()
+
+  pending.set(userId, promise)
+  return promise
 }
