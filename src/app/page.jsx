@@ -114,7 +114,7 @@ export default function MainMenu() {
           const totalSeen = overview.reduce((s, o) => s + Number(o.seen ?? 0), 0)
           const totalCards = overview.reduce((s, o) => s + Number(o.total ?? 0), 0)
           const accuracy = totalSeen > 0 ? Math.round((totalMastered / totalSeen) * 100) : 0
-          const maxCount = Math.max(...daily.map(d => d.count), 1)
+          const maxCount = Math.max(...daily.map(d => d.mastered ?? 0), 1)
           const fmt = (iso) => {
             const d = new Date(iso)
             return chartDays <= 5
@@ -157,14 +157,15 @@ export default function MainMenu() {
                     </div>
                   </div>
 
-                  {daily.every(d => d.count === 0) ? (
+                  {daily.every(d => d.mastered === 0 && !d.active) ? (
                     <p style={{ margin: 0, textAlign: 'center', fontSize: '13px', color: 'rgba(255,255,255,0.3)', padding: '16px 0' }}>{t('stats.noChart')}</p>
                   ) : (
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: chartDays <= 5 ? '8px' : '3px', height: '100px' }}>
-                      {daily.map(({ date, count }) => (
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: chartDays <= 5 ? '8px' : '3px', height: '110px' }}>
+                      {daily.map(({ date, mastered: m, active: isActive }) => (
                         <div key={date} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', height: '100%', justifyContent: 'flex-end' }}>
-                          <span style={{ fontSize: '11px', fontWeight: '700', color: count > 0 ? 'rgba(255,255,255,0.8)' : 'transparent' }}>{count || ''}</span>
-                          <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: count > 0 ? 'linear-gradient(180deg,#a855f7,#ec4899)' : 'rgba(255,255,255,0.06)', height: `${Math.max((count / maxCount) * 72, count > 0 ? 8 : 4)}px`, transition: 'height 0.4s ease' }} />
+                          <span style={{ fontSize: '11px', fontWeight: '700', color: m > 0 ? 'rgba(255,255,255,0.8)' : 'transparent' }}>{m || ''}</span>
+                          <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: m > 0 ? 'linear-gradient(180deg,#a855f7,#ec4899)' : isActive ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.04)', height: `${Math.max((m / maxCount) * 72, m > 0 ? 8 : isActive ? 4 : 3)}px`, transition: 'height 0.4s ease' }} />
+                          <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: isActive ? '#10b981' : 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
                           <span style={{ fontSize: chartDays <= 5 ? '11px' : '9px', color: 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{fmt(date)}</span>
                         </div>
                       ))}

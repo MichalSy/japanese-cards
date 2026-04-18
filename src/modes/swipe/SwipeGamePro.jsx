@@ -77,12 +77,24 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   const [nextGroupId, setNextGroupId] = useState(undefined)
   const toastTimeoutRef = useRef(null)
   const buttonClickRef = useRef(null)
+  const sessionIdRef = useRef(null)
+  const sessionStartRef = useRef(null)
 
   const game = useSwipeGame(items, cardCount)
 
   // Override back button while this game component is mounted
   useSetBackHandler(() => router.push(`/content/${contentType}`))
 
+  // On game end: close session
+  useEffect(() => {
+    if (game.gameState !== 'finished' || !sessionIdRef.current) return
+    const duration = sessionStartRef.current ? Math.round((Date.now() - sessionStartRef.current) / 1000) : null
+    fetch(`/api/sessions/${sessionIdRef.current}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cards_reviewed: game.stats.correct + game.stats.incorrect, cards_correct: game.stats.correct, duration_seconds: duration }),
+    }).catch(() => {})
+  }, [game.gameState])
 
   const handleSwipeWithToast = (isCorrect, direction, correctTransliteration, native) => {
     // Fire-and-forget: record answer + update snapshot server-side
@@ -126,6 +138,13 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         } else {
           setNextGroupId(null)
         }
+        // Record session start
+        sessionStartRef.current = Date.now()
+        fetch('/api/sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category_slug: contentType, group_slug: groupId, game_mode: 'swipe' }),
+        }).then(r => r.ok ? r.json() : null).then(d => { if (d?.id) sessionIdRef.current = d.id }).catch(() => {})
       } catch (err) {
         setError(err.message)
         setNextGroupId(null)
