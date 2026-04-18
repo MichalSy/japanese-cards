@@ -39,7 +39,7 @@ export async function resolveSettings(userId: string, supabase: any): Promise<Us
     .single()
 
   if (!data) {
-    data = { ui_language: 'de', learn_language_id: 'ja' }
+    data = { ui_language: 'en', learn_language_id: 'ja' }
     await supabase
       .from('language_cards_user_settings')
       .insert({ user_id: userId, ...data })

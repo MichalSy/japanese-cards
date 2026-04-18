@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
 import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
-import { resolveSettings, setCachedSettings, invalidateCache } from '@/lib/settingsCache'
+import { resolveSettings, invalidateCache } from '@/lib/settingsCache'
 
 export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
