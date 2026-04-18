@@ -93,11 +93,19 @@ export default function SettingsPage() {
         )}
       </AppContent>
       <AppFooter>
-        <button onClick={handleSave} disabled={!hasChanges || saving}
-          style={{ width: '100%', padding: '14px', background: hasChanges ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'rgba(255,255,255,0.08)', color: hasChanges ? 'white' : 'rgba(255,255,255,0.3)', border: 'none', borderRadius: '100px', fontWeight: '700', fontSize: '16px', cursor: hasChanges ? 'pointer' : 'default', boxShadow: hasChanges ? '0 4px 16px rgba(236,72,153,0.35)' : 'none', transition: 'all 0.2s' }}
-        >
-          {saving ? t('saving') : t('save')}
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+          <button onClick={handleSave} disabled={!hasChanges || saving}
+            style={{ width: '100%', padding: '14px', background: hasChanges ? 'linear-gradient(135deg, #ec4899, #a855f7)' : 'rgba(255,255,255,0.08)', color: hasChanges ? 'white' : 'rgba(255,255,255,0.3)', border: 'none', borderRadius: '100px', fontWeight: '700', fontSize: '16px', cursor: hasChanges ? 'pointer' : 'default', boxShadow: hasChanges ? '0 4px 16px rgba(236,72,153,0.35)' : 'none', transition: 'all 0.2s' }}
+          >
+            {saving ? t('saving') : t('save')}
+          </button>
+          {process.env.NEXT_PUBLIC_APP_VERSION && (
+            <p style={{ margin: 0, textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
+              v{process.env.NEXT_PUBLIC_APP_VERSION}
+              {process.env.NEXT_PUBLIC_APP_VERSION_DATE && ` (${process.env.NEXT_PUBLIC_APP_VERSION_DATE})`}
+            </p>
+          )}
+        </div>
       </AppFooter>
     </AppLayout>
   )
