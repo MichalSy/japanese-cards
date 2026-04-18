@@ -12,7 +12,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.start': 'Start',
 
     'stats.title': 'Deine Statistik',
-    'stats.learned': 'Gelernt',
+    'stats.learned': 'Gesehen',
     'stats.mastered': 'Beherrscht',
     'stats.learning': 'Lernend',
     'stats.struggling': 'Schwierig',
@@ -69,7 +69,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.start': 'Start',
 
     'stats.title': 'Your Stats',
-    'stats.learned': 'Learned',
+    'stats.learned': 'Seen',
     'stats.mastered': 'Mastered',
     'stats.learning': 'Learning',
     'stats.struggling': 'Struggling',
