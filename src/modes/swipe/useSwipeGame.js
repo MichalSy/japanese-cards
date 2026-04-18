@@ -43,12 +43,12 @@ export function useSwipeGame(items, cardCount, category) {
         do {
           wrongCard = items[Math.floor(Math.random() * items.length)]
           attempts++
-        } while (wrongCard.romaji === card.transliteration && attempts < 20)
+        } while (wrongCard.transliteration === card.transliteration && attempts < 20)
 
-        if (wrongCard.romaji === card.transliteration) {
+        if (wrongCard.transliteration === card.transliteration) {
           display.push({ ...card, shownTransliteration: card.transliteration, correctTransliteration: card.transliteration, isWrongPairing: false })
         } else {
-          display.push({ ...card, shownTransliteration: wrongCard.romaji, correctTransliteration: card.transliteration, isWrongPairing: true })
+          display.push({ ...card, shownTransliteration: wrongCard.transliteration, correctTransliteration: card.transliteration, isWrongPairing: true })
         }
       }
 
