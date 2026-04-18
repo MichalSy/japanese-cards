@@ -8,12 +8,15 @@ export default function UserSettingsSync() {
   const { user } = useAuth()
   const { language, setLanguage } = useLanguage()
   const { setSettings } = useSettings()
-  const initializedRef = useRef(false)
+  // Track by user ID — prevents duplicate fetches when auth fires multiple state updates
+  const fetchedForUserRef = useRef<string | null>(null)
   const prevLangRef = useRef(language)
 
   useEffect(() => {
-    if (!user) { initializedRef.current = false; return }
-    if (initializedRef.current) return
+    if (!user?.id) return
+    if (fetchedForUserRef.current === user.id) return
+    // Set synchronously before the async fetch so concurrent effect runs don't race
+    fetchedForUserRef.current = user.id
 
     fetch('/api/settings')
       .then((r) => (r.ok ? r.json() : null))
@@ -31,11 +34,22 @@ export default function UserSettingsSync() {
           appIcon: lang.app_icon ?? '🌸',
           appTitle: `${langName} Cards`,
         })
-
-        initializedRef.current = true
       })
-      .catch(() => { initializedRef.current = true })
-  }, [user])
+      .catch(() => {})
+  }, [user?.id])
+
+  // Save language changes to DB when user manually switches
+  useEffect(() => {
+    if (!user?.id || !fetchedForUserRef.current) return
+    if (language === prevLangRef.current) return
+    prevLangRef.current = language
+
+    fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ui_language: language }),
+    }).catch(() => {})
+  }, [user?.id, language])
 
   return null
 }
