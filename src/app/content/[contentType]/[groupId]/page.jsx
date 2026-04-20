@@ -45,7 +45,7 @@ export default function GameModeSelector({ params }) {
   if (gameModeConfig?.gameModes) gameModeConfig.gameModes.forEach(mode => { gameModeMap[mode.id] = mode })
 
   const gameModes = (categoryConfig?.gameModes || []).map(id => gameModeMap[id]).filter(m => m?.enabled)
-  const groupName = groupId === 'all' ? t('groups.all') : (categoryConfig?.groups?.find(g => g.id === groupId)?.name ?? groupId)
+  const groupName = t(`groups.${groupId}`, '') || categoryConfig?.groups?.find(g => g.id === groupId)?.name || groupId
 
   if (loading) return <AppLayout><AppHeader><AppHeaderBar title={t('loading')} /></AppHeader><AppContent><div className="card" style={{ color: 'rgba(255,255,255,0.5)' }}>{t('loading')}</div></AppContent></AppLayout>
   if (error || !categoryConfig || !gameModeConfig) return <AppLayout><AppHeader><AppHeaderBar title={t('error')} /></AppHeader><AppContent><div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>{t('error')}: {error}</div></AppContent></AppLayout>
