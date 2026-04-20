@@ -92,7 +92,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
     fetch(`/api/sessions/${sessionIdRef.current}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cards_reviewed: game.stats.correct + game.stats.incorrect, cards_correct: game.stats.correct, duration_seconds: duration }),
+      body: JSON.stringify({ cards_reviewed: game.totalCards, cards_correct: game.stats.correct, duration_seconds: duration }),
     }).catch(() => {})
   }, [game.gameState])
 

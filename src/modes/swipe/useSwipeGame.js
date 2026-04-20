@@ -57,15 +57,23 @@ export function useSwipeGame(items, cardCount) {
     const card = displayCards[currentIndex]
     const nextIndex = currentIndex + 1
 
-    // Only track stats for real pairings — wrong pairings are neutral decoys
     if (!card.isWrongPairing) {
+      // Real pairing: fully tracked
       setStats(prev => ({
         correct: prev.correct + (isCorrect ? 1 : 0),
         incorrect: prev.incorrect + (isCorrect ? 0 : 1),
         results: [...prev.results, { cardSlug: card.id, isCorrect }],
         mistakes: isCorrect ? prev.mistakes : [...prev.mistakes, { card, displayedCard: card }],
       }))
+    } else if (!isCorrect) {
+      // Wrong pairing swiped right = user thought it was correct → mistake
+      setStats(prev => ({
+        ...prev,
+        incorrect: prev.incorrect + 1,
+        mistakes: [...prev.mistakes, { card, displayedCard: card }],
+      }))
     }
+    // Wrong pairing swiped left = neutral, no stat change
 
     if (nextIndex >= displayCards.length) setGameState('finished')
     else setCurrentIndex(nextIndex)
