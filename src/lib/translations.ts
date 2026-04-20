@@ -103,7 +103,7 @@ export const translations: Record<string, Record<string, string>> = {
     'game.chooseMode': 'Choose a mode to play',
     'game.notAvailable': 'This mode is not available yet.',
     'game.loadingMode': 'loading...',
-    'game.question': 'Which reading is correct?',
+    'game.question': 'Which combination is correct?',
     'game.lookup': 'Look up characters',
     'game.charsInGame': 'Characters in game',
     'game.finished': 'Well done! 🌸',
