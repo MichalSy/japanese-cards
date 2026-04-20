@@ -165,8 +165,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   )
 
   if (game.gameState === 'finished') {
-    const total = game.stats.correct + game.stats.incorrect
-    const pct = total > 0 ? Math.round((game.stats.correct / total) * 100) : 0
+    const pct = game.baseDeckSize > 0 ? Math.round((game.stats.correct / game.baseDeckSize) * 100) : 0
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px 20px', gap: '20px' }}>
 
@@ -174,9 +173,14 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         <div style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '28px 24px', textAlign: 'center' }}>
           <h2 style={{ fontSize: '26px', fontWeight: '700', color: 'white', margin: '0 0 20px' }}>{t('game.finished')}</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '48px' }}>
-            <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#10b981', margin: '6px 0 0', lineHeight: 1 }}>{game.stats.correct}/{total}</p></div>
+            <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#10b981', margin: '6px 0 0', lineHeight: 1 }}>{game.stats.correct}/{game.baseDeckSize}</p></div>
             <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.percent')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#ec4899', margin: '6px 0 0', lineHeight: 1 }}>{pct}%</p></div>
           </div>
+          {game.stats.decoyMistakes > 0 && (
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', margin: '16px 0 0' }}>
+              {game.stats.decoyMistakes}× {t('game.decoyMistake')}
+            </p>
+          )}
         </div>
 
         {/* Buttons */}

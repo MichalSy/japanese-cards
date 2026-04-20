@@ -52,6 +52,7 @@ export const translations: Record<string, Record<string, string>> = {
     'game.toCategory': 'Zur Kategorie',
     'game.nextGroup': 'Nächste Gruppe →',
     'game.toHome': 'Hauptmenü',
+    'game.decoyMistake': 'falsche Kombination nicht erkannt',
 
     'settings.title': 'Einstellungen',
     'settings.motherTongue': 'Muttersprache',
@@ -113,6 +114,7 @@ export const translations: Record<string, Record<string, string>> = {
     'game.toCategory': 'Back to category',
     'game.nextGroup': 'Next group →',
     'game.toHome': 'Main menu',
+    'game.decoyMistake': 'decoy not recognized',
 
     'settings.title': 'Settings',
     'settings.motherTongue': 'Mother tongue',

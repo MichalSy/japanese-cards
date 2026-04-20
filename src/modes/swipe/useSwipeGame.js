@@ -4,7 +4,8 @@ export function useSwipeGame(items, cardCount) {
   const [gameState, setGameState] = useState('loading')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [displayCards, setDisplayCards] = useState([])
-  const [stats, setStats] = useState({ correct: 0, incorrect: 0, mistakes: [], results: [] })
+  const [baseDeckSize, setBaseDeckSize] = useState(0)
+  const [stats, setStats] = useState({ correct: 0, incorrect: 0, decoyMistakes: 0, mistakes: [], results: [] })
 
   useEffect(() => {
     if (!items || items.length === 0) { setGameState('error'); return }
@@ -25,31 +26,31 @@ export function useSwipeGame(items, cardCount) {
       isWrongPairing: false,
     }))
 
-    // Inject ~25% additional wrong pairings as decoys
+    // Inject ~25% wrong pairings as decoys, preferring cards from the same group
     const wrongCount = Math.max(1, Math.round(baseDeck.length * 0.25))
     const wrongPairings = [...baseDeck]
       .sort(() => Math.random() - 0.5)
       .slice(0, wrongCount)
       .reduce((acc, card) => {
-        let wrongCard, attempts = 0
-        do { wrongCard = items[Math.floor(Math.random() * items.length)]; attempts++ }
-        while (wrongCard.transliteration === card.transliteration && attempts < 20)
-        if (wrongCard.transliteration !== card.transliteration) {
-          acc.push({
-            ...card,
-            shownTransliteration: wrongCard.transliteration,
-            correctTransliteration: card.transliteration,
-            isWrongPairing: true,
-          })
-        }
+        const sameGroup = items.filter(i => i.group_name === card.group_name && i.transliteration !== card.transliteration)
+        const pool = sameGroup.length >= 1 ? sameGroup : items.filter(i => i.transliteration !== card.transliteration)
+        if (pool.length === 0) return acc
+        const wrongCard = pool[Math.floor(Math.random() * pool.length)]
+        acc.push({
+          ...card,
+          shownTransliteration: wrongCard.transliteration,
+          correctTransliteration: card.transliteration,
+          isWrongPairing: true,
+        })
         return acc
       }, [])
 
     const allCards = [...correctPairings, ...wrongPairings].sort(() => Math.random() - 0.5)
 
+    setBaseDeckSize(baseDeck.length)
     setDisplayCards(allCards)
     setCurrentIndex(0)
-    setStats({ correct: 0, incorrect: 0, mistakes: [], results: [] })
+    setStats({ correct: 0, incorrect: 0, decoyMistakes: 0, mistakes: [], results: [] })
     setGameState('playing')
   }, [items, cardCount])
 
@@ -58,22 +59,23 @@ export function useSwipeGame(items, cardCount) {
     const nextIndex = currentIndex + 1
 
     if (!card.isWrongPairing) {
-      // Real pairing: fully tracked
+      // Real pairing: tracked fully, percent based on this
       setStats(prev => ({
+        ...prev,
         correct: prev.correct + (isCorrect ? 1 : 0),
         incorrect: prev.incorrect + (isCorrect ? 0 : 1),
         results: [...prev.results, { cardSlug: card.id, isCorrect }],
         mistakes: isCorrect ? prev.mistakes : [...prev.mistakes, { card, displayedCard: card }],
       }))
     } else if (!isCorrect) {
-      // Wrong pairing swiped right = user thought it was correct → mistake
+      // Wrong pairing swiped right = decoy mistake, tracked separately
       setStats(prev => ({
         ...prev,
-        incorrect: prev.incorrect + 1,
+        decoyMistakes: prev.decoyMistakes + 1,
         mistakes: [...prev.mistakes, { card, displayedCard: card }],
       }))
     }
-    // Wrong pairing swiped left = neutral, no stat change
+    // Wrong pairing swiped left = neutral
 
     if (nextIndex >= displayCards.length) setGameState('finished')
     else setCurrentIndex(nextIndex)
@@ -85,9 +87,9 @@ export function useSwipeGame(items, cardCount) {
     cardStack: displayCards.slice(currentIndex, currentIndex + 4),
     currentIndex,
     totalCards: displayCards.length,
+    baseDeckSize,
     stats,
     handleSwipe,
-    // true = correct pairing (swipe right), false = wrong pairing (swipe left)
     correctAnswer: displayCards[currentIndex] ? !displayCards[currentIndex].isWrongPairing : null,
   }
 }
