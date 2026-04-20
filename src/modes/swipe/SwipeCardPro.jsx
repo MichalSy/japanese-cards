@@ -7,16 +7,24 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
   const [dragStart, setDragStart] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [position, setPosition] = useState({ x: 0, rotation: 0 })
+  const [resultFlash, setResultFlash] = useState(null) // 'correct' | 'incorrect' | null
 
   const character = card?.native || ''
 
-  const triggerSwipe = useCallback((userThinkCorrect) => {
-    if (!card || swipeState === 'exit') return
-    const isCorrect = userThinkCorrect === correctAnswer
-    const direction = userThinkCorrect ? 'right' : 'left'
-    setSwipeState('exit')
-    setPosition({ x: direction === 'right' ? 300 : -300, rotation: direction === 'right' ? 10 : -10 })
-    setTimeout(() => { onSwipe(isCorrect, direction, card.correctTransliteration, character) }, 220)
+  const triggerSwipe = useCallback((swipedRight) => {
+    if (!card || swipeState === 'exit' || swipeState === 'result') return
+    const isCorrect = swipedRight === correctAnswer
+    const direction = swipedRight ? 'right' : 'left'
+
+    // Brief color flash before exit
+    setSwipeState('result')
+    setResultFlash(isCorrect ? 'correct' : 'incorrect')
+
+    setTimeout(() => {
+      setSwipeState('exit')
+      setPosition({ x: direction === 'right' ? 300 : -300, rotation: direction === 'right' ? 10 : -10 })
+      setTimeout(() => { onSwipe(isCorrect, direction, card.correctTransliteration, character) }, 220)
+    }, 300)
   }, [card, correctAnswer, onSwipe, character, swipeState])
 
   useEffect(() => {
@@ -37,8 +45,10 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
 
   if (!card) return null
 
+  const isLocked = swipeState === 'result' || swipeState === 'exit'
+
   const handleDragStart = (e) => {
-    if (!isActive || swipeState) return
+    if (!isActive || isLocked) return
     e.preventDefault()
     setIsDragging(true)
     setSwipeState('swiping')
@@ -66,13 +76,16 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     return 'all 0.28s cubic-bezier(0.34, 1.2, 0.64, 1)'
   }
 
-  const swipeProgress = Math.min(1, Math.abs(position.x) / 50)
-  const isSwipingRight = position.x > 0
-  const isSwipingLeft = position.x < 0
   const stackYOffset = index * 3
   const stackScale = 1 - (index * 0.01)
   const stackOpacity = index === 0 ? 1 : Math.max(0.45, 0.7 - (index * 0.08))
   const stackBlur = index === 0 ? 0 : index * 0.8
+
+  const flashColor = resultFlash === 'correct'
+    ? 'rgba(16,185,129,0.45)'
+    : resultFlash === 'incorrect'
+    ? 'rgba(239,68,68,0.45)'
+    : null
 
   return (
     <div
@@ -99,14 +112,12 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative', borderRadius: '26px',
-        /* Solide dunkle Basis — kein backdrop-filter (der würde gestapelte Karten durchblenden) */
         background: 'linear-gradient(160deg, rgba(28,16,60,1) 0%, rgba(12,8,34,1) 100%)',
-        /* Glas-Look durch inset highlights + border */
         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.25)',
         border: '1px solid rgba(255,255,255,0.10)',
         overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
-        {/* Glass top-sheen: licht-reflektion auf der oberfläche */}
+        {/* Glass top-sheen */}
         <div style={{
           position: 'absolute', top: 0, left: '10%', right: '10%', height: '45%',
           background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 60%, transparent 100%)',
@@ -118,6 +129,16 @@ export default function SwipeCardPro({ card, index, isActive, onSwipe, correctAn
           background: 'linear-gradient(0deg, rgba(236,72,153,0.08) 0%, transparent 100%)',
           pointerEvents: 'none', zIndex: 1,
         }} />
+
+        {/* Result flash overlay */}
+        {flashColor && (
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 3,
+            background: flashColor,
+            borderRadius: '26px',
+            transition: 'opacity 0.15s ease-in',
+          }} />
+        )}
 
         <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
           <div style={{ fontSize: 'clamp(100px, 28vw, 170px)', fontWeight: '300', lineHeight: 1, color: 'white', textAlign: 'center', textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>

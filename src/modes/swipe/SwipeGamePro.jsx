@@ -229,11 +229,13 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
       {/* Karte mit Seiten-Labels */}
       <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 8px', gap: '8px' }}>
         {/* Linke Option */}
-        <div style={{ width: '56px', flexShrink: 0, textAlign: 'center' }}>
-          <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>
+        <div style={{ width: '60px', flexShrink: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', letterSpacing: '1px' }}>
             {game.currentCard?.leftOption}
           </div>
-          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '4px' }}>←</div>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
         </div>
 
         <div style={{ position: 'relative', flex: 1, maxWidth: '260px', aspectRatio: '9/12' }}>
@@ -249,11 +251,13 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </div>
 
         {/* Rechte Option */}
-        <div style={{ width: '56px', flexShrink: 0, textAlign: 'center' }}>
-          <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>
+        <div style={{ width: '60px', flexShrink: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', letterSpacing: '1px' }}>
             {game.currentCard?.rightOption}
           </div>
-          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '4px' }}>→</div>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
         </div>
       </div>
 
