@@ -97,13 +97,13 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   }, [game.gameState])
 
   const handleSwipeWithToast = (isCorrect, direction, correctTransliteration, native) => {
-    // Fire-and-forget: record answer + update snapshot server-side
-    const cardSlug = game.currentCard?.id
-    if (cardSlug) {
+    // Only record progress for real pairings — wrong pairings are neutral decoys
+    const currentCard = game.currentCard
+    if (currentCard?.id && !currentCard.isWrongPairing) {
       fetch(`/api/progress/${contentType}/answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cardSlug, isCorrect }),
+        body: JSON.stringify({ cardSlug: currentCard.id, isCorrect }),
       }).catch(() => {})
     }
 
