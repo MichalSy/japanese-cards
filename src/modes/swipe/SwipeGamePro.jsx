@@ -117,8 +117,8 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
     game.handleSwipe(isCorrect, direction)
   }
 
-  const handleButtonClick = (isCorrect) => {
-    if (buttonClickRef.current) buttonClickRef.current(isCorrect)
+  const handleButtonClick = (swipeRight) => {
+    if (buttonClickRef.current) buttonClickRef.current(swipeRight)
   }
 
   useEffect(() => () => { if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current) }, [])
@@ -165,7 +165,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
   )
 
   if (game.gameState === 'finished') {
-    const pct = game.baseDeckSize > 0 ? Math.round((game.stats.correct / game.baseDeckSize) * 100) : 0
+    const pct = game.totalCards > 0 ? Math.round((game.stats.correct / game.totalCards) * 100) : 0
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px 20px', gap: '20px' }}>
 
@@ -173,14 +173,9 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         <div style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(236,72,153,0.2)', padding: '28px 24px', textAlign: 'center' }}>
           <h2 style={{ fontSize: '26px', fontWeight: '700', color: 'white', margin: '0 0 20px' }}>{t('game.finished')}</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '48px' }}>
-            <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#10b981', margin: '6px 0 0', lineHeight: 1 }}>{game.stats.correct}/{game.baseDeckSize}</p></div>
+            <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.correct')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#10b981', margin: '6px 0 0', lineHeight: 1 }}>{game.stats.correct}/{game.totalCards}</p></div>
             <div><p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>{t('game.percent')}</p><p style={{ fontSize: '40px', fontWeight: '700', color: '#ec4899', margin: '6px 0 0', lineHeight: 1 }}>{pct}%</p></div>
           </div>
-          {game.stats.decoyMistakes > 0 && (
-            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', margin: '16px 0 0' }}>
-              {game.stats.decoyMistakes}× {t('game.decoyMistake')}
-            </p>
-          )}
         </div>
 
         {/* Buttons */}
@@ -231,9 +226,17 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
         </span>
       </div>
 
-      {/* Karte */}
-      <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'center', padding: '0 20px' }}>
-        <div style={{ position: 'relative', width: '100%', maxWidth: '290px', aspectRatio: '9/12' }}>
+      {/* Karte mit Seiten-Labels */}
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 8px', gap: '8px' }}>
+        {/* Linke Option */}
+        <div style={{ width: '56px', flexShrink: 0, textAlign: 'center' }}>
+          <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>
+            {game.currentCard?.leftOption}
+          </div>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '4px' }}>←</div>
+        </div>
+
+        <div style={{ position: 'relative', flex: 1, maxWidth: '260px', aspectRatio: '9/12' }}>
           {game.cardStack.map((card, idx) => (
             <SwipeCardPro
               key={`${game.currentIndex + idx}`}
@@ -244,25 +247,33 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             />
           ))}
         </div>
+
+        {/* Rechte Option */}
+        <div style={{ width: '56px', flexShrink: 0, textAlign: 'center' }}>
+          <div style={{ fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>
+            {game.currentCard?.rightOption}
+          </div>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '4px' }}>→</div>
+        </div>
       </div>
 
       {/* Button-Zone */}
       <div style={{ flex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', minHeight: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '48px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
         {[
-          { isCorrect: false, icon: '✕', r: 255, g: 59,  b: 48  },
-          { isCorrect: true,  icon: '✓', r: 52,  g: 199, b: 89  },
-        ].map(({ isCorrect, icon, r, g, b }) => (
+          { swipeRight: false, label: game.currentCard?.leftOption },
+          { swipeRight: true,  label: game.currentCard?.rightOption },
+        ].map(({ swipeRight, label }) => (
           <button
-            key={icon}
-            onClick={() => handleButtonClick(isCorrect)}
+            key={swipeRight ? 'right' : 'left'}
+            onClick={() => handleButtonClick(swipeRight)}
             style={{
-              width: '84px', height: '84px', borderRadius: '50%',
-              background: `linear-gradient(160deg, rgba(${r},${g},${b},0.20) 0%, rgba(${r},${g},${b},0.08) 100%)`,
+              width: '120px', height: '64px', borderRadius: '20px',
+              background: 'linear-gradient(160deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.05) 100%)',
               backdropFilter: 'blur(24px) saturate(160%)', WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-              border: `1px solid rgba(${r},${g},${b},0.25)`,
-              boxShadow: [`inset 0 1px 0 rgba(255,255,255,0.18)`, `inset 0 -1px 0 rgba(0,0,0,0.15)`, `0 2px 8px rgba(0,0,0,0.20)`].join(', '),
-              color: `rgb(${r},${g},${b})`, fontSize: '28px', cursor: 'pointer',
+              border: '1px solid rgba(255,255,255,0.15)',
+              boxShadow: ['inset 0 1px 0 rgba(255,255,255,0.18)', 'inset 0 -1px 0 rgba(0,0,0,0.15)', '0 2px 8px rgba(0,0,0,0.20)'].join(', '),
+              color: 'rgba(255,255,255,0.75)', fontSize: '22px', fontWeight: '700', letterSpacing: '1px', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'transform 0.16s cubic-bezier(0.34,1.56,0.64,1)', flexShrink: 0,
             }}
@@ -270,7 +281,7 @@ export default function SwipeGamePro({ contentType, groupId, cardCount }) {
             onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)' }}
             onTouchStart={e => { e.currentTarget.style.transform = 'scale(0.88)' }}
             onTouchEnd={e => { e.currentTarget.style.transform = 'scale(1)' }}
-          >{icon}</button>
+          >{label}</button>
         ))}
         </div>
 
