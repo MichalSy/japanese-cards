@@ -78,6 +78,7 @@ jobs:
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-key' }}
+          NEXT_PUBLIC_ASSETS_URL: https://pqnfiqczcxnwaenylysb.supabase.co/storage/v1/object/public/language-cards
         run: npm run build
 
       - name: Set up Docker Buildx
