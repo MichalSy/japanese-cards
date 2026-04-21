@@ -136,7 +136,7 @@ export default function MainMenu() {
             {!loading && courses.length > 0 && (
               <>
                 <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '8px' }}>
-                  {t('nav.courses') || 'Kurse'}
+                  {t('nav.courses')}
                 </h2>
                 <div className="grid-1">
                   {courses.map(course => (

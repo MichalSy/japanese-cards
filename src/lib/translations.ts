@@ -7,6 +7,7 @@ export const translations: Record<string, Record<string, string>> = {
     'saving': 'Speichern...',
 
     'nav.categories': 'Kategorien',
+    'nav.courses': 'Kurse',
     'nav.progress': 'Fortschritt',
     'nav.stats': 'Statistiken',
     'nav.start': 'Start',
@@ -69,6 +70,7 @@ export const translations: Record<string, Record<string, string>> = {
     'saving': 'Saving...',
 
     'nav.categories': 'Categories',
+    'nav.courses': 'Courses',
     'nav.progress': 'Progress',
     'nav.stats': 'Statistics',
     'nav.start': 'Start',
