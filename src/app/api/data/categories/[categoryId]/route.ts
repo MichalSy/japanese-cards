@@ -12,10 +12,10 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const pick = (arr: any[]) => arr?.find((x) => x.lang_code === lang) ?? arr?.find((x) => x.lang_code === 'en') ?? {}
 
   const groupSelect = includeItems
-    ? `slug, sort_order, language_cards_group_translations (lang_code, name),
+    ? `slug, sort_order, lesson_id, game_modes, language_cards_group_translations (lang_code, name),
        language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active,
          language_cards_card_translations (lang_code, translation, example_translation))`
-    : `slug, sort_order, language_cards_group_translations (lang_code, name)`
+    : `slug, sort_order, lesson_id, game_modes, language_cards_group_translations (lang_code, name)`
 
   const { data: cat, error } = await supabase
     .from('language_cards_categories')
@@ -36,7 +36,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
     .sort((a: any, b: any) => a.sort_order - b.sort_order)
     .map((g: any) => {
       const gt = pick(g.language_cards_group_translations ?? [])
-      const base = { id: g.slug, name: gt.name ?? g.slug }
+      const base = { id: g.slug, name: gt.name ?? g.slug, lessonId: g.lesson_id ?? null, gameModes: g.game_modes ?? null }
       if (!includeItems) return base
 
       const items = (g.language_cards_cards ?? [])
@@ -52,7 +52,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
             group_name: gt.name ?? g.slug,
           }
         })
-      return { ...base, items }
+      return { ...base, items, lessonId: g.lesson_id ?? null, gameModes: g.game_modes ?? null }
     })
 
   return NextResponse.json({

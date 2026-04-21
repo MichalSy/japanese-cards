@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 const GAME_MODES = [
+  { id: 'learn', name: 'Lektion', emoji: 'learn', description: 'Lerne Zeichen Schritt für Schritt mit Erklärungen und Quiz', enabled: true },
   { id: 'swipe', name: 'Swipe Game', emoji: 'swipe', description: 'Wische links oder rechts um zu antworten', enabled: true },
   { id: 'multiChoice', name: 'Multiple Choice', emoji: 'multiChoice', description: 'Wähle die richtige Antwort aus 4 Optionen', enabled: false },
   { id: 'flashcard', name: 'Flashcard', emoji: 'flashcard', description: 'Klassische Lernkarten zum Umschlagen', enabled: false },
