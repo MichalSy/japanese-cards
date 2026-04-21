@@ -126,6 +126,8 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Footer */

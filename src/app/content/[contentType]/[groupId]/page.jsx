@@ -121,8 +121,8 @@ export default function GameModeSelector({ params }) {
                       <ModeIcon id={mode.id} />
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '16px', fontWeight: '600', color: 'white', marginBottom: '3px' }}>{mode.name}</div>
-                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>{mode.description}</div>
+                      <div style={{ fontSize: '16px', fontWeight: '600', color: 'white', marginBottom: '3px' }}>{t(`mode.${mode.id}.name`, mode.id)}</div>
+                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>{t(`mode.${mode.id}.desc`)}</div>
                     </div>
                     <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px' }}>›</span>
                   </div>
