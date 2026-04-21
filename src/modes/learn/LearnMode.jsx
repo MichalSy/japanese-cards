@@ -130,20 +130,26 @@ export default function LearnMode({ lesson, course, cards, lang }) {
         </AppHeader>
 
         <AppContent>
-          <div
-            key={animKey}
-            className="card"
-            style={{
-              width: '100%',
-              flex: isQuiz ? '1' : undefined,
-              animation: `${animDir === 'forward' ? 'learnSlideRight' : 'learnSlideLeft'} 0.25s cubic-bezier(0.25,0.46,0.45,0.94) both`,
-              cursor: isQuiz ? 'default' : 'grab',
-            }}
-            onPointerDown={isQuiz ? undefined : onPointerDown}
-            onPointerUp={isQuiz ? undefined : onPointerUp}
-          >
-            {renderCardContent()}
-          </div>
+          {isQuiz ? (
+            <div
+              key={animKey}
+              className="card"
+              style={{ flex: 1, animation: `${animDir === 'forward' ? 'learnSlideRight' : 'learnSlideLeft'} 0.25s cubic-bezier(0.25,0.46,0.45,0.94) both` }}
+            >
+              {renderCardContent()}
+            </div>
+          ) : (
+            <div
+              key={animKey}
+              style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'grab', animation: `${animDir === 'forward' ? 'learnSlideRight' : 'learnSlideLeft'} 0.25s cubic-bezier(0.25,0.46,0.45,0.94) both` }}
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+            >
+              <div className="card" style={{ width: '100%' }}>
+                {renderCardContent()}
+              </div>
+            </div>
+          )}
         </AppContent>
 
         <AppFooter>
