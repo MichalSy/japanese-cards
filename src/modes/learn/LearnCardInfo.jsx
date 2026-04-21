@@ -95,8 +95,8 @@ export default function LearnCardInfo({ card, lang }) {
   const contentMd = card.data?.content_md?.[lang] ?? card.data?.content_md?.en ?? ''
 
   return (
-    <div style={{ padding: '8px 4px', width: '100%' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <div style={{ padding: '8px 4px', width: '100%', textAlign: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
         {renderMarkdown(contentMd)}
       </div>
     </div>

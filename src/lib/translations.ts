@@ -55,6 +55,11 @@ export const translations: Record<string, Record<string, string>> = {
     'game.toHome': 'Hauptmenü',
     'game.decoyMistake': 'falsche Kombination nicht erkannt',
 
+    'learn.next': 'Weiter →',
+    'learn.finish': 'Fertig ✓',
+    'learn.correct': '✓ Richtig!',
+    'learn.wrong': '✗ Falsch — die Antwort war:',
+
     'settings.title': 'Einstellungen',
     'settings.motherTongue': 'Muttersprache',
     'settings.learnLang': 'Lernsprache',
@@ -117,6 +122,11 @@ export const translations: Record<string, Record<string, string>> = {
     'game.nextGroup': 'Next group →',
     'game.toHome': 'Main menu',
     'game.decoyMistake': 'decoy not recognized',
+
+    'learn.next': 'Next →',
+    'learn.finish': 'Done ✓',
+    'learn.correct': '✓ Correct!',
+    'learn.wrong': '✗ Wrong — the answer was:',
 
     'settings.title': 'Settings',
     'settings.motherTongue': 'Mother tongue',
