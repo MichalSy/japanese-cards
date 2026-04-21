@@ -34,13 +34,13 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     const { data: groups } = await supabase
       .from('language_cards_groups')
       .select(`slug, sort_order, language_cards_group_translations (lang_code, name),
-               language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation))`)
+               language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation))`)
       .eq('category_id', cat.id).order('sort_order')
 
     const items = (groups ?? []).flatMap((g: any) => {
       const gName = pick(g.language_cards_group_translations ?? []).name ?? g.slug
       return (g.language_cards_cards ?? [])
-        .filter((c: any) => c.is_active)
+        .filter((c: any) => c.is_active && c.card_type === cat.card_type)
         .sort((a: any, b: any) => a.sort_order - b.sort_order)
         .map((c: any) => mapCard(c, lang, gName))
     })
@@ -57,7 +57,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     .from('language_cards_groups')
     .select(`slug, language_cards_group_translations (lang_code, name),
              language_cards_categories!inner (slug, card_type),
-             language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation))`)
+             language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation))`)
     .eq('slug', groupId).eq('language_cards_categories.slug', categoryId).single()
 
   if (error || !group) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -67,7 +67,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const groupName = gt.name ?? groupId
 
   const items = ((group as any).language_cards_cards ?? [])
-    .filter((c: any) => c.is_active)
+    .filter((c: any) => c.is_active && c.card_type === cardType)
     .sort((a: any, b: any) => a.sort_order - b.sort_order)
     .map((c: any) => mapCard(c, lang, groupName))
 
