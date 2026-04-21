@@ -46,6 +46,7 @@ export default function MainMenu() {
   const [chartMode, setChartMode] = useState('days')
   const [daily, setDaily] = useState([])
   const [statInfo, setStatInfo] = useState(null)
+  const [courses, setCourses] = useState([])
 
   const tabs = [
     { id: 'start',    key: 'nav.start',    icon: '🎮' },
@@ -84,14 +85,16 @@ export default function MainMenu() {
     (async () => {
       try {
         setLoading(true)
-        const [catData, ovData, dailyData] = await Promise.all([
+        const [catData, ovData, dailyData, courseData] = await Promise.all([
           fetchCategories(),
           fetch('/api/progress/overview').then(r => r.ok ? r.json() : { overview: [] }),
           fetch('/api/progress/daily?days=5').then(r => r.ok ? r.json() : { daily: [] }),
+          fetch('/api/learn/courses').then(r => r.ok ? r.json() : { courses: [] }),
         ])
         setCategories(catData.categories.filter(cat => cat.enabled !== false))
         setOverview(ovData.overview ?? [])
         setDaily(dailyData.daily ?? [])
+        setCourses(courseData.courses ?? [])
       } catch (err) {
         setError(err.message)
       } finally {
@@ -128,6 +131,48 @@ export default function MainMenu() {
                   </Card>
                 ))}
               </div>
+            )}
+
+            {!loading && courses.length > 0 && (
+              <>
+                <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '8px' }}>
+                  {t('nav.courses') || 'Kurse'}
+                </h2>
+                <div className="grid-1">
+                  {courses.map(course => (
+                    <Card key={course.id}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '48px', height: '48px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.25)', borderRadius: '14px', fontSize: '22px' }}>
+                            📚
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{course.name}</div>
+                            {course.description && <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', marginTop: '2px' }}>{course.description}</div>}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          {course.lessons.map(lesson => (
+                            <button
+                              key={lesson.id}
+                              onClick={() => router.push(`/learn/${lesson.id}`)}
+                              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', cursor: 'pointer', textAlign: 'left', transition: 'background 0.15s' }}
+                              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(168,85,247,0.12)' }}
+                              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
+                            >
+                              <div>
+                                <div style={{ fontSize: '14px', fontWeight: '600', color: 'white' }}>{lesson.title}</div>
+                                {lesson.description && <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>{lesson.description}</div>}
+                              </div>
+                              <span style={{ color: 'rgba(168,85,247,0.8)', fontSize: '16px', flexShrink: 0 }}>›</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         )}
