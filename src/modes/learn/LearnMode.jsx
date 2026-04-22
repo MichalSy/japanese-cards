@@ -154,7 +154,7 @@ export default function LearnMode({ lesson, cards, lang }) {
               onPointerDown={onPointerDown}
               onPointerUp={onPointerUp}
             >
-              <div className="card" style={{ width: '100%', padding: 0, overflow: 'hidden' }}>
+              <div className="card" style={{ width: '100%', padding: (card.card_type === 'character' && card.image_id) ? 0 : undefined, overflow: 'hidden' }}>
                 {renderCardContent()}
               </div>
             </div>
