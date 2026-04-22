@@ -96,7 +96,11 @@ export default function ContentTypeView({ params }) {
   // Build ordered lesson list from group lessonIds
   const lessons = (categoryConfig?.groups ?? [])
     .filter(g => g.lessonId && lessonMap[g.lessonId])
-    .map(g => ({ ...lessonMap[g.lessonId], groupName: g.name }))
+    .map(g => ({
+      ...lessonMap[g.lessonId],
+      groupName: g.name,
+      groupChars: (groupData[g.id] || []).map(item => item.native).filter(Boolean).join(''),
+    }))
 
   const categoryName = categoryConfig?.name || categoryConfig?.native_name || ''
 
@@ -132,10 +136,10 @@ export default function ContentTypeView({ params }) {
                     {i + 1}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{lesson.title}</div>
-                    {lesson.description && (
-                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {lesson.description}
+                    <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{lesson.groupName}</div>
+                    {lesson.groupChars && (
+                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px', letterSpacing: '0.1em' }}>
+                        {lesson.groupChars}
                       </div>
                     )}
                   </div>
