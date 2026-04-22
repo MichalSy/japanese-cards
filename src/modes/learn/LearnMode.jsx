@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
@@ -15,6 +15,16 @@ export default function LearnMode({ lesson, cards, lang }) {
   const [quizAnswers, setQuizAnswers] = useState({})
   const [animDir, setAnimDir] = useState('forward')
   const [animKey, setAnimKey] = useState(0)
+
+  useEffect(() => {
+    const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
+    cards.forEach(card => {
+      if (card.image_id) {
+        const img = new Image()
+        img.src = `${assetsUrl}/${card.image_id}.jpg`
+      }
+    })
+  }, [cards])
 
   const dragRef = useRef(null)
   const card = cards[index]
