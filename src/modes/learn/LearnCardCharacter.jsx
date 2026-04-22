@@ -10,6 +10,8 @@ export default function LearnCardCharacter({ card, lang }) {
   const [imgLoaded, setImgLoaded] = useState(false)
   const imgRef = useRef(null)
 
+  console.log(`[LearnCard] mount card=${card.native} imageUrl=${imageUrl}`);
+
   if (!imageUrl) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '16px', textAlign: 'center' }}>
@@ -35,8 +37,15 @@ export default function LearnCardCharacter({ card, lang }) {
         <img
           src={imageUrl}
           alt={card.native}
-          ref={el => { if (el?.complete) setImgLoaded(true) }}
-          onLoad={() => setImgLoaded(true)}
+          ref={el => {
+            if (!el) return
+            console.log(`[LearnCard] ref callback: complete=${el.complete} naturalWidth=${el.naturalWidth} src=${el.src.slice(-30)}`)
+            if (el.complete) setImgLoaded(true)
+          }}
+          onLoad={e => {
+            console.log(`[LearnCard] onLoad fired: complete=${e.target.complete} src=${e.target.src.slice(-30)}`)
+            setImgLoaded(true)
+          }}
           style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: imgLoaded ? 1 : 0, transition: imgLoaded ? 'none' : 'opacity 0.3s ease', display: 'block' }}
         />
       </div>

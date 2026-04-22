@@ -20,8 +20,12 @@ export default function LearnMode({ lesson, cards, lang }) {
     const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
     cards.forEach(card => {
       if (card.image_id) {
+        const url = `${assetsUrl}/${card.image_id}.jpg`
         const img = new Image()
-        img.src = `${assetsUrl}/${card.image_id}.jpg`
+        img.onload = () => console.log(`[Preload] loaded: ${url.slice(-30)}`)
+        img.onerror = () => console.log(`[Preload] error: ${url.slice(-30)}`)
+        img.src = url
+        console.log(`[Preload] started: complete=${img.complete} url=${url.slice(-30)}`)
       }
     })
   }, [cards])
