@@ -47,12 +47,7 @@ Der Token `aiko-jpcard-dev-2026` ist in `.env.local` als `SUPABASE_DEV_TOKEN` hi
 
 Chrome muss mit `--remote-debugging-port=9222` gestartet werden damit das Chrome DevTools MCP darauf zugreifen kann. Normales Chrome hat keinen Debug-Port.
 
-**Wichtig:** Zuerst alle laufenden Chrome-Prozesse beenden:
-```powershell
-taskkill //F //IM chrome.exe //T
-```
-
-Dann Chrome neu starten (PowerShell):
+Chrome mit einem separaten `--user-data-dir` starten - das lauft als eigene Instanz neben dem normalen Chrome, nichts beenden (PowerShell):
 ```powershell
 Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--remote-debugging-port=9222","--user-data-dir=C:\tmp\chrome-debug2","http://localhost:3001/api/dev-login?token=aiko-jpcard-dev-2026&redirect=/content/hiragana"
 ```
