@@ -1,18 +1,18 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { fetchCategoryWithItems } from '@/config/api'
-import { useLanguage } from '@/context/LanguageContext'
-import { fetchProgressFromServer, computeGroupProgress, computeCategoryStats } from '@/utils/progressStorage'
+import { useT } from '@/components/I18nContext'
+import { fetchProgressFromServer, computeGroupProgress } from '@/utils/progressStorage'
 import { useSetBackHandler } from '@/components/BackHandlerContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
 
 function ProgressBar({ value }) {
   return (
-    <div style={{ height: '6px', borderRadius: '9999px', backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-      <div style={{ background: 'linear-gradient(90deg, #ec4899, #a855f7)', height: '6px', borderRadius: '9999px', width: `${value}%`, transition: 'width 0.3s ease' }} />
+    <div style={{ height: '4px', borderRadius: '9999px', backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+      <div style={{ background: 'linear-gradient(90deg, #ec4899, #a855f7)', height: '4px', borderRadius: '9999px', width: `${value}%`, transition: 'width 0.3s ease' }} />
     </div>
   )
 }
@@ -20,15 +20,25 @@ function ProgressBar({ value }) {
 export default function ContentTypeView({ params }) {
   const { contentType } = params
   const router = useRouter()
-  const { language } = useLanguage()
+  const t = useT()
+  const [activeTab, setActiveTab] = useState('learn')
   const [categoryConfig, setCategoryConfig] = useState(null)
+  const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [stats, setStats] = useState(null)
   const [groupData, setGroupData] = useState({})
   const [progress, setProgress] = useState({})
 
-  const t = (de, en) => language === 'de' ? de : en
+  const tabContainerRef = useRef(null)
+  const [indicatorLeft, setIndicatorLeft] = useState(0)
+  const [indicatorWidth, setIndicatorWidth] = useState(0)
+  const [indicatorDuration, setIndicatorDuration] = useState(0)
+  const [indicatorReady, setIndicatorReady] = useState(false)
+
+  const tabs = [
+    { id: 'learn', label: t('category.tab.learn') },
+    { id: 'practice', label: t('category.tab.practice') },
+  ]
 
   useSetBackHandler(() => router.push('/'))
 
@@ -36,16 +46,17 @@ export default function ContentTypeView({ params }) {
     (async () => {
       try {
         setLoading(true)
-        const [config, serverProgress] = await Promise.all([
+        const [config, serverProgress, coursesRes] = await Promise.all([
           fetchCategoryWithItems(contentType),
           fetchProgressFromServer(contentType),
+          fetch('/api/learn/courses').then(r => r.ok ? r.json() : { courses: [] }),
         ])
         setCategoryConfig(config)
         setProgress(serverProgress)
-        setStats(computeCategoryStats(serverProgress))
         const groups = {}
         for (const group of config.groups) groups[group.id] = group.items || []
         setGroupData(groups)
+        setCourses(coursesRes.courses ?? [])
       } catch (err) {
         setError(err.message)
       } finally {
@@ -54,103 +65,148 @@ export default function ContentTypeView({ params }) {
     })()
   }, [contentType])
 
+  useEffect(() => {
+    if (!tabContainerRef.current) return
+    const buttons = tabContainerRef.current.querySelectorAll('[data-tab-btn]')
+    const idx = tabs.findIndex(tab => tab.id === activeTab)
+    const btn = buttons[idx]
+    if (btn) {
+      setIndicatorLeft(btn.offsetLeft)
+      setIndicatorWidth(btn.offsetWidth)
+      setIndicatorReady(true)
+    }
+  }, [activeTab, loading])
+
+  const handleTabChange = (newTabId) => {
+    if (newTabId === activeTab) return
+    setIndicatorDuration(220)
+    setActiveTab(newTabId)
+  }
+
+  // Map lesson IDs from courses → flat lookup
+  const lessonMap = {}
+  for (const course of courses) {
+    for (const lesson of course.lessons ?? []) {
+      lessonMap[lesson.id] = lesson
+    }
+  }
+
+  // Build ordered lesson list from group lessonIds
+  const lessons = (categoryConfig?.groups ?? [])
+    .filter(g => g.lessonId && lessonMap[g.lessonId])
+    .map(g => ({ ...lessonMap[g.lessonId], groupName: g.name }))
+
   const categoryName = categoryConfig?.name || categoryConfig?.native_name || ''
 
   if (loading) return (
-    <AppLayout><AppHeader><AppHeaderBar title="Laden..." /></AppHeader>
-      <AppContent><div className="card" style={{ color: 'rgba(255,255,255,0.5)' }}>Laden...</div></AppContent>
-    </AppLayout>
-  )
-  if (error || !categoryConfig) return (
-    <AppLayout><AppHeader><AppHeaderBar title="Fehler" /></AppHeader>
-      <AppContent><div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>Fehler: {error || 'Nicht geladen'}</div></AppContent>
+    <AppLayout>
+      <AppHeader><AppHeaderBar title={t('loading')} /></AppHeader>
+      <AppContent><div className="card" style={{ color: 'rgba(255,255,255,0.5)' }}>{t('loading')}</div></AppContent>
     </AppLayout>
   )
 
-  const allItems = Object.values(groupData).flat()
-  const allProgress = computeGroupProgress(allItems, progress)
+  if (error || !categoryConfig) return (
+    <AppLayout>
+      <AppHeader><AppHeaderBar title={t('error')} /></AppHeader>
+      <AppContent><div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>{t('error')}: {error}</div></AppContent>
+    </AppLayout>
+  )
 
   return (
     <AppLayout>
       <AppHeader><AppHeaderBar title={categoryName} /></AppHeader>
+
       <AppContent>
-        <div className="space-y-6 fade-in">
-
-          <Card>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                {t('Deine Statistik', 'Your Stats')}
+        {activeTab === 'learn' && (
+          <div className="space-y-4 fade-in">
+            {lessons.length === 0 ? (
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', textAlign: 'center', padding: '32px 0' }}>
+                {t('category.noLessons')}
               </div>
-              <div className="grid-2">
-                <div>
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', margin: '0 0 4px' }}>{t('Gelernt', 'Learned')}</p>
-                  <p style={{ fontSize: '28px', fontWeight: '700', color: '#10b981', margin: 0 }}>{stats?.totalLearned || 0}</p>
-                </div>
-                <div>
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', margin: '0 0 4px' }}>{t('Beherrscht', 'Mastered')}</p>
-                  <p style={{ fontSize: '28px', fontWeight: '700', color: '#3b82f6', margin: 0 }}>{stats?.mastered || 0}</p>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {categoryConfig.showAllOption && (
-            <Card interactive onClick={() => router.push(`/content/${contentType}/all`)}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'white' }}>✨ {t('Alle kombiniert', 'All Combined')}</div>
-                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px' }}>
-                      {allItems.length} {t('Zeichen', 'characters')}
-                    </div>
+            ) : lessons.map((lesson, i) => (
+              <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.id}`)}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', flexShrink: 0, borderRadius: '50%', background: 'linear-gradient(135deg,#ec4899,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: 'white', boxShadow: '0 3px 10px rgba(236,72,153,0.35)' }}>
+                    {i + 1}
                   </div>
-                  <span style={{ fontSize: '16px', fontWeight: '700', color: '#ec4899' }}>{allProgress}%</span>
-                </div>
-                <ProgressBar value={allProgress} />
-              </div>
-            </Card>
-          )}
-
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
-              {t('Gruppen', 'Groups')}
-            </div>
-            <div className="grid-1">
-              {categoryConfig.groups.map(group => {
-                const items = groupData[group.id] || []
-                const groupProgress = computeGroupProgress(items, progress)
-                return (
-                  <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}`)}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                          <span style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{group.name || group.id}</span>
-                          <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginLeft: '8px' }}>
-                            {items.length} {t('Zeichen', 'chars')}
-                          </span>
-                        </div>
-                        <span style={{ fontSize: '14px', fontWeight: '700', color: '#ec4899' }}>{groupProgress}%</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{lesson.title}</div>
+                    {lesson.description && (
+                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {lesson.description}
                       </div>
-                      <ProgressBar value={groupProgress} />
-                    </div>
-                  </Card>
-                )
-              })}
-            </div>
+                    )}
+                  </div>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px', flexShrink: 0 }}>›</span>
+                </div>
+              </Card>
+            ))}
           </div>
+        )}
 
-        </div>
+        {activeTab === 'practice' && (
+          <div className="space-y-4 fade-in">
+            {categoryConfig.showAllOption && (() => {
+              const allItems = Object.values(groupData).flat()
+              const allProgress = computeGroupProgress(allItems, progress)
+              return (
+                <Card interactive onClick={() => router.push(`/content/${contentType}/all`)}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{t('groups.all')}</div>
+                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>
+                          {allItems.length} {t('groups.all.sub')}
+                        </div>
+                      </div>
+                      <span style={{ fontSize: '14px', fontWeight: '700', color: '#ec4899' }}>{allProgress}%</span>
+                    </div>
+                    <ProgressBar value={allProgress} />
+                  </div>
+                </Card>
+              )
+            })()}
+
+            {categoryConfig.groups.map(group => {
+              const items = groupData[group.id] || []
+              const groupProgress = computeGroupProgress(items, progress)
+              return (
+                <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}`)}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <span style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{group.name || group.id}</span>
+                        <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginLeft: '8px' }}>
+                          {items.length} {t('groups.chars.short')}
+                        </span>
+                      </div>
+                      <span style={{ fontSize: '14px', fontWeight: '700', color: '#ec4899' }}>{groupProgress}%</span>
+                    </div>
+                    <ProgressBar value={groupProgress} />
+                  </div>
+                </Card>
+              )
+            })}
+          </div>
+        )}
       </AppContent>
 
       <AppFooter>
-        <button
-          onClick={() => router.push(`/content/${contentType}/${categoryConfig.groups[0]?.id}`)}
-          style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg, #ec4899, #a855f7)', color: 'white', border: 'none', borderRadius: '100px', fontWeight: '700', fontSize: '16px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(236,72,153,0.35)', transition: 'all 0.2s' }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(236,72,153,0.45)' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(236,72,153,0.35)' }}
-        >
-          {t('Spielen →', 'Play →')}
-        </button>
+        <div ref={tabContainerRef} style={{ position: 'relative', display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '100px', padding: '4px', border: '1px solid rgba(255,255,255,0.1)', width: '100%' }}>
+          {indicatorReady && (
+            <div style={{ position: 'absolute', top: '4px', bottom: '4px', left: `${indicatorLeft}px`, width: `${indicatorWidth}px`, background: 'linear-gradient(135deg, #ec4899, #a855f7)', borderRadius: '100px', boxShadow: '0 4px 12px rgba(236,72,153,0.35)', transition: `left ${indicatorDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`, pointerEvents: 'none', zIndex: 0 }} />
+          )}
+          {tabs.map(tab => {
+            const isActive = activeTab === tab.id
+            return (
+              <button key={tab.id} data-tab-btn onClick={() => handleTabChange(tab.id)}
+                style={{ position: 'relative', zIndex: 1, flex: 1, padding: '10px 4px', borderRadius: '100px', border: 'none', cursor: 'pointer', background: 'transparent', color: isActive ? 'white' : 'rgba(255,255,255,0.45)', fontSize: '14px', fontWeight: '600', transition: 'color 0.2s ease' }}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
       </AppFooter>
     </AppLayout>
   )

@@ -49,29 +49,11 @@ export default function GameModeSelector({ params }) {
   const group = categoryConfig?.groups?.find(g => g.id === groupId)
   const availableModeIds = group?.gameModes ?? categoryConfig?.gameModes ?? []
 
-  // For "learn" mode: collect lessonIds — for "all" group, gather from all groups that have one
-  const lessonIds = groupId === 'all'
-    ? (categoryConfig?.groups ?? []).filter(g => g.lessonId).map(g => g.lessonId)
-    : group?.lessonId ? [group.lessonId] : []
-
-  // Inject "learn" mode if there are lessons available, even if not in gameModes list
-  const modeIds = lessonIds.length > 0 && !availableModeIds.includes('learn')
-    ? ['learn', ...availableModeIds]
-    : availableModeIds
-
-  const gameModes = modeIds.map(id => gameModeMap[id]).filter(m => m?.enabled)
+  const gameModes = availableModeIds.map(id => gameModeMap[id]).filter(m => m?.enabled && m.id !== 'learn')
 
   const groupName = t(`groups.${groupId}`, group?.name ?? groupId)
 
   const handleModeClick = (modeId) => {
-    if (modeId === 'learn') {
-      if (lessonIds.length === 1) {
-        router.push(`/learn/${lessonIds[0]}`)
-      } else if (lessonIds.length > 1) {
-        router.push(`/learn/chain?lessons=${lessonIds.join(',')}`)
-      }
-      return
-    }
     router.push(`/game/${contentType}/${groupId}/${modeId}?cards=${cardCount}`)
   }
 

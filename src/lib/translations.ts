@@ -8,6 +8,9 @@ export const translations: Record<string, Record<string, string>> = {
 
     'nav.categories': 'Kategorien',
     'nav.courses': 'Kurse',
+    'category.tab.learn': 'Lernen',
+    'category.tab.practice': 'Üben',
+    'category.noLessons': 'Noch keine Lektionen verfügbar.',
     'nav.progress': 'Fortschritt',
     'nav.stats': 'Statistiken',
     'nav.start': 'Start',
@@ -87,6 +90,9 @@ export const translations: Record<string, Record<string, string>> = {
 
     'nav.categories': 'Categories',
     'nav.courses': 'Courses',
+    'category.tab.learn': 'Learn',
+    'category.tab.practice': 'Practice',
+    'category.noLessons': 'No lessons available yet.',
     'nav.progress': 'Progress',
     'nav.stats': 'Statistics',
     'nav.start': 'Start',
