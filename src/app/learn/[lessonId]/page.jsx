@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { useT } from '@/components/I18nContext'
+import AppHeaderBar from '@/components/AppHeaderBar'
+import { AppLayout, AppHeader, AppContent } from '@/components/Layout'
 import LearnMode from '@/modes/learn/LearnMode'
 
 export default function LearnLessonPage() {
   const { lessonId } = useParams()
+  const t = useT()
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
 
@@ -17,16 +21,17 @@ export default function LearnLessonPage() {
   }, [lessonId])
 
   if (error) return (
-    <div style={{ display: 'flex', height: '100dvh', alignItems: 'center', justifyContent: 'center', background: '#0c0820', color: '#ef4444', fontSize: '15px', padding: '24px', textAlign: 'center' }}>
-      Fehler: {error}
-    </div>
+    <AppLayout>
+      <AppHeader><AppHeaderBar title={t('error')} /></AppHeader>
+      <AppContent><div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>{t('error')}: {error}</div></AppContent>
+    </AppLayout>
   )
 
   if (!data) return (
-    <div style={{ display: 'flex', height: '100dvh', alignItems: 'center', justifyContent: 'center', background: '#0c0820' }}>
-      <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '3px solid rgba(236,72,153,0.3)', borderTopColor: '#ec4899', animation: 'spin 0.8s linear infinite' }} />
-      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-    </div>
+    <AppLayout>
+      <AppHeader><AppHeaderBar title={t('loading')} /></AppHeader>
+      <AppContent><div className="card" style={{ color: 'rgba(255,255,255,0.5)' }}>{t('loading')}</div></AppContent>
+    </AppLayout>
   )
 
   return <LearnMode lesson={data.lesson} course={data.course} cards={data.cards} lang={data.lang} />
