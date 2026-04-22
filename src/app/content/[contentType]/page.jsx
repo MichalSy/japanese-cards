@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { fetchCategoryWithItems } from '@/config/api'
 import { useT } from '@/components/I18nContext'
@@ -20,8 +20,9 @@ function ProgressBar({ value }) {
 export default function ContentTypeView({ params }) {
   const { contentType } = params
   const router = useRouter()
+  const searchParams = useSearchParams()
   const t = useT()
-  const [activeTab, setActiveTab] = useState('learn')
+  const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') === 'practice' ? 'practice' : 'learn')
   const [categoryConfig, setCategoryConfig] = useState(null)
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(true)
@@ -81,6 +82,7 @@ export default function ContentTypeView({ params }) {
     if (newTabId === activeTab) return
     setIndicatorDuration(220)
     setActiveTab(newTabId)
+    router.replace(`/content/${contentType}?tab=${newTabId}`, { scroll: false })
   }
 
   // Map lesson IDs from courses → flat lookup
