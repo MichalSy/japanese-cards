@@ -15,16 +15,12 @@ export default function LearnMode({ lesson, cards, lang }) {
   const [quizAnswers, setQuizAnswers] = useState({})
   const [animDir, setAnimDir] = useState('forward')
   const [animKey, setAnimKey] = useState(0)
-  const preloadedUrls = useRef(new Set())
-
   useEffect(() => {
     const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
     cards.forEach(card => {
       if (card.image_id) {
-        const url = `${assetsUrl}/${card.image_id}.jpg`
         const img = new Image()
-        img.onload = () => { preloadedUrls.current.add(url) }
-        img.src = url
+        img.src = `${assetsUrl}/${card.image_id}.jpg`
       }
     })
   }, [cards])
@@ -125,9 +121,9 @@ export default function LearnMode({ lesson, cards, lang }) {
   const renderCardContent = () => {
     if (!card) return null
     if (isQuiz) return renderQuizContent()
-    if (card.card_type === 'character') return <LearnCardCharacter card={card} lang={lang} preloadedUrls={preloadedUrls.current} />
+    if (card.card_type === 'character') return <LearnCardCharacter card={card} lang={lang} />
     if (card.card_type === 'info') return <LearnCardInfo card={card} lang={lang} />
-    return <LearnCardCharacter card={card} lang={lang} preloadedUrls={preloadedUrls.current} />
+    return <LearnCardCharacter card={card} lang={lang} />
   }
 
   return (

@@ -1,13 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-
 const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_URL
 
-export default function LearnCardCharacter({ card, lang, preloadedUrls }) {
+export default function LearnCardCharacter({ card, lang }) {
   const mnemonic = card.data?.mnemonic?.[lang] ?? card.data?.mnemonic?.en ?? null
   const imageUrl = card.image_id ? `${ASSETS_URL}/${card.image_id}.jpg` : null
-  const [imgLoaded, setImgLoaded] = useState(() => preloadedUrls?.has(imageUrl) ?? false)
 
   if (!imageUrl) {
     return (
@@ -33,8 +30,7 @@ export default function LearnCardCharacter({ card, lang, preloadedUrls }) {
         <img
           src={imageUrl}
           alt={card.native}
-          onLoad={() => setImgLoaded(true)}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: imgLoaded ? 1 : 0, transition: imgLoaded ? 'none' : 'opacity 0.3s ease', display: 'block' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
       </div>
 
