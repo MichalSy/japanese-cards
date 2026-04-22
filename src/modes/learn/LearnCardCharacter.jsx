@@ -38,7 +38,7 @@ export default function LearnCardCharacter({ card, lang }) {
             position: 'absolute', bottom: 0, left: 0, right: 0,
             background: 'rgba(0,0,0,0.62)',
             padding: '12px 16px',
-            fontSize: '14px', fontWeight: '500', color: 'rgba(255,255,255,0.95)', lineHeight: '1.5', textAlign: 'center'
+            fontSize: '14px', fontWeight: '500', color: 'rgba(255,255,255,0.95)', lineHeight: '1.5', textAlign: 'center', whiteSpace: 'pre-line'
           }}>
             {mnemonic}
           </div>
