@@ -136,10 +136,10 @@ export default function ContentTypeView({ params }) {
                     {i + 1}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{lesson.groupName}</div>
-                    {lesson.groupChars && (
+                    <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{lesson.title}</div>
+                    {lesson.description && (
                       <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px', letterSpacing: '0.1em' }}>
-                        {lesson.groupChars}
+                        {lesson.description}
                       </div>
                     )}
                   </div>
