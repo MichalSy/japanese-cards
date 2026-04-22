@@ -1,16 +1,13 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 
 const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_URL
 
-export default function LearnCardCharacter({ card, lang }) {
+export default function LearnCardCharacter({ card, lang, preloadedUrls }) {
   const mnemonic = card.data?.mnemonic?.[lang] ?? card.data?.mnemonic?.en ?? null
   const imageUrl = card.image_id ? `${ASSETS_URL}/${card.image_id}.jpg` : null
-  const [imgLoaded, setImgLoaded] = useState(false)
-  const imgRef = useRef(null)
-
-  console.log(`[LearnCard] mount card=${card.native} imageUrl=${imageUrl}`);
+  const [imgLoaded, setImgLoaded] = useState(() => preloadedUrls?.has(imageUrl) ?? false)
 
   if (!imageUrl) {
     return (
@@ -32,33 +29,21 @@ export default function LearnCardCharacter({ card, lang }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      {/* Square image - fills full card width */}
       <div style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden', background: 'rgba(255,255,255,0.04)' }}>
         <img
           src={imageUrl}
           alt={card.native}
-          ref={el => {
-            if (!el) return
-            console.log(`[LearnCard] ref callback: complete=${el.complete} naturalWidth=${el.naturalWidth} src=${el.src.slice(-30)}`)
-            if (el.complete) setImgLoaded(true)
-          }}
-          onLoad={e => {
-            console.log(`[LearnCard] onLoad fired: complete=${e.target.complete} src=${e.target.src.slice(-30)}`)
-            setImgLoaded(true)
-          }}
+          onLoad={() => setImgLoaded(true)}
           style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: imgLoaded ? 1 : 0, transition: imgLoaded ? 'none' : 'opacity 0.3s ease', display: 'block' }}
         />
       </div>
 
-      {/* Text content */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', padding: '14px 20px', textAlign: 'center' }}>
         {mnemonic && (
           <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: '1.6' }}>
             {mnemonic}
           </div>
         )}
-
-        {/* Character + transliteration side by side */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
           <span style={{ fontSize: 'clamp(56px, 15vw, 80px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
             {card.native}
