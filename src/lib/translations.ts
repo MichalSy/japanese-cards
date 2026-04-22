@@ -72,7 +72,7 @@ export const translations: Record<string, Record<string, string>> = {
     'learn.next': 'Weiter →',
     'learn.finish': 'Fertig ✓',
     'learn.correct': '✓ Richtig!',
-    'learn.wrong': '✗ Falsch — die Antwort war:',
+    'learn.wrong': '✗ Falsch! Die Antwort war:',
 
     'settings.title': 'Einstellungen',
     'settings.motherTongue': 'Muttersprache',
@@ -154,7 +154,7 @@ export const translations: Record<string, Record<string, string>> = {
     'learn.next': 'Next →',
     'learn.finish': 'Done ✓',
     'learn.correct': '✓ Correct!',
-    'learn.wrong': '✗ Wrong — the answer was:',
+    'learn.wrong': '✗ Wrong! The answer was:',
 
     'settings.title': 'Settings',
     'settings.motherTongue': 'Mother tongue',
