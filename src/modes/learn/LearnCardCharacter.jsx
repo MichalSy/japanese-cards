@@ -11,7 +11,7 @@ export default function LearnCardCharacter({ card, lang }) {
 
   if (!imageUrl) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '16px', textAlign: 'center' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '16px', textAlign: 'center' }}>
         <div style={{ fontSize: 'clamp(80px, 22vw, 120px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
           {card.native}
         </div>
@@ -28,9 +28,9 @@ export default function LearnCardCharacter({ card, lang }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-      {/* Image fills card top edge-to-edge, no padding needed */}
-      <div style={{ height: '200px', overflow: 'hidden', background: 'rgba(255,255,255,0.04)', flexShrink: 0 }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      {/* Square image - fills full card width */}
+      <div style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden', flexShrink: 0, background: 'rgba(255,255,255,0.04)' }}>
         <img
           src={imageUrl}
           alt={card.native}
@@ -39,18 +39,22 @@ export default function LearnCardCharacter({ card, lang }) {
         />
       </div>
 
-      {/* Text content with its own padding */}
-      <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+      {/* Text content fills remaining space */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '14px 20px', textAlign: 'center' }}>
         {mnemonic && (
           <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: '1.6' }}>
             {mnemonic}
           </div>
         )}
-        <div style={{ fontSize: 'clamp(60px, 16vw, 88px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
-          {card.native}
-        </div>
-        <div style={{ fontSize: '24px', fontWeight: '600', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.05em' }}>
-          {card.transliteration}
+
+        {/* Character + transliteration side by side */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+          <span style={{ fontSize: 'clamp(56px, 15vw, 80px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
+            {card.native}
+          </span>
+          <span style={{ fontSize: '28px', fontWeight: '600', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.05em' }}>
+            {card.transliteration}
+          </span>
         </div>
       </div>
     </div>
