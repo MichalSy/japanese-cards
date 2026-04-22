@@ -8,7 +8,7 @@ import { AppLayout, AppHeader, AppContent, AppFooter } from '@/components/Layout
 import LearnCardCharacter from './LearnCardCharacter'
 import LearnCardInfo from './LearnCardInfo'
 
-export default function LearnMode({ lesson, course, cards, lang }) {
+export default function LearnMode({ lesson, cards, lang }) {
   const router = useRouter()
   const t = useT()
   const [index, setIndex] = useState(0)
@@ -156,7 +156,6 @@ export default function LearnMode({ lesson, course, cards, lang }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
             {/* Progress bar */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontWeight: '500', flexShrink: 0 }}>{course.name}</span>
               <div style={{ flex: 1, height: '3px', background: 'rgba(255,255,255,0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
                 <div style={{ height: '3px', background: 'linear-gradient(90deg,#ec4899,#a855f7)', borderRadius: '9999px', width: `${progress}%`, transition: 'width 0.3s ease' }} />
               </div>

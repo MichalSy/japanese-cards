@@ -34,5 +34,5 @@ export default function LearnLessonPage() {
     </AppLayout>
   )
 
-  return <LearnMode lesson={data.lesson} course={data.course} cards={data.cards} lang={data.lang} />
+  return <LearnMode lesson={data.lesson} cards={data.cards} lang={data.lang} />
 }
