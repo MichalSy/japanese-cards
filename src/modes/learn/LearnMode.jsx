@@ -129,8 +129,8 @@ export default function LearnMode({ lesson, cards, lang }) {
   return (
     <>
       <style>{`
-        @keyframes learnSlideRight { from { opacity:0; transform:translateX(32px) } to { opacity:1; transform:translateX(0) } }
-        @keyframes learnSlideLeft  { from { opacity:0; transform:translateX(-32px) } to { opacity:1; transform:translateX(0) } }
+        @keyframes learnSlideRight { from { transform:translateX(32px) } to { transform:translateX(0) } }
+        @keyframes learnSlideLeft  { from { transform:translateX(-32px) } to { transform:translateX(0) } }
       `}</style>
 
       <AppLayout>
