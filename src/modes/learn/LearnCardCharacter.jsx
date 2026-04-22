@@ -11,7 +11,7 @@ export default function LearnCardCharacter({ card, lang }) {
 
   if (!imageUrl) {
     return (
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '16px', textAlign: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '16px', textAlign: 'center' }}>
         <div style={{ fontSize: 'clamp(80px, 22vw, 120px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
           {card.native}
         </div>
@@ -28,9 +28,9 @@ export default function LearnCardCharacter({ card, lang }) {
   }
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       {/* Square image - fills full card width */}
-      <div style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden', flexShrink: 0, background: 'rgba(255,255,255,0.04)' }}>
+      <div style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden', background: 'rgba(255,255,255,0.04)' }}>
         <img
           src={imageUrl}
           alt={card.native}
@@ -39,8 +39,8 @@ export default function LearnCardCharacter({ card, lang }) {
         />
       </div>
 
-      {/* Text content fills remaining space */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '14px 20px', textAlign: 'center' }}>
+      {/* Text content */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', padding: '14px 20px', textAlign: 'center' }}>
         {mnemonic && (
           <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: '1.6' }}>
             {mnemonic}
