@@ -45,14 +45,20 @@ export default function LearnCardCharacter({ card, lang }) {
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', padding: '20px 24px' }}>
-        <span style={{ fontSize: 'clamp(64px, 18vw, 90px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
-          {card.native}
-        </span>
-        <div style={{ width: '36px', height: '2px', background: 'rgba(236,72,153,0.5)', borderRadius: '9999px' }} />
-        <span style={{ fontSize: '40px', fontWeight: '700', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.1em' }}>
-          {card.transliteration?.toUpperCase()}
-        </span>
+      <div style={{ display: 'flex', alignItems: 'stretch', padding: '16px 0' }}>
+        <div style={{ flex: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '0 16px' }}>
+          <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>Hiragana</span>
+          <span style={{ fontSize: 'clamp(56px, 16vw, 80px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
+            {card.native}
+          </span>
+        </div>
+        <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)', flexShrink: 0, margin: '4px 0' }} />
+        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '0 16px' }}>
+          <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>Romaji</span>
+          <span style={{ fontSize: '44px', fontWeight: '700', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.05em' }}>
+            {card.transliteration?.toUpperCase()}
+          </span>
+        </div>
       </div>
     </div>
   )
