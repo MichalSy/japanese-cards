@@ -11,7 +11,7 @@ export default function LearnCardCharacter({ card, lang }) {
 
   if (!imageUrl) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '8px 0', textAlign: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '16px', textAlign: 'center' }}>
         <div style={{ fontSize: 'clamp(80px, 22vw, 120px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
           {card.native}
         </div>
@@ -29,8 +29,8 @@ export default function LearnCardCharacter({ card, lang }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-      {/* Image: breaks out of card padding to fill edge-to-edge */}
-      <div style={{ margin: '-16px -16px 0 -16px', height: '200px', borderRadius: '16px 16px 0 0', overflow: 'hidden', background: 'rgba(255,255,255,0.04)', flexShrink: 0 }}>
+      {/* Image fills card top edge-to-edge, no padding needed */}
+      <div style={{ height: '200px', overflow: 'hidden', background: 'rgba(255,255,255,0.04)', flexShrink: 0 }}>
         <img
           src={imageUrl}
           alt={card.native}
@@ -39,19 +39,19 @@ export default function LearnCardCharacter({ card, lang }) {
         />
       </div>
 
-      {/* Mnemonic caption */}
-      {mnemonic && (
-        <div style={{ marginTop: '14px', fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: '1.6' }}>
-          {mnemonic}
+      {/* Text content with its own padding */}
+      <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+        {mnemonic && (
+          <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: '1.6' }}>
+            {mnemonic}
+          </div>
+        )}
+        <div style={{ fontSize: 'clamp(60px, 16vw, 88px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
+          {card.native}
         </div>
-      )}
-
-      {/* Character + transliteration */}
-      <div style={{ marginTop: '10px', fontSize: 'clamp(60px, 16vw, 88px)', lineHeight: 1, fontWeight: '300', color: 'white', textShadow: '0 4px 24px rgba(236,72,153,0.3)' }}>
-        {card.native}
-      </div>
-      <div style={{ marginTop: '8px', fontSize: '24px', fontWeight: '600', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.05em' }}>
-        {card.transliteration}
+        <div style={{ fontSize: '24px', fontWeight: '600', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.05em' }}>
+          {card.transliteration}
+        </div>
       </div>
     </div>
   )
