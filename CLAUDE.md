@@ -43,6 +43,38 @@ http://localhost:3001/api/dev-login?token=aiko-jpcard-dev-2026&redirect=/content
 
 Der Token `aiko-jpcard-dev-2026` ist in `.env.local` als `SUPABASE_DEV_TOKEN` hinterlegt. In Kubernetes/Produktion existiert dieser Token nicht - er ist ausschliesslich fur lokale Entwicklung.
 
+### Schneller Browser-Check mit Dev-Token
+
+Wenn du die App im Browser/Screenshot pruefen willst, immer den echten Browser auf den Dev-Login-Endpoint schicken, nicht nur `curl` verwenden:
+
+```text
+http://localhost:3001/api/dev-login?token=<SUPABASE_DEV_TOKEN>&redirect=/
+```
+
+Erwartetes Ergebnis:
+- Browser-URL endet auf `http://localhost:3001/`
+- Screenshot zeigt die Startseite mit `Japanese Cards`, `Hiragana` und `Katakana`
+- Wenn die URL auf `/login?redirect=%2F` endet, ist der Dev-Login fehlgeschlagen
+
+Wichtige Checks bei Fehlern:
+
+```bash
+node -p "require('./node_modules/@michalsy/aiko-webapp-core/package.json').version"
+```
+
+Die Version muss mindestens `1.1.9` sein. Ab `1.1.9` nutzt der Core fuer Dev-Login Supabase-Fetches mit `cache: 'no-store'`; ohne das kann Next im lokalen Route-Kontext eine alte Magic-Link-Antwort wiederverwenden, was zu `refresh_token_already_used` und Redirect zur Login-Seite fuehrt.
+
+Wenn trotz richtiger Version weiter `/login` kommt:
+
+```powershell
+taskkill /F /IM node.exe /T
+Remove-Item .next -Recurse -Force
+npm install @michalsy/aiko-webapp-core@latest
+npm run dev
+```
+
+Dann den Browser erneut auf die Dev-Login-URL schicken und direkt danach einen Screenshot der Zielseite machen.
+
 ### Chrome mit Remote-Debugging starten
 
 Chrome muss mit `--remote-debugging-port=9222` gestartet werden damit das Chrome DevTools MCP darauf zugreifen kann. Normales Chrome hat keinen Debug-Port.

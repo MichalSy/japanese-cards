@@ -62,6 +62,27 @@ Auth wird von `@michalsy/aiko-webapp-core` verwaltet. Der `prebuild`-Script gene
 die nötigen Auth-Dateien automatisch. Geschützte Routen werden via Next.js Middleware
 abgesichert (Google OAuth erforderlich).
 
+### Lokaler Dev-Login
+
+Für lokale Browser-Checks kann eine echte Supabase-Session ohne Google-OAuth erzeugt
+werden. Voraussetzung ist eine `.env.local` mit `SUPABASE_DEV_TOKEN`,
+`SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL` und
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+
+```bash
+npm run dev
+```
+
+Dann im Browser öffnen:
+
+```text
+http://localhost:3001/api/dev-login?token=<SUPABASE_DEV_TOKEN>&redirect=/
+```
+
+Erwartet: Der Browser landet auf `http://localhost:3001/` und zeigt die Startseite
+mit `Hiragana` und `Katakana`. Wenn stattdessen `/login?redirect=%2F` erscheint,
+Core-Version prüfen: `@michalsy/aiko-webapp-core` muss mindestens `1.1.9` sein.
+
 ## Datenbank (Supabase)
 
 Alle Tabellen nutzen den Prefix `language_cards_`. Neue Tabellen immer mit diesem Prefix anlegen.
