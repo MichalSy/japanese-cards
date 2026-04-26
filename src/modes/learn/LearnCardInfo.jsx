@@ -44,6 +44,18 @@ const GRADIENT_TITLE = {
   WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
 }
 
+function renderIntroTitle(title) {
+  const match = title.match(/^(Willkommen zur )(.+)$/)
+  if (!match) return title
+
+  return (
+    <>
+      <span>{match[1].trim()}</span>
+      <span style={{ display: 'block', whiteSpace: 'nowrap' }}>{match[2]}</span>
+    </>
+  )
+}
+
 function TableEl({ rows, charSize = 48 }) {
   if (!rows.length) return null
   const colCount = Math.max(...rows.map(cells => cells.length))
@@ -90,7 +102,7 @@ function IntroVariant({ title, paragraphs, tableRows }) {
   return (
     <div style={{ width: '100%', textAlign: 'center' }}>
       <div style={{ padding: '30px 20px 22px', display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
-        {title && <h1 style={GRADIENT_TITLE}>{title}</h1>}
+        {title && <h1 style={GRADIENT_TITLE}>{renderIntroTitle(title)}</h1>}
       </div>
       <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.1)' }} />
       <div style={{ padding: '20px', background: 'rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
