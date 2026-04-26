@@ -61,6 +61,9 @@ Reject images when:
 - the object is cute but does not help memory
 - the mnemonic only works in English or only works in German
 - the object name in the prompt does not match the German and English mnemonic text
+- the German word and English word point to different objects in the image
+- the image only makes sense through an English wordplay
+- the German text sounds translated instead of natural
 
 Kana in images is optional. Keep it only when it is rendered correctly.
 
@@ -75,6 +78,21 @@ Every card needs a bridge:
 - ideally both
 
 The bridge must work in German and English. If one language needs a completely different object, choose a different motif or split the idea before generating the image.
+
+Before generating an image, write the intended German and English mnemonic pair first. If the pair is weak, do not generate the image yet.
+
+Use motifs whose names are strong in both languages:
+
+- same or near-same word: Sushi, Sofa, Ninja, Ring, Yuzu
+- clear German/English pair for the same object: Schiff/ship, Kessel/kettle, Rakete/rocket
+- accepted loanword in both languages: Senbei, Karate, Kimono
+
+Avoid motifs that only work in one language:
+
+- English-only puns
+- German-only compounds that do not map to the same image in English
+- vague shape captions such as "this shows the kana"
+- mismatched pairs such as German Hase with English hamster
 
 Good:
 
