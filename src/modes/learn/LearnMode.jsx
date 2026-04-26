@@ -283,7 +283,9 @@ export default function LearnMode({ lesson, cards, lang }) {
   }
 
   const finishLabel = lang === 'de' ? 'Fertig' : 'Finish'
-  const nextLabel = isSummary ? finishLabel : (isLast ? t('learn.finish') : t('learn.next'))
+  const nextFallback = lang === 'de' ? 'Weiter \u2192' : 'Next \u2192'
+  const finishFallback = lang === 'de' ? 'Fertig \u2713' : 'Done \u2713'
+  const nextLabel = isSummary ? finishLabel : (isLast ? t('learn.finish', finishFallback) : t('learn.next', nextFallback))
 
   return (
     <>

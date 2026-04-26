@@ -29,8 +29,32 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   if (!cat) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  // ALL — combine all groups
   if (groupId === 'all') {
+    const { data: practiceGroups, error: practiceError } = await supabase
+      .from('language_cards_practice_groups')
+      .select(`slug, sort_order, language_cards_practice_group_translations (lang_code, name),
+               language_cards_practice_group_cards (sort_order,
+                 language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation)))`)
+      .eq('category_id', cat.id)
+      .order('sort_order')
+
+    if (!practiceError) {
+      const items = (practiceGroups ?? []).flatMap((g: any) => {
+        const gName = pick(g.language_cards_practice_group_translations ?? []).name ?? g.slug
+        return (g.language_cards_practice_group_cards ?? [])
+          .sort((a: any, b: any) => a.sort_order - b.sort_order)
+          .map((entry: any) => entry.language_cards_cards)
+          .filter((c: any) => c?.is_active && c.card_type === cat.card_type)
+          .map((c: any) => mapCard(c, lang, gName))
+      })
+
+      return NextResponse.json({
+        id: `${categoryId}-all`,
+        name: lang === 'de' ? 'Alle kombiniert' : 'All combined',
+        card_type: cat.card_type, items,
+      })
+    }
+
     const { data: groups } = await supabase
       .from('language_cards_groups')
       .select(`slug, sort_order, language_cards_group_translations (lang_code, name),
@@ -52,7 +76,30 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     })
   }
 
-  // SINGLE GROUP
+  const { data: practiceGroup, error: practiceGroupError } = await supabase
+    .from('language_cards_practice_groups')
+    .select(`slug, language_cards_practice_group_translations (lang_code, name),
+             language_cards_categories!inner (slug, card_type),
+             language_cards_practice_group_cards (sort_order,
+               language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation)))`)
+    .eq('slug', groupId)
+    .eq('language_cards_categories.slug', categoryId)
+    .single()
+
+  if (!practiceGroupError && practiceGroup) {
+    const cardType = (practiceGroup as any).language_cards_categories?.card_type ?? 'character'
+    const gt = pick((practiceGroup as any).language_cards_practice_group_translations ?? [])
+    const groupName = gt.name ?? groupId
+
+    const items = ((practiceGroup as any).language_cards_practice_group_cards ?? [])
+      .sort((a: any, b: any) => a.sort_order - b.sort_order)
+      .map((entry: any) => entry.language_cards_cards)
+      .filter((c: any) => c?.is_active && c.card_type === cardType)
+      .map((c: any) => mapCard(c, lang, groupName))
+
+    return NextResponse.json({ id: `${categoryId}-${groupId}`, name: groupName, card_type: cardType, items })
+  }
+
   const { data: group, error } = await supabase
     .from('language_cards_groups')
     .select(`slug, language_cards_group_translations (lang_code, name),

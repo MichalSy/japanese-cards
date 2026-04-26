@@ -50,13 +50,13 @@ export default function ContentTypeView({ params }) {
         const [config, serverProgress, coursesRes] = await Promise.all([
           fetchCategoryWithItems(contentType),
           fetchProgressFromServer(contentType),
-          fetch('/api/learn/courses').then(r => r.ok ? r.json() : { courses: [] }),
+          fetch(`/api/learn/courses?category=${contentType}`).then(r => r.ok ? r.json() : { courses: [] }),
         ])
         setCategoryConfig(config)
         setProgress(serverProgress)
-        const groups = {}
-        for (const group of config.groups) groups[group.id] = group.items || []
-        setGroupData(groups)
+        const practiceGroups = {}
+        for (const group of config.groups) practiceGroups[group.id] = group.items || []
+        setGroupData(practiceGroups)
         setCourses(coursesRes.courses ?? [])
       } catch (err) {
         setError(err.message)
@@ -85,23 +85,6 @@ export default function ContentTypeView({ params }) {
     router.replace(`/content/${contentType}?tab=${newTabId}`, { scroll: false })
   }
 
-  // Map lesson IDs from courses → flat lookup
-  const lessonMap = {}
-  for (const course of courses) {
-    for (const lesson of course.lessons ?? []) {
-      lessonMap[lesson.id] = lesson
-    }
-  }
-
-  // Build ordered lesson list from group lessonIds
-  const lessons = (categoryConfig?.groups ?? [])
-    .filter(g => g.lessonId && lessonMap[g.lessonId])
-    .map(g => ({
-      ...lessonMap[g.lessonId],
-      groupName: g.name,
-      groupChars: (groupData[g.id] || []).map(item => item.native).filter(Boolean).join(''),
-    }))
-
   const categoryName = categoryConfig?.name || categoryConfig?.native_name || ''
 
   if (loading) return (
@@ -125,27 +108,37 @@ export default function ContentTypeView({ params }) {
       <AppContent>
         {activeTab === 'learn' && (
           <div className="space-y-4 fade-in">
-            {lessons.length === 0 ? (
+            {courses.flatMap(course => course.lessons ?? []).length === 0 ? (
               <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', textAlign: 'center', padding: '32px 0' }}>
                 {t('category.noLessons')}
               </div>
-            ) : lessons.map((lesson, i) => (
-              <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.slug}`)}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{ width: '36px', height: '36px', flexShrink: 0, borderRadius: '50%', background: 'linear-gradient(135deg,#ec4899,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: 'white', boxShadow: '0 3px 10px rgba(236,72,153,0.35)' }}>
-                    {i + 1}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{lesson.title}</div>
-                    {lesson.description && (
-                      <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px', letterSpacing: '0.1em' }}>
-                        {lesson.description}
-                      </div>
-                    )}
-                  </div>
-                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px', flexShrink: 0 }}>›</span>
+            ) : courses.map(course => (
+              <div key={course.id} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ padding: '0 2px' }}>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.7)' }}>{course.title ?? course.slug}</div>
+                  {course.description && (
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{course.description}</div>
+                  )}
                 </div>
-              </Card>
+                {(course.lessons ?? []).map((lesson, i) => (
+                  <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.slug}`)}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{ width: '36px', height: '36px', flexShrink: 0, borderRadius: '50%', background: 'linear-gradient(135deg,#ec4899,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: 'white', boxShadow: '0 3px 10px rgba(236,72,153,0.35)' }}>
+                        {i + 1}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '15px', fontWeight: '600', color: 'white' }}>{lesson.title}</div>
+                        {lesson.description && (
+                          <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '2px', letterSpacing: '0.1em' }}>
+                            {lesson.description}
+                          </div>
+                        )}
+                      </div>
+                      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px', flexShrink: 0 }}>{'>'}</span>
+                    </div>
+                  </Card>
+                ))}
+              </div>
             ))}
           </div>
         )}
