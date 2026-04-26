@@ -1,4 +1,5 @@
 const imagePromises = new Map()
+const PRELOAD_TIMEOUT_MS = 2500
 
 export function preloadImage(src) {
   if (!src) return Promise.resolve(null)
@@ -6,15 +7,15 @@ export function preloadImage(src) {
 
   const promise = new Promise((resolve, reject) => {
     const img = new Image()
-    img.onload = async () => {
-      try {
-        if (img.decode) await img.decode()
-      } catch {
-        // The image is already loaded; decode failures should not block display.
-      }
+    const timeout = window.setTimeout(() => resolve(src), PRELOAD_TIMEOUT_MS)
+    img.onload = () => {
+      window.clearTimeout(timeout)
       resolve(src)
     }
-    img.onerror = reject
+    img.onerror = (error) => {
+      window.clearTimeout(timeout)
+      reject(error)
+    }
     img.src = src
   })
 
