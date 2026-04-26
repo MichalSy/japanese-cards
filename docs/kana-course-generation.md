@@ -59,8 +59,12 @@ Reject images when:
 - a frame or card panel appears
 - kana or Latin text is malformed
 - the object is cute but does not help memory
+- the mnemonic only works in English or only works in German
+- the object name in the prompt does not match the German and English mnemonic text
 
 Kana in images is optional. Keep it only when it is rendered correctly.
+
+Do not bulk-approve generated images. Generate at row scale, create a montage, inspect it, reject weak candidates, and only then upload selected finals.
 
 ## Mnemonics
 
@@ -69,6 +73,8 @@ Every card needs a bridge:
 - sound bridge: the object starts with or strongly suggests the kana sound
 - shape bridge: a visible part of the object or action resembles the kana
 - ideally both
+
+The bridge must work in German and English. If one language needs a completely different object, choose a different motif or split the idea before generating the image.
 
 Good:
 
@@ -96,6 +102,8 @@ Text rules:
 - Romaji style is `Ka`, `Ki`, `Shi`, `Tsu`, not `KA`
 - avoid em dashes and AI-looking punctuation
 - validate UTF-8 after every DB update
+- use real German umlauts in user-facing German text: `ä`, `ö`, `ü`
+- never leave ASCII replacements such as `ae`, `oe`, `ue`, `fuer`, `grosse`, `Ruecken`
 
 ## Info And Comparison Cards
 
@@ -147,14 +155,15 @@ For every row:
 1. Research mnemonic ideas.
 2. Decide image concepts.
 3. Generate multiple candidates if needed.
-4. Reject framed, cropped, boring, or malformed images.
-5. Save final images as JPG, max 800x800, below 300 KB where possible.
-6. Upload to Supabase Storage bucket `language-cards` as `{image_id}.jpg`.
-7. Update `language_cards_cards.image_id`.
-8. Update German and English mnemonic text.
-9. Validate UTF-8 and check for `?` or replacement characters.
-10. Open the lesson in the in-app browser and inspect the cards.
-11. If the in-app browser gets stuck, close the tab or open a new in-app browser tab and continue.
+4. Build a montage for the row and inspect it.
+5. Reject framed, cropped, boring, language-mismatched, or malformed images.
+6. Save final images as JPG, max 800x800, below 300 KB where possible.
+7. Upload to Supabase Storage bucket `language-cards` as `{image_id}.jpg`.
+8. Update `language_cards_cards.image_id`.
+9. Update German and English mnemonic text.
+10. Validate UTF-8 and check for `?`, replacement characters, and ASCII umlaut replacements.
+11. Open the lesson in the in-app browser and inspect the cards.
+12. If the in-app browser gets stuck, close the tab or open a new in-app browser tab and continue.
 
 ## Encoding
 

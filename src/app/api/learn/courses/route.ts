@@ -26,8 +26,8 @@ export const GET = requireAuth(async (req: Request, context: any) => {
       id, slug, level, sort_order,
       language_cards_categories!inner (slug, language_id),
       language_cards_learning_course_translations (lang_code, title, description),
-      language_cards_learning_lessons (
-        id, slug, sort_order,
+        language_cards_learning_lessons (
+        id, slug, sort_order, is_active,
         language_cards_learning_lesson_translations (lang_code, title, description)
       )
     `)
@@ -43,6 +43,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
     const result = (learningCourses ?? []).map((c: any) => {
       const ct = pick(c.language_cards_learning_course_translations ?? [])
       const lessons = (c.language_cards_learning_lessons ?? [])
+        .filter((l: any) => l.is_active !== false)
         .sort((a: any, b: any) => a.sort_order - b.sort_order)
         .map((l: any) => {
           const lt = pick(l.language_cards_learning_lesson_translations ?? [])
@@ -58,8 +59,8 @@ export const GET = requireAuth(async (req: Request, context: any) => {
     .from('language_cards_courses')
     .select(`
       id, slug, level, sort_order,
-      language_cards_course_lessons (
-        id, slug, sort_order,
+        language_cards_course_lessons (
+        id, slug, sort_order, is_active,
         language_cards_course_lesson_translations (lang_code, title, description)
       )
     `)
@@ -73,6 +74,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
 
   const result = (courses ?? []).map((c: any) => {
     const lessons = (c.language_cards_course_lessons ?? [])
+      .filter((l: any) => l.is_active !== false)
       .sort((a: any, b: any) => a.sort_order - b.sort_order)
       .map((l: any) => {
         const lt = pick(l.language_cards_course_lesson_translations ?? [])
