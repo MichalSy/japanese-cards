@@ -2,6 +2,11 @@
 
 const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_URL
 
+function formatRomaji(value) {
+  if (!value) return ''
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+}
+
 export default function LearnCardCharacter({ card, lang }) {
   const mnemonic = card.data?.mnemonic?.[lang] ?? card.data?.mnemonic?.en ?? null
   const imageUrl = card.image_id ? `${ASSETS_URL}/${card.image_id}.jpg` : null
@@ -14,7 +19,7 @@ export default function LearnCardCharacter({ card, lang }) {
         </div>
         <div style={{ width: '40px', height: '2px', background: 'rgba(236,72,153,0.5)', borderRadius: '9999px' }} />
         <div style={{ fontSize: '36px', fontWeight: '700', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.08em' }}>
-          {card.transliteration?.toUpperCase()}
+          {formatRomaji(card.transliteration)}
         </div>
         {mnemonic && (
           <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: '1.6', maxWidth: '280px', marginTop: '8px' }}>
@@ -58,7 +63,7 @@ export default function LearnCardCharacter({ card, lang }) {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '0 16px' }}>
           <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>Romaji</span>
           <span style={{ fontSize: '44px', fontWeight: '700', color: 'rgba(236,72,153,0.9)', letterSpacing: '0.05em' }}>
-            {card.transliteration?.toUpperCase()}
+            {formatRomaji(card.transliteration)}
           </span>
         </div>
       </div>

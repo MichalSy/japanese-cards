@@ -82,8 +82,8 @@ function TableEl({ rows, charSize = 48 }) {
                   fontSize: ri === 0 ? `${charSize}px` : '13px',
                   fontWeight: ri === 0 ? '300' : '600',
                   color: ri === 0 ? 'white' : 'rgba(255,255,255,0.4)',
-                  letterSpacing: ri === 0 ? '0' : '0.12em',
-                  textTransform: ri === 0 ? 'none' : 'uppercase',
+                  letterSpacing: ri === 0 ? '0' : '0.04em',
+                  textTransform: 'none',
                   textShadow: ri === 0 ? '0 2px 20px rgba(236,72,153,0.3)' : 'none',
                 }}>
                   {cell}
@@ -131,7 +131,7 @@ function ComparisonVariant({ title, tableRows, paragraphs }) {
               {i > 0 && <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />}
               <div style={{ flex: 1, padding: '24px 12px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                 <div style={{ fontSize: '80px', fontWeight: '300', lineHeight: 1, color: 'white', textShadow: '0 2px 24px rgba(236,72,153,0.35)' }}>{char}</div>
-                {labels[i] && <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.16em', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase' }}>{labels[i]}</div>}
+                {labels[i] && <div style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.04em', color: 'rgba(255,255,255,0.4)' }}>{labels[i]}</div>}
                 {paragraphs[i] && <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', margin: '6px 0 0', lineHeight: '1.5' }}>{parseInline(paragraphs[i])}</p>}
               </div>
             </div>
