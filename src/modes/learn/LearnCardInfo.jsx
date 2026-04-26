@@ -46,16 +46,27 @@ const GRADIENT_TITLE = {
 
 function TableEl({ rows, charSize = 48 }) {
   if (!rows.length) return null
+  const colCount = Math.max(...rows.map(cells => cells.length))
+  const colWidth = `${100 / colCount}%`
   return (
-    <div style={{ overflowX: 'auto', width: '100%' }}>
-      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <div style={{ overflowX: 'hidden', width: '100%', maxWidth: '100%' }}>
+      <table style={{ borderCollapse: 'collapse', width: '100%', tableLayout: 'fixed' }}>
+        <colgroup>
+          {Array.from({ length: colCount }).map((_, i) => (
+            <col key={i} style={{ width: colWidth }} />
+          ))}
+        </colgroup>
         <tbody>
           {rows.map((cells, ri) => (
             <tr key={ri}>
               {cells.map((cell, ci) => (
                 <td key={ci} style={{
-                  padding: ri === 0 ? `${Math.round(charSize * 0.2)}px ${Math.round(charSize * 0.28)}px ${Math.round(charSize * 0.12)}px` : `2px ${Math.round(charSize * 0.28)}px 12px`,
+                  padding: ri === 0 ? `${Math.round(charSize * 0.2)}px 0 ${Math.round(charSize * 0.12)}px` : '2px 0 12px',
                   textAlign: 'center',
+                  width: colWidth,
+                  maxWidth: 0,
+                  overflow: 'hidden',
+                  wordBreak: 'break-word',
                   fontSize: ri === 0 ? `${charSize}px` : '13px',
                   fontWeight: ri === 0 ? '300' : '600',
                   color: ri === 0 ? 'white' : 'rgba(255,255,255,0.4)',

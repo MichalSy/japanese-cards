@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter } from '@/components/Layout'
+import { preloadImage, preloadImagesInBackground } from '@/utils/imagePreload'
 import LearnCardCharacter from './LearnCardCharacter'
 import LearnCardInfo from './LearnCardInfo'
 
@@ -30,15 +31,13 @@ export default function LearnMode({ lesson, cards, lang }) {
   const [quizAnswers, setQuizAnswers] = useState({})
   const [animDir, setAnimDir] = useState('forward')
   const [animKey, setAnimKey] = useState(0)
+  const [currentImageReady, setCurrentImageReady] = useState(false)
 
-  useEffect(() => {
+  const imageUrls = useMemo(() => {
     const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
-    cards.forEach(card => {
-      if (card.image_id) {
-        const img = new Image()
-        img.src = `${assetsUrl}/${card.image_id}.jpg`
-      }
-    })
+    return cards
+      .filter(card => card.image_id)
+      .map(card => `${assetsUrl}/${card.image_id}.jpg`)
   }, [cards])
 
   const dragRef = useRef(null)
@@ -47,6 +46,33 @@ export default function LearnMode({ lesson, cards, lang }) {
   const total = cards.length
   const isSummary = index === total
   const isQuiz = card?.card_type === 'quiz_4_option'
+  const currentImageUrl = card?.image_id
+    ? `${process.env.NEXT_PUBLIC_ASSETS_URL}/${card.image_id}.jpg`
+    : null
+
+  useEffect(() => {
+    preloadImagesInBackground(imageUrls)
+  }, [imageUrls])
+
+  useEffect(() => {
+    if (!currentImageUrl) {
+      setCurrentImageReady(true)
+      return
+    }
+
+    let cancelled = false
+    setCurrentImageReady(false)
+    preloadImage(currentImageUrl)
+      .catch(() => null)
+      .then(() => {
+        if (cancelled) return
+        setCurrentImageReady(true)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [currentImageUrl])
 
   // Shuffle quiz options once per card per session, cached in ref
   const getShuffledOpts = (cardIdx) => {
@@ -272,7 +298,11 @@ export default function LearnMode({ lesson, cards, lang }) {
         </AppHeader>
 
         <AppContent>
-          {isSummary ? (
+          {!currentImageReady ? (
+            <div className="card" style={{ width: '100%', padding: '28px 20px', textAlign: 'center', color: 'rgba(255,255,255,0.55)', fontSize: '15px' }}>
+              {t('loading')}
+            </div>
+          ) : isSummary ? (
             <div
               key={animKey}
               className="card"
