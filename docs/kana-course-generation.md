@@ -47,7 +47,11 @@ Use this framing language instead:
 single cute mascot illustration directly on one continuous plain pastel background,
 background fills the whole square edge to edge,
 no panel, no border, no frame, no rounded rectangle, no white edge,
-full object visible, centered, natural breathing room, not cropped
+full object visible, visually centered with a slight upward bias,
+the lower text overlay may cover a small part of the object,
+but the object must not disappear mostly behind the overlay,
+avoid excessive empty space above the object,
+natural breathing room, not cropped
 ```
 
 Reject images when:
@@ -56,6 +60,8 @@ Reject images when:
 - a limb, spout, tail, ear, hand, or foot is cut off
 - the subject is too large
 - the subject is too small to read
+- the subject sits so low that it mostly disappears behind the mnemonic overlay
+- the subject leaves excessive empty space above and feels incorrectly positioned
 - a frame or card panel appears
 - kana or Latin text is malformed
 - the object is cute but does not help memory
