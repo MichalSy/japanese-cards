@@ -139,6 +139,8 @@ Rules:
 
 - never compare with a character that appears later in the course
 - place the comparison card after the newly introduced character
+- keep the base character cards in gojuon order inside each row
+- do not reorder character cards to make a comparison card easier
 - use comparison cards for real confusion risks, not generic theory
 - keep wording short
 
