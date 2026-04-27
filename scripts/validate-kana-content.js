@@ -10,7 +10,7 @@ function loadEnv(path) {
 }
 
 function isSuspicious(text) {
-  return /[\uFFFD]|Ã|ã|[A-Za-zÄÖÜäöüß]\?[A-Za-zÄÖÜäöüß]/.test(text)
+  return /[\uFFFD]|\u00c3|\u00e3|[A-Za-z\u00c4\u00d6\u00dc\u00e4\u00f6\u00fc\u00df]\?[A-Za-z\u00c4\u00d6\u00dc\u00e4\u00f6\u00fc\u00df]/.test(text)
 }
 
 async function main() {
