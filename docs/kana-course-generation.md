@@ -21,10 +21,17 @@ Style:
 - cute kawaii / chibi / soft anime look
 - rounded shapes
 - friendly face when it fits the object
-- pastel full-bleed background
+- beautiful scenic full-bleed background, not a flat card panel
+- soft pastel lighting with enough contrast for the mascot
 - clean thick outline
-- simple scene
+- simple but charming scene that matches the mnemonic
 - no text unless the kana is intentionally included and correct
+
+Default generator: use imagegen 2 for final course images.
+
+Z-Image is no longer the default for course assets. Only use it for rough ideation
+when explicitly useful; do not keep Z-Image results as finals if imagegen 2 can
+produce the newer scenic kawaii style more reliably.
 
 Hard rule: no visible frame.
 
@@ -44,14 +51,16 @@ Avoid these prompt words because they often create framed images:
 Use this framing language instead:
 
 ```text
-single cute mascot illustration directly on one continuous plain pastel background,
-background fills the whole square edge to edge,
+single cute kawaii mascot illustration in a charming scenic pastel background,
+background fills the whole square edge to edge as one continuous scene,
 no panel, no border, no frame, no rounded rectangle, no white edge,
 full object visible, visually centered with a slight upward bias,
 the lower text overlay may cover a small part of the object,
 but the object must not disappear mostly behind the overlay,
 avoid excessive empty space above the object,
-natural breathing room, not cropped
+natural breathing room, not cropped,
+subject sits in the upper-middle visual area so the app's lower mnemonic overlay
+does not hide the main shape
 ```
 
 Reject images when:
@@ -77,9 +86,9 @@ Do not bulk-approve generated images. Generate at row scale, create a montage, i
 
 Generation workflow:
 
-- try Z-Image first because it is faster
-- use at most two serious Z-Image attempts for the same motif
-- if those attempts do not produce a usable image, switch to the imagegen skill
+- use imagegen 2 as the default generator for production images
+- generate enough candidates to choose a cute, readable, mnemonic-friendly final
+- use Z-Image only for quick rough exploration when useful, not as the default final generator
 - do not keep forcing Z-Image when the composition, cuteness, framing, or mnemonic bridge keeps failing
 - never replace a weak generated image with a hand-built or code-drawn card asset unless the user explicitly asks for that
 
