@@ -19,8 +19,8 @@ async function main() {
   const updates = {
     'h-ta': {
       mnemonic: {
-        de: 'Der Taco beginnt mit Ta\nGabel links, Taco-Bogen rechts',
-        en: 'The taco starts with Ta\nfork on the left, taco curve on the right',
+        de: 'Der Taco beginnt mit Ta\nGabel links, Soßenstreifen rechts',
+        en: 'The taco starts with Ta\nfork left, sauce stripes right',
       },
     },
     'h-ti': {
