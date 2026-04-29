@@ -41,6 +41,7 @@ export default function LearnMode({ lesson, cards, lang }) {
   }, [cards])
 
   const dragRef = useRef(null)
+  const completionSavedRef = useRef(false)
   const shuffleCache = useRef({})
   const card = cards[index]
   const total = cards.length
@@ -105,6 +106,22 @@ export default function LearnMode({ lesson, cards, lang }) {
   const quizCount = quizCardIndices.length
   const correctCount = quizCardIndices.filter(i => quizAnswers[i]?.isCorrect).length
   const passed = quizCount === 0 || correctCount === quizCount
+
+  useEffect(() => {
+    if (!isSummary || !passed || completionSavedRef.current) return
+    completionSavedRef.current = true
+
+    fetch(`/api/learn/lessons/${lesson.slug}/complete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        quiz_count: quizCount,
+        correct_count: correctCount,
+      }),
+    }).catch(() => {
+      completionSavedRef.current = false
+    })
+  }, [isSummary, passed, lesson.slug, quizCount, correctCount])
 
   const goTo = useCallback((newIndex, dir) => {
     if (newIndex < 0 || newIndex > total) return

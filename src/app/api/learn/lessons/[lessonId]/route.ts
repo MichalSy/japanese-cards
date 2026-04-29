@@ -46,7 +46,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     })
 
     return NextResponse.json({
-      lesson: { id: learningLesson.id, title: lt.title ?? learningLesson.slug, description: lt.description ?? null },
+      lesson: { id: learningLesson.id, slug: learningLesson.slug, title: lt.title ?? learningLesson.slug, description: lt.description ?? null },
       lang,
       cards,
     })
@@ -87,7 +87,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   })
 
   return NextResponse.json({
-    lesson: { id: lesson.id, title: lt.title ?? lesson.slug, description: lt.description ?? null },
+    lesson: { id: lesson.id, slug: lesson.slug, title: lt.title ?? lesson.slug, description: lt.description ?? null },
     lang,
     cards,
   })

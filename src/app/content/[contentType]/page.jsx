@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
+import { Check } from 'lucide-react'
 import { fetchCategoryWithItems } from '@/config/api'
 import { useT } from '@/components/I18nContext'
 import { fetchProgressFromServer, computeGroupProgress } from '@/utils/progressStorage'
@@ -123,7 +124,7 @@ export default function ContentTypeView({ params }) {
                 {(course.lessons ?? []).map((lesson, i) => (
                   <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.slug}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <div style={{ width: '36px', height: '36px', flexShrink: 0, borderRadius: '50%', background: 'linear-gradient(135deg,#ec4899,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: 'white', boxShadow: '0 3px 10px rgba(236,72,153,0.35)' }}>
+                      <div style={{ width: '36px', height: '36px', flexShrink: 0, borderRadius: '50%', background: lesson.completed ? 'linear-gradient(135deg,#10b981,#34d399)' : 'linear-gradient(135deg,#ec4899,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: 'white', boxShadow: lesson.completed ? '0 3px 10px rgba(16,185,129,0.32)' : '0 3px 10px rgba(236,72,153,0.35)' }}>
                         {i + 1}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -134,7 +135,17 @@ export default function ContentTypeView({ params }) {
                           </div>
                         )}
                       </div>
-                      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px', flexShrink: 0 }}>{'>'}</span>
+                      {lesson.completed ? (
+                        <div
+                          aria-label="Completed"
+                          title="Completed"
+                          style={{ width: '30px', height: '30px', flexShrink: 0, borderRadius: '50%', background: 'rgba(16,185,129,0.14)', border: '1px solid rgba(52,211,153,0.35)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                          <Check size={17} strokeWidth={3} />
+                        </div>
+                      ) : (
+                        <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px', flexShrink: 0 }}>{'>'}</span>
+                      )}
                     </div>
                   </Card>
                 ))}
