@@ -115,10 +115,21 @@ export default function ContentTypeView({ params }) {
               </div>
             ) : courses.map(course => (
               <div key={course.id} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ padding: '0 2px' }}>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.7)' }}>{course.title ?? course.slug}</div>
-                  {course.description && (
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{course.description}</div>
+                <div style={{ padding: '0 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.7)' }}>{course.title ?? course.slug}</div>
+                    {course.description && (
+                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{course.description}</div>
+                    )}
+                  </div>
+                  {(course.lessons ?? []).length > 0 && (course.lessons ?? []).every(lesson => lesson.completed) && (
+                    <div
+                      aria-label="Course completed"
+                      title="Course completed"
+                      style={{ width: '28px', height: '28px', flexShrink: 0, borderRadius: '50%', background: 'rgba(16,185,129,0.16)', border: '1px solid rgba(52,211,153,0.4)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <Check size={16} strokeWidth={3} />
+                    </div>
                   )}
                 </div>
                 {(course.lessons ?? []).map((lesson, i) => (
