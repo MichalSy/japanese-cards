@@ -1,5 +1,10 @@
 const imagePromises = new Map()
+const loadedImages = new Set()
 const PRELOAD_TIMEOUT_MS = 2500
+
+export function isImagePreloaded(src) {
+  return loadedImages.has(src)
+}
 
 export function preloadImage(src) {
   if (!src) return Promise.resolve(null)
@@ -7,10 +12,14 @@ export function preloadImage(src) {
 
   const promise = new Promise((resolve, reject) => {
     const img = new Image()
-    const timeout = window.setTimeout(() => resolve(src), PRELOAD_TIMEOUT_MS)
+    const markLoaded = () => {
+      loadedImages.add(src)
+      resolve(src)
+    }
+    const timeout = window.setTimeout(markLoaded, PRELOAD_TIMEOUT_MS)
     img.onload = () => {
       window.clearTimeout(timeout)
-      resolve(src)
+      markLoaded()
     }
     img.onerror = (error) => {
       window.clearTimeout(timeout)
@@ -27,6 +36,7 @@ export function preloadImagesInBackground(urls) {
   urls.forEach(url => {
     preloadImage(url).catch(() => {
       imagePromises.delete(url)
+      loadedImages.delete(url)
     })
   })
 }

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter } from '@/components/Layout'
-import { preloadImage, preloadImagesInBackground } from '@/utils/imagePreload'
+import { isImagePreloaded, preloadImage, preloadImagesInBackground } from '@/utils/imagePreload'
 import LearnCardCharacter from './LearnCardCharacter'
 import LearnCardInfo from './LearnCardInfo'
 
@@ -31,7 +31,7 @@ export default function LearnMode({ lesson, cards, lang }) {
   const [quizAnswers, setQuizAnswers] = useState({})
   const [animDir, setAnimDir] = useState('forward')
   const [animKey, setAnimKey] = useState(0)
-  const [currentImageReady, setCurrentImageReady] = useState(false)
+  const [imageReadyState, setImageReadyState] = useState({ url: null, ready: false })
 
   const imageUrls = useMemo(() => {
     const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
@@ -49,6 +49,9 @@ export default function LearnMode({ lesson, cards, lang }) {
   const currentImageUrl = card?.image_id
     ? `${process.env.NEXT_PUBLIC_ASSETS_URL}/${card.image_id}.jpg`
     : null
+  const currentImageReady = !currentImageUrl
+    || isImagePreloaded(currentImageUrl)
+    || (imageReadyState.url === currentImageUrl && imageReadyState.ready)
 
   useEffect(() => {
     preloadImagesInBackground(imageUrls)
@@ -56,17 +59,22 @@ export default function LearnMode({ lesson, cards, lang }) {
 
   useEffect(() => {
     if (!currentImageUrl) {
-      setCurrentImageReady(true)
+      setImageReadyState({ url: null, ready: true })
+      return
+    }
+
+    if (isImagePreloaded(currentImageUrl)) {
+      setImageReadyState({ url: currentImageUrl, ready: true })
       return
     }
 
     let cancelled = false
-    setCurrentImageReady(false)
+    setImageReadyState({ url: currentImageUrl, ready: false })
     preloadImage(currentImageUrl)
       .catch(() => null)
       .then(() => {
         if (cancelled) return
-        setCurrentImageReady(true)
+        setImageReadyState({ url: currentImageUrl, ready: true })
       })
 
     return () => {
