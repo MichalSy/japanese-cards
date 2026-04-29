@@ -83,8 +83,8 @@ async function main() {
       emoji: data.category.emoji,
       color: data.category.color,
       card_type: 'vocabulary',
-      game_modes: ['swipe', 'multiChoice', 'flashcard'],
-      show_all_option: true,
+      game_modes: [],
+      show_all_option: false,
       sort_order: data.category.sort_order,
       is_active: true,
     }, { onConflict: 'language_id,slug' })
@@ -115,34 +115,9 @@ async function main() {
 
   await upsertLearningTranslations(supabase, 'language_cards_learning_course_translations', 'course_id', finalCourseId, data.course.translations)
 
-  const created = { groups: 0, lessons: 0, cards: 0, images: 0 }
+  const created = { lessons: 0, cards: 0, images: 0 }
 
   for (const group of data.groups) {
-    const groupId = randomUUID()
-    const { data: existingGroup, error: groupSelectError } = await supabase
-      .from('language_cards_practice_groups')
-      .select('id')
-      .eq('category_id', finalCategoryId)
-      .eq('slug', group.slug)
-      .maybeSingle()
-    if (groupSelectError) throw groupSelectError
-
-    const finalGroupId = existingGroup?.id ?? groupId
-    const { error: groupError } = await supabase
-      .from('language_cards_practice_groups')
-      .upsert({
-        id: finalGroupId,
-        category_id: finalCategoryId,
-        slug: group.slug,
-        sort_order: group.sort_order,
-        game_modes: ['swipe', 'multiChoice', 'flashcard'],
-        is_active: true,
-      }, { onConflict: 'category_id,slug' })
-    if (groupError) throw groupError
-
-    await upsertTranslations(supabase, 'language_cards_practice_group_translations', 'practice_group_id', finalGroupId, group.translations)
-    created.groups += existingGroup ? 0 : 1
-
     const { data: existingLesson, error: lessonSelectError } = await supabase
       .from('language_cards_learning_lessons')
       .select('id')
@@ -215,11 +190,6 @@ async function main() {
           { card_id: cardId, lang_code: 'en', translation: item.en, example_translation: null, hint: null },
         ], { onConflict: 'card_id,lang_code' })
       if (translationError) throw translationError
-
-      const { error: linkError } = await supabase
-        .from('language_cards_practice_group_cards')
-        .upsert({ practice_group_id: finalGroupId, card_id: cardId, sort_order: index + 1 }, { onConflict: 'practice_group_id,card_id' })
-      if (linkError) throw linkError
 
       const { error: learningLinkError } = await supabase
         .from('language_cards_learning_lesson_cards')
