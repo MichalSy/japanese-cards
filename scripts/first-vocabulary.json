@@ -1,0 +1,83 @@
+{
+  "category": {
+    "slug": "first-words",
+    "native_name": "はじめてのことば",
+    "emoji": "🌱",
+    "color": "#38bdf8",
+    "sort_order": 5,
+    "translations": {
+      "de": { "name": "Erste Vokabeln", "description": "Einfache japanische Wörter für den Anfang: Zuhause, Essen, Farben und Zahlen." },
+      "en": { "name": "First Words", "description": "Simple first Japanese words: home, food, colors, and numbers." }
+    }
+  },
+  "groups": [
+    {
+      "slug": "first-words-home",
+      "sort_order": 1,
+      "translations": { "de": "Zuhause", "en": "At Home" },
+      "items": [
+        { "slug": "fv-tsukue", "native": "つくえ", "transliteration": "tsukue", "de": "Schreibtisch", "en": "desk", "kind": "desk" },
+        { "slug": "fv-isu", "native": "いす", "transliteration": "isu", "de": "Stuhl", "en": "chair", "kind": "chair" },
+        { "slug": "fv-hon", "native": "ほん", "transliteration": "hon", "de": "Buch", "en": "book", "kind": "book" },
+        { "slug": "fv-kagi", "native": "かぎ", "transliteration": "kagi", "de": "Schlüssel", "en": "key", "kind": "key" },
+        { "slug": "fv-tokei", "native": "とけい", "transliteration": "tokei", "de": "Uhr", "en": "clock", "kind": "clock" },
+        { "slug": "fv-mado", "native": "まど", "transliteration": "mado", "de": "Fenster", "en": "window", "kind": "window" },
+        { "slug": "fv-doa", "native": "ドア", "transliteration": "doa", "de": "Tür", "en": "door", "kind": "door" },
+        { "slug": "fv-kaban", "native": "かばん", "transliteration": "kaban", "de": "Tasche", "en": "bag", "kind": "bag" },
+        { "slug": "fv-denwa", "native": "でんわ", "transliteration": "denwa", "de": "Telefon", "en": "phone", "kind": "phone" },
+        { "slug": "fv-koppu", "native": "コップ", "transliteration": "koppu", "de": "Becher", "en": "cup", "kind": "cup" }
+      ]
+    },
+    {
+      "slug": "first-words-food",
+      "sort_order": 2,
+      "translations": { "de": "Essen & Trinken", "en": "Food & Drink" },
+      "items": [
+        { "slug": "fv-mizu", "native": "みず", "transliteration": "mizu", "de": "Wasser", "en": "water", "kind": "water" },
+        { "slug": "fv-ocha", "native": "おちゃ", "transliteration": "ocha", "de": "Tee", "en": "tea", "kind": "tea" },
+        { "slug": "fv-gohan", "native": "ごはん", "transliteration": "gohan", "de": "Reis", "en": "rice", "kind": "rice" },
+        { "slug": "fv-pan", "native": "パン", "transliteration": "pan", "de": "Brot", "en": "bread", "kind": "bread" },
+        { "slug": "fv-ringo", "native": "りんご", "transliteration": "ringo", "de": "Apfel", "en": "apple", "kind": "apple" },
+        { "slug": "fv-banana", "native": "バナナ", "transliteration": "banana", "de": "Banane", "en": "banana", "kind": "banana" },
+        { "slug": "fv-tamago", "native": "たまご", "transliteration": "tamago", "de": "Ei", "en": "egg", "kind": "egg" },
+        { "slug": "fv-sakana", "native": "さかな", "transliteration": "sakana", "de": "Fisch", "en": "fish", "kind": "fish" },
+        { "slug": "fv-niku", "native": "にく", "transliteration": "niku", "de": "Fleisch", "en": "meat", "kind": "meat" },
+        { "slug": "fv-keeki", "native": "ケーキ", "transliteration": "keeki", "de": "Kuchen", "en": "cake", "kind": "cake" }
+      ]
+    },
+    {
+      "slug": "first-words-colors",
+      "sort_order": 3,
+      "translations": { "de": "Farben", "en": "Colors" },
+      "items": [
+        { "slug": "fv-aka", "native": "あか", "transliteration": "aka", "de": "Rot", "en": "red", "kind": "color", "color": "#ef4444" },
+        { "slug": "fv-ao", "native": "あお", "transliteration": "ao", "de": "Blau", "en": "blue", "kind": "color", "color": "#3b82f6" },
+        { "slug": "fv-kiiro", "native": "きいろ", "transliteration": "kiiro", "de": "Gelb", "en": "yellow", "kind": "color", "color": "#facc15" },
+        { "slug": "fv-midori", "native": "みどり", "transliteration": "midori", "de": "Grün", "en": "green", "kind": "color", "color": "#22c55e" },
+        { "slug": "fv-shiro", "native": "しろ", "transliteration": "shiro", "de": "Weiß", "en": "white", "kind": "color", "color": "#f8fafc" },
+        { "slug": "fv-kuro", "native": "くろ", "transliteration": "kuro", "de": "Schwarz", "en": "black", "kind": "color", "color": "#111827" },
+        { "slug": "fv-pinku", "native": "ピンク", "transliteration": "pinku", "de": "Pink", "en": "pink", "kind": "color", "color": "#ec4899" },
+        { "slug": "fv-orenji", "native": "オレンジ", "transliteration": "orenji", "de": "Orange", "en": "orange", "kind": "color", "color": "#f97316" },
+        { "slug": "fv-murasaki", "native": "むらさき", "transliteration": "murasaki", "de": "Lila", "en": "purple", "kind": "color", "color": "#8b5cf6" },
+        { "slug": "fv-chairo", "native": "ちゃいろ", "transliteration": "chairo", "de": "Braun", "en": "brown", "kind": "color", "color": "#92400e" }
+      ]
+    },
+    {
+      "slug": "first-words-numbers",
+      "sort_order": 4,
+      "translations": { "de": "Zahlen 1–10", "en": "Numbers 1–10" },
+      "items": [
+        { "slug": "fv-ichi", "native": "いち", "transliteration": "ichi", "de": "eins", "en": "one", "kind": "number", "number": 1 },
+        { "slug": "fv-ni", "native": "に", "transliteration": "ni", "de": "zwei", "en": "two", "kind": "number", "number": 2 },
+        { "slug": "fv-san", "native": "さん", "transliteration": "san", "de": "drei", "en": "three", "kind": "number", "number": 3 },
+        { "slug": "fv-yon", "native": "よん", "transliteration": "yon", "de": "vier", "en": "four", "kind": "number", "number": 4 },
+        { "slug": "fv-go", "native": "ご", "transliteration": "go", "de": "fünf", "en": "five", "kind": "number", "number": 5 },
+        { "slug": "fv-roku", "native": "ろく", "transliteration": "roku", "de": "sechs", "en": "six", "kind": "number", "number": 6 },
+        { "slug": "fv-nana", "native": "なな", "transliteration": "nana", "de": "sieben", "en": "seven", "kind": "number", "number": 7 },
+        { "slug": "fv-hachi", "native": "はち", "transliteration": "hachi", "de": "acht", "en": "eight", "kind": "number", "number": 8 },
+        { "slug": "fv-kyuu", "native": "きゅう", "transliteration": "kyuu", "de": "neun", "en": "nine", "kind": "number", "number": 9 },
+        { "slug": "fv-juu", "native": "じゅう", "transliteration": "juu", "de": "zehn", "en": "ten", "kind": "number", "number": 10 }
+      ]
+    }
+  ]
+}
