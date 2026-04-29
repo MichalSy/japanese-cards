@@ -14,11 +14,12 @@ export const POST = requireAuth(async (req: Request, context: any) => {
     .eq('slug', body.category_slug)
     .single()
 
-  // Resolve group_id from slug (optional)
+  // Resolve practice group id from slug (optional).
+  // language_cards_user_sessions.group_id still stores the copied UUID.
   let groupId: string | null = null
   if (body.group_slug && body.group_slug !== 'all' && cat) {
     const { data: grp } = await supabase
-      .from('language_cards_groups')
+      .from('language_cards_practice_groups')
       .select('id')
       .eq('slug', body.group_slug)
       .eq('category_id', cat.id)

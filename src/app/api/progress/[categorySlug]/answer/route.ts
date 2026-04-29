@@ -11,17 +11,22 @@ export const POST = requireAuth(async (req: Request, context: any) => {
 
   const supabase = await createServerSupabaseClient()
 
-  const { data: card } = await supabase
-    .from('language_cards_cards')
-    .select('id, language_cards_groups!inner(category_id, language_cards_categories!inner(id, slug))')
-    .eq('slug', cardSlug)
-    .eq('language_cards_groups.language_cards_categories.slug', categorySlug)
-    .single()
+  const { data: practiceCard } = await supabase
+    .from('language_cards_practice_group_cards')
+    .select(`
+      card_id,
+      language_cards_cards!inner(slug),
+      language_cards_practice_groups!inner(category_id, language_cards_categories!inner(id, slug))
+    `)
+    .eq('language_cards_cards.slug', cardSlug)
+    .eq('language_cards_practice_groups.language_cards_categories.slug', categorySlug)
+    .limit(1)
+    .maybeSingle()
 
-  if (!card) return NextResponse.json({ error: 'Card not found' }, { status: 404 })
+  if (!practiceCard) return NextResponse.json({ error: 'Card not found' }, { status: 404 })
 
-  const categoryId = (card as any).language_cards_groups?.language_cards_categories?.id
-  const cardId = card.id
+  const categoryId = (practiceCard as any).language_cards_practice_groups?.language_cards_categories?.id
+  const cardId = practiceCard.card_id
   const now = new Date().toISOString()
 
   const { data: existing } = await supabase
@@ -51,7 +56,6 @@ export const POST = requireAuth(async (req: Request, context: any) => {
       })
       .eq('id', existing.id)
   } else {
-    const justMastered = isCorrect && 1 >= 3 // only if threshold is 1 (not the case here)
     await supabase
       .from('language_cards_user_card_progress')
       .insert({

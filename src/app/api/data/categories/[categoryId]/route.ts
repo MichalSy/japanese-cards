@@ -18,7 +18,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
            language_cards_card_translations (lang_code, translation, example_translation)))`
     : `slug, sort_order, game_modes, language_cards_practice_group_translations (lang_code, name)`
 
-  const { data: practiceCat, error: practiceError } = await supabase
+  const { data: cat, error } = await supabase
     .from('language_cards_categories')
     .select(`
       slug, native_name, emoji, color, card_type, game_modes, show_all_option, is_active,
@@ -29,72 +29,20 @@ export const GET = requireAuth(async (req: Request, context: any) => {
     .eq('slug', categoryId)
     .single()
 
-  if (!practiceError && practiceCat) {
-    const ct = pick((practiceCat as any).language_cards_category_translations ?? [])
-    const groups = ((practiceCat as any).language_cards_practice_groups ?? [])
-      .sort((a: any, b: any) => a.sort_order - b.sort_order)
-      .map((g: any) => {
-        const gt = pick(g.language_cards_practice_group_translations ?? [])
-        const base = { id: g.slug, name: gt.name ?? g.slug, gameModes: g.game_modes ?? null }
-        if (!includeItems) return base
-
-        const items = (g.language_cards_practice_group_cards ?? [])
-          .sort((a: any, b: any) => a.sort_order - b.sort_order)
-          .map((entry: any) => entry.language_cards_cards)
-          .filter((c: any) => c?.is_active)
-          .map((c: any) => {
-            const ct2 = pick(c.language_cards_card_translations ?? [])
-            return {
-              id: c.slug, native: c.native, transliteration: c.transliteration ?? null,
-              word_type: c.word_type ?? null, example_native: c.example_native ?? null,
-              translation: ct2.translation ?? null, example_translation: ct2.example_translation ?? null,
-              difficulty: c.difficulty ?? null, context: c.context ?? null,
-              group_name: gt.name ?? g.slug,
-            }
-          })
-        return { ...base, items }
-      })
-
-    return NextResponse.json({
-      id: practiceCat.slug, native_name: practiceCat.native_name,
-      name: ct.name ?? practiceCat.native_name, description: ct.description ?? '',
-      emoji: practiceCat.emoji, color: practiceCat.color, cardType: practiceCat.card_type,
-      enabled: practiceCat.is_active, showAllOption: practiceCat.show_all_option,
-      gameModes: practiceCat.game_modes ?? [], groups,
-    })
-  }
-
-  const groupSelect = includeItems
-    ? `slug, sort_order, lesson_id, game_modes, language_cards_group_translations (lang_code, name),
-       language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active,
-         language_cards_card_translations (lang_code, translation, example_translation))`
-    : `slug, sort_order, lesson_id, game_modes, language_cards_group_translations (lang_code, name)`
-
-  const { data: cat, error } = await supabase
-    .from('language_cards_categories')
-    .select(`
-      slug, native_name, emoji, color, card_type, game_modes, show_all_option, is_active,
-      language_cards_category_translations (lang_code, name, description),
-      language_cards_groups (${groupSelect})
-    `)
-    .eq('language_id', 'ja')
-    .eq('slug', categoryId)
-    .single()
-
   if (error || !cat) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const ct = pick((cat as any).language_cards_category_translations ?? [])
-
-  const groups = ((cat as any).language_cards_groups ?? [])
+  const groups = ((cat as any).language_cards_practice_groups ?? [])
     .sort((a: any, b: any) => a.sort_order - b.sort_order)
     .map((g: any) => {
-      const gt = pick(g.language_cards_group_translations ?? [])
-      const base = { id: g.slug, name: gt.name ?? g.slug, lessonId: g.lesson_id ?? null, gameModes: g.game_modes ?? null }
+      const gt = pick(g.language_cards_practice_group_translations ?? [])
+      const base = { id: g.slug, name: gt.name ?? g.slug, gameModes: g.game_modes ?? null }
       if (!includeItems) return base
 
-      const items = (g.language_cards_cards ?? [])
-        .filter((c: any) => c.is_active)
+      const items = (g.language_cards_practice_group_cards ?? [])
         .sort((a: any, b: any) => a.sort_order - b.sort_order)
+        .map((entry: any) => entry.language_cards_cards)
+        .filter((c: any) => c?.is_active)
         .map((c: any) => {
           const ct2 = pick(c.language_cards_card_translations ?? [])
           return {
@@ -105,7 +53,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
             group_name: gt.name ?? g.slug,
           }
         })
-      return { ...base, items, lessonId: g.lesson_id ?? null, gameModes: g.game_modes ?? null }
+      return { ...base, items }
     })
 
   return NextResponse.json({

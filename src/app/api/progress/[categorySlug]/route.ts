@@ -19,15 +19,31 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   if (!cat) return NextResponse.json({ progress: {} })
 
-  const { data: progressRows } = await supabase
+  const { data: practiceCards, error: practiceCardsError } = await supabase
+    .from('language_cards_practice_group_cards')
+    .select('card_id, language_cards_cards!inner(slug), language_cards_practice_groups!inner(category_id)')
+    .eq('language_cards_practice_groups.category_id', cat.id)
+
+  if (practiceCardsError) return NextResponse.json({ error: practiceCardsError.message }, { status: 500 })
+
+  const cardIds = Array.from(new Set((practiceCards ?? []).map((row: any) => row.card_id)))
+  if (!cardIds.length) return NextResponse.json({ progress: {} })
+
+  const slugByCardId = new Map(
+    (practiceCards ?? []).map((row: any) => [row.card_id, row.language_cards_cards?.slug])
+  )
+
+  const { data: progressRows, error: progressError } = await supabase
     .from('language_cards_user_card_progress')
-    .select('card_id, correct_count, incorrect_count, last_reviewed_at, language_cards_cards!inner(slug, language_cards_groups!inner(category_id))')
+    .select('card_id, correct_count, incorrect_count, last_reviewed_at')
     .eq('user_id', user.id)
-    .eq('language_cards_cards.language_cards_groups.category_id', cat.id)
+    .in('card_id', cardIds)
+
+  if (progressError) return NextResponse.json({ error: progressError.message }, { status: 500 })
 
   const progress: Record<string, { score: number; learned: boolean }> = {}
   for (const row of progressRows ?? []) {
-    const slug = (row as any).language_cards_cards?.slug
+    const slug = slugByCardId.get((row as any).card_id)
     if (slug) {
       progress[slug] = {
         score: computeScore(row.correct_count, row.incorrect_count),
@@ -40,7 +56,6 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 })
 
 export const POST = requireAuth(async (req: Request, context: any) => {
-  const { categorySlug } = await context.params
   const { user } = context
   const body = await req.json()
   const results: { cardSlug: string; isCorrect: boolean }[] = body.results ?? []

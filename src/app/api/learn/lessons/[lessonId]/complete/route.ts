@@ -21,7 +21,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
     return NextResponse.json({ ok: true, completed: false })
   }
 
-  const { data: learningLesson, error: learningError } = await supabase
+  const { data: lesson, error: lessonError } = await supabase
     .from('language_cards_learning_lessons')
     .select(`
       id, slug,
@@ -32,28 +32,12 @@ export const POST = requireAuth(async (req: Request, context: any) => {
     .eq('slug', lessonId)
     .single()
 
-  let quizCardIds = ((learningLesson as any)?.language_cards_learning_lesson_cards ?? [])
+  if (lessonError || !lesson) return NextResponse.json({ error: 'Lesson not found' }, { status: 404 })
+
+  const quizCardIds = ((lesson as any).language_cards_learning_lesson_cards ?? [])
     .map((row: any) => row.language_cards_cards)
     .filter((card: any) => card?.card_type === 'quiz_4_option')
     .map((card: any) => card.id)
-
-  if (learningError || !learningLesson) {
-    const { data: legacyLesson } = await supabase
-      .from('language_cards_course_lessons')
-      .select(`
-        id, slug,
-        language_cards_course_lesson_cards (
-          language_cards_cards (id, card_type)
-        )
-      `)
-      .eq('slug', lessonId)
-      .single()
-
-    quizCardIds = ((legacyLesson as any)?.language_cards_course_lesson_cards ?? [])
-      .map((row: any) => row.language_cards_cards)
-      .filter((card: any) => card?.card_type === 'quiz_4_option')
-      .map((card: any) => card.id)
-  }
 
   if (quizCardIds.length === 0) {
     return NextResponse.json({ ok: true, completed: true })
