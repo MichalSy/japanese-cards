@@ -75,6 +75,14 @@ Kana in images is optional. Keep it only when it is rendered correctly.
 
 Do not bulk-approve generated images. Generate at row scale, create a montage, inspect it, reject weak candidates, and only then upload selected finals.
 
+Generation workflow:
+
+- try Z-Image first because it is faster
+- use at most two serious Z-Image attempts for the same motif
+- if those attempts do not produce a usable image, switch to the imagegen skill
+- do not keep forcing Z-Image when the composition, cuteness, framing, or mnemonic bridge keeps failing
+- never replace a weak generated image with a hand-built or code-drawn card asset unless the user explicitly asks for that
+
 ## Mnemonics
 
 Every card needs a bridge:

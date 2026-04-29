@@ -19,8 +19,8 @@ async function main() {
   const updates = {
     'h-ta': {
       mnemonic: {
-        de: 'Links steht die T-Kreuzung\nrechts führen zwei Kurven zu た',
-        en: 'The T-junction is on the left\ntwo right-side curves make た',
+        de: 'Der Taco beginnt mit Ta\nGabel links, Taco-Bogen rechts',
+        en: 'The taco starts with Ta\nfork on the left, taco curve on the right',
       },
     },
     'h-ti': {
