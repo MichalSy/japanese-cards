@@ -10,6 +10,15 @@
       "en": { "name": "First Words", "description": "Simple first Japanese words: home, food, colors, and numbers." }
     }
   },
+  "course": {
+    "slug": "first-words-basics",
+    "level": "beginner",
+    "sort_order": 1,
+    "translations": {
+      "de": { "title": "Erste Vokabeln", "description": "Vier kurze Lernlektionen mit einfachen japanischen Alltagswörtern." },
+      "en": { "title": "First Words", "description": "Four short learning lessons with simple everyday Japanese words." }
+    }
+  },
   "groups": [
     {
       "slug": "first-words-home",

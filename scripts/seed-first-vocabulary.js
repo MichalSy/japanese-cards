@@ -45,6 +45,19 @@ async function upsertTranslations(supabase, table, keyName, keyValue, translatio
   if (error) throw error
 }
 
+async function upsertLearningTranslations(supabase, table, keyName, keyValue, translations) {
+  const rows = Object.entries(translations).map(([lang_code, value]) => ({
+    [keyName]: keyValue,
+    lang_code,
+    title: value.title,
+    description: value.description ?? null,
+  }))
+
+  const conflict = `${keyName},lang_code`
+  const { error } = await supabase.from(table).upsert(rows, { onConflict: conflict })
+  if (error) throw error
+}
+
 async function main() {
   loadEnv('.env.local')
   const data = JSON.parse(fs.readFileSync('scripts/first-vocabulary.json', 'utf8'))
@@ -79,7 +92,30 @@ async function main() {
 
   await upsertTranslations(supabase, 'language_cards_category_translations', 'category_id', finalCategoryId, data.category.translations)
 
-  const created = { groups: 0, cards: 0, images: 0 }
+  const { data: existingCourse, error: courseSelectError } = await supabase
+    .from('language_cards_learning_courses')
+    .select('id')
+    .eq('category_id', finalCategoryId)
+    .eq('slug', data.course.slug)
+    .maybeSingle()
+  if (courseSelectError) throw courseSelectError
+
+  const finalCourseId = existingCourse?.id ?? randomUUID()
+  const { error: courseError } = await supabase
+    .from('language_cards_learning_courses')
+    .upsert({
+      id: finalCourseId,
+      category_id: finalCategoryId,
+      slug: data.course.slug,
+      level: data.course.level,
+      sort_order: data.course.sort_order,
+      is_active: true,
+    }, { onConflict: 'category_id,slug' })
+  if (courseError) throw courseError
+
+  await upsertLearningTranslations(supabase, 'language_cards_learning_course_translations', 'course_id', finalCourseId, data.course.translations)
+
+  const created = { groups: 0, lessons: 0, cards: 0, images: 0 }
 
   for (const group of data.groups) {
     const groupId = randomUUID()
@@ -106,6 +142,38 @@ async function main() {
 
     await upsertTranslations(supabase, 'language_cards_practice_group_translations', 'practice_group_id', finalGroupId, group.translations)
     created.groups += existingGroup ? 0 : 1
+
+    const { data: existingLesson, error: lessonSelectError } = await supabase
+      .from('language_cards_learning_lessons')
+      .select('id')
+      .eq('course_id', finalCourseId)
+      .eq('slug', group.slug)
+      .maybeSingle()
+    if (lessonSelectError) throw lessonSelectError
+
+    const finalLessonId = existingLesson?.id ?? randomUUID()
+    const { error: lessonError } = await supabase
+      .from('language_cards_learning_lessons')
+      .upsert({
+        id: finalLessonId,
+        course_id: finalCourseId,
+        slug: group.slug,
+        sort_order: group.sort_order,
+        is_active: true,
+      }, { onConflict: 'course_id,slug' })
+    if (lessonError) throw lessonError
+
+    await upsertLearningTranslations(
+      supabase,
+      'language_cards_learning_lesson_translations',
+      'lesson_id',
+      finalLessonId,
+      {
+        de: { title: group.translations.de, description: `${group.items.length} einfache Wörter` },
+        en: { title: group.translations.en, description: `${group.items.length} simple words` },
+      }
+    )
+    created.lessons += existingLesson ? 0 : 1
 
     for (let index = 0; index < group.items.length; index++) {
       const item = group.items[index]
@@ -152,6 +220,11 @@ async function main() {
         .from('language_cards_practice_group_cards')
         .upsert({ practice_group_id: finalGroupId, card_id: cardId, sort_order: index + 1 }, { onConflict: 'practice_group_id,card_id' })
       if (linkError) throw linkError
+
+      const { error: learningLinkError } = await supabase
+        .from('language_cards_learning_lesson_cards')
+        .upsert({ lesson_id: finalLessonId, card_id: cardId, sort_order: index + 1 }, { onConflict: 'lesson_id,card_id' })
+      if (learningLinkError) throw learningLinkError
     }
   }
 
