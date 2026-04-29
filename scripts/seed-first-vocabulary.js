@@ -15,6 +15,21 @@ function allItems(data) {
   return data.groups.flatMap((group) => group.items.map((item, index) => ({ group, item, index })))
 }
 
+function quizOptions(group, correctIndex) {
+  const items = group.items
+  const ordered = [items[correctIndex]]
+  for (let offset = 1; ordered.length < 4 && offset < items.length; offset++) {
+    ordered.push(items[(correctIndex + offset) % items.length])
+  }
+
+  return ordered.map((item, index) => ({
+    default_text: item.en,
+    translations: { de: item.de, en: item.en },
+    is_correct: index === 0,
+    sort_order: index + 1,
+  }))
+}
+
 async function uploadImageIfNeeded(supabase, item, existingImageId) {
   if (existingImageId && process.env.FORCE_FIRST_VOCAB_IMAGES !== '1') return existingImageId
 
@@ -115,7 +130,7 @@ async function main() {
 
   await upsertLearningTranslations(supabase, 'language_cards_learning_course_translations', 'course_id', finalCourseId, data.course.translations)
 
-  const created = { lessons: 0, cards: 0, images: 0 }
+  const created = { lessons: 0, cards: 0, quizzes: 0, images: 0 }
 
   for (const group of data.groups) {
     const { data: existingLesson, error: lessonSelectError } = await supabase
@@ -195,6 +210,51 @@ async function main() {
         .from('language_cards_learning_lesson_cards')
         .upsert({ lesson_id: finalLessonId, card_id: cardId, sort_order: index + 1 }, { onConflict: 'lesson_id,card_id' })
       if (learningLinkError) throw learningLinkError
+    }
+
+    for (let index = 0; index < group.items.length; index++) {
+      const item = group.items[index]
+      const quizSlug = `${item.slug}-quiz`
+      const { data: existingQuiz, error: quizSelectError } = await supabase
+        .from('language_cards_cards')
+        .select('id')
+        .eq('slug', quizSlug)
+        .maybeSingle()
+      if (quizSelectError) throw quizSelectError
+
+      const quizCardId = existingQuiz?.id ?? randomUUID()
+      const { error: quizError } = await supabase
+        .from('language_cards_cards')
+        .upsert({
+          id: quizCardId,
+          group_id: null,
+          slug: quizSlug,
+          card_type: 'quiz_4_option',
+          native: item.native,
+          transliteration: item.transliteration,
+          word_type: null,
+          difficulty: 'beginner',
+          context: 'first-words',
+          sort_order: group.items.length + index + 1,
+          is_active: true,
+          image_id: null,
+          data: {
+            quiz_type: 'vocabulary_translation',
+            source_card_slug: item.slug,
+            question: {
+              de: `Was bedeutet ${item.native}?`,
+              en: `What does ${item.native} mean?`,
+            },
+            options: quizOptions(group, index),
+          },
+        })
+      if (quizError) throw quizError
+      created.quizzes += existingQuiz ? 0 : 1
+
+      const { error: quizLinkError } = await supabase
+        .from('language_cards_learning_lesson_cards')
+        .upsert({ lesson_id: finalLessonId, card_id: quizCardId, sort_order: group.items.length + index + 1 }, { onConflict: 'lesson_id,card_id' })
+      if (quizLinkError) throw quizLinkError
     }
   }
 

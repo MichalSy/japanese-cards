@@ -28,7 +28,8 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     .select(`
       sort_order,
       language_cards_cards (
-        id, slug, card_type, native, transliteration, image_id, audio_url, data
+        id, slug, card_type, native, transliteration, image_id, audio_url, data,
+        language_cards_card_translations (lang_code, translation, example_translation, hint)
       )
     `)
     .eq('lesson_id', lesson.id)
@@ -40,10 +41,15 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   const cards = (lessonCards ?? []).map((lc: any) => {
     const c = lc.language_cards_cards
+    const translation = pick(c.language_cards_card_translations ?? [])
     return {
       id: c.id, slug: c.slug, card_type: c.card_type,
       native: c.native ?? null, transliteration: c.transliteration ?? null,
       image_id: c.image_id ?? null, audio_url: c.audio_url ?? null,
+      translation: translation.translation ?? null,
+      example_translation: translation.example_translation ?? null,
+      hint: translation.hint ?? null,
+      translations: c.language_cards_card_translations ?? [],
       data: c.data ?? null,
     }
   })

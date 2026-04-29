@@ -7,6 +7,7 @@ import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter } from '@/components/Layout'
 import { isImagePreloaded, preloadImage, preloadImagesInBackground } from '@/utils/imagePreload'
 import LearnCardCharacter from './LearnCardCharacter'
+import LearnCardVocabulary from './LearnCardVocabulary'
 import LearnCardInfo from './LearnCardInfo'
 
 function randomShuffle(arr) {
@@ -158,8 +159,13 @@ export default function LearnMode({ lesson, cards, lang }) {
 
   const renderQuizContent = () => {
     const answerData = quizAnswers[index] ?? null
-    const label = lang === 'de' ? 'Das Hiragana-Zeichen fur:' : 'The Hiragana character for:'
+    const question = card.data?.question?.[lang] ?? card.data?.question?.en ?? card.data?.question?.default ?? null
+    const quizType = card.data?.quiz_type ?? 'character_choice'
+    const isVocabularyQuiz = quizType === 'vocabulary_translation'
+    const label = question ?? (lang === 'de' ? 'Das Hiragana-Zeichen für:' : 'The Hiragana character for:')
     const correct = answerData?.isCorrect ?? false
+    const correctOpt = shuffledOpts.find(o => o.is_correct)
+    const correctText = correctOpt?.translations?.[lang] ?? correctOpt?.default_text
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -177,13 +183,19 @@ export default function LearnMode({ lesson, cards, lang }) {
             {label}
           </div>
           <div style={{
-            fontSize: 'clamp(96px, 26vw, 130px)', fontWeight: '800', lineHeight: 1,
+            fontSize: isVocabularyQuiz ? 'clamp(54px, 15vw, 82px)' : 'clamp(96px, 26vw, 130px)',
+            fontWeight: '800', lineHeight: 1.08, textAlign: 'center', maxWidth: '100%', overflowWrap: 'anywhere',
             background: 'linear-gradient(135deg, #ec4899, #a855f7)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
             filter: 'drop-shadow(0 0 32px rgba(236,72,153,0.4))',
           }}>
-            {card.transliteration?.toUpperCase()}
+            {isVocabularyQuiz ? card.native : card.transliteration?.toUpperCase()}
           </div>
+          {isVocabularyQuiz && card.transliteration && (
+            <div style={{ fontSize: '22px', fontWeight: '800', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.03em' }}>
+              {card.transliteration}
+            </div>
+          )}
 
           {/* Feedback strip - absolute overlay, no layout shift */}
           <div style={{
@@ -200,7 +212,7 @@ export default function LearnMode({ lesson, cards, lang }) {
             pointerEvents: 'none',
           }}>
             {answerData != null
-              ? (correct ? t('learn.correct') : `${t('learn.wrong')} ${shuffledOpts.find(o => o.is_correct)?.default_text}`)
+              ? (correct ? t('learn.correct') : `${t('learn.wrong')} ${correctText}`)
               : ''}
           </div>
         </div>
@@ -226,9 +238,9 @@ export default function LearnMode({ lesson, cards, lang }) {
                 disabled={answerData != null}
                 onClick={() => answerData == null && setQuizAnswers(prev => ({ ...prev, [index]: { selectedIndex: i, isCorrect: opt.is_correct } }))}
                 style={{
-                  height: '82px', padding: '0',
+                  minHeight: isVocabularyQuiz ? '72px' : '82px', padding: isVocabularyQuiz ? '10px 12px' : '0',
                   background: bg, border: `1.5px solid ${borderColor}`, borderRadius: '18px',
-                  color, fontSize: '38px', fontWeight: '300',
+                  color, fontSize: isVocabularyQuiz ? 'clamp(17px, 4.8vw, 24px)' : '38px', fontWeight: isVocabularyQuiz ? '800' : '300', lineHeight: 1.15,
                   cursor: answerData != null ? 'default' : 'pointer',
                   transition: 'background 0.15s, border-color 0.15s, opacity 0.2s',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', opacity,
@@ -303,6 +315,7 @@ export default function LearnMode({ lesson, cards, lang }) {
     if (!card) return null
     if (isQuiz) return renderQuizContent()
     if (card.card_type === 'character') return <LearnCardCharacter card={card} lang={lang} />
+    if (card.card_type === 'vocabulary') return <LearnCardVocabulary card={card} lang={lang} />
     if (card.card_type === 'info') return <LearnCardInfo card={card} lang={lang} />
     return <LearnCardCharacter card={card} lang={lang} />
   }
@@ -352,7 +365,7 @@ export default function LearnMode({ lesson, cards, lang }) {
               onPointerDown={onPointerDown}
               onPointerUp={onPointerUp}
             >
-              <div className="card" style={{ width: '100%', padding: (card.card_type === 'info' || (card.card_type === 'character' && card.image_id)) ? 0 : undefined, overflow: 'hidden' }}>
+              <div className="card" style={{ width: '100%', padding: (card.card_type === 'info' || ((card.card_type === 'character' || card.card_type === 'vocabulary') && card.image_id)) ? 0 : undefined, overflow: 'hidden' }}>
                 {renderCardContent()}
               </div>
             </div>
