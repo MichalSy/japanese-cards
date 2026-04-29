@@ -172,8 +172,13 @@ Create Hiragana and Katakana rows in gojuon order:
 8. Ya row
 9. Ra row
 10. Wa/N row
-11. Dakuten and handakuten
-12. Small kana and combinations
+11. Dakuten K row: K becomes G
+12. Dakuten S row: S becomes Z
+13. Dakuten T row: T becomes D
+14. Dakuten H row: H becomes B
+15. Handakuten P row: H becomes P
+16. Small Ya Yu Yo combinations
+17. Small Tsu pause
 
 Each row should contain:
 
@@ -181,6 +186,10 @@ Each row should contain:
 - character cards
 - comparison cards only after relevant characters
 - quiz cards with strong distractors
+
+Do not put all dakuten, handakuten, small kana, and combinations into one large
+lesson. Split them into row-sized lessons so the learner only has to understand
+one sound change or combination rule at a time.
 
 ## Validation Checklist
 
