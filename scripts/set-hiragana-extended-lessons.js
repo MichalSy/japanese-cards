@@ -12,7 +12,7 @@ function loadEnv(path) {
   }
 }
 
-async function upsertLesson(supabase, courseId, slug, sortOrder, titles, isActive = true) {
+async function upsertLesson(supabase, courseId, slug, sortOrder, titles, descriptions = {}, isActive = true) {
   const { data: existing, error: selectError } = await supabase
     .from('language_cards_course_lessons')
     .select('id')
@@ -41,7 +41,7 @@ async function upsertLesson(supabase, courseId, slug, sortOrder, titles, isActiv
         lesson_id: id,
         lang_code,
         title,
-        description: null,
+        description: descriptions[lang_code] ?? null,
       }, { onConflict: 'lesson_id,lang_code' })
 
     if (translationError) throw translationError
@@ -181,7 +181,8 @@ async function writeLesson(supabase, courseId, lesson, groupId) {
     lesson.slug,
     lesson.sortOrder,
     lesson.titles,
-    true
+    lesson.descriptions ?? {},
+    lesson.isActive !== false
   )
 
   const ids = []
@@ -245,7 +246,8 @@ async function main() {
     {
       slug: 'hiragana-dakuten-k-row',
       sortOrder: 11,
-      titles: { de: 'Dakuten: K wird G', en: 'Dakuten: K becomes G' },
+      titles: { de: 'G-Reihe', en: 'G row' },
+      descriptions: { de: `${k.ga}${k.gi}${k.gu}${k.ge}${k.go}`, en: `${k.ga}${k.gi}${k.gu}${k.ge}${k.go}` },
       groupId: dakutenGroupId,
       cards: [
         info(
@@ -266,7 +268,8 @@ async function main() {
     {
       slug: 'hiragana-dakuten-s-row',
       sortOrder: 12,
-      titles: { de: 'Dakuten: S wird Z', en: 'Dakuten: S becomes Z' },
+      titles: { de: 'Z-Reihe', en: 'Z row' },
+      descriptions: { de: `${k.za}${k.ji}${k.zu}${k.ze}${k.zo}`, en: `${k.za}${k.ji}${k.zu}${k.ze}${k.zo}` },
       groupId: dakutenGroupId,
       cards: [
         info(
@@ -287,7 +290,8 @@ async function main() {
     {
       slug: 'hiragana-dakuten-t-row',
       sortOrder: 13,
-      titles: { de: 'Dakuten: T wird D', en: 'Dakuten: T becomes D' },
+      titles: { de: 'D-Reihe', en: 'D row' },
+      descriptions: { de: `${k.da}${k.de}${k.do_}`, en: `${k.da}${k.de}${k.do_}` },
       groupId: dakutenGroupId,
       cards: [
         info(
@@ -306,7 +310,8 @@ async function main() {
     {
       slug: 'hiragana-dakuten-h-row',
       sortOrder: 14,
-      titles: { de: 'Dakuten: H wird B', en: 'Dakuten: H becomes B' },
+      titles: { de: 'B-Reihe', en: 'B row' },
+      descriptions: { de: `${k.ba}${k.bi}${k.bu}${k.be}${k.bo}`, en: `${k.ba}${k.bi}${k.bu}${k.be}${k.bo}` },
       groupId: dakutenGroupId,
       cards: [
         info(
@@ -327,7 +332,8 @@ async function main() {
     {
       slug: 'hiragana-handakuten-p-row',
       sortOrder: 15,
-      titles: { de: 'Handakuten: H wird P', en: 'Handakuten: H becomes P' },
+      titles: { de: 'P-Reihe', en: 'P row' },
+      descriptions: { de: `${k.pa}${k.pi}${k.pu}${k.pe}${k.po}`, en: `${k.pa}${k.pi}${k.pu}${k.pe}${k.po}` },
       groupId: handakutenGroupId,
       cards: [
         info(
@@ -348,6 +354,7 @@ async function main() {
     {
       slug: 'hiragana-small-ya-yu-yo',
       sortOrder: 16,
+      isActive: false,
       titles: { de: 'Kleine Ya Yu Yo', en: 'Small Ya Yu Yo' },
       groupId: defaultGroupId,
       cards: [
@@ -374,6 +381,7 @@ async function main() {
     {
       slug: 'hiragana-small-tsu',
       sortOrder: 17,
+      isActive: false,
       titles: { de: 'Kleines Tsu', en: 'Small Tsu' },
       groupId: defaultGroupId,
       cards: [
