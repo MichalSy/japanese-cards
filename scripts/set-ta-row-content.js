@@ -19,8 +19,8 @@ async function main() {
   const updates = {
     'h-ta': {
       mnemonic: {
-        de: 'Der Taco beginnt mit Ta\nSchale und Füllung erinnern an た',
-        en: 'The taco starts with Ta\nshell and filling point to た',
+        de: 'Links steht die T-Kreuzung\nrechts führen zwei Kurven zu た',
+        en: 'The T-junction is on the left\ntwo right-side curves make た',
       },
     },
     'h-ti': {
