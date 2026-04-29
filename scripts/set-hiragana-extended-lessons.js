@@ -101,6 +101,16 @@ async function replaceLessonCards(supabase, lessonId, cardIds) {
   if (insertError) throw insertError
 }
 
+async function fetchImageIds(supabase, slugs) {
+  const { data, error } = await supabase
+    .from('language_cards_cards')
+    .select('slug,image_id')
+    .in('slug', slugs)
+
+  if (error) throw error
+  return Object.fromEntries(data.map((row) => [row.slug, row.image_id]))
+}
+
 function info(slug, de, en, groupId) {
   return {
     slug,
@@ -110,13 +120,14 @@ function info(slug, de, en, groupId) {
   }
 }
 
-function character(slug, native, transliteration, de, en, groupId) {
+function character(slug, native, transliteration, de, en, groupId, imageId = null) {
   return {
     slug,
     group_id: groupId,
     card_type: 'character',
     native,
     transliteration,
+    image_id: imageId,
     data: { mnemonic: { de, en } },
   }
 }
@@ -139,25 +150,27 @@ function quiz(slug, native, transliteration, deQuestion, enQuestion, options, gr
   }
 }
 
-function dakutenCard(baseName, baseKana, voicedName, voicedKana, groupId) {
+function dakutenCard(baseName, baseKana, voicedName, voicedKana, groupId, imageId = null) {
   return character(
     `h-${voicedName.toLowerCase()}`,
     voicedKana,
     voicedName,
     `${baseName} bekommt zwei Striche\n${baseKana} wird ${voicedKana}`,
     `${baseName} gets two marks\n${baseKana} becomes ${voicedKana}`,
-    groupId
+    groupId,
+    imageId
   )
 }
 
-function handakutenCard(baseName, baseKana, pName, pKana, groupId) {
+function handakutenCard(baseName, baseKana, pName, pKana, groupId, imageId = null) {
   return character(
     `h-${pName.toLowerCase()}`,
     pKana,
     pName,
     `${baseName} bekommt einen Kreis\n${baseKana} wird ${pKana}`,
     `${baseName} gets a circle\n${baseKana} becomes ${pKana}`,
-    groupId
+    groupId,
+    imageId
   )
 }
 
@@ -220,6 +233,14 @@ async function main() {
     ya: cp(0x3084), yu: cp(0x3086), yo: cp(0x3088), smallYa: cp(0x3083), smallYu: cp(0x3085), smallYo: cp(0x3087), smallTsu: cp(0x3063),
   }
 
+  const imageIds = await fetchImageIds(supabase, [
+    'h-ka', 'h-ki', 'h-ku', 'h-ke', 'h-ko',
+    'h-sa', 'h-si', 'h-su', 'h-se', 'h-so',
+    'h-ta', 'h-te', 'h-to',
+    'h-ha', 'h-hi', 'h-hu', 'h-he', 'h-ho',
+    'h-ya', 'h-yu', 'h-yo', 'h-tu',
+  ])
+
   const lessons = [
     {
       slug: 'hiragana-dakuten-k-row',
@@ -229,15 +250,15 @@ async function main() {
       cards: [
         info(
           'info-hiragana-dakuten-k-row-split',
-          `# K wird G\n\nDakuten sind zwei kleine Striche rechts oben.\nSie machen den K-Laut stimmhaft.\n\n| ${k.ka} | ${k.ki} | ${k.ku} | ${k.ke} | ${k.ko} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ka | Ki | Ku | Ke | Ko |\n\n| ${k.ga} | ${k.gi} | ${k.gu} | ${k.ge} | ${k.go} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ga | Gi | Gu | Ge | Go |`,
-          `# K becomes G\n\nDakuten are two small marks at the upper right.\nThey voice the K sound.\n\n| ${k.ka} | ${k.ki} | ${k.ku} | ${k.ke} | ${k.ko} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ka | Ki | Ku | Ke | Ko |\n\n| ${k.ga} | ${k.gi} | ${k.gu} | ${k.ge} | ${k.go} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ga | Gi | Gu | Ge | Go |`,
+          `# K wird G\n\nDakuten sind zwei kleine Striche rechts oben.\nOben steht die neue G-Reihe.\n\n| ${k.ga} | ${k.gi} | ${k.gu} | ${k.ge} | ${k.go} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ga | Gi | Gu | Ge | Go |\n\nDarunter steht die bekannte K-Reihe.\n\n| ${k.ka} | ${k.ki} | ${k.ku} | ${k.ke} | ${k.ko} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ka | Ki | Ku | Ke | Ko |`,
+          `# K becomes G\n\nDakuten are two small marks at the upper right.\nThe new G row is on top.\n\n| ${k.ga} | ${k.gi} | ${k.gu} | ${k.ge} | ${k.go} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ga | Gi | Gu | Ge | Go |\n\nThe known K row is below.\n\n| ${k.ka} | ${k.ki} | ${k.ku} | ${k.ke} | ${k.ko} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ka | Ki | Ku | Ke | Ko |`,
           dakutenGroupId
         ),
-        dakutenCard('Ka', k.ka, 'Ga', k.ga, dakutenGroupId),
-        dakutenCard('Ki', k.ki, 'Gi', k.gi, dakutenGroupId),
-        dakutenCard('Ku', k.ku, 'Gu', k.gu, dakutenGroupId),
-        dakutenCard('Ke', k.ke, 'Ge', k.ge, dakutenGroupId),
-        dakutenCard('Ko', k.ko, 'Go', k.go, dakutenGroupId),
+        dakutenCard('Ka', k.ka, 'Ga', k.ga, dakutenGroupId, imageIds['h-ka']),
+        dakutenCard('Ki', k.ki, 'Gi', k.gi, dakutenGroupId, imageIds['h-ki']),
+        dakutenCard('Ku', k.ku, 'Gu', k.gu, dakutenGroupId, imageIds['h-ku']),
+        dakutenCard('Ke', k.ke, 'Ge', k.ge, dakutenGroupId, imageIds['h-ke']),
+        dakutenCard('Ko', k.ko, 'Go', k.go, dakutenGroupId, imageIds['h-ko']),
         quiz('quiz-h-ga', k.ga, 'Ga', 'Welches Zeichen steht für Ga?', 'Which character represents Ga?', [k.ga, k.ka, k.sa, k.ha], dakutenGroupId),
         quiz('quiz-h-gi', k.gi, 'Gi', 'Welches Zeichen steht für Gi?', 'Which character represents Gi?', [k.gi, k.ki, k.ji, k.ri], dakutenGroupId),
       ],
@@ -250,15 +271,15 @@ async function main() {
       cards: [
         info(
           'info-hiragana-dakuten-s-row-split',
-          `# S wird Z\n\nDie gleiche Form bleibt.\nNur die zwei Dakuten-Striche kommen dazu.\n\n| ${k.sa} | ${k.shi} | ${k.su} | ${k.se} | ${k.so} |\n|:---:|:---:|:---:|:---:|:---:|\n| Sa | Shi | Su | Se | So |\n\n| ${k.za} | ${k.ji} | ${k.zu} | ${k.ze} | ${k.zo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Za | Ji | Zu | Ze | Zo |\n\nAchtung: ${k.ji} liest du Ji.`,
-          `# S becomes Z\n\nThe shape stays the same.\nOnly the two dakuten marks are added.\n\n| ${k.sa} | ${k.shi} | ${k.su} | ${k.se} | ${k.so} |\n|:---:|:---:|:---:|:---:|:---:|\n| Sa | Shi | Su | Se | So |\n\n| ${k.za} | ${k.ji} | ${k.zu} | ${k.ze} | ${k.zo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Za | Ji | Zu | Ze | Zo |\n\nCareful: ${k.ji} is read Ji.`,
+          `# S wird Z\n\nDie gleiche Form bleibt.\nOben steht die neue Z-Reihe.\n\n| ${k.za} | ${k.ji} | ${k.zu} | ${k.ze} | ${k.zo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Za | Ji | Zu | Ze | Zo |\n\nDarunter steht die bekannte S-Reihe.\n\n| ${k.sa} | ${k.shi} | ${k.su} | ${k.se} | ${k.so} |\n|:---:|:---:|:---:|:---:|:---:|\n| Sa | Shi | Su | Se | So |\n\nAchtung: ${k.ji} liest du Ji.`,
+          `# S becomes Z\n\nThe shape stays the same.\nThe new Z row is on top.\n\n| ${k.za} | ${k.ji} | ${k.zu} | ${k.ze} | ${k.zo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Za | Ji | Zu | Ze | Zo |\n\nThe known S row is below.\n\n| ${k.sa} | ${k.shi} | ${k.su} | ${k.se} | ${k.so} |\n|:---:|:---:|:---:|:---:|:---:|\n| Sa | Shi | Su | Se | So |\n\nCareful: ${k.ji} is read Ji.`,
           dakutenGroupId
         ),
-        dakutenCard('Sa', k.sa, 'Za', k.za, dakutenGroupId),
-        dakutenCard('Shi', k.shi, 'Ji', k.ji, dakutenGroupId),
-        dakutenCard('Su', k.su, 'Zu', k.zu, dakutenGroupId),
-        dakutenCard('Se', k.se, 'Ze', k.ze, dakutenGroupId),
-        dakutenCard('So', k.so, 'Zo', k.zo, dakutenGroupId),
+        dakutenCard('Sa', k.sa, 'Za', k.za, dakutenGroupId, imageIds['h-sa']),
+        dakutenCard('Shi', k.shi, 'Ji', k.ji, dakutenGroupId, imageIds['h-si']),
+        dakutenCard('Su', k.su, 'Zu', k.zu, dakutenGroupId, imageIds['h-su']),
+        dakutenCard('Se', k.se, 'Ze', k.ze, dakutenGroupId, imageIds['h-se']),
+        dakutenCard('So', k.so, 'Zo', k.zo, dakutenGroupId, imageIds['h-so']),
         quiz('quiz-h-ji', k.ji, 'Ji', 'Welches Zeichen steht für Ji?', 'Which character represents Ji?', [k.ji, k.shi, k.chi, k.gi], dakutenGroupId),
         quiz('quiz-h-zu', k.zu, 'Zu', 'Welches Zeichen steht für Zu?', 'Which character represents Zu?', [k.zu, k.su, k.tsu, k.gu], dakutenGroupId),
       ],
@@ -271,13 +292,13 @@ async function main() {
       cards: [
         info(
           'info-hiragana-dakuten-t-row-split',
-          `# T wird D\n\nIn der T-Reihe nutzt du Dakuten nur bei drei Zeichen.\n\n| ${k.ta} | ${k.te} | ${k.to} |\n|:---:|:---:|:---:|\n| Ta | Te | To |\n\n| ${k.da} | ${k.de} | ${k.do_} |\n|:---:|:---:|:---:|\n| Da | De | Do |`,
-          `# T becomes D\n\nIn the T row you use dakuten on three characters.\n\n| ${k.ta} | ${k.te} | ${k.to} |\n|:---:|:---:|:---:|\n| Ta | Te | To |\n\n| ${k.da} | ${k.de} | ${k.do_} |\n|:---:|:---:|:---:|\n| Da | De | Do |`,
+          `# T wird D\n\nIn der T-Reihe nutzt du Dakuten nur bei drei Zeichen.\nOben stehen die neuen D-Zeichen.\n\n| ${k.da} | ${k.de} | ${k.do_} |\n|:---:|:---:|:---:|\n| Da | De | Do |\n\nDarunter stehen die bekannten T-Zeichen.\n\n| ${k.ta} | ${k.te} | ${k.to} |\n|:---:|:---:|:---:|\n| Ta | Te | To |`,
+          `# T becomes D\n\nIn the T row you use dakuten on three characters.\nThe new D characters are on top.\n\n| ${k.da} | ${k.de} | ${k.do_} |\n|:---:|:---:|:---:|\n| Da | De | Do |\n\nThe known T characters are below.\n\n| ${k.ta} | ${k.te} | ${k.to} |\n|:---:|:---:|:---:|\n| Ta | Te | To |`,
           dakutenGroupId
         ),
-        dakutenCard('Ta', k.ta, 'Da', k.da, dakutenGroupId),
-        dakutenCard('Te', k.te, 'De', k.de, dakutenGroupId),
-        dakutenCard('To', k.to, 'Do', k.do_, dakutenGroupId),
+        dakutenCard('Ta', k.ta, 'Da', k.da, dakutenGroupId, imageIds['h-ta']),
+        dakutenCard('Te', k.te, 'De', k.de, dakutenGroupId, imageIds['h-te']),
+        dakutenCard('To', k.to, 'Do', k.do_, dakutenGroupId, imageIds['h-to']),
         quiz('quiz-h-da', k.da, 'Da', 'Welches Zeichen steht für Da?', 'Which character represents Da?', [k.da, k.ta, k.ba, k.pa], dakutenGroupId),
         quiz('quiz-h-do', k.do_, 'Do', 'Welches Zeichen steht für Do?', 'Which character represents Do?', [k.do_, k.to, k.go, k.zo], dakutenGroupId),
       ],
@@ -290,15 +311,15 @@ async function main() {
       cards: [
         info(
           'info-hiragana-dakuten-h-row-split',
-          `# H wird B\n\nZwei Dakuten-Striche machen aus der H-Reihe die B-Reihe.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |\n\n| ${k.ba} | ${k.bi} | ${k.bu} | ${k.be} | ${k.bo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ba | Bi | Bu | Be | Bo |`,
-          `# H becomes B\n\nTwo dakuten marks turn the H row into the B row.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |\n\n| ${k.ba} | ${k.bi} | ${k.bu} | ${k.be} | ${k.bo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ba | Bi | Bu | Be | Bo |`,
+          `# H wird B\n\nZwei Dakuten-Striche machen aus der H-Reihe die B-Reihe.\nOben steht die neue B-Reihe.\n\n| ${k.ba} | ${k.bi} | ${k.bu} | ${k.be} | ${k.bo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ba | Bi | Bu | Be | Bo |\n\nDarunter steht die bekannte H-Reihe.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |`,
+          `# H becomes B\n\nTwo dakuten marks turn the H row into the B row.\nThe new B row is on top.\n\n| ${k.ba} | ${k.bi} | ${k.bu} | ${k.be} | ${k.bo} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ba | Bi | Bu | Be | Bo |\n\nThe known H row is below.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |`,
           dakutenGroupId
         ),
-        dakutenCard('Ha', k.ha, 'Ba', k.ba, dakutenGroupId),
-        dakutenCard('Hi', k.hi, 'Bi', k.bi, dakutenGroupId),
-        dakutenCard('Fu', k.fu, 'Bu', k.bu, dakutenGroupId),
-        dakutenCard('He', k.he, 'Be', k.be, dakutenGroupId),
-        dakutenCard('Ho', k.ho, 'Bo', k.bo, dakutenGroupId),
+        dakutenCard('Ha', k.ha, 'Ba', k.ba, dakutenGroupId, imageIds['h-ha']),
+        dakutenCard('Hi', k.hi, 'Bi', k.bi, dakutenGroupId, imageIds['h-hi']),
+        dakutenCard('Fu', k.fu, 'Bu', k.bu, dakutenGroupId, imageIds['h-hu']),
+        dakutenCard('He', k.he, 'Be', k.be, dakutenGroupId, imageIds['h-he']),
+        dakutenCard('Ho', k.ho, 'Bo', k.bo, dakutenGroupId, imageIds['h-ho']),
         quiz('quiz-h-ba', k.ba, 'Ba', 'Welches Zeichen steht für Ba?', 'Which character represents Ba?', [k.ba, k.ha, k.pa, k.ma], dakutenGroupId),
         quiz('quiz-h-bo', k.bo, 'Bo', 'Welches Zeichen steht für Bo?', 'Which character represents Bo?', [k.bo, k.ho, k.po, k.do_], dakutenGroupId),
       ],
@@ -311,15 +332,15 @@ async function main() {
       cards: [
         info(
           'info-hiragana-handakuten-p-row-split',
-          `# H wird P\n\nHandakuten ist der kleine Kreis rechts oben.\nEr macht aus H ein P.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |\n\n| ${k.pa} | ${k.pi} | ${k.pu} | ${k.pe} | ${k.po} |\n|:---:|:---:|:---:|:---:|:---:|\n| Pa | Pi | Pu | Pe | Po |`,
-          `# H becomes P\n\nHandakuten is the small circle at the upper right.\nIt turns H into P.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |\n\n| ${k.pa} | ${k.pi} | ${k.pu} | ${k.pe} | ${k.po} |\n|:---:|:---:|:---:|:---:|:---:|\n| Pa | Pi | Pu | Pe | Po |`,
+          `# H wird P\n\nHandakuten ist der kleine Kreis rechts oben.\nOben steht die neue P-Reihe.\n\n| ${k.pa} | ${k.pi} | ${k.pu} | ${k.pe} | ${k.po} |\n|:---:|:---:|:---:|:---:|:---:|\n| Pa | Pi | Pu | Pe | Po |\n\nDarunter steht die bekannte H-Reihe.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |`,
+          `# H becomes P\n\nHandakuten is the small circle at the upper right.\nThe new P row is on top.\n\n| ${k.pa} | ${k.pi} | ${k.pu} | ${k.pe} | ${k.po} |\n|:---:|:---:|:---:|:---:|:---:|\n| Pa | Pi | Pu | Pe | Po |\n\nThe known H row is below.\n\n| ${k.ha} | ${k.hi} | ${k.fu} | ${k.he} | ${k.ho} |\n|:---:|:---:|:---:|:---:|:---:|\n| Ha | Hi | Fu | He | Ho |`,
           handakutenGroupId
         ),
-        handakutenCard('Ha', k.ha, 'Pa', k.pa, handakutenGroupId),
-        handakutenCard('Hi', k.hi, 'Pi', k.pi, handakutenGroupId),
-        handakutenCard('Fu', k.fu, 'Pu', k.pu, handakutenGroupId),
-        handakutenCard('He', k.he, 'Pe', k.pe, handakutenGroupId),
-        handakutenCard('Ho', k.ho, 'Po', k.po, handakutenGroupId),
+        handakutenCard('Ha', k.ha, 'Pa', k.pa, handakutenGroupId, imageIds['h-ha']),
+        handakutenCard('Hi', k.hi, 'Pi', k.pi, handakutenGroupId, imageIds['h-hi']),
+        handakutenCard('Fu', k.fu, 'Pu', k.pu, handakutenGroupId, imageIds['h-hu']),
+        handakutenCard('He', k.he, 'Pe', k.pe, handakutenGroupId, imageIds['h-he']),
+        handakutenCard('Ho', k.ho, 'Po', k.po, handakutenGroupId, imageIds['h-ho']),
         quiz('quiz-h-pa', k.pa, 'Pa', 'Welches Zeichen steht für Pa?', 'Which character represents Pa?', [k.pa, k.ba, k.ha, k.ma], handakutenGroupId),
         quiz('quiz-h-po', k.po, 'Po', 'Welches Zeichen steht für Po?', 'Which character represents Po?', [k.po, k.bo, k.ho, k.do_], handakutenGroupId),
       ],
@@ -332,13 +353,13 @@ async function main() {
       cards: [
         info(
           'info-hiragana-small-ya-yu-yo-intro',
-          `# Kleine Ya Yu Yo\n\nKleine Zeichen stehen nicht allein.\nSie hängen sich an i-Laute.\n\n| ${k.ya} | ${k.smallYa} |\n|:---:|:---:|\n| Ya | klein ya |`,
-          `# Small Ya Yu Yo\n\nSmall characters do not stand alone.\nThey attach to i sounds.\n\n| ${k.ya} | ${k.smallYa} |\n|:---:|:---:|\n| Ya | small ya |`,
+          `# Kleine Ya Yu Yo\n\nKleine Zeichen stehen nicht allein.\nOben steht die neue kleine Form.\n\n| ${k.smallYa} | ${k.smallYu} | ${k.smallYo} |\n|:---:|:---:|:---:|\n| klein ya | klein yu | klein yo |\n\nDarunter stehen die großen Zeichen.\n\n| ${k.ya} | ${k.yu} | ${k.yo} |\n|:---:|:---:|:---:|\n| Ya | Yu | Yo |`,
+          `# Small Ya Yu Yo\n\nSmall characters do not stand alone.\nThe new small forms are on top.\n\n| ${k.smallYa} | ${k.smallYu} | ${k.smallYo} |\n|:---:|:---:|:---:|\n| small ya | small yu | small yo |\n\nThe large characters are below.\n\n| ${k.ya} | ${k.yu} | ${k.yo} |\n|:---:|:---:|:---:|\n| Ya | Yu | Yo |`,
           defaultGroupId
         ),
-        character('h-small-ya', k.smallYa, 'small ya', 'Kleines Ya hängt sich an i-Laute\nKi plus kleines Ya wird Kya', 'Small ya attaches to i sounds\nKi plus small ya becomes Kya', defaultGroupId),
-        character('h-small-yu', k.smallYu, 'small yu', 'Kleines Yu hängt sich an i-Laute\nShi plus kleines Yu wird Shu', 'Small yu attaches to i sounds\nShi plus small yu becomes Shu', defaultGroupId),
-        character('h-small-yo', k.smallYo, 'small yo', 'Kleines Yo hängt sich an i-Laute\nChi plus kleines Yo wird Cho', 'Small yo attaches to i sounds\nChi plus small yo becomes Cho', defaultGroupId),
+        character('h-small-ya', k.smallYa, 'small ya', 'Kleines Ya hängt sich an i-Laute\nKi plus kleines Ya wird Kya', 'Small ya attaches to i sounds\nKi plus small ya becomes Kya', defaultGroupId, imageIds['h-ya']),
+        character('h-small-yu', k.smallYu, 'small yu', 'Kleines Yu hängt sich an i-Laute\nShi plus kleines Yu wird Shu', 'Small yu attaches to i sounds\nShi plus small yu becomes Shu', defaultGroupId, imageIds['h-yu']),
+        character('h-small-yo', k.smallYo, 'small yo', 'Kleines Yo hängt sich an i-Laute\nChi plus kleines Yo wird Cho', 'Small yo attaches to i sounds\nChi plus small yo becomes Cho', defaultGroupId, imageIds['h-yo']),
         info(
           'info-hiragana-yoon-examples',
           `# Kombinationen\n\n| ${k.ki}${k.smallYa} | ${k.ki}${k.smallYu} | ${k.ki}${k.smallYo} |\n|:---:|:---:|:---:|\n| Kya | Kyu | Kyo |\n\n| ${k.shi}${k.smallYa} | ${k.shi}${k.smallYu} | ${k.shi}${k.smallYo} |\n|:---:|:---:|:---:|\n| Sha | Shu | Sho |\n\n| ${k.chi}${k.smallYa} | ${k.chi}${k.smallYu} | ${k.chi}${k.smallYo} |\n|:---:|:---:|:---:|\n| Cha | Chu | Cho |`,
@@ -362,11 +383,11 @@ async function main() {
           `# Small Tsu\n\nSmall ${k.smallTsu} creates a short pause.\nThe next consonant is doubled.`,
           defaultGroupId
         ),
-        character('h-small-tsu', k.smallTsu, 'small tsu', `Kleines Tsu ist eine kurze Pause\n${k.ki}${k.smallTsu}${k.te} liest du Kitte`, `Small tsu is a short pause\n${k.ki}${k.smallTsu}${k.te} is read Kitte`, defaultGroupId),
+        character('h-small-tsu', k.smallTsu, 'small tsu', `Kleines Tsu ist eine kurze Pause\n${k.ki}${k.smallTsu}${k.te} liest du Kitte`, `Small tsu is a short pause\n${k.ki}${k.smallTsu}${k.te} is read Kitte`, defaultGroupId, imageIds['h-tu']),
         info(
           'info-hiragana-small-tsu-examples',
-          `# Kleine Pause\n\n| ${k.ki}${k.te} | ${k.ki}${k.smallTsu}${k.te} |\n|:---:|:---:|\n| Kite | Kitte |\n\nOhne ${k.smallTsu} fließt der Laut weiter.\nMit ${k.smallTsu} stoppst du kurz vor dem nächsten Konsonanten.`,
-          `# Small Pause\n\n| ${k.ki}${k.te} | ${k.ki}${k.smallTsu}${k.te} |\n|:---:|:---:|\n| Kite | Kitte |\n\nWithout ${k.smallTsu}, the sound flows on.\nWith ${k.smallTsu}, you stop briefly before the next consonant.`,
+          `# Kleine Pause\n\nOben steht die neue Schreibweise mit Pause.\n\n| ${k.ki}${k.smallTsu}${k.te} |\n|:---:|\n| Kitte |\n\nDarunter steht die bekannte Schreibweise ohne Pause.\n\n| ${k.ki}${k.te} |\n|:---:|\n| Kite |\n\nMit ${k.smallTsu} stoppst du kurz vor dem nächsten Konsonanten.`,
+          `# Small Pause\n\nThe new spelling with a pause is on top.\n\n| ${k.ki}${k.smallTsu}${k.te} |\n|:---:|\n| Kitte |\n\nThe known spelling without a pause is below.\n\n| ${k.ki}${k.te} |\n|:---:|\n| Kite |\n\nWith ${k.smallTsu}, you stop briefly before the next consonant.`,
           defaultGroupId
         ),
         quiz('quiz-h-kitte', `${k.ki}${k.smallTsu}${k.te}`, 'Kitte', 'Welche Schreibweise enthält die kleine Pause?', 'Which spelling contains the small pause?', [`${k.ki}${k.smallTsu}${k.te}`, `${k.ki}${k.te}`, `${k.ki}${k.tsu}${k.te}`, `${k.ki}${cp(0x3044)}${k.te}`], defaultGroupId),
