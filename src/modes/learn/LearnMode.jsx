@@ -19,7 +19,7 @@ function randomShuffle(arr) {
   return result
 }
 
-export default function LearnMode({ lesson, cards, lang }) {
+export default function LearnMode({ lesson, cards, lang, settings }) {
   const router = useRouter()
   const t = useT()
   const [index, setIndex] = useState(() => {
@@ -33,6 +33,11 @@ export default function LearnMode({ lesson, cards, lang }) {
   const [animDir, setAnimDir] = useState('forward')
   const [animKey, setAnimKey] = useState(0)
   const [imageReadyState, setImageReadyState] = useState({ url: null, ready: false })
+  const [showTranslationsByDefault, setShowTranslationsByDefault] = useState(
+    settings?.show_translations_by_default ?? true
+  )
+  const [isSavingTranslationPreference, setIsSavingTranslationPreference] = useState(false)
+  const [revealedTranslationCardIds, setRevealedTranslationCardIds] = useState(() => new Set())
 
   const imageUrls = useMemo(() => {
     const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
@@ -107,6 +112,36 @@ export default function LearnMode({ lesson, cards, lang }) {
   const quizCount = quizCardIndices.length
   const correctCount = quizCardIndices.filter(i => quizAnswers[i]?.isCorrect).length
   const passed = quizCount === 0 || correctCount === quizCount
+
+  useEffect(() => {
+    if (typeof settings?.show_translations_by_default === 'boolean') {
+      setShowTranslationsByDefault(settings.show_translations_by_default)
+    }
+  }, [settings?.show_translations_by_default])
+
+  const handleShowTranslationsByDefaultChange = useCallback((value) => {
+    setShowTranslationsByDefault(value)
+    setIsSavingTranslationPreference(true)
+
+    fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ show_translations_by_default: value }),
+    })
+      .catch(() => {
+        setShowTranslationsByDefault(!value)
+      })
+      .finally(() => setIsSavingTranslationPreference(false))
+  }, [])
+
+  const revealTranslationForCurrentCard = useCallback(() => {
+    if (!card?.id) return
+    setRevealedTranslationCardIds(prev => {
+      const next = new Set(prev)
+      next.add(card.id)
+      return next
+    })
+  }, [card?.id])
 
   useEffect(() => {
     if (!isSummary || !passed || completionSavedRef.current) return
@@ -315,7 +350,18 @@ export default function LearnMode({ lesson, cards, lang }) {
     if (!card) return null
     if (isQuiz) return renderQuizContent()
     if (card.card_type === 'character') return <LearnCardCharacter card={card} lang={lang} />
-    if (card.card_type === 'vocabulary') return <LearnCardVocabulary card={card} lang={lang} />
+    if (card.card_type === 'vocabulary') return (
+      <LearnCardVocabulary
+        card={card}
+        lang={lang}
+        showTranslationsByDefault={showTranslationsByDefault}
+        isTranslationRevealed={revealedTranslationCardIds.has(card.id)}
+        onRevealTranslation={revealTranslationForCurrentCard}
+        showTranslationPreference={index === 0}
+        onShowTranslationsByDefaultChange={handleShowTranslationsByDefaultChange}
+        isSavingTranslationPreference={isSavingTranslationPreference}
+      />
+    )
     if (card.card_type === 'info') return <LearnCardInfo card={card} lang={lang} />
     return <LearnCardCharacter card={card} lang={lang} />
   }

@@ -5,6 +5,7 @@
 interface UserSettings {
   ui_language: string
   learn_language_id: string | null
+  show_translations_by_default: boolean
 }
 
 interface CacheEntry extends UserSettings {
@@ -19,7 +20,11 @@ function getCached(userId: string): UserSettings | null {
   const entry = cache.get(userId)
   if (!entry) return null
   if (Date.now() - entry.cachedAt > TTL_MS) { cache.delete(userId); return null }
-  return { ui_language: entry.ui_language, learn_language_id: entry.learn_language_id }
+  return {
+    ui_language: entry.ui_language,
+    learn_language_id: entry.learn_language_id,
+    show_translations_by_default: entry.show_translations_by_default,
+  }
 }
 
 export function setCachedSettings(userId: string, settings: UserSettings) {
@@ -43,12 +48,12 @@ export async function resolveSettings(userId: string, supabase: any): Promise<Us
     try {
       let { data } = await supabase
         .from('language_cards_user_settings')
-        .select('ui_language, learn_language_id')
+        .select('ui_language, learn_language_id, show_translations_by_default')
         .eq('user_id', userId)
         .single()
 
       if (!data) {
-        data = { ui_language: 'en', learn_language_id: 'ja' }
+        data = { ui_language: 'en', learn_language_id: 'ja', show_translations_by_default: true }
         await supabase.from('language_cards_user_settings').insert({ user_id: userId, ...data })
       }
 

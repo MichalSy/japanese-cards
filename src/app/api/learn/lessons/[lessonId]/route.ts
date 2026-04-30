@@ -7,7 +7,8 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
   const { lessonId } = await context.params
   const supabase = await createServerSupabaseClient()
-  const { ui_language: lang } = await resolveSettings(user.id, supabase)
+  const settings = await resolveSettings(user.id, supabase)
+  const { ui_language: lang } = settings
 
   const pick = (arr: any[]) =>
     arr?.find((x: any) => x.lang_code === lang) ?? arr?.find((x: any) => x.lang_code === 'en') ?? {}
@@ -57,6 +58,9 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   return NextResponse.json({
     lesson: { id: lesson.id, slug: lesson.slug, title: lt.title ?? lesson.slug, description: lt.description ?? null },
     lang,
+    settings: {
+      show_translations_by_default: settings.show_translations_by_default,
+    },
     cards,
   })
 })

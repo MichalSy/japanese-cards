@@ -22,9 +22,12 @@ export const POST = requireAuth(async (req: Request, context: any) => {
   const body = await req.json()
   const supabase = await createServerSupabaseClient()
 
-  const update: Record<string, string> = {}
+  const update: Record<string, string | boolean> = {}
   if (body.ui_language) update.ui_language = body.ui_language
   if (body.learn_language_id) update.learn_language_id = body.learn_language_id
+  if (typeof body.show_translations_by_default === 'boolean') {
+    update.show_translations_by_default = body.show_translations_by_default
+  }
 
   await supabase
     .from('language_cards_user_settings')
