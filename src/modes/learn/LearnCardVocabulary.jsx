@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
+
 const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_URL
 
 function formatRomaji(value) {
@@ -20,6 +22,36 @@ export default function LearnCardVocabulary({ card, lang }) {
   const translation = translationFor(card, lang)
   const languageLabel = lang === 'de' ? 'Bedeutung' : 'Meaning'
   const romaji = formatRomaji(card.transliteration)
+  const audioRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  useEffect(() => {
+    setIsPlaying(false)
+    return () => {
+      if (!audioRef.current) return
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+    }
+  }, [card.audio_url])
+
+  const handlePlayAudio = async () => {
+    if (!card.audio_url || !audioRef.current) return
+
+    if (!audioRef.current.paused) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setIsPlaying(false)
+      return
+    }
+
+    try {
+      audioRef.current.currentTime = 0
+      await audioRef.current.play()
+      setIsPlaying(true)
+    } catch {
+      setIsPlaying(false)
+    }
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
@@ -57,6 +89,27 @@ export default function LearnCardVocabulary({ card, lang }) {
             }}>
               {romaji}
             </div>
+          )}
+          {card.audio_url && (
+            <>
+              <audio ref={audioRef} src={card.audio_url} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
+              <button
+                type="button"
+                onClick={handlePlayAudio}
+                aria-label={lang === 'de' ? 'Aussprache abspielen' : 'Play pronunciation'}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  minHeight: '42px', padding: '9px 16px', borderRadius: '999px', cursor: 'pointer',
+                  border: '1px solid rgba(236,72,153,0.35)', color: 'white', fontSize: '14px', fontWeight: '800',
+                  background: isPlaying ? 'linear-gradient(135deg, rgba(236,72,153,0.95), rgba(168,85,247,0.95))' : 'rgba(236,72,153,0.14)',
+                  boxShadow: isPlaying ? '0 6px 18px rgba(236,72,153,0.28)' : 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                  transition: 'background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
+                }}
+              >
+                <span aria-hidden="true">{isPlaying ? '■' : '▶'}</span>
+                {lang === 'de' ? 'Anhören' : 'Listen'}
+              </button>
+            </>
           )}
         </div>
 
