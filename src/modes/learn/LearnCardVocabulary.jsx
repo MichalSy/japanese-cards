@@ -106,10 +106,9 @@ export default function LearnCardVocabulary({ card, lang }) {
 
           <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
 
-          <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '9px', fontWeight: '750', letterSpacing: '0.11em', color: 'rgba(255,255,255,0.32)', textTransform: 'uppercase', flexShrink: 0 }}>Romaji</span>
+          <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{
-              minWidth: 0, fontSize: 'clamp(17px, 4.8vw, 24px)', fontWeight: '850', color: 'rgba(236,72,153,0.96)',
+              minWidth: 0, fontSize: 'clamp(18px, 5vw, 25px)', fontWeight: '850', color: 'rgba(236,72,153,0.96)',
               letterSpacing: '0.02em', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center', lineHeight: 1.12,
             }}>
               {romaji || '–'}
