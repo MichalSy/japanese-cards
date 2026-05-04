@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Check } from 'lucide-react'
 import { fetchCategoryWithItems } from '@/config/api'
 import { useT } from '@/components/I18nContext'
@@ -44,28 +44,48 @@ export default function ContentTypeView({ params }) {
 
   useSetBackHandler(() => router.push('/'))
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true)
-        const [config, serverProgress, coursesRes] = await Promise.all([
-          fetchCategoryWithItems(contentType),
-          fetchProgressFromServer(contentType),
-          fetch(`/api/learn/courses?category=${contentType}`).then(r => r.ok ? r.json() : { courses: [] }),
-        ])
-        setCategoryConfig(config)
-        setProgress(serverProgress)
-        const practiceGroups = {}
-        for (const group of config.groups) practiceGroups[group.id] = group.items || []
-        setGroupData(practiceGroups)
-        setCourses(coursesRes.courses ?? [])
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    })()
+  const loadData = useCallback(async ({ showLoading = false } = {}) => {
+    try {
+      if (showLoading) setLoading(true)
+      const [config, serverProgress, coursesRes] = await Promise.all([
+        fetchCategoryWithItems(contentType),
+        fetchProgressFromServer(contentType),
+        fetch(`/api/learn/courses?category=${contentType}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : { courses: [] }),
+      ])
+      setCategoryConfig(config)
+      setProgress(serverProgress)
+      const practiceGroups = {}
+      for (const group of config.groups) practiceGroups[group.id] = group.items || []
+      setGroupData(practiceGroups)
+      setCourses(coursesRes.courses ?? [])
+      setError(null)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      if (showLoading) setLoading(false)
+    }
   }, [contentType])
+
+  useEffect(() => {
+    loadData({ showLoading: true })
+  }, [loadData])
+
+  useEffect(() => {
+    const refresh = () => loadData()
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') refresh()
+    }
+
+    window.addEventListener('focus', refresh)
+    window.addEventListener('pageshow', refresh)
+    document.addEventListener('visibilitychange', refreshWhenVisible)
+
+    return () => {
+      window.removeEventListener('focus', refresh)
+      window.removeEventListener('pageshow', refresh)
+      document.removeEventListener('visibilitychange', refreshWhenVisible)
+    }
+  }, [loadData])
 
   useEffect(() => {
     if (!tabContainerRef.current) return
