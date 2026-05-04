@@ -8,6 +8,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const supabase = await createServerSupabaseClient()
   const { ui_language: lang } = await resolveSettings(user.id, supabase)
 
+  let hasCollectionColumns = true
   let categoryQuery: any = await supabase
     .from('language_cards_categories')
     .select(`slug, native_name, emoji, card_type, is_active, sort_order, collection_id, collection_sort_order, language_cards_category_translations (lang_code, name, description)`)
@@ -16,6 +17,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   if (categoryQuery.error) {
     // Backward-compatible fallback while the collection migration is not applied yet.
+    hasCollectionColumns = false
     categoryQuery = await supabase
       .from('language_cards_categories')
       .select(`slug, native_name, emoji, card_type, is_active, sort_order, language_cards_category_translations (lang_code, name, description)`)
@@ -67,6 +69,25 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
         categories: collectionCategories.map((cat) => cat.id),
       }
     })
+  }
+
+  if (!hasCollectionColumns && collections.length === 0) {
+    const n5Categories = ['hiragana', 'katakana', 'first-words'].filter((categoryId) =>
+      categories.some((category) => category.id === categoryId && category.enabled !== false)
+    )
+
+    if (n5Categories.length > 0) {
+      collections = [{
+        id: 'jlpt-n5',
+        name: 'JLPT N5',
+        description: lang === 'de'
+          ? 'Grundlagen für die erste Japanisch-Prüfung'
+          : 'Basics for the first Japanese proficiency test',
+        emoji: '🎓',
+        enabled: true,
+        categories: n5Categories,
+      }]
+    }
   }
 
   return NextResponse.json({ categories, collections })
