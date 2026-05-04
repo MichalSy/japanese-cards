@@ -115,7 +115,6 @@ export default function LearnCardVocabulary({ card, lang }) {
             </>
           )}
           <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
-            <span style={{ fontSize: '9px', fontWeight: '750', letterSpacing: '0.11em', color: 'rgba(255,255,255,0.32)', textTransform: 'uppercase' }}>Hiragana</span>
             <span style={{
               minWidth: 0, fontSize: 'clamp(30px, 9vw, 46px)', lineHeight: 1.04, fontWeight: '700', color: 'white',
               textShadow: '0 4px 24px rgba(236,72,153,0.24)', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center',
