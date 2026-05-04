@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Check } from 'lucide-react'
-import { fetchCategoryWithItems } from '@/config/api'
+import { fetchCategories, fetchCategoryWithItems } from '@/config/api'
 import { useT } from '@/components/I18nContext'
 import { fetchProgressFromServer, computeGroupProgress } from '@/utils/progressStorage'
 import { useSetBackHandler } from '@/components/BackHandlerContext'
@@ -30,6 +30,8 @@ export default function ContentTypeView({ params }) {
   const [error, setError] = useState(null)
   const [groupData, setGroupData] = useState({})
   const [progress, setProgress] = useState({})
+  const querySourceCollection = searchParams.get('collection')
+  const [sourceCollection, setSourceCollection] = useState(querySourceCollection)
 
   const tabContainerRef = useRef(null)
   const [indicatorLeft, setIndicatorLeft] = useState(0)
@@ -42,16 +44,16 @@ export default function ContentTypeView({ params }) {
     { id: 'practice', label: t('category.tab.practice') },
   ]
 
-  const sourceCollection = searchParams.get('collection')
   useSetBackHandler(() => router.push(sourceCollection ? `/collections/${sourceCollection}` : '/'))
 
   const loadData = useCallback(async ({ showLoading = false } = {}) => {
     try {
       if (showLoading) setLoading(true)
-      const [config, serverProgress, coursesRes] = await Promise.all([
+      const [config, serverProgress, coursesRes, categoryData] = await Promise.all([
         fetchCategoryWithItems(contentType),
         fetchProgressFromServer(contentType),
         fetch(`/api/learn/courses?category=${contentType}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : { courses: [] }),
+        fetchCategories(),
       ])
       setCategoryConfig(config)
       setProgress(serverProgress)
@@ -59,13 +61,19 @@ export default function ContentTypeView({ params }) {
       for (const group of config.groups) practiceGroups[group.id] = group.items || []
       setGroupData(practiceGroups)
       setCourses(coursesRes.courses ?? [])
+      if (!querySourceCollection) {
+        const parentCollection = (categoryData.collections ?? []).find(collection =>
+          collection.enabled !== false && collection.categories?.includes(contentType)
+        )
+        setSourceCollection(parentCollection?.id ?? null)
+      }
       setError(null)
     } catch (err) {
       setError(err.message)
     } finally {
       if (showLoading) setLoading(false)
     }
-  }, [contentType])
+  }, [contentType, querySourceCollection])
 
   useEffect(() => {
     loadData({ showLoading: true })
