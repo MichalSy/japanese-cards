@@ -17,6 +17,10 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     .from('language_cards_learning_lessons')
     .select(`
       id, slug,
+      course:language_cards_learning_courses (
+        slug,
+        category:language_cards_categories (slug)
+      ),
       language_cards_learning_lesson_translations (lang_code, title, description)
     `)
     .eq('slug', lessonId)
@@ -56,7 +60,14 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   })
 
   return NextResponse.json({
-    lesson: { id: lesson.id, slug: lesson.slug, title: lt.title ?? lesson.slug, description: lt.description ?? null },
+    lesson: {
+      id: lesson.id,
+      slug: lesson.slug,
+      title: lt.title ?? lesson.slug,
+      description: lt.description ?? null,
+      course_slug: (lesson as any).course?.slug ?? null,
+      category_slug: (lesson as any).course?.category?.slug ?? null,
+    },
     lang,
     settings: {
       show_translations_by_default: settings.show_translations_by_default,

@@ -159,7 +159,11 @@ export default function LearnMode({ lesson, cards, lang }) {
     if (!canAdvance) return
     if (isSummary) {
       await saveCompletion()
-      router.back()
+      if (lesson.category_slug) {
+        router.replace(`/content/${lesson.category_slug}?tab=learn&completed=${lesson.slug}`)
+      } else {
+        router.back()
+      }
       return
     }
     if (isLast) { goTo(total, 'forward'); return }
