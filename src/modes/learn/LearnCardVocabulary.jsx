@@ -89,56 +89,54 @@ export default function LearnCardVocabulary({ card, lang }) {
         </div>
       )}
 
-      <div style={{ padding: imageUrl ? '12px 14px 14px' : '16px 16px 18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ padding: imageUrl ? '10px 14px 12px' : '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '10px',
+          display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '7px',
+          padding: '10px 12px', borderRadius: '18px', background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.08)',
         }}>
-          <div style={{
-            minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px',
-            padding: '12px 12px', borderRadius: '18px', background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.08)',
-          }}>
-            <span style={{ fontSize: '10px', fontWeight: '750', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.34)', textTransform: 'uppercase' }}>Hiragana</span>
+          <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+            <span style={{ fontSize: '9px', fontWeight: '750', letterSpacing: '0.11em', color: 'rgba(255,255,255,0.32)', textTransform: 'uppercase' }}>Hiragana</span>
             <span style={{
-              fontSize: 'clamp(34px, 10.5vw, 54px)', lineHeight: 1.08, fontWeight: '700', color: 'white',
-              textShadow: '0 4px 24px rgba(236,72,153,0.26)', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center',
+              fontSize: 'clamp(30px, 9vw, 46px)', lineHeight: 1.04, fontWeight: '700', color: 'white',
+              textShadow: '0 4px 24px rgba(236,72,153,0.24)', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center',
             }}>
               {card.native}
             </span>
           </div>
 
-          <div style={{
-            minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px',
-            padding: '11px 12px', borderRadius: '18px', background: 'rgba(236,72,153,0.08)', border: '1px solid rgba(236,72,153,0.16)',
-          }}>
-            <span style={{ fontSize: '10px', fontWeight: '750', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.34)', textTransform: 'uppercase' }}>Romaji</span>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
+
+          <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '9px', fontWeight: '750', letterSpacing: '0.11em', color: 'rgba(255,255,255,0.32)', textTransform: 'uppercase', flexShrink: 0 }}>Romaji</span>
             <span style={{
-              fontSize: 'clamp(19px, 5.4vw, 28px)', fontWeight: '850', color: 'rgba(236,72,153,0.96)',
-              letterSpacing: '0.02em', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center', lineHeight: 1.15,
+              minWidth: 0, fontSize: 'clamp(17px, 4.8vw, 24px)', fontWeight: '850', color: 'rgba(236,72,153,0.96)',
+              letterSpacing: '0.02em', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center', lineHeight: 1.12,
             }}>
               {romaji || '–'}
             </span>
           </div>
 
           {card.audio_url && (
-            <div>
+            <>
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
               <audio ref={audioRef} src={card.audio_url} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
               <button
                 type="button"
                 onClick={handlePlayAudio}
                 aria-label={lang === 'de' ? 'Aussprache abspielen' : 'Play pronunciation'}
                 style={{
-                  width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  minHeight: '42px', padding: '10px 14px', borderRadius: '18px', cursor: 'pointer',
-                  border: '1px solid rgba(236,72,153,0.35)', color: 'white', fontSize: '14px', fontWeight: '850',
-                  background: isPlaying ? 'linear-gradient(135deg, rgba(236,72,153,0.95), rgba(168,85,247,0.95))' : 'rgba(236,72,153,0.14)',
-                  boxShadow: isPlaying ? '0 6px 18px rgba(236,72,153,0.28)' : 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                  width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
+                  minHeight: '34px', padding: '7px 12px', borderRadius: '999px', cursor: 'pointer',
+                  border: '1px solid rgba(236,72,153,0.32)', color: 'white', fontSize: '13px', fontWeight: '850',
+                  background: isPlaying ? 'linear-gradient(135deg, rgba(236,72,153,0.95), rgba(168,85,247,0.95))' : 'rgba(236,72,153,0.13)',
+                  boxShadow: isPlaying ? '0 5px 14px rgba(236,72,153,0.24)' : 'none',
                   transition: 'background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
                 }}
               >
-                <span aria-hidden="true" style={{ fontSize: '16px', lineHeight: 1 }}>{isPlaying ? '■' : '▶'}</span>
-                <span>{lang === 'de' ? 'Audio abspielen' : 'Play audio'}</span>
+                <span aria-hidden="true" style={{ fontSize: '14px', lineHeight: 1 }}>{isPlaying ? '■' : '▶'}</span>
+                <span>{lang === 'de' ? 'Audio' : 'Audio'}</span>
               </button>
-            </div>
+            </>
           )}
         </div>
 
