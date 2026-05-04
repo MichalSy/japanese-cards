@@ -1,0 +1,157 @@
+{
+  "category": {
+    "slug": "n5-vocabulary",
+    "native_name": "語彙",
+    "emoji": "📚",
+    "color": "#6366f1",
+    "sort_order": 104,
+    "collection_sort_order": 4,
+    "translations": {
+      "de": {
+        "name": "N5 Vokabeln",
+        "description": "Kernwortschatz für JLPT N5 in kurzen Lektionen mit maximal 10 Karten."
+      },
+      "en": {
+        "name": "N5 Vocabulary",
+        "description": "Core vocabulary for JLPT N5 in short lessons with at most 10 cards."
+      }
+    }
+  },
+  "course": {
+    "slug": "n5-vocabulary-basics",
+    "level": "jlpt-n5",
+    "sort_order": 1,
+    "translations": {
+      "de": {
+        "title": "N5 Vokabeln",
+        "description": "Zehn kurze Lektionen mit je 5 Vokabeln und 5 Quizkarten."
+      },
+      "en": {
+        "title": "N5 Vocabulary",
+        "description": "Ten short lessons with 5 vocabulary cards and 5 quiz cards each."
+      }
+    }
+  },
+  "lessons": [
+    {
+      "slug": "n5-vocab-family-people",
+      "sort_order": 1,
+      "translations": { "de": "Familie & Menschen", "en": "Family & People" },
+      "items": [
+        { "slug": "n5v-hito", "native": "人", "transliteration": "hito", "de": "Mensch, Person", "en": "person", "kind": "person" },
+        { "slug": "n5v-otoko", "native": "男", "transliteration": "otoko", "de": "Mann", "en": "man", "kind": "man" },
+        { "slug": "n5v-onna", "native": "女", "transliteration": "onna", "de": "Frau", "en": "woman", "kind": "woman" },
+        { "slug": "n5v-kodomo", "native": "子供", "transliteration": "kodomo", "de": "Kind", "en": "child", "kind": "child" },
+        { "slug": "n5v-tomodachi", "native": "友達", "transliteration": "tomodachi", "de": "Freund, Freundin", "en": "friend", "kind": "friend" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-home-places",
+      "sort_order": 2,
+      "translations": { "de": "Zuhause & Orte", "en": "Home & Places" },
+      "items": [
+        { "slug": "n5v-ie", "native": "家", "transliteration": "ie", "de": "Haus, Zuhause", "en": "house, home", "kind": "home" },
+        { "slug": "n5v-heya", "native": "部屋", "transliteration": "heya", "de": "Zimmer", "en": "room", "kind": "room" },
+        { "slug": "n5v-gakkou", "native": "学校", "transliteration": "gakkou", "de": "Schule", "en": "school", "kind": "school" },
+        { "slug": "n5v-eki", "native": "駅", "transliteration": "eki", "de": "Bahnhof", "en": "station", "kind": "station" },
+        { "slug": "n5v-mise", "native": "店", "transliteration": "mise", "de": "Geschäft, Laden", "en": "shop", "kind": "shop" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-daily-objects",
+      "sort_order": 3,
+      "translations": { "de": "Alltagsdinge", "en": "Everyday Objects" },
+      "items": [
+        { "slug": "n5v-kuruma", "native": "車", "transliteration": "kuruma", "de": "Auto", "en": "car", "kind": "car" },
+        { "slug": "n5v-jitensha", "native": "自転車", "transliteration": "jitensha", "de": "Fahrrad", "en": "bicycle", "kind": "bicycle" },
+        { "slug": "n5v-tegami", "native": "手紙", "transliteration": "tegami", "de": "Brief", "en": "letter", "kind": "letter" },
+        { "slug": "n5v-shashin", "native": "写真", "transliteration": "shashin", "de": "Foto", "en": "photo", "kind": "photo" },
+        { "slug": "n5v-kutsu", "native": "靴", "transliteration": "kutsu", "de": "Schuhe", "en": "shoes", "kind": "shoes" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-food-drink",
+      "sort_order": 4,
+      "translations": { "de": "Essen & Trinken", "en": "Food & Drink" },
+      "items": [
+        { "slug": "n5v-tabemono", "native": "食べ物", "transliteration": "tabemono", "de": "Essen, Lebensmittel", "en": "food", "kind": "food" },
+        { "slug": "n5v-nomimono", "native": "飲み物", "transliteration": "nomimono", "de": "Getränk", "en": "drink", "kind": "drink" },
+        { "slug": "n5v-asa-gohan", "native": "朝ご飯", "transliteration": "asa-gohan", "de": "Frühstück", "en": "breakfast", "kind": "breakfast" },
+        { "slug": "n5v-hiru-gohan", "native": "昼ご飯", "transliteration": "hiru-gohan", "de": "Mittagessen", "en": "lunch", "kind": "lunch" },
+        { "slug": "n5v-ban-gohan", "native": "晩ご飯", "transliteration": "ban-gohan", "de": "Abendessen", "en": "dinner", "kind": "dinner" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-basic-verbs-1",
+      "sort_order": 5,
+      "translations": { "de": "Basisverben 1", "en": "Basic Verbs 1" },
+      "items": [
+        { "slug": "n5v-iku", "native": "行く", "transliteration": "iku", "de": "gehen", "en": "to go", "kind": "verb" },
+        { "slug": "n5v-kuru", "native": "来る", "transliteration": "kuru", "de": "kommen", "en": "to come", "kind": "verb" },
+        { "slug": "n5v-kaeru", "native": "帰る", "transliteration": "kaeru", "de": "zurückkehren", "en": "to return", "kind": "verb" },
+        { "slug": "n5v-taberu", "native": "食べる", "transliteration": "taberu", "de": "essen", "en": "to eat", "kind": "verb" },
+        { "slug": "n5v-nomu", "native": "飲む", "transliteration": "nomu", "de": "trinken", "en": "to drink", "kind": "verb" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-basic-verbs-2",
+      "sort_order": 6,
+      "translations": { "de": "Basisverben 2", "en": "Basic Verbs 2" },
+      "items": [
+        { "slug": "n5v-miru", "native": "見る", "transliteration": "miru", "de": "sehen, anschauen", "en": "to see, to watch", "kind": "verb" },
+        { "slug": "n5v-kiku", "native": "聞く", "transliteration": "kiku", "de": "hören, fragen", "en": "to listen, to ask", "kind": "verb" },
+        { "slug": "n5v-yomu", "native": "読む", "transliteration": "yomu", "de": "lesen", "en": "to read", "kind": "verb" },
+        { "slug": "n5v-kaku", "native": "書く", "transliteration": "kaku", "de": "schreiben", "en": "to write", "kind": "verb" },
+        { "slug": "n5v-hanasu", "native": "話す", "transliteration": "hanasu", "de": "sprechen", "en": "to speak", "kind": "verb" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-adjectives-1",
+      "sort_order": 7,
+      "translations": { "de": "Adjektive 1", "en": "Adjectives 1" },
+      "items": [
+        { "slug": "n5v-ookii", "native": "大きい", "transliteration": "ookii", "de": "groß", "en": "big", "kind": "adjective" },
+        { "slug": "n5v-chiisai", "native": "小さい", "transliteration": "chiisai", "de": "klein", "en": "small", "kind": "adjective" },
+        { "slug": "n5v-atarashii", "native": "新しい", "transliteration": "atarashii", "de": "neu", "en": "new", "kind": "adjective" },
+        { "slug": "n5v-furui", "native": "古い", "transliteration": "furui", "de": "alt", "en": "old", "kind": "adjective" },
+        { "slug": "n5v-ii", "native": "いい", "transliteration": "ii", "de": "gut", "en": "good", "kind": "adjective" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-adjectives-2",
+      "sort_order": 8,
+      "translations": { "de": "Adjektive 2", "en": "Adjectives 2" },
+      "items": [
+        { "slug": "n5v-atsui", "native": "暑い", "transliteration": "atsui", "de": "heiß", "en": "hot", "kind": "adjective" },
+        { "slug": "n5v-samui", "native": "寒い", "transliteration": "samui", "de": "kalt", "en": "cold", "kind": "adjective" },
+        { "slug": "n5v-takai", "native": "高い", "transliteration": "takai", "de": "hoch, teuer", "en": "high, expensive", "kind": "adjective" },
+        { "slug": "n5v-yasui", "native": "安い", "transliteration": "yasui", "de": "billig, günstig", "en": "cheap", "kind": "adjective" },
+        { "slug": "n5v-omoshiroi", "native": "面白い", "transliteration": "omoshiroi", "de": "interessant", "en": "interesting", "kind": "adjective" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-school-work",
+      "sort_order": 9,
+      "translations": { "de": "Schule & Arbeit", "en": "School & Work" },
+      "items": [
+        { "slug": "n5v-sensei", "native": "先生", "transliteration": "sensei", "de": "Lehrer, Lehrerin", "en": "teacher", "kind": "person" },
+        { "slug": "n5v-gakusei", "native": "学生", "transliteration": "gakusei", "de": "Student, Schüler", "en": "student", "kind": "person" },
+        { "slug": "n5v-shigoto", "native": "仕事", "transliteration": "shigoto", "de": "Arbeit, Job", "en": "work, job", "kind": "work" },
+        { "slug": "n5v-kaisha", "native": "会社", "transliteration": "kaisha", "de": "Firma", "en": "company", "kind": "company" },
+        { "slug": "n5v-benkyou", "native": "勉強", "transliteration": "benkyou", "de": "Lernen, Studium", "en": "study", "kind": "study" }
+      ]
+    },
+    {
+      "slug": "n5-vocab-nature-weather",
+      "sort_order": 10,
+      "translations": { "de": "Natur & Wetter", "en": "Nature & Weather" },
+      "items": [
+        { "slug": "n5v-tenki", "native": "天気", "transliteration": "tenki", "de": "Wetter", "en": "weather", "kind": "weather" },
+        { "slug": "n5v-ame", "native": "雨", "transliteration": "ame", "de": "Regen", "en": "rain", "kind": "rain" },
+        { "slug": "n5v-yuki", "native": "雪", "transliteration": "yuki", "de": "Schnee", "en": "snow", "kind": "snow" },
+        { "slug": "n5v-kawa", "native": "川", "transliteration": "kawa", "de": "Fluss", "en": "river", "kind": "river" },
+        { "slug": "n5v-yama", "native": "山", "transliteration": "yama", "de": "Berg", "en": "mountain", "kind": "mountain" }
+      ]
+    }
+  ]
+}
