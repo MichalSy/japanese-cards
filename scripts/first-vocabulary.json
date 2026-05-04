@@ -445,12 +445,36 @@
           "kind": "greeting-evening"
         },
         {
+          "slug": "fv-oyasumi",
+          "native": "おやすみ",
+          "transliteration": "oyasumi",
+          "de": "Gute Nacht",
+          "en": "good night",
+          "kind": "greeting-good-night"
+        },
+        {
           "slug": "fv-sayounara",
           "native": "さようなら",
           "transliteration": "sayounara",
           "de": "Auf Wiedersehen",
           "en": "goodbye",
           "kind": "greeting-goodbye"
+        },
+        {
+          "slug": "fv-mata-ne",
+          "native": "またね",
+          "transliteration": "mata ne",
+          "de": "Bis später",
+          "en": "see you",
+          "kind": "greeting-see-you"
+        },
+        {
+          "slug": "fv-jaa-ne",
+          "native": "じゃあね",
+          "transliteration": "jaa ne",
+          "de": "Tschüss",
+          "en": "bye",
+          "kind": "greeting-bye"
         },
         {
           "slug": "fv-arigatou",
@@ -469,20 +493,28 @@
           "kind": "excuse"
         },
         {
-          "slug": "fv-hai",
-          "native": "はい",
-          "transliteration": "hai",
-          "de": "Ja",
-          "en": "yes",
-          "kind": "yes"
+          "slug": "fv-gomen",
+          "native": "ごめん",
+          "transliteration": "gomen",
+          "de": "Sorry",
+          "en": "sorry",
+          "kind": "sorry"
         },
         {
-          "slug": "fv-iie",
-          "native": "いいえ",
-          "transliteration": "iie",
-          "de": "Nein",
-          "en": "no",
-          "kind": "no"
+          "slug": "fv-hajimemashite",
+          "native": "はじめまして",
+          "transliteration": "hajimemashite",
+          "de": "Freut mich",
+          "en": "nice to meet you",
+          "kind": "nice-meet"
+        },
+        {
+          "slug": "fv-yoroshiku",
+          "native": "よろしく",
+          "transliteration": "yoroshiku",
+          "de": "Freut mich / bitte gut mit mir",
+          "en": "nice to meet you / please be kind",
+          "kind": "yoroshiku"
         }
       ]
     },
@@ -557,6 +589,38 @@
           "de": "wie viel",
           "en": "how much",
           "kind": "question-how-much"
+        },
+        {
+          "slug": "fv-nanji",
+          "native": "なんじ",
+          "transliteration": "nanji",
+          "de": "wie spät",
+          "en": "what time",
+          "kind": "question-time"
+        },
+        {
+          "slug": "fv-docchi",
+          "native": "どっち",
+          "transliteration": "docchi",
+          "de": "welche Richtung",
+          "en": "which way",
+          "kind": "question-which-way"
+        },
+        {
+          "slug": "fv-donna",
+          "native": "どんな",
+          "transliteration": "donna",
+          "de": "was für ein",
+          "en": "what kind",
+          "kind": "question-what-kind"
+        },
+        {
+          "slug": "fv-dare-no",
+          "native": "だれの",
+          "transliteration": "dare no",
+          "de": "wessen",
+          "en": "whose",
+          "kind": "question-whose"
         }
       ]
     },
@@ -564,8 +628,8 @@
       "slug": "first-words-time",
       "sort_order": 7,
       "translations": {
-        "de": "Tageszeiten",
-        "en": "Times of Day"
+        "de": "Zeiten",
+        "en": "Time"
       },
       "items": [
         {
@@ -631,6 +695,38 @@
           "de": "gestern",
           "en": "yesterday",
           "kind": "time-yesterday"
+        },
+        {
+          "slug": "fv-mainichi",
+          "native": "まいにち",
+          "transliteration": "mainichi",
+          "de": "jeden Tag",
+          "en": "every day",
+          "kind": "time-every-day"
+        },
+        {
+          "slug": "fv-hayai",
+          "native": "はやい",
+          "transliteration": "hayai",
+          "de": "früh",
+          "en": "early",
+          "kind": "time-early"
+        },
+        {
+          "slug": "fv-osoi",
+          "native": "おそい",
+          "transliteration": "osoi",
+          "de": "spät",
+          "en": "late",
+          "kind": "time-late"
+        },
+        {
+          "slug": "fv-toki",
+          "native": "とき",
+          "transliteration": "toki",
+          "de": "Zeit / Moment",
+          "en": "time / moment",
+          "kind": "time-moment"
         }
       ]
     }
