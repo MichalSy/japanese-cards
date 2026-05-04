@@ -37,7 +37,7 @@ export default function CollectionView({ params }) {
 
   return (
     <AppLayout>
-      <AppHeader><AppHeaderBar title={collection?.name} /></AppHeader>
+      <AppHeader><AppHeaderBar title={collection?.name} backHref="/" /></AppHeader>
       <AppContent>
         <div className="space-y-6 fade-in">
           {collection?.description && (

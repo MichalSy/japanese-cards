@@ -6,7 +6,6 @@ import { Check } from 'lucide-react'
 import { fetchCategories, fetchCategoryWithItems } from '@/config/api'
 import { useT } from '@/components/I18nContext'
 import { fetchProgressFromServer, computeGroupProgress } from '@/utils/progressStorage'
-import { useSetBackHandler } from '@/components/BackHandlerContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
 
@@ -43,8 +42,6 @@ export default function ContentTypeView({ params }) {
     { id: 'learn', label: t('category.tab.learn') },
     { id: 'practice', label: t('category.tab.practice') },
   ]
-
-  useSetBackHandler(() => router.push(sourceCollection ? `/collections/${sourceCollection}` : '/'))
 
   const loadData = useCallback(async ({ showLoading = false } = {}) => {
     try {
@@ -133,7 +130,7 @@ export default function ContentTypeView({ params }) {
 
   return (
     <AppLayout>
-      <AppHeader><AppHeaderBar title={categoryName} /></AppHeader>
+      <AppHeader><AppHeaderBar title={categoryName} backHref={sourceCollection ? `/collections/${sourceCollection}` : undefined} /></AppHeader>
 
       <AppContent>
         {activeTab === 'learn' && (
@@ -200,7 +197,7 @@ export default function ContentTypeView({ params }) {
               const allItems = Object.values(groupData).flat()
               const allProgress = computeGroupProgress(allItems, progress)
               return (
-                <Card interactive onClick={() => router.push(`/content/${contentType}/all`)}>
+                <Card interactive onClick={() => router.push(`/content/${contentType}/all${sourceCollection ? `?collection=${sourceCollection}` : ''}`)}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
@@ -221,7 +218,7 @@ export default function ContentTypeView({ params }) {
               const items = groupData[group.id] || []
               const groupProgress = computeGroupProgress(items, progress)
               return (
-                <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}`)}>
+                <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}${sourceCollection ? `?collection=${sourceCollection}` : ''}`)}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>

@@ -1,8 +1,8 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { fetchCategoryConfig, fetchGameModes } from '@/config/api'
+import { fetchCategories, fetchCategoryConfig, fetchGameModes } from '@/config/api'
 import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter, Card } from '@/components/Layout'
@@ -20,27 +20,36 @@ function ModeIcon({ id }) {
 export default function GameModeSelector({ params }) {
   const { contentType, groupId } = params
   const router = useRouter()
+  const searchParams = useSearchParams()
   const t = useT()
   const [cardCount, setCardCount] = useState('all')
   const [categoryConfig, setCategoryConfig] = useState(null)
   const [gameModeConfig, setGameModeConfig] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const querySourceCollection = searchParams.get('collection')
+  const [sourceCollection, setSourceCollection] = useState(querySourceCollection)
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true)
-        const [catConfig, gameModes] = await Promise.all([fetchCategoryConfig(contentType), fetchGameModes()])
+        const [catConfig, gameModes, categoryData] = await Promise.all([fetchCategoryConfig(contentType), fetchGameModes(), fetchCategories()])
         setCategoryConfig(catConfig)
         setGameModeConfig(gameModes)
+        if (!querySourceCollection) {
+          const parentCollection = (categoryData.collections ?? []).find(collection =>
+            collection.enabled !== false && collection.categories?.includes(contentType)
+          )
+          setSourceCollection(parentCollection?.id ?? null)
+        }
       } catch (err) {
         setError(err.message)
       } finally {
         setLoading(false)
       }
     })()
-  }, [contentType])
+  }, [contentType, querySourceCollection])
 
   const gameModeMap = {}
   if (gameModeConfig?.gameModes) gameModeConfig.gameModes.forEach(mode => { gameModeMap[mode.id] = mode })
@@ -54,7 +63,7 @@ export default function GameModeSelector({ params }) {
   const groupName = t(`groups.${groupId}`, group?.name ?? groupId)
 
   const handleModeClick = (modeId) => {
-    router.push(`/game/${contentType}/${groupId}/${modeId}?cards=${cardCount}`)
+    router.push(`/game/${contentType}/${groupId}/${modeId}?cards=${cardCount}${sourceCollection ? `&collection=${sourceCollection}` : ''}`)
   }
 
   if (loading) return <AppLayout><AppHeader><AppHeaderBar title={t('loading')} /></AppHeader><AppContent><div className="card" style={{ color: 'rgba(255,255,255,0.5)' }}>{t('loading')}</div></AppContent></AppLayout>
@@ -71,7 +80,7 @@ export default function GameModeSelector({ params }) {
 
   return (
     <AppLayout>
-      <AppHeader><AppHeaderBar title={groupName} /></AppHeader>
+      <AppHeader><AppHeaderBar title={groupName} backHref={sourceCollection ? `/collections/${sourceCollection}` : undefined} /></AppHeader>
       <AppContent>
         <div className="space-y-6 fade-in">
           {hasNonLearnModes && (
