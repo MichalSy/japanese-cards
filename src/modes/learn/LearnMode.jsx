@@ -33,18 +33,23 @@ export default function LearnMode({ lesson, cards, lang }) {
   const [animDir, setAnimDir] = useState('forward')
   const [animKey, setAnimKey] = useState(0)
   const [imageReadyState, setImageReadyState] = useState({ url: null, ready: false })
+  const lessonCards = useMemo(() => {
+    const learningCards = cards.filter(card => card.card_type !== 'quiz_4_option')
+    const quizCards = randomShuffle(cards.filter(card => card.card_type === 'quiz_4_option'))
+    return [...learningCards, ...quizCards]
+  }, [cards])
   const imageUrls = useMemo(() => {
     const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
-    return cards
+    return lessonCards
       .filter(card => card.image_id)
       .map(card => `${assetsUrl}/${card.image_id}.jpg`)
-  }, [cards])
+  }, [lessonCards])
 
   const dragRef = useRef(null)
   const completionSavedRef = useRef(false)
   const shuffleCache = useRef({})
-  const card = cards[index]
-  const total = cards.length
+  const card = lessonCards[index]
+  const total = lessonCards.length
   const isSummary = index === total
   const isQuiz = card?.card_type === 'quiz_4_option'
   const currentImageUrl = card?.image_id
@@ -86,7 +91,7 @@ export default function LearnMode({ lesson, cards, lang }) {
   // Shuffle quiz options once per card per session, cached in ref
   const getShuffledOpts = (cardIdx) => {
     if (!shuffleCache.current[cardIdx]) {
-      const c = cards[cardIdx]
+      const c = lessonCards[cardIdx]
       const sorted = [...(c.data?.options ?? [])].sort((a, b) => a.sort_order - b.sort_order)
       shuffleCache.current[cardIdx] = randomShuffle(sorted)
     }
@@ -100,8 +105,8 @@ export default function LearnMode({ lesson, cards, lang }) {
   const isLast = index === total - 1
 
   const quizCardIndices = useMemo(() =>
-    cards.reduce((acc, c, i) => { if (c.card_type === 'quiz_4_option') acc.push(i); return acc }, []),
-    [cards]
+    lessonCards.reduce((acc, c, i) => { if (c.card_type === 'quiz_4_option') acc.push(i); return acc }, []),
+    [lessonCards]
   )
   const quizCount = quizCardIndices.length
   const correctCount = quizCardIndices.filter(i => quizAnswers[i]?.isCorrect).length
