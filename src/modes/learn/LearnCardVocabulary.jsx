@@ -96,7 +96,7 @@ export default function LearnCardVocabulary({ card, lang }) {
         }}>
           <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
             <span style={{ fontSize: '9px', fontWeight: '750', letterSpacing: '0.11em', color: 'rgba(255,255,255,0.32)', textTransform: 'uppercase' }}>Hiragana</span>
-            <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
               {card.audio_url && (
                 <>
                   <audio ref={audioRef} src={card.audio_url} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
@@ -105,7 +105,7 @@ export default function LearnCardVocabulary({ card, lang }) {
                     onClick={handlePlayAudio}
                     aria-label={lang === 'de' ? 'Aussprache abspielen' : 'Play pronunciation'}
                     style={{
-                      width: '32px', height: '32px', flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      width: '30px', height: '30px', flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       borderRadius: '999px', cursor: 'pointer', border: '1px solid rgba(236,72,153,0.38)', color: 'white',
                       background: isPlaying ? 'linear-gradient(135deg, rgba(236,72,153,0.95), rgba(168,85,247,0.95))' : 'rgba(236,72,153,0.22)',
                       boxShadow: isPlaying ? '0 5px 14px rgba(236,72,153,0.24)' : '0 4px 12px rgba(0,0,0,0.22)',
