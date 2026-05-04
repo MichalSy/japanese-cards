@@ -96,9 +96,9 @@ export default function LearnCardVocabulary({ card, lang }) {
         }}>
           <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
             <span style={{ fontSize: '9px', fontWeight: '750', letterSpacing: '0.11em', color: 'rgba(255,255,255,0.32)', textTransform: 'uppercase' }}>Hiragana</span>
-            <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+            <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', paddingLeft: card.audio_url ? '8px' : 0 }}>
               {card.audio_url && (
-                <>
+                <div style={{ width: '42px', flexShrink: 0, display: 'flex', justifyContent: 'flex-start' }}>
                   <audio ref={audioRef} src={card.audio_url} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
                   <button
                     type="button"
@@ -114,14 +114,15 @@ export default function LearnCardVocabulary({ card, lang }) {
                   >
                     <span aria-hidden="true" style={{ fontSize: '13px', lineHeight: 1, transform: isPlaying ? 'none' : 'translateX(1px)' }}>{isPlaying ? '■' : '▶'}</span>
                   </button>
-                </>
+                </div>
               )}
               <span style={{
-                minWidth: 0, fontSize: 'clamp(30px, 9vw, 46px)', lineHeight: 1.04, fontWeight: '700', color: 'white',
+                minWidth: 0, flex: '0 1 auto', fontSize: 'clamp(30px, 9vw, 46px)', lineHeight: 1.04, fontWeight: '700', color: 'white',
                 textShadow: '0 4px 24px rgba(236,72,153,0.24)', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center',
               }}>
                 {card.native}
               </span>
+              {card.audio_url && <div aria-hidden="true" style={{ width: '42px', flexShrink: 0 }} />}
             </div>
           </div>
 
