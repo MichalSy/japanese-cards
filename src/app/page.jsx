@@ -40,6 +40,8 @@ export default function MainMenu() {
 
   const [activeTab, setActiveTab] = useState('start')
   const [categories, setCategories] = useState([])
+  const [collections, setCollections] = useState([])
+  const [selectedCollectionId, setSelectedCollectionId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [overview, setOverview] = useState([])
@@ -90,6 +92,7 @@ export default function MainMenu() {
           fetch('/api/progress/daily?days=5').then(r => r.ok ? r.json() : { daily: [] }),
         ])
         setCategories(catData.categories.filter(cat => cat.enabled !== false))
+        setCollections((catData.collections ?? []).filter(collection => collection.enabled !== false))
         setOverview(ovData.overview ?? [])
         setDaily(dailyData.daily ?? [])
       } catch (err) {
@@ -100,20 +103,49 @@ export default function MainMenu() {
     })()
   }, [])
 
+  const selectedCollection = collections.find(collection => collection.id === selectedCollectionId) ?? null
+  const visibleCategories = selectedCollection
+    ? selectedCollection.categories
+      .map(categoryId => categories.find(category => category.id === categoryId))
+      .filter(Boolean)
+    : categories
+  const showCollections = collections.length > 0 && !selectedCollection
+
   return (
     <AppLayout>
       <AppHeader><AppHeaderBar /></AppHeader>
       <AppContent>
         {activeTab === 'start' && (
           <div className="space-y-6 fade-in">
-            <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-              {t('nav.categories')}
-            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {selectedCollection && (
+                <button onClick={() => setSelectedCollectionId(null)} style={{ width: '34px', height: '34px', flexShrink: 0, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontSize: '18px' }}>‹</button>
+              )}
+              <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
+                {selectedCollection ? selectedCollection.name : t('nav.categories')}
+              </h2>
+            </div>
+            {selectedCollection?.description && (
+              <p style={{ margin: '-12px 0 0', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>{selectedCollection.description}</p>
+            )}
             {loading && <div className="card" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '15px' }}>{t('loading')}</div>}
             {error && <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>{t('error')}: {error}</div>}
             {!loading && !error && (
               <div className="grid-1">
-                {categories.map(type => (
+                {showCollections ? collections.map(collection => (
+                  <Card key={collection.id} interactive onClick={() => setSelectedCollectionId(collection.id)}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>
+                        {collection.emoji}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '16px', fontWeight: '600', color: 'white', marginBottom: '4px' }}>{collection.name}</div>
+                        {collection.description && <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>{collection.description}</div>}
+                      </div>
+                      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px' }}>›</span>
+                    </div>
+                  </Card>
+                )) : visibleCategories.map(type => (
                   <Card key={type.id} interactive onClick={() => router.push(`/content/${type.id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                       <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>
