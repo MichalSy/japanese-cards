@@ -41,7 +41,6 @@ export default function MainMenu() {
   const [activeTab, setActiveTab] = useState('start')
   const [categories, setCategories] = useState([])
   const [collections, setCollections] = useState([])
-  const [selectedCollectionId, setSelectedCollectionId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [overview, setOverview] = useState([])
@@ -103,13 +102,7 @@ export default function MainMenu() {
     })()
   }, [])
 
-  const selectedCollection = collections.find(collection => collection.id === selectedCollectionId) ?? null
-  const visibleCategories = selectedCollection
-    ? selectedCollection.categories
-      .map(categoryId => categories.find(category => category.id === categoryId))
-      .filter(Boolean)
-    : categories
-  const showCollections = collections.length > 0 && !selectedCollection
+  const showCollections = collections.length > 0
 
   return (
     <AppLayout>
@@ -117,25 +110,15 @@ export default function MainMenu() {
       <AppContent>
         {activeTab === 'start' && (
           <div className="space-y-6 fade-in">
-            <div style={{ display: 'flex', alignItems: selectedCollection ? 'center' : 'flex-start', gap: '12px' }}>
-              {selectedCollection && (
-                <button aria-label="Zurück zu Kategorien" onClick={() => setSelectedCollectionId(null)} style={{ width: '34px', height: '34px', flexShrink: 0, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontSize: '18px', lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
-              )}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: selectedCollection ? '3px' : 0, minWidth: 0 }}>
-                <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0, lineHeight: 1.2 }}>
-                  {selectedCollection ? selectedCollection.name : t('nav.categories')}
-                </h2>
-                {selectedCollection?.description && (
-                  <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.35 }}>{selectedCollection.description}</p>
-                )}
-              </div>
-            </div>
+            <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              {t('nav.categories')}
+            </h2>
             {loading && <div className="card" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '15px' }}>{t('loading')}</div>}
             {error && <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>{t('error')}: {error}</div>}
             {!loading && !error && (
               <div className="grid-1">
                 {showCollections ? collections.map(collection => (
-                  <Card key={collection.id} interactive onClick={() => setSelectedCollectionId(collection.id)}>
+                  <Card key={collection.id} interactive onClick={() => router.push(`/collections/${collection.id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                       <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>
                         {collection.emoji}
@@ -147,7 +130,7 @@ export default function MainMenu() {
                       <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px' }}>›</span>
                     </div>
                   </Card>
-                )) : visibleCategories.map(type => (
+                )) : categories.map(type => (
                   <Card key={type.id} interactive onClick={() => router.push(`/content/${type.id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                       <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>

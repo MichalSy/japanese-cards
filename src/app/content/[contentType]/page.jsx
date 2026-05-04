@@ -42,7 +42,8 @@ export default function ContentTypeView({ params }) {
     { id: 'practice', label: t('category.tab.practice') },
   ]
 
-  useSetBackHandler(() => router.push('/'))
+  const sourceCollection = searchParams.get('collection')
+  useSetBackHandler(() => router.push(sourceCollection ? `/collections/${sourceCollection}` : '/'))
 
   const loadData = useCallback(async ({ showLoading = false } = {}) => {
     try {
@@ -153,7 +154,7 @@ export default function ContentTypeView({ params }) {
                   )}
                 </div>
                 {(course.lessons ?? []).map((lesson, i) => (
-                  <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.slug}`)}>
+                  <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.slug}${sourceCollection ? `?collection=${sourceCollection}` : ''}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                       <div style={{ width: '36px', height: '36px', flexShrink: 0, borderRadius: '50%', background: lesson.completed ? 'linear-gradient(135deg,#10b981,#34d399)' : 'linear-gradient(135deg,#ec4899,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: 'white', boxShadow: lesson.completed ? '0 3px 10px rgba(16,185,129,0.32)' : '0 3px 10px rgba(236,72,153,0.35)' }}>
                         {i + 1}
