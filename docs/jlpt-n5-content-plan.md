@@ -2,6 +2,8 @@
 
 Ziel: Die Collection `JLPT N5` soll den kompletten Einstiegspfad sichtbar machen. Fertige Kategorien bleiben aktiv und klickbar. Geplante Kategorien werden bereits angezeigt, sind aber deaktiviert und haben noch keine Lessons oder Practice Groups.
 
+Die weiteren JLPT-Collections `JLPT N4`, `JLPT N3`, `JLPT N2` und `JLPT N1` werden auf der Hauptseite ebenfalls sichtbar gemacht. Sie sind deaktiviert, ausgegraut und enthalten noch keine Kategorien oder Inhalte. Sie dienen nur als Roadmap-Ausblick.
+
 ## Reihenfolge in der Collection
 
 | Sortierung | Slug | Status | Typ | Inhalt |

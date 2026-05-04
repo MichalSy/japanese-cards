@@ -53,6 +53,13 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     { id: 'n5-phrases', native_name: '表現', nameDe: 'Sätze & Dialoge', descDe: 'Alltagssätze, Mini-Dialoge und Prüfungsmuster', nameEn: 'Phrases & Dialogues', descEn: 'Everyday phrases, mini dialogues, and test patterns', emoji: '💬', card_type: 'phrase', sort: 11 },
   ]
 
+  const plannedCollections = [
+    { id: 'jlpt-n4', name: 'JLPT N4', descDe: 'Aufbaukurs nach N5', descEn: 'Follow-up course after N5', emoji: '🌿', sort: 2 },
+    { id: 'jlpt-n3', name: 'JLPT N3', descDe: 'Mittelstufe mit Alltag und Lesen', descEn: 'Intermediate everyday Japanese and reading', emoji: '⛩️', sort: 3 },
+    { id: 'jlpt-n2', name: 'JLPT N2', descDe: 'Fortgeschrittene Grammatik, Kanji und Texte', descEn: 'Advanced grammar, kanji, and texts', emoji: '🗻', sort: 4 },
+    { id: 'jlpt-n1', name: 'JLPT N1', descDe: 'Höchste JLPT-Stufe für komplexes Japanisch', descEn: 'Highest JLPT level for complex Japanese', emoji: '🏯', sort: 5 },
+  ]
+
   for (const cat of plannedN5Categories) {
     if (categories.some((existing) => existing.id === cat.id)) continue
     categories.push({
@@ -90,6 +97,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
         description: t.description ?? '',
         emoji: collection.emoji,
         enabled: collection.is_active,
+        sort_order: collection.sort_order ?? 0,
         categories: collection.slug === 'jlpt-n5'
           ? Array.from(new Set([...collectionCategories.map((cat) => cat.id), ...plannedN5Categories.map((cat) => cat.id)]))
           : collectionCategories.map((cat) => cat.id),
@@ -111,10 +119,26 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
           : 'Basics for the first Japanese proficiency test',
         emoji: '🎓',
         enabled: true,
+        sort_order: 1,
         categories: n5Categories,
       }]
     }
   }
+
+  for (const collection of plannedCollections) {
+    if (collections.some((existing) => existing.id === collection.id)) continue
+    collections.push({
+      id: collection.id,
+      name: collection.name,
+      description: lang === 'de' ? collection.descDe : collection.descEn,
+      emoji: collection.emoji,
+      enabled: false,
+      sort_order: collection.sort,
+      categories: [],
+    })
+  }
+
+  collections.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
 
   return NextResponse.json({ categories, collections })
 })

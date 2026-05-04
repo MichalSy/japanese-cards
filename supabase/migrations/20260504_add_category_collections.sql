@@ -121,4 +121,33 @@ on conflict (category_id, lang_code) do update set
   name = excluded.name,
   description = excluded.description;
 
+
+with planned_collections as (
+  select * from (values
+    ('jlpt-n4', '🌿', 2, 'JLPT N4', 'Aufbaukurs nach N5', 'JLPT N4', 'Follow-up course after N5'),
+    ('jlpt-n3', '⛩️', 3, 'JLPT N3', 'Mittelstufe mit Alltag und Lesen', 'JLPT N3', 'Intermediate everyday Japanese and reading'),
+    ('jlpt-n2', '🗻', 4, 'JLPT N2', 'Fortgeschrittene Grammatik, Kanji und Texte', 'JLPT N2', 'Advanced grammar, kanji, and texts'),
+    ('jlpt-n1', '🏯', 5, 'JLPT N1', 'Höchste JLPT-Stufe für komplexes Japanisch', 'JLPT N1', 'Highest JLPT level for complex Japanese')
+  ) as v(slug, emoji, sort_order, de_name, de_description, en_name, en_description)
+), upserted as (
+  insert into language_cards_category_collections (language_id, slug, emoji, sort_order, is_active)
+  select 'ja', slug, emoji, sort_order, false
+  from planned_collections
+  on conflict (language_id, slug) do update set
+    emoji = excluded.emoji,
+    sort_order = excluded.sort_order,
+    is_active = false
+  returning id, slug
+)
+insert into language_cards_category_collection_translations (collection_id, lang_code, name, description)
+select u.id, lang.lang_code,
+  case when lang.lang_code = 'de' then p.de_name else p.en_name end,
+  case when lang.lang_code = 'de' then p.de_description else p.en_description end
+from upserted u
+join planned_collections p on p.slug = u.slug
+cross join (values ('de'), ('en')) as lang(lang_code)
+on conflict (collection_id, lang_code) do update set
+  name = excluded.name,
+  description = excluded.description;
+
 commit;

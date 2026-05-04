@@ -91,7 +91,7 @@ export default function MainMenu() {
           fetch('/api/progress/daily?days=5').then(r => r.ok ? r.json() : { daily: [] }),
         ])
         setCategories(catData.categories.filter(cat => cat.enabled !== false))
-        setCollections((catData.collections ?? []).filter(collection => collection.enabled !== false))
+        setCollections(catData.collections ?? [])
         setOverview(ovData.overview ?? [])
         setDaily(dailyData.daily ?? [])
       } catch (err) {
@@ -117,20 +117,26 @@ export default function MainMenu() {
             {error && <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>{t('error')}: {error}</div>}
             {!loading && !error && (
               <div className="grid-1">
-                {showCollections ? collections.map(collection => (
-                  <Card key={collection.id} interactive onClick={() => router.push(`/collections/${collection.id}`)}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                      <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>
-                        {collection.emoji}
+                {showCollections ? collections.map(collection => {
+                  const isEnabled = collection.enabled !== false
+                  return (
+                    <Card key={collection.id} interactive={isEnabled} onClick={isEnabled ? () => router.push(`/collections/${collection.id}`) : undefined}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', opacity: isEnabled ? 1 : 0.48 }}>
+                        <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>
+                          {collection.emoji}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                            <div style={{ fontSize: '16px', fontWeight: '600', color: 'white' }}>{collection.name}</div>
+                            {!isEnabled && <span style={{ padding: '3px 7px', borderRadius: '999px', background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.65)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Kommt bald</span>}
+                          </div>
+                          {collection.description && <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>{collection.description}</div>}
+                        </div>
+                        {isEnabled && <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px' }}>›</span>}
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '16px', fontWeight: '600', color: 'white', marginBottom: '4px' }}>{collection.name}</div>
-                        {collection.description && <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>{collection.description}</div>}
-                      </div>
-                      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '18px' }}>›</span>
-                    </div>
-                  </Card>
-                )) : categories.map(type => (
+                    </Card>
+                  )
+                }) : categories.map(type => (
                   <Card key={type.id} interactive onClick={() => router.push(`/content/${type.id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                       <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>
