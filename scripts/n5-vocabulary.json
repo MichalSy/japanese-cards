@@ -24,11 +24,11 @@
     "translations": {
       "de": {
         "title": "N5 Vokabeln",
-        "description": "Schrittweise aufgebaute N5-Vokabeln. Aktuell sauber aktiv: Familie & Menschen mit 10 Vokabeln und passenden Quizkarten."
+        "description": "Kernwortschatz für JLPT N5 in kurzen Lektionen mit je 10 Vokabeln und passenden Quizkarten."
       },
       "en": {
         "title": "N5 Vocabulary",
-        "description": "Incrementally built N5 vocabulary. Currently clean and active: Family & People with 10 vocabulary cards and matching quiz cards."
+        "description": "Core JLPT N5 vocabulary in short lessons with 10 words and matching quiz cards each."
       }
     }
   },
@@ -134,7 +134,7 @@
       "items": [
         {
           "slug": "n5v-ie",
-          "native": "家",
+          "native": "いえ",
           "transliteration": "ie",
           "de": "Haus, Zuhause",
           "en": "house, home",
@@ -142,7 +142,7 @@
         },
         {
           "slug": "n5v-heya",
-          "native": "部屋",
+          "native": "へや",
           "transliteration": "heya",
           "de": "Zimmer",
           "en": "room",
@@ -150,7 +150,7 @@
         },
         {
           "slug": "n5v-gakkou",
-          "native": "学校",
+          "native": "がっこう",
           "transliteration": "gakkou",
           "de": "Schule",
           "en": "school",
@@ -158,7 +158,7 @@
         },
         {
           "slug": "n5v-eki",
-          "native": "駅",
+          "native": "えき",
           "transliteration": "eki",
           "de": "Bahnhof",
           "en": "station",
@@ -166,7 +166,7 @@
         },
         {
           "slug": "n5v-mise",
-          "native": "店",
+          "native": "みせ",
           "transliteration": "mise",
           "de": "Geschäft, Laden",
           "en": "shop",
@@ -182,7 +182,7 @@
         },
         {
           "slug": "n5v-machi",
-          "native": "町",
+          "native": "まち",
           "transliteration": "machi",
           "de": "Stadt, Ort",
           "en": "town",
@@ -190,7 +190,7 @@
         },
         {
           "slug": "n5v-kuni",
-          "native": "国",
+          "native": "くに",
           "transliteration": "kuni",
           "de": "Land",
           "en": "country",
@@ -198,7 +198,7 @@
         },
         {
           "slug": "n5v-toshokan",
-          "native": "図書館",
+          "native": "としょかん",
           "transliteration": "toshokan",
           "de": "Bibliothek",
           "en": "library",
@@ -206,7 +206,7 @@
         },
         {
           "slug": "n5v-byouin",
-          "native": "病院",
+          "native": "びょういん",
           "transliteration": "byouin",
           "de": "Krankenhaus",
           "en": "hospital",
@@ -225,7 +225,7 @@
       "items": [
         {
           "slug": "n5v-kuruma",
-          "native": "車",
+          "native": "くるま",
           "transliteration": "kuruma",
           "de": "Auto",
           "en": "car",
@@ -233,7 +233,7 @@
         },
         {
           "slug": "n5v-jitensha",
-          "native": "自転車",
+          "native": "じてんしゃ",
           "transliteration": "jitensha",
           "de": "Fahrrad",
           "en": "bicycle",
@@ -241,7 +241,7 @@
         },
         {
           "slug": "n5v-tegami",
-          "native": "手紙",
+          "native": "てがみ",
           "transliteration": "tegami",
           "de": "Brief",
           "en": "letter",
@@ -249,7 +249,7 @@
         },
         {
           "slug": "n5v-shashin",
-          "native": "写真",
+          "native": "しゃしん",
           "transliteration": "shashin",
           "de": "Foto",
           "en": "photo",
@@ -257,7 +257,7 @@
         },
         {
           "slug": "n5v-kutsu",
-          "native": "靴",
+          "native": "くつ",
           "transliteration": "kutsu",
           "de": "Schuhe",
           "en": "shoes",
@@ -265,7 +265,7 @@
         },
         {
           "slug": "n5v-enpitsu",
-          "native": "鉛筆",
+          "native": "えんぴつ",
           "transliteration": "enpitsu",
           "de": "Bleistift",
           "en": "pencil",
@@ -273,7 +273,7 @@
         },
         {
           "slug": "n5v-kasa",
-          "native": "傘",
+          "native": "かさ",
           "transliteration": "kasa",
           "de": "Regenschirm",
           "en": "umbrella",
@@ -281,7 +281,7 @@
         },
         {
           "slug": "n5v-megane",
-          "native": "眼鏡",
+          "native": "めがね",
           "transliteration": "megane",
           "de": "Brille",
           "en": "glasses",
@@ -289,7 +289,7 @@
         },
         {
           "slug": "n5v-shinbun",
-          "native": "新聞",
+          "native": "しんぶん",
           "transliteration": "shinbun",
           "de": "Zeitung",
           "en": "newspaper",
@@ -297,7 +297,7 @@
         },
         {
           "slug": "n5v-zasshi",
-          "native": "雑誌",
+          "native": "ざっし",
           "transliteration": "zasshi",
           "de": "Zeitschrift",
           "en": "magazine",
@@ -316,7 +316,7 @@
       "items": [
         {
           "slug": "n5v-tabemono",
-          "native": "食べ物",
+          "native": "たべもの",
           "transliteration": "tabemono",
           "de": "Essen, Lebensmittel",
           "en": "food",
@@ -324,7 +324,7 @@
         },
         {
           "slug": "n5v-nomimono",
-          "native": "飲み物",
+          "native": "のみもの",
           "transliteration": "nomimono",
           "de": "Getränk",
           "en": "drink",
@@ -332,7 +332,7 @@
         },
         {
           "slug": "n5v-asa-gohan",
-          "native": "朝ご飯",
+          "native": "あさごはん",
           "transliteration": "asa-gohan",
           "de": "Frühstück",
           "en": "breakfast",
@@ -340,7 +340,7 @@
         },
         {
           "slug": "n5v-hiru-gohan",
-          "native": "昼ご飯",
+          "native": "ひるごはん",
           "transliteration": "hiru-gohan",
           "de": "Mittagessen",
           "en": "lunch",
@@ -348,7 +348,7 @@
         },
         {
           "slug": "n5v-ban-gohan",
-          "native": "晩ご飯",
+          "native": "ばんごはん",
           "transliteration": "ban-gohan",
           "de": "Abendessen",
           "en": "dinner",
@@ -356,7 +356,7 @@
         },
         {
           "slug": "n5v-yasai",
-          "native": "野菜",
+          "native": "やさい",
           "transliteration": "yasai",
           "de": "Gemüse",
           "en": "vegetables",
@@ -364,7 +364,7 @@
         },
         {
           "slug": "n5v-kudamono",
-          "native": "果物",
+          "native": "くだもの",
           "transliteration": "kudamono",
           "de": "Obst",
           "en": "fruit",
@@ -372,7 +372,7 @@
         },
         {
           "slug": "n5v-gyuunyuu",
-          "native": "牛乳",
+          "native": "ぎゅうにゅう",
           "transliteration": "gyuunyuu",
           "de": "Milch",
           "en": "milk",
@@ -388,7 +388,7 @@
         },
         {
           "slug": "n5v-sato",
-          "native": "砂糖",
+          "native": "さとう",
           "transliteration": "satou",
           "de": "Zucker",
           "en": "sugar",
@@ -407,7 +407,7 @@
       "items": [
         {
           "slug": "n5v-iku",
-          "native": "行く",
+          "native": "いく",
           "transliteration": "iku",
           "de": "gehen",
           "en": "to go",
@@ -415,7 +415,7 @@
         },
         {
           "slug": "n5v-kuru",
-          "native": "来る",
+          "native": "くる",
           "transliteration": "kuru",
           "de": "kommen",
           "en": "to come",
@@ -423,7 +423,7 @@
         },
         {
           "slug": "n5v-kaeru",
-          "native": "帰る",
+          "native": "かえる",
           "transliteration": "kaeru",
           "de": "zurückkehren",
           "en": "to return",
@@ -431,7 +431,7 @@
         },
         {
           "slug": "n5v-taberu",
-          "native": "食べる",
+          "native": "たべる",
           "transliteration": "taberu",
           "de": "essen",
           "en": "to eat",
@@ -439,7 +439,7 @@
         },
         {
           "slug": "n5v-nomu",
-          "native": "飲む",
+          "native": "のむ",
           "transliteration": "nomu",
           "de": "trinken",
           "en": "to drink",
@@ -447,7 +447,7 @@
         },
         {
           "slug": "n5v-kau",
-          "native": "買う",
+          "native": "かう",
           "transliteration": "kau",
           "de": "kaufen",
           "en": "to buy",
@@ -455,7 +455,7 @@
         },
         {
           "slug": "n5v-uru",
-          "native": "売る",
+          "native": "うる",
           "transliteration": "uru",
           "de": "verkaufen",
           "en": "to sell",
@@ -463,7 +463,7 @@
         },
         {
           "slug": "n5v-matsu",
-          "native": "待つ",
+          "native": "まつ",
           "transliteration": "matsu",
           "de": "warten",
           "en": "to wait",
@@ -471,7 +471,7 @@
         },
         {
           "slug": "n5v-au",
-          "native": "会う",
+          "native": "あう",
           "transliteration": "au",
           "de": "treffen",
           "en": "to meet",
@@ -479,7 +479,7 @@
         },
         {
           "slug": "n5v-neru",
-          "native": "寝る",
+          "native": "ねる",
           "transliteration": "neru",
           "de": "schlafen gehen",
           "en": "to sleep",
@@ -498,7 +498,7 @@
       "items": [
         {
           "slug": "n5v-miru",
-          "native": "見る",
+          "native": "みる",
           "transliteration": "miru",
           "de": "sehen, anschauen",
           "en": "to see, to watch",
@@ -506,7 +506,7 @@
         },
         {
           "slug": "n5v-kiku",
-          "native": "聞く",
+          "native": "きく",
           "transliteration": "kiku",
           "de": "hören, fragen",
           "en": "to listen, to ask",
@@ -514,7 +514,7 @@
         },
         {
           "slug": "n5v-yomu",
-          "native": "読む",
+          "native": "よむ",
           "transliteration": "yomu",
           "de": "lesen",
           "en": "to read",
@@ -522,7 +522,7 @@
         },
         {
           "slug": "n5v-kaku",
-          "native": "書く",
+          "native": "かく",
           "transliteration": "kaku",
           "de": "schreiben",
           "en": "to write",
@@ -530,7 +530,7 @@
         },
         {
           "slug": "n5v-hanasu",
-          "native": "話す",
+          "native": "はなす",
           "transliteration": "hanasu",
           "de": "sprechen",
           "en": "to speak",
@@ -538,7 +538,7 @@
         },
         {
           "slug": "n5v-akeru",
-          "native": "開ける",
+          "native": "あける",
           "transliteration": "akeru",
           "de": "öffnen",
           "en": "to open",
@@ -546,7 +546,7 @@
         },
         {
           "slug": "n5v-shimeru",
-          "native": "閉める",
+          "native": "しめる",
           "transliteration": "shimeru",
           "de": "schließen",
           "en": "to close",
@@ -554,7 +554,7 @@
         },
         {
           "slug": "n5v-hairu",
-          "native": "入る",
+          "native": "はいる",
           "transliteration": "hairu",
           "de": "hineingehen",
           "en": "to enter",
@@ -562,7 +562,7 @@
         },
         {
           "slug": "n5v-deru",
-          "native": "出る",
+          "native": "でる",
           "transliteration": "deru",
           "de": "hinausgehen",
           "en": "to leave",
@@ -570,7 +570,7 @@
         },
         {
           "slug": "n5v-tsukuru",
-          "native": "作る",
+          "native": "つくる",
           "transliteration": "tsukuru",
           "de": "machen, herstellen",
           "en": "to make",
@@ -589,7 +589,7 @@
       "items": [
         {
           "slug": "n5v-ookii",
-          "native": "大きい",
+          "native": "おおきい",
           "transliteration": "ookii",
           "de": "groß",
           "en": "big",
@@ -597,7 +597,7 @@
         },
         {
           "slug": "n5v-chiisai",
-          "native": "小さい",
+          "native": "ちいさい",
           "transliteration": "chiisai",
           "de": "klein",
           "en": "small",
@@ -605,7 +605,7 @@
         },
         {
           "slug": "n5v-atarashii",
-          "native": "新しい",
+          "native": "あたらしい",
           "transliteration": "atarashii",
           "de": "neu",
           "en": "new",
@@ -613,7 +613,7 @@
         },
         {
           "slug": "n5v-furui",
-          "native": "古い",
+          "native": "ふるい",
           "transliteration": "furui",
           "de": "alt",
           "en": "old",
@@ -629,7 +629,7 @@
         },
         {
           "slug": "n5v-warui",
-          "native": "悪い",
+          "native": "わるい",
           "transliteration": "warui",
           "de": "schlecht",
           "en": "bad",
@@ -637,7 +637,7 @@
         },
         {
           "slug": "n5v-muzukashii",
-          "native": "難しい",
+          "native": "むずかしい",
           "transliteration": "muzukashii",
           "de": "schwierig",
           "en": "difficult",
@@ -645,7 +645,7 @@
         },
         {
           "slug": "n5v-yasashii",
-          "native": "易しい",
+          "native": "やさしい",
           "transliteration": "yasashii",
           "de": "einfach",
           "en": "easy",
@@ -653,7 +653,7 @@
         },
         {
           "slug": "n5v-chikai",
-          "native": "近い",
+          "native": "ちかい",
           "transliteration": "chikai",
           "de": "nah",
           "en": "near",
@@ -661,7 +661,7 @@
         },
         {
           "slug": "n5v-tooi",
-          "native": "遠い",
+          "native": "とおい",
           "transliteration": "tooi",
           "de": "weit entfernt",
           "en": "far",
@@ -680,7 +680,7 @@
       "items": [
         {
           "slug": "n5v-atsui",
-          "native": "暑い",
+          "native": "あつい",
           "transliteration": "atsui",
           "de": "heiß",
           "en": "hot",
@@ -688,7 +688,7 @@
         },
         {
           "slug": "n5v-samui",
-          "native": "寒い",
+          "native": "さむい",
           "transliteration": "samui",
           "de": "kalt",
           "en": "cold",
@@ -696,7 +696,7 @@
         },
         {
           "slug": "n5v-takai",
-          "native": "高い",
+          "native": "たかい",
           "transliteration": "takai",
           "de": "hoch, teuer",
           "en": "high, expensive",
@@ -704,7 +704,7 @@
         },
         {
           "slug": "n5v-yasui",
-          "native": "安い",
+          "native": "やすい",
           "transliteration": "yasui",
           "de": "billig, günstig",
           "en": "cheap",
@@ -712,7 +712,7 @@
         },
         {
           "slug": "n5v-omoshiroi",
-          "native": "面白い",
+          "native": "おもしろい",
           "transliteration": "omoshiroi",
           "de": "interessant",
           "en": "interesting",
@@ -720,7 +720,7 @@
         },
         {
           "slug": "n5v-isogashii",
-          "native": "忙しい",
+          "native": "いそがしい",
           "transliteration": "isogashii",
           "de": "beschäftigt",
           "en": "busy",
@@ -728,7 +728,7 @@
         },
         {
           "slug": "n5v-tanoshii",
-          "native": "楽しい",
+          "native": "たのしい",
           "transliteration": "tanoshii",
           "de": "spaßig",
           "en": "fun",
@@ -736,7 +736,7 @@
         },
         {
           "slug": "n5v-shiroi",
-          "native": "白い",
+          "native": "しろい",
           "transliteration": "shiroi",
           "de": "weiß",
           "en": "white",
@@ -744,7 +744,7 @@
         },
         {
           "slug": "n5v-kuroi",
-          "native": "黒い",
+          "native": "くろい",
           "transliteration": "kuroi",
           "de": "schwarz",
           "en": "black",
@@ -752,7 +752,7 @@
         },
         {
           "slug": "n5v-akai",
-          "native": "赤い",
+          "native": "あかい",
           "transliteration": "akai",
           "de": "rot",
           "en": "red",
@@ -771,7 +771,7 @@
       "items": [
         {
           "slug": "n5v-sensei",
-          "native": "先生",
+          "native": "せんせい",
           "transliteration": "sensei",
           "de": "Lehrer, Lehrerin",
           "en": "teacher",
@@ -779,7 +779,7 @@
         },
         {
           "slug": "n5v-gakusei",
-          "native": "学生",
+          "native": "がくせい",
           "transliteration": "gakusei",
           "de": "Student, Schüler",
           "en": "student",
@@ -787,7 +787,7 @@
         },
         {
           "slug": "n5v-shigoto",
-          "native": "仕事",
+          "native": "しごと",
           "transliteration": "shigoto",
           "de": "Arbeit, Job",
           "en": "work, job",
@@ -795,7 +795,7 @@
         },
         {
           "slug": "n5v-kaisha",
-          "native": "会社",
+          "native": "かいしゃ",
           "transliteration": "kaisha",
           "de": "Firma",
           "en": "company",
@@ -803,7 +803,7 @@
         },
         {
           "slug": "n5v-benkyou",
-          "native": "勉強",
+          "native": "べんきょう",
           "transliteration": "benkyou",
           "de": "Lernen, Studium",
           "en": "study",
@@ -811,7 +811,7 @@
         },
         {
           "slug": "n5v-kyoushitsu",
-          "native": "教室",
+          "native": "きょうしつ",
           "transliteration": "kyoushitsu",
           "de": "Klassenzimmer",
           "en": "classroom",
@@ -819,7 +819,7 @@
         },
         {
           "slug": "n5v-daigaku",
-          "native": "大学",
+          "native": "だいがく",
           "transliteration": "daigaku",
           "de": "Universität",
           "en": "university",
@@ -827,7 +827,7 @@
         },
         {
           "slug": "n5v-shukudai",
-          "native": "宿題",
+          "native": "しゅくだい",
           "transliteration": "shukudai",
           "de": "Hausaufgaben",
           "en": "homework",
@@ -835,7 +835,7 @@
         },
         {
           "slug": "n5v-namae",
-          "native": "名前",
+          "native": "なまえ",
           "transliteration": "namae",
           "de": "Name",
           "en": "name",
@@ -843,7 +843,7 @@
         },
         {
           "slug": "n5v-jikan",
-          "native": "時間",
+          "native": "じかん",
           "transliteration": "jikan",
           "de": "Zeit, Stunde",
           "en": "time",
@@ -862,7 +862,7 @@
       "items": [
         {
           "slug": "n5v-tenki",
-          "native": "天気",
+          "native": "てんき",
           "transliteration": "tenki",
           "de": "Wetter",
           "en": "weather",
@@ -870,7 +870,7 @@
         },
         {
           "slug": "n5v-ame",
-          "native": "雨",
+          "native": "あめ",
           "transliteration": "ame",
           "de": "Regen",
           "en": "rain",
@@ -878,7 +878,7 @@
         },
         {
           "slug": "n5v-yuki",
-          "native": "雪",
+          "native": "ゆき",
           "transliteration": "yuki",
           "de": "Schnee",
           "en": "snow",
@@ -886,7 +886,7 @@
         },
         {
           "slug": "n5v-kawa",
-          "native": "川",
+          "native": "かわ",
           "transliteration": "kawa",
           "de": "Fluss",
           "en": "river",
@@ -894,7 +894,7 @@
         },
         {
           "slug": "n5v-yama",
-          "native": "山",
+          "native": "やま",
           "transliteration": "yama",
           "de": "Berg",
           "en": "mountain",
@@ -902,7 +902,7 @@
         },
         {
           "slug": "n5v-sora",
-          "native": "空",
+          "native": "そら",
           "transliteration": "sora",
           "de": "Himmel",
           "en": "sky",
@@ -910,7 +910,7 @@
         },
         {
           "slug": "n5v-umi",
-          "native": "海",
+          "native": "うみ",
           "transliteration": "umi",
           "de": "Meer",
           "en": "sea",
@@ -918,7 +918,7 @@
         },
         {
           "slug": "n5v-ki",
-          "native": "木",
+          "native": "き",
           "transliteration": "ki",
           "de": "Baum",
           "en": "tree",
@@ -926,7 +926,7 @@
         },
         {
           "slug": "n5v-hana",
-          "native": "花",
+          "native": "はな",
           "transliteration": "hana",
           "de": "Blume",
           "en": "flower",
@@ -934,7 +934,7 @@
         },
         {
           "slug": "n5v-kaze",
-          "native": "風",
+          "native": "かぜ",
           "transliteration": "kaze",
           "de": "Wind",
           "en": "wind",

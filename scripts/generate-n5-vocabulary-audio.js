@@ -38,6 +38,7 @@ async function main() {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
   const force = process.env.FORCE_N5_VOCAB_AUDIO === '1'
   const onlyLesson = process.env.N5_VOCAB_AUDIO_LESSON
+  const version = process.env.N5_VOCAB_AUDIO_VERSION || new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)
   const results = []
 
   for (const lesson of data.lessons) {
@@ -59,7 +60,7 @@ async function main() {
         continue
       }
 
-      const storagePath = `audio/n5-vocabulary/${lessonKey}/${item.slug}.mp3`
+      const storagePath = `audio/n5-vocabulary/${lessonKey}-${version}/${item.slug}.mp3`
       const { data: publicUrlData } = supabase.storage.from('language-cards').getPublicUrl(storagePath)
       const audioUrl = publicUrlData.publicUrl
       console.log(`generating ${item.slug} ${item.native}`)
