@@ -117,17 +117,19 @@ export default function MainMenu() {
       <AppContent>
         {activeTab === 'start' && (
           <div className="space-y-6 fade-in">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              {selectedCollection && (
-                <button onClick={() => setSelectedCollectionId(null)} style={{ width: '34px', height: '34px', flexShrink: 0, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontSize: '18px' }}>‹</button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {selectedCollection && (
+                  <button aria-label="Zurück zu Kategorien" onClick={() => setSelectedCollectionId(null)} style={{ width: '34px', height: '34px', flexShrink: 0, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer', fontSize: '18px', lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+                )}
+                <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0, lineHeight: 1.2 }}>
+                  {selectedCollection ? selectedCollection.name : t('nav.categories')}
+                </h2>
+              </div>
+              {selectedCollection?.description && (
+                <p style={{ margin: selectedCollection ? '0 0 0 44px' : 0, fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.45 }}>{selectedCollection.description}</p>
               )}
-              <h2 style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
-                {selectedCollection ? selectedCollection.name : t('nav.categories')}
-              </h2>
             </div>
-            {selectedCollection?.description && (
-              <p style={{ margin: '-12px 0 0', fontSize: '14px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>{selectedCollection.description}</p>
-            )}
             {loading && <div className="card" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '15px' }}>{t('loading')}</div>}
             {error && <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>{t('error')}: {error}</div>}
             {!loading && !error && (
