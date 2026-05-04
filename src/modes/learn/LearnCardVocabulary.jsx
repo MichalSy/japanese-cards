@@ -53,6 +53,13 @@ export default function LearnCardVocabulary({ card, lang }) {
     }
   }
 
+  const handleAudioPanelKeyDown = (event) => {
+    if (!card.audio_url) return
+    if (event.key !== 'Enter' && event.key !== ' ') return
+    event.preventDefault()
+    handlePlayAudio()
+  }
+
   const translationPanel = translation && (
     <div style={{
       position: imageUrl ? 'absolute' : 'relative', bottom: imageUrl ? 0 : 'auto', left: imageUrl ? 0 : 'auto', right: imageUrl ? 0 : 'auto',
@@ -90,16 +97,26 @@ export default function LearnCardVocabulary({ card, lang }) {
       )}
 
       <div style={{ padding: imageUrl ? '10px 14px 12px' : '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{
-          position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '5px',
-          padding: '9px 12px', borderRadius: '18px', background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.08)',
-        }}>
+        <div
+          role={card.audio_url ? 'button' : undefined}
+          tabIndex={card.audio_url ? 0 : undefined}
+          onClick={card.audio_url ? handlePlayAudio : undefined}
+          onKeyDown={handleAudioPanelKeyDown}
+          style={{
+            position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '5px',
+            padding: '9px 12px', borderRadius: '18px', background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.08)',
+            cursor: card.audio_url ? 'pointer' : 'default',
+          }}
+        >
           {card.audio_url && (
             <>
               <audio ref={audioRef} src={card.audio_url} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
               <button
                 type="button"
-                onClick={handlePlayAudio}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  handlePlayAudio()
+                }}
                 aria-label={lang === 'de' ? 'Aussprache abspielen' : 'Play pronunciation'}
                 style={{
                   position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
