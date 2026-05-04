@@ -11,6 +11,34 @@ const BackHandlerContext = createContext<{
 
 export function BackHandlerProvider({ children }: { children: ReactNode }) {
   const [handler, setHandler] = useState<Handler | null>(null)
+  const handlerRef = useRef<Handler | null>(null)
+  const guardActiveRef = useRef(false)
+
+  useEffect(() => {
+    handlerRef.current = handler
+    if (!handler || guardActiveRef.current || typeof window === 'undefined') return
+
+    guardActiveRef.current = true
+    window.history.pushState({ ...window.history.state, aikoBackGuard: true }, '', window.location.href)
+  }, [handler])
+
+  useEffect(() => {
+    const onPopState = (event: PopStateEvent) => {
+      const currentHandler = handlerRef.current
+      if (!currentHandler) {
+        guardActiveRef.current = false
+        return
+      }
+
+      event.stopImmediatePropagation()
+      window.history.pushState({ ...window.history.state, aikoBackGuard: true }, '', window.location.href)
+      currentHandler()
+    }
+
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
   return (
     <BackHandlerContext.Provider value={{ handler, setHandler }}>
       {children}
