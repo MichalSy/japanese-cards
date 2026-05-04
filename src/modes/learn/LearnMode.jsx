@@ -47,6 +47,7 @@ export default function LearnMode({ lesson, cards, lang }) {
 
   const dragRef = useRef(null)
   const completionSavedRef = useRef(false)
+  const completionSavePromiseRef = useRef(null)
   const shuffleCache = useRef({})
   const card = lessonCards[index]
   const total = lessonCards.length
@@ -112,21 +113,40 @@ export default function LearnMode({ lesson, cards, lang }) {
   const correctCount = quizCardIndices.filter(i => quizAnswers[i]?.isCorrect).length
   const passed = quizCount === 0 || correctCount === quizCount
 
-  useEffect(() => {
-    if (!isSummary || !passed || completionSavedRef.current) return
-    completionSavedRef.current = true
+  const saveCompletion = useCallback(() => {
+    if (!passed) return Promise.resolve(false)
+    if (completionSavePromiseRef.current) return completionSavePromiseRef.current
+    if (completionSavedRef.current) return Promise.resolve(true)
 
-    fetch(`/api/learn/lessons/${lesson.slug}/complete`, {
+    completionSavePromiseRef.current = fetch(`/api/learn/lessons/${lesson.slug}/complete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         quiz_count: quizCount,
         correct_count: correctCount,
       }),
-    }).catch(() => {
-      completionSavedRef.current = false
     })
-  }, [isSummary, passed, lesson.slug, quizCount, correctCount])
+      .then(async (res) => {
+        const payload = await res.json().catch(() => ({}))
+        const completed = Boolean(res.ok && payload.completed)
+        completionSavedRef.current = completed
+        return completed
+      })
+      .catch(() => {
+        completionSavedRef.current = false
+        return false
+      })
+      .finally(() => {
+        completionSavePromiseRef.current = null
+      })
+
+    return completionSavePromiseRef.current
+  }, [passed, lesson.slug, quizCount, correctCount])
+
+  useEffect(() => {
+    if (!isSummary || !passed || completionSavedRef.current) return
+    saveCompletion()
+  }, [isSummary, passed, saveCompletion])
 
   const goTo = useCallback((newIndex, dir) => {
     if (newIndex < 0 || newIndex > total) return
@@ -135,9 +155,13 @@ export default function LearnMode({ lesson, cards, lang }) {
     setIndex(newIndex)
   }, [total])
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!canAdvance) return
-    if (isSummary) { router.back(); return }
+    if (isSummary) {
+      await saveCompletion()
+      router.back()
+      return
+    }
     if (isLast) { goTo(total, 'forward'); return }
     goTo(index + 1, 'forward')
   }
