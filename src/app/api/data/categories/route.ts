@@ -8,7 +8,6 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const supabase = await createServerSupabaseClient()
   const { ui_language: lang } = await resolveSettings(user.id, supabase)
 
-  let hasCollectionColumns = true
   let categoryQuery: any = await supabase
     .from('language_cards_categories')
     .select(`slug, native_name, emoji, card_type, is_active, sort_order, collection_id, collection_sort_order, language_cards_category_translations (lang_code, name, description)`)
@@ -17,7 +16,6 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   if (categoryQuery.error) {
     // Backward-compatible fallback while the collection migration is not applied yet.
-    hasCollectionColumns = false
     categoryQuery = await supabase
       .from('language_cards_categories')
       .select(`slug, native_name, emoji, card_type, is_active, sort_order, language_cards_category_translations (lang_code, name, description)`)
@@ -29,7 +27,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   const pick = (arr: any[]) => arr?.find((x) => x.lang_code === lang) ?? arr?.find((x) => x.lang_code === 'en') ?? {}
 
-  const categories = (categoryQuery.data ?? []).map((cat: any) => {
+  let categories = (categoryQuery.data ?? []).map((cat: any) => {
     const t = pick(cat.language_cards_category_translations ?? [])
     return {
       id: cat.slug,
@@ -43,6 +41,32 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
       enabled: cat.is_active,
     }
   })
+
+  const plannedN5Categories = [
+    { id: 'n5-vocabulary', native_name: '語彙', nameDe: 'N5 Vokabeln', descDe: 'Kernwortschatz für JLPT N5', nameEn: 'N5 Vocabulary', descEn: 'Core vocabulary for JLPT N5', emoji: '📚', card_type: 'vocabulary', sort: 4 },
+    { id: 'n5-numbers-time', native_name: '数と時間', nameDe: 'Zahlen & Zeit', descDe: 'Zahlen, Uhrzeit, Datum, Wochentage und Mengen', nameEn: 'Numbers & Time', descEn: 'Numbers, time, dates, weekdays, and quantities', emoji: '🔢', card_type: 'vocabulary', sort: 5 },
+    { id: 'n5-particles', native_name: '助詞', nameDe: 'Partikel', descDe: 'N5-Partikel wie は, が, を, に, で und の', nameEn: 'Particles', descEn: 'N5 particles such as は, が, を, に, で, and の', emoji: '🧩', card_type: 'grammar', sort: 6 },
+    { id: 'n5-verbs', native_name: '動詞', nameDe: 'Verben', descDe: 'Verbgruppen und grundlegende N5-Formen', nameEn: 'Verbs', descEn: 'Verb groups and basic N5 forms', emoji: '🏃', card_type: 'grammar', sort: 7 },
+    { id: 'n5-adjectives', native_name: '形容詞', nameDe: 'Adjektive', descDe: 'い- und な-Adjektive mit einfachen Formen', nameEn: 'Adjectives', descEn: 'い and な adjectives with basic forms', emoji: '🎨', card_type: 'grammar', sort: 8 },
+    { id: 'n5-grammar', native_name: '文法', nameDe: 'Grammatik', descDe: 'Grundlegender Satzbau und wichtige N5-Muster', nameEn: 'Grammar', descEn: 'Basic sentence structure and important N5 patterns', emoji: '🏗️', card_type: 'grammar', sort: 9 },
+    { id: 'n5-kanji', native_name: '漢字', nameDe: 'N5 Kanji', descDe: 'Grundlegende Kanji mit Lesungen und Beispielwörtern', nameEn: 'N5 Kanji', descEn: 'Basic kanji with readings and example words', emoji: '🈶', card_type: 'character', sort: 10 },
+    { id: 'n5-phrases', native_name: '表現', nameDe: 'Sätze & Dialoge', descDe: 'Alltagssätze, Mini-Dialoge und Prüfungsmuster', nameEn: 'Phrases & Dialogues', descEn: 'Everyday phrases, mini dialogues, and test patterns', emoji: '💬', card_type: 'phrase', sort: 11 },
+  ]
+
+  for (const cat of plannedN5Categories) {
+    if (categories.some((existing) => existing.id === cat.id)) continue
+    categories.push({
+      id: cat.id,
+      collection_id: null,
+      collection_sort_order: cat.sort,
+      native_name: cat.native_name,
+      name: lang === 'de' ? cat.nameDe : cat.nameEn,
+      description: lang === 'de' ? cat.descDe : cat.descEn,
+      emoji: cat.emoji,
+      card_type: cat.card_type,
+      enabled: false,
+    })
+  }
 
   let collections: any[] = []
   const collectionIds = Array.from(new Set(categories.map((cat) => cat.collection_id).filter(Boolean)))
@@ -66,14 +90,16 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
         description: t.description ?? '',
         emoji: collection.emoji,
         enabled: collection.is_active,
-        categories: collectionCategories.map((cat) => cat.id),
+        categories: collection.slug === 'jlpt-n5'
+          ? Array.from(new Set([...collectionCategories.map((cat) => cat.id), ...plannedN5Categories.map((cat) => cat.id)]))
+          : collectionCategories.map((cat) => cat.id),
       }
     })
   }
 
-  if (!hasCollectionColumns && collections.length === 0) {
-    const n5Categories = ['hiragana', 'katakana', 'first-words'].filter((categoryId) =>
-      categories.some((category) => category.id === categoryId && category.enabled !== false)
+  if (collections.length === 0) {
+    const n5Categories = ['hiragana', 'katakana', 'first-words', ...plannedN5Categories.map((cat) => cat.id)].filter((categoryId) =>
+      categories.some((category) => category.id === categoryId)
     )
 
     if (n5Categories.length > 0) {
