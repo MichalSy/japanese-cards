@@ -26,7 +26,9 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     .eq('slug', lessonId)
     .single()
 
-  if (lessonError || !lesson) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  const noStore = { 'Cache-Control': 'no-store, max-age=0' }
+
+  if (lessonError || !lesson) return NextResponse.json({ error: 'Not found' }, { status: 404, headers: noStore })
 
   const { data: lessonCards, error: lessonCardsError } = await supabase
     .from('language_cards_learning_lesson_cards')
@@ -40,7 +42,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     .eq('lesson_id', lesson.id)
     .order('sort_order')
 
-  if (lessonCardsError) return NextResponse.json({ error: lessonCardsError.message }, { status: 500 })
+  if (lessonCardsError) return NextResponse.json({ error: lessonCardsError.message }, { status: 500, headers: noStore })
 
   const lt = pick((lesson as any).language_cards_learning_lesson_translations ?? [])
 
@@ -73,5 +75,5 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
       show_translations_by_default: settings.show_translations_by_default,
     },
     cards,
-  })
+  }, { headers: noStore })
 })
