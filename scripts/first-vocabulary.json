@@ -416,8 +416,8 @@
       "slug": "first-words-greetings",
       "sort_order": 5,
       "translations": {
-        "de": "Begrüßungen",
-        "en": "Greetings"
+        "de": "Hallo & Höflichkeit",
+        "en": "Hello & Politeness"
       },
       "items": [
         {
@@ -499,22 +499,6 @@
           "de": "Sorry",
           "en": "sorry",
           "kind": "sorry"
-        },
-        {
-          "slug": "fv-hajimemashite",
-          "native": "はじめまして",
-          "transliteration": "hajimemashite",
-          "de": "Freut mich",
-          "en": "nice to meet you",
-          "kind": "nice-meet"
-        },
-        {
-          "slug": "fv-yoroshiku",
-          "native": "よろしく",
-          "transliteration": "yoroshiku",
-          "de": "Freut mich / bitte gut mit mir",
-          "en": "nice to meet you / please be kind",
-          "kind": "yoroshiku"
         }
       ]
     },
@@ -605,22 +589,6 @@
           "de": "welche Richtung",
           "en": "which way",
           "kind": "question-which-way"
-        },
-        {
-          "slug": "fv-donna",
-          "native": "どんな",
-          "transliteration": "donna",
-          "de": "was für ein",
-          "en": "what kind",
-          "kind": "question-what-kind"
-        },
-        {
-          "slug": "fv-dare-no",
-          "native": "だれの",
-          "transliteration": "dare no",
-          "de": "wessen",
-          "en": "whose",
-          "kind": "question-whose"
         }
       ]
     },
@@ -703,22 +671,6 @@
           "de": "jeden Tag",
           "en": "every day",
           "kind": "time-every-day"
-        },
-        {
-          "slug": "fv-hayai",
-          "native": "はやい",
-          "transliteration": "hayai",
-          "de": "früh",
-          "en": "early",
-          "kind": "time-early"
-        },
-        {
-          "slug": "fv-osoi",
-          "native": "おそい",
-          "transliteration": "osoi",
-          "de": "spät",
-          "en": "late",
-          "kind": "time-late"
         },
         {
           "slug": "fv-toki",
