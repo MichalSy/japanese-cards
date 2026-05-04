@@ -11,7 +11,7 @@ Die weiteren JLPT-Collections `JLPT N4`, `JLPT N3`, `JLPT N2` und `JLPT N1` werd
 | 1 | `hiragana` | aktiv | Zeichen | Hiragana-Grundlagen, inklusive Dakuten/Handakuten |
 | 2 | `katakana` | aktiv | Zeichen | Katakana-Grundlagen, inklusive Dakuten/Handakuten |
 | 3 | `first-words` | aktiv | Vokabeln | Erste einfache Wörter zum Einstieg |
-| 4 | `n5-vocabulary` | aktiv | Vokabeln | Kernwortschatz für JLPT N5, 10 Lessons mit je 5 Vokabelkarten + 5 Quizkarten |
+| 4 | `n5-vocabulary` | aktiv | Vokabeln | Kernwortschatz für JLPT N5; aktuell erste Lesson sauber aktiv, weitere Lessons werden schrittweise ergänzt |
 | 5 | `n5-numbers-time` | geplant, deaktiviert | Vokabeln | Zahlen, Uhrzeit, Datum, Wochentage, Mengen |
 | 6 | `n5-particles` | geplant, deaktiviert | Grammatik | は, が, を, に, で, と, も, の, へ, から, まで, よ, ね |
 | 7 | `n5-verbs` | geplant, deaktiviert | Grammatik | Verbgruppen, Masu-Form, Te-Form-Basis, Vergangenheit, Verneinung |
@@ -39,7 +39,7 @@ Die weiteren JLPT-Collections `JLPT N4`, `JLPT N3`, `JLPT N2` und `JLPT N1` werd
 
 ### `n5-vocabulary`
 
-Aktuell angelegt als `n5-vocabulary-basics` mit 10 aktiven Lessons. Jede Lesson hat maximal 10 Karten: 5 Vokabelkarten und 5 Quizkarten.
+Aktuell angelegt als `n5-vocabulary-basics`. Sauber aktiv ist zunächst `Familie & Menschen` mit 10 Vokabelkarten plus 10 passenden Quizkarten. Die Vokabelkarten folgen dem `first-words` Pattern mit Kana-Native, Bild (`image_id`) und Audio (`audio_url`). Weitere Lessons bleiben deaktiviert, bis Bilder mit Imagegen 2 und Audios mit ElevenLabs sauber erstellt und geprüft sind.
 
 1. Familie & Menschen
 2. Zuhause & Orte

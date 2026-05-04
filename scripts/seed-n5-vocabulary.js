@@ -127,7 +127,7 @@ async function main() {
   const summary = { lessons: 0, vocabularyCards: 0, quizCards: 0, links: 0 }
 
   for (const lesson of data.lessons) {
-    if (lesson.items.length > 5) throw new Error(`${lesson.slug} has too many items; max 5 items + 5 quiz cards = 10 cards`)
+    if (lesson.items.length > 10) throw new Error(`${lesson.slug} has too many vocabulary items; max 10 vocabulary cards plus quiz cards`)
 
     const { data: existingLesson, error: lessonSelectError } = await supabase
       .from('language_cards_learning_lessons')
@@ -145,7 +145,7 @@ async function main() {
         course_id: courseId,
         slug: lesson.slug,
         sort_order: lesson.sort_order,
-        is_active: true,
+        is_active: lesson.is_active ?? true,
       }, { onConflict: 'course_id,slug' })
     if (lessonError) throw lessonError
 
@@ -155,8 +155,8 @@ async function main() {
       'lesson_id',
       lessonId,
       {
-        de: { title: lesson.translations.de, description: '5 Vokabeln + 5 Quizkarten' },
-        en: { title: lesson.translations.en, description: '5 vocabulary cards + 5 quiz cards' },
+        de: { title: lesson.translations.de, description: `${lesson.items.length} Vokabeln + ${lesson.items.length} Quizkarten` },
+        en: { title: lesson.translations.en, description: `${lesson.items.length} vocabulary cards + ${lesson.items.length} quiz cards` },
       }
     )
     if (!existingLesson) summary.lessons++
@@ -165,7 +165,7 @@ async function main() {
       const item = lesson.items[index]
       const { data: existingCard, error: cardSelectError } = await supabase
         .from('language_cards_cards')
-        .select('id')
+        .select('id,image_id,audio_url')
         .eq('slug', item.slug)
         .maybeSingle()
       if (cardSelectError) throw cardSelectError
@@ -185,8 +185,8 @@ async function main() {
           context: data.category.slug,
           sort_order: lesson.sort_order * 100 + index + 1,
           is_active: true,
-          image_id: null,
-          audio_url: null,
+          image_id: existingCard?.image_id ?? null,
+          audio_url: existingCard?.audio_url ?? null,
           data: { lesson_slug: lesson.slug, kind: item.kind },
         })
       if (cardError) throw cardError
