@@ -1,113 +1,106 @@
 # Japanese Cards
 
-Lernspiel für japanische Schriftsysteme, Vokabeln und JLPT-Inhalte.
+Mehrsprachige Lernplattform für Sprachen, Tracks/Level, Lektionen und Übungsspiele.
+
+Aktueller produktiver Fokus: Japanisch mit `JLPT N5`.
+
+## Produktmodell
+
+Zielstruktur:
+
+```text
+Learning Language
+└── Track / Level
+    └── Category
+        ├── Lernen → Course → Lessons → Cards
+        └── Üben → Practice Groups → Game Modes
+```
+
+Beispiele:
+
+- Japanisch → JLPT N5 → Hiragana → Lernen
+- Japanisch → JLPT N5 → Hiragana → Üben → Swipe
+- Deutsch → A1 → Basisvokabeln → Lernen/Üben
+
+Details:
+
+- `docs/product-model.md` — fachliches Zielmodell und Begriffe
+- `docs/current-state.md` — aktueller DB-/App-Stand
+- `docs/jlpt-n5-content-plan.md` — konkreter JLPT-N5-Plan
+- `docs/kana-course-generation.md` — Content-/Asset-Regeln für Kana-Kurse
 
 ## Features
 
-- **JLPT-Gruppierung**: Startseite zeigt `JLPT N5` aktiv sowie `JLPT N4` bis `JLPT N1` als Roadmap/„Kommt bald“.
-- **Lernen + Üben**: Kategorien haben Learn-Lessons und/oder Practice-Groups mit Spielmodi.
-- **Swipe Game**: Zeichen + Romaji-Paarung bewerten (Tinder-Style).
-- **Supabase-basierte Lerninhalte**: Kategorien, Learning-Lessons, Practice-Groups, Cards und Fortschritt aus der Datenbank.
-- **Mehrsprachig**: Deutsch und Englisch.
-- **Responsive**: Mobile (Touch) und Desktop.
+- **Tracks / Level:** `JLPT N5` aktiv, `JLPT N4-N1` als Roadmap, Deutsch `A1-C2` als geplante DB-Tracks.
+- **Lernen:** Kurse, Lektionen und Karten aus Supabase.
+- **Üben:** Practice Groups und Game Modes. Produktiv aktiv ist aktuell Swipe.
+- **Mehrsprachigkeit:** UI-Sprachen Deutsch/Englisch; Lernsprache aktuell Japanisch, Datenmodell für weitere Lernsprachen vorbereitet.
+- **Auth:** Google OAuth via Supabase/Aiko Webapp Core; lokaler Dev-Login für Smoke-/Browser-Checks.
 
 ## Technologien
 
-- **Framework**: Next.js 14 (App Router)
-- **Auth**: `@michalsy/aiko-webapp-core` (Google OAuth via Supabase)
-- **Styling**: Tailwind CSS v3
-- **Icons**: Lucide React
-- **Deployment**: Docker + Kubernetes via GitOps
+- Next.js 14 App Router
+- `@michalsy/aiko-webapp-core`
+- Supabase
+- Tailwind CSS v3
+- Docker + Kubernetes + ArgoCD
 
 ## Projektstruktur
 
 ```text
-japanese-cards/
-├── src/
-│   ├── app/               # Next.js App Router (pages & API routes)
-│   │   ├── collections/   # JLPT-/Roadmap-Gruppierung
-│   │   ├── content/       # Kategorie- und Gruppenauswahl
-│   │   ├── game/          # Spielmodi
-│   │   └── page.jsx       # Hauptmenü
-│   ├── components/        # Wiederverwendbare UI-Komponenten
-│   ├── modes/             # Spielmodi-Implementierungen
-│   ├── config/            # API-Client-Konfiguration
-│   └── utils/             # Hilfsfunktionen
-├── public/                # Statische Assets
-└── .aiko/                 # Generierte Auth-Dateien (nicht manuell bearbeiten)
+src/app/collections/   # Track-/Level-Seite, UI heißt historisch noch collection
+src/app/content/       # Kategorie, Lernen/Üben Tabs, Practice Groups
+src/app/learn/         # Lesson Player
+src/app/game/          # Game Mode Runtime
+src/app/api/           # Supabase-backed API Routes
+src/modes/             # Learn-/Swipe-Komponenten
+supabase/migrations/   # DB-Migrationen
+scripts/               # Audit-, Seed- und Wartungsskripte
+docs/                  # Produkt-/DB-/Content-Doku
 ```
 
-## Installation & Start
-
-Voraussetzung: Node.js 20+
+## Lokaler Start
 
 ```bash
 npm install
 npm run dev
 ```
 
-Die App ist lokal unter `http://localhost:3001` erreichbar.
+Die App läuft auf `http://localhost:3001`.
 
-## Build & Deployment
-
-```bash
-npm run build    # prebuild generiert Auth-Dateien + next build
-```
-
-Das Docker-Image wird via GitHub Actions gebaut und in der K8s-Umgebung deployed.
-Domain: `japanese-cards.sytko.de`
-
-## Auth
-
-Auth wird von `@michalsy/aiko-webapp-core` verwaltet. Der `prebuild`-Script generiert die nötigen Auth-Dateien automatisch. Geschützte Routen werden via Next.js Middleware abgesichert (Google OAuth erforderlich).
-
-### Lokaler Dev-Login
-
-Für lokale Browser-Checks kann eine echte Supabase-Session ohne Google-OAuth erzeugt werden. Voraussetzung ist eine `.env.local` mit `SUPABASE_DEV_TOKEN`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL` und `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+## Build
 
 ```bash
-npm run dev
+npm run build
 ```
 
-Dann im Browser öffnen:
+`prebuild` generiert Aiko-Webapp-Core-Dateien und kopiert sie nach `src/`.
+
+## Dev-Login
+
+Für lokale und interne Smoke-Checks kann `/api/dev-login` genutzt werden. Token nie ausgeben oder in Screenshots/Logs sichtbar machen.
 
 ```text
 http://localhost:3001/api/dev-login?token=<SUPABASE_DEV_TOKEN>&redirect=/
 ```
 
-Erwartet: Der Browser landet auf `http://localhost:3001/` und zeigt die Startseite mit `JLPT N5` sowie den Roadmap-Gruppen `JLPT N4` bis `JLPT N1`. Wenn stattdessen `/login?redirect=%2F` erscheint, Core-Version prüfen: `@michalsy/aiko-webapp-core` muss mindestens `1.1.9` sein.
+Erwartung nach Login:
 
-## Datenbank (Supabase)
+- Startseite zeigt Track-Karten.
+- `JLPT N5` ist aktiv/klickbar.
+- `JLPT N4-N1` sind sichtbar, aber `Kommt bald`.
+- In `JLPT N5` sind aktive Kategorien klickbar und geplante Kategorien deaktiviert.
 
-Alle produktiven Tabellen nutzen den Prefix `language_cards_`. Neue Tabellen immer mit diesem Prefix anlegen.
+## DB-Audit
 
-| Tabelle | Zweck |
-|---|---|
-| `language_cards_languages` | UI- und Lernsprachen |
-| `language_cards_categories` | Aktive/deaktivierte Inhaltsbereiche wie Hiragana, Katakana, First Words, N5 Vocabulary |
-| `language_cards_category_translations` | Kategoriename/-beschreibung pro UI-Sprache |
-| `language_cards_learning_courses` | Kuratierte Lernpfade pro Kategorie |
-| `language_cards_learning_course_translations` | Kurstitel/-beschreibung pro UI-Sprache |
-| `language_cards_learning_lessons` | Lektionen innerhalb eines Learning Course |
-| `language_cards_learning_lesson_translations` | Lektionstitel/-beschreibung pro UI-Sprache |
-| `language_cards_learning_lesson_cards` | Kartenreihenfolge innerhalb einer Lesson |
-| `language_cards_practice_groups` | Übungsgruppen pro Kategorie |
-| `language_cards_practice_group_translations` | Practice-Group-Name pro UI-Sprache |
-| `language_cards_practice_group_cards` | Kartenreihenfolge innerhalb einer Practice Group |
-| `language_cards_cards` | Einzelne Lern-, Info- und Quizkarten |
-| `language_cards_card_translations` | Übersetzung + Beispiel pro UI-Sprache für Vokabel-/Phrasenkarten |
-| `language_cards_user_settings` | UI-Sprache + Lernsprache pro User |
-| `language_cards_user_card_progress` | Fortschritt pro User pro Karte |
-| `language_cards_category_snapshots` | Aggregierter Fortschritt pro User/Kategorie |
-| `language_cards_user_sessions` | Spielsessions mit Statistiken |
+```bash
+node scripts/audit-language-cards-db.js docs/db-audit-current.md
+```
 
-Karten haben generische Felder wie `native` (Zielsprachen-Inhalt), `transliteration`, `card_type` (`character` | `vocabulary` | `phrase` | `grammar` | `quiz_4_option` | `info`) und optionale Medienfelder.
+DDL-Migrationen werden per Supabase Management API ausgeführt:
 
-## JLPT-/Collection-Layer
+```bash
+node scripts/apply-supabase-sql.js supabase/migrations/<migration>.sql
+```
 
-Die JLPT-Gruppierung ist Produktnavigation und Roadmap, nicht gleichbedeutend mit alten Übungsgruppen. Die API `/api/data/categories` liefert deshalb zusätzlich zu `categories` auch `collections`:
-
-- `jlpt-n5` aktiv mit Hiragana, Katakana, Erste Vokabeln, N5 Vokabeln und geplanten deaktivierten N5-Bereichen.
-- `jlpt-n4` bis `jlpt-n1` deaktiviert als sichtbare Roadmap.
-
-Wenn eine echte Collection-Migration (`language_cards_category_collections` + `collection_id`) vorhanden ist, kann die API sie nutzen. Solange sie nicht vorhanden ist, wird diese Navigationsstruktur aus den bestehenden Kategorien zusammengesetzt, damit die Produktstruktur live stabil bleibt.
+Der Runner liest `SUPABASE_ACCESS_TOKEN` aus der Umgebung oder aus `~/secrets.json` und gibt keine Secrets aus.

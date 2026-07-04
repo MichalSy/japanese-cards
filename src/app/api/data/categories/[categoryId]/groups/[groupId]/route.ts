@@ -19,13 +19,14 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
   const { categoryId, groupId } = await context.params
   const supabase = await createServerSupabaseClient()
-  const { ui_language: lang } = await resolveSettings(user.id, supabase)
+  const { ui_language: lang, learn_language_id } = await resolveSettings(user.id, supabase)
+  const learningLanguage = learn_language_id ?? 'ja'
   const pick = (arr: any[]) => arr?.find((x: any) => x.lang_code === lang) ?? arr?.find((x: any) => x.lang_code === 'en') ?? {}
 
   const { data: cat } = await supabase
     .from('language_cards_categories')
     .select('id, card_type')
-    .eq('language_id', 'ja').eq('slug', categoryId).single()
+    .eq('language_id', learningLanguage).eq('slug', categoryId).single()
 
   if (!cat) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 

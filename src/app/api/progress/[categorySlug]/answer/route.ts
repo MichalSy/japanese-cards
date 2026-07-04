@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
 import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
+import { resolveSettings } from '@/lib/settingsCache'
 
 export const POST = requireAuth(async (req: Request, context: any) => {
   const { user } = context
@@ -10,16 +11,19 @@ export const POST = requireAuth(async (req: Request, context: any) => {
   if (!cardSlug) return NextResponse.json({ error: 'cardSlug required' }, { status: 400 })
 
   const supabase = await createServerSupabaseClient()
+  const { learn_language_id } = await resolveSettings(user.id, supabase)
+  const learningLanguage = learn_language_id ?? 'ja'
 
   const { data: practiceCard } = await supabase
     .from('language_cards_practice_group_cards')
     .select(`
       card_id,
       language_cards_cards!inner(slug),
-      language_cards_practice_groups!inner(category_id, language_cards_categories!inner(id, slug))
+      language_cards_practice_groups!inner(category_id, language_cards_categories!inner(id, slug, language_id))
     `)
     .eq('language_cards_cards.slug', cardSlug)
     .eq('language_cards_practice_groups.language_cards_categories.slug', categorySlug)
+    .eq('language_cards_practice_groups.language_cards_categories.language_id', learningLanguage)
     .limit(1)
     .maybeSingle()
 

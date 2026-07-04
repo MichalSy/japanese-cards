@@ -1,10 +1,13 @@
 import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
 import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
+import { resolveSettings } from '@/lib/settingsCache'
 
 export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
   const supabase = await createServerSupabaseClient()
+  const { learn_language_id } = await resolveSettings(user.id, supabase)
+  const learningLanguage = learn_language_id ?? 'ja'
 
   const [{ data: snapshots }, { data: categories }, { data: cardCounts }] = await Promise.all([
     supabase
@@ -14,10 +17,11 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     supabase
       .from('language_cards_categories')
       .select('id, slug')
-      .eq('language_id', 'ja')
+      .eq('language_id', learningLanguage)
       .eq('is_active', true)
+      .eq('status', 'active')
       .order('sort_order'),
-    supabase.rpc('get_category_card_counts'),
+    supabase.rpc('get_language_category_card_counts', { p_language_id: learningLanguage }),
   ])
 
   const snapshotMap = Object.fromEntries(

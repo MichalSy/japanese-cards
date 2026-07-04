@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
 import { requireAuth } from '@michalsy/aiko-webapp-core/server'
 import { NextResponse } from 'next/server'
+import { resolveSettings } from '@/lib/settingsCache'
 
 function computeScore(correct: number, incorrect: number): number {
   return correct - incorrect
@@ -10,10 +11,13 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   const { categorySlug } = await context.params
   const { user } = context
   const supabase = await createServerSupabaseClient()
+  const { learn_language_id } = await resolveSettings(user.id, supabase)
+  const learningLanguage = learn_language_id ?? 'ja'
 
   const { data: cat } = await supabase
     .from('language_cards_categories')
     .select('id')
+    .eq('language_id', learningLanguage)
     .eq('slug', categorySlug)
     .single()
 
@@ -57,18 +61,31 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
 export const POST = requireAuth(async (req: Request, context: any) => {
   const { user } = context
+  const { categorySlug } = await context.params
   const body = await req.json()
   const results: { cardSlug: string; isCorrect: boolean }[] = body.results ?? []
 
   const supabase = await createServerSupabaseClient()
+  const { learn_language_id } = await resolveSettings(user.id, supabase)
+  const learningLanguage = learn_language_id ?? 'ja'
+
+  const { data: cat } = await supabase
+    .from('language_cards_categories')
+    .select('id')
+    .eq('language_id', learningLanguage)
+    .eq('slug', categorySlug)
+    .single()
+
+  if (!cat) return NextResponse.json({ error: 'Category not found' }, { status: 404 })
 
   const slugs = results.map((r) => r.cardSlug)
-  const { data: cards } = await supabase
-    .from('language_cards_cards')
-    .select('id, slug')
-    .in('slug', slugs)
+  const { data: practiceCards } = await supabase
+    .from('language_cards_practice_group_cards')
+    .select('card_id, language_cards_cards!inner(slug), language_cards_practice_groups!inner(category_id)')
+    .eq('language_cards_practice_groups.category_id', cat.id)
+    .in('language_cards_cards.slug', slugs)
 
-  const cardMap = Object.fromEntries((cards ?? []).map((c) => [c.slug, c.id]))
+  const cardMap = Object.fromEntries((practiceCards ?? []).map((row: any) => [row.language_cards_cards?.slug, row.card_id]))
 
   for (const { cardSlug, isCorrect } of results) {
     const cardId = cardMap[cardSlug]

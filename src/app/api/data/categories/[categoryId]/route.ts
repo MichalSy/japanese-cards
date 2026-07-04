@@ -8,7 +8,8 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const { categoryId } = await context.params
   const includeItems = new URL(req.url).searchParams.get('items') === 'true'
   const supabase = await createServerSupabaseClient()
-  const { ui_language: lang } = await resolveSettings(user.id, supabase)
+  const { ui_language: lang, learn_language_id } = await resolveSettings(user.id, supabase)
+  const learningLanguage = learn_language_id ?? 'ja'
   const pick = (arr: any[]) => arr?.find((x) => x.lang_code === lang) ?? arr?.find((x) => x.lang_code === 'en') ?? {}
 
   const practiceGroupSelect = includeItems
@@ -21,11 +22,11 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const { data: cat, error } = await supabase
     .from('language_cards_categories')
     .select(`
-      slug, native_name, emoji, color, card_type, game_modes, show_all_option, is_active,
+      slug, native_name, emoji, color, card_type, game_modes, show_all_option, is_active, status,
       language_cards_category_translations (lang_code, name, description),
       language_cards_practice_groups (${practiceGroupSelect})
     `)
-    .eq('language_id', 'ja')
+    .eq('language_id', learningLanguage)
     .eq('slug', categoryId)
     .single()
 
@@ -60,7 +61,9 @@ export const GET = requireAuth(async (req: Request, context: any) => {
     id: cat.slug, native_name: cat.native_name,
     name: ct.name ?? cat.native_name, description: ct.description ?? '',
     emoji: cat.emoji, color: cat.color, cardType: cat.card_type,
-    enabled: cat.is_active, showAllOption: cat.show_all_option,
+    status: (cat as any).status ?? (cat.is_active ? 'active' : 'draft'),
+    enabled: cat.is_active && ((cat as any).status ?? (cat.is_active ? 'active' : 'draft')) === 'active',
+    showAllOption: cat.show_all_option,
     gameModes: cat.game_modes ?? [], groups,
   })
 })

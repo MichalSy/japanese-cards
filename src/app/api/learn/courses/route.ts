@@ -7,7 +7,8 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const { user } = context
   const category = new URL(req.url).searchParams.get('category')
   const supabase = await createServerSupabaseClient()
-  const { ui_language: lang } = await resolveSettings(user.id, supabase)
+  const { ui_language: lang, learn_language_id } = await resolveSettings(user.id, supabase)
+  const learningLanguage = learn_language_id ?? 'ja'
 
   const pick = (arr: any[]) =>
     arr?.find((x: any) => x.lang_code === lang) ?? arr?.find((x: any) => x.lang_code === 'en') ?? {}
@@ -44,7 +45,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
       )
     `)
     .eq('is_active', true)
-    .eq('language_cards_categories.language_id', 'ja')
+    .eq('language_cards_categories.language_id', learningLanguage)
     .order('sort_order')
 
   if (category) learningQuery = learningQuery.eq('language_cards_categories.slug', category)

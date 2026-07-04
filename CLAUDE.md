@@ -53,7 +53,8 @@ http://localhost:3001/api/dev-login?token=<SUPABASE_DEV_TOKEN>&redirect=/
 
 Erwartetes Ergebnis:
 - Browser-URL endet auf `http://localhost:3001/`
-- Screenshot zeigt die Startseite mit `Japanese Cards`, `Hiragana` und `Katakana`
+- Screenshot zeigt die Startseite mit Track-Karten: `JLPT N5` aktiv sowie `JLPT N4` bis `JLPT N1` als `Kommt bald`
+- Klick auf `JLPT N5` zeigt aktive Kategorien wie `Hiragana`, `Katakana`, `Erste Wörter`, `N5 Vokabeln` plus geplante deaktivierte Roadmap-Kategorien
 - Wenn die URL auf `/login?redirect=%2F` endet, ist der Dev-Login fehlgeschlagen
 
 Wichtige Checks bei Fehlern:

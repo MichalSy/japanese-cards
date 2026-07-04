@@ -109,7 +109,7 @@ export default function ContentTypeView({ params }) {
     if (newTabId === activeTab) return
     setIndicatorDuration(220)
     setActiveTab(newTabId)
-    router.replace(`/content/${contentType}?tab=${newTabId}`, { scroll: false })
+    router.replace(`/content/${contentType}?tab=${newTabId}${sourceCollection ? `&collection=${sourceCollection}` : ''}`, { scroll: false })
   }
 
   const categoryName = categoryConfig?.name || categoryConfig?.native_name || ''
