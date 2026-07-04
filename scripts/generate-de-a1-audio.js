@@ -3,6 +3,14 @@ const path = require('path')
 const { createClient } = require('@supabase/supabase-js')
 
 const GERMAN_VOICE_ID = 'xLCJR8xcZX2YjImGFyGw'
+const GERMAN_MODEL_ID = 'eleven_multilingual_v2'
+const GERMAN_VOICE_SETTINGS = {
+  stability: 0.45,
+  similarity_boost: 0.78,
+  style: 0.12,
+  use_speaker_boost: true,
+  speed: 0.95,
+}
 
 function loadEnv(filePath) {
   if (!fs.existsSync(filePath)) return
@@ -33,8 +41,10 @@ function loadElevenLabsConfig() {
   return {
     apiKey,
     voiceId: process.env.ELEVENLABS_GERMAN_VOICE_ID || GERMAN_VOICE_ID,
-    modelId: process.env.ELEVENLABS_GERMAN_MODEL_ID || process.env.ELEVENLABS_MODEL_ID || provider.modelId || 'eleven_multilingual_v2',
-    voiceSettings: provider.voiceSettings,
+    modelId: process.env.ELEVENLABS_GERMAN_MODEL_ID || process.env.ELEVENLABS_MODEL_ID || GERMAN_MODEL_ID,
+    voiceSettings: process.env.ELEVENLABS_GERMAN_VOICE_SETTINGS_JSON
+      ? JSON.parse(process.env.ELEVENLABS_GERMAN_VOICE_SETTINGS_JSON)
+      : GERMAN_VOICE_SETTINGS,
   }
 }
 

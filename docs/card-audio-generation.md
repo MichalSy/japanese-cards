@@ -36,7 +36,21 @@ FORCE_DE_A1_AUDIO=1 node scripts/generate-de-a1-audio.js
 ELEVENLABS_GERMAN_VOICE_ID=<voice-id> node scripts/generate-de-a1-audio.js
 ```
 
-Default model is `eleven_multilingual_v2`, unless overridden with `ELEVENLABS_GERMAN_MODEL_ID`.
+Default model is `eleven_multilingual_v2`.
+
+Default German voice settings:
+
+```json
+{
+  "stability": 0.45,
+  "similarity_boost": 0.78,
+  "style": 0.12,
+  "use_speaker_boost": true,
+  "speed": 0.95
+}
+```
+
+These German defaults are deliberately independent from the global OpenClaw TTS voice settings. Do not inherit high-speed/global chat settings for language-learning cards; short A1 phrases need slower, clearer pronunciation.
 
 ## Japanese N5
 
