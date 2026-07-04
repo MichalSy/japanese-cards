@@ -1,6 +1,6 @@
 # Japanese Cards DB Audit
 
-Generated: 2026-07-04T16:41:39.401Z
+Generated: 2026-07-04T16:57:47.225Z
 
 ## Tables
 | Table | Status | Rows / Error |

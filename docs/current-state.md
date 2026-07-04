@@ -114,9 +114,10 @@ Game Modes:
 | `flashcard` | vorbereitet, global deaktiviert |
 | `typing` | vorbereitet, global deaktiviert |
 
-## Audit Reports
+## Audit Report
 
-Aktuelle DB-Audits liegen hier:
+Der aktuelle DB-Audit liegt hier:
 
-- `docs/db-audit-before-tracks.md`
-- `docs/db-audit-after-tracks.md`
+- `docs/db-audit-current.md`
+
+Ältere Vorher/Nachher-Audit-Snapshots bleiben in Git nachvollziehbar, liegen aber nicht mehr als parallele Doku-Dateien im Arbeitsbaum.

@@ -1,5 +1,6 @@
--- Add a simple one-to-many grouping layer above categories.
--- A category belongs to at most one collection via language_cards_categories.collection_id.
+-- Historical migration: added a simple one-to-many grouping layer above categories.
+-- Superseded by language_cards_tracks / language_cards_track_categories.
+-- Final-state cleanup is in 20260704_cleanup_superseded_collections.sql.
 
 begin;
 
