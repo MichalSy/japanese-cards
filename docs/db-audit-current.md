@@ -1,6 +1,6 @@
 # Japanese Cards DB Audit
 
-Generated: 2026-07-04T17:10:10.415Z
+Generated: 2026-07-04T17:28:46.248Z
 
 ## Tables
 | Table | Status | Rows / Error |
@@ -18,7 +18,7 @@ Generated: 2026-07-04T17:10:10.415Z
 | language_cards_learning_lesson_cards | exists | 703 |
 | language_cards_practice_groups | exists | 14 |
 | language_cards_practice_group_translations | exists | 28 |
-| language_cards_practice_group_cards | exists | 153 |
+| language_cards_practice_group_cards | exists | 158 |
 | language_cards_cards | exists | 695 |
 | language_cards_card_translations | exists | 368 |
 | language_cards_user_settings | exists | 5 |
@@ -126,4 +126,4 @@ Generated: 2026-07-04T17:10:10.415Z
 | Learning lesson links pointing to missing lesson/card | 0 |
 | Practice group links pointing to missing group/card | 0 |
 | Lessons without cards | 0 |
-| Practice groups without cards | 1 |
+| Practice groups without cards | 0 |
