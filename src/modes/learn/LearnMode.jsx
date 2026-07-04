@@ -160,9 +160,9 @@ export default function LearnMode({ lesson, cards, lang }) {
     if (isSummary) {
       await saveCompletion()
       if (lesson.category_slug) {
-        const sourceCollection = new URLSearchParams(window.location.search).get('collection')
-        const collectionParam = sourceCollection ? `&collection=${sourceCollection}` : ''
-        router.replace(`/content/${lesson.category_slug}?tab=learn&completed=${lesson.slug}${collectionParam}`)
+        const sourceTrack = new URLSearchParams(window.location.search).get('track')
+        const trackParam = sourceTrack ? `&track=${sourceTrack}` : ''
+        router.replace(`/content/${lesson.category_slug}?tab=learn&completed=${lesson.slug}${trackParam}`)
       } else {
         router.back()
       }

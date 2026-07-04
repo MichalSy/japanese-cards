@@ -48,7 +48,7 @@ Details:
 ## Projektstruktur
 
 ```text
-src/app/collections/   # Track-/Level-Seite, UI heißt historisch noch collection
+src/app/tracks/        # Track-/Level-Seite
 src/app/content/       # Kategorie, Lernen/Üben Tabs, Practice Groups
 src/app/learn/         # Lesson Player
 src/app/game/          # Game Mode Runtime

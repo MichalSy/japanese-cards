@@ -52,7 +52,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 
   if (trackError) return NextResponse.json({ error: trackError.message }, { status: 500 })
 
-  const collections = (trackData ?? []).map((track: any) => {
+  const tracks = (trackData ?? []).map((track: any) => {
     const t = pick(track.language_cards_track_translations ?? [])
     const trackCategories = (track.language_cards_track_categories ?? [])
       .sort((a: any, b: any) => a.sort_order - b.sort_order)
@@ -74,6 +74,6 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
   return NextResponse.json({
     learningLanguage,
     categories,
-    collections,
+    tracks,
   })
 })

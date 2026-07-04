@@ -27,7 +27,7 @@ export default function GameScreen({ params }) {
   const { contentType, groupId, modeId } = params
   const searchParams = useSearchParams()
   const cardCount = searchParams.get('cards') || 'all'
-  const sourceCollection = searchParams.get('collection')
+  const sourceTrack = searchParams.get('track')
   const t = useT()
   const GameComponent = GAME_MODES[modeId]
 
@@ -49,7 +49,7 @@ export default function GameScreen({ params }) {
             <p style={{ fontSize: '16px' }}>{modeNames[modeId]} {t('game.loadingMode')}</p>
           </div>
         }>
-          <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} sourceCollection={sourceCollection} />
+          <GameComponent contentType={contentType} groupId={groupId} cardCount={cardCount} sourceTrack={sourceTrack} />
         </Suspense>
       )}
     </AppLayout>

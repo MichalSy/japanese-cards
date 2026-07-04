@@ -6,7 +6,7 @@ export const translations: Record<string, Record<string, string>> = {
     'save': 'Speichern',
     'saving': 'Speichern...',
 
-    'nav.categories': 'Kategorien',
+    'nav.tracks': 'Lernpfade',
     'nav.courses': 'Kurse',
     'category.tab.learn': 'Lernen',
     'category.tab.practice': 'Üben',
@@ -88,7 +88,7 @@ export const translations: Record<string, Record<string, string>> = {
     'save': 'Save',
     'saving': 'Saving...',
 
-    'nav.categories': 'Categories',
+    'nav.tracks': 'Learning Tracks',
     'nav.courses': 'Courses',
     'category.tab.learn': 'Learn',
     'category.tab.practice': 'Practice',

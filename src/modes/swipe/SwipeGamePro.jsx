@@ -63,7 +63,7 @@ function HelpModal({ items, onClose, t }) {
   )
 }
 
-export default function SwipeGamePro({ contentType, groupId, cardCount, sourceCollection }) {
+export default function SwipeGamePro({ contentType, groupId, cardCount, sourceTrack }) {
   const t = useT()
   const router = useRouter()
 
@@ -81,10 +81,10 @@ export default function SwipeGamePro({ contentType, groupId, cardCount, sourceCo
   const sessionStartRef = useRef(null)
 
   const game = useSwipeGame(items, cardCount)
-  const collectionParam = sourceCollection ? `?collection=${sourceCollection}` : ''
+  const trackParam = sourceTrack ? `?track=${sourceTrack}` : ''
 
   // Override back button while this game component is mounted
-  useSetBackHandler(() => router.push(`/content/${contentType}${collectionParam}`))
+  useSetBackHandler(() => router.push(`/content/${contentType}${trackParam}`))
 
   // On game end: close session
   useEffect(() => {
@@ -182,15 +182,15 @@ export default function SwipeGamePro({ contentType, groupId, cardCount, sourceCo
         {/* Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {nextGroupId && (
-            <button onClick={() => router.push(`/content/${contentType}/${nextGroupId}${collectionParam}`)}
+            <button onClick={() => router.push(`/content/${contentType}/${nextGroupId}${trackParam}`)}
               style={{ width: '100%', padding: '16px', borderRadius: '100px', border: 'none', cursor: 'pointer', fontWeight: '700', fontSize: '16px', background: 'linear-gradient(135deg, #ec4899, #a855f7)', color: 'white', boxShadow: '0 4px 16px rgba(236,72,153,0.35)' }}>
               {t('game.nextGroup')}
             </button>
           )}
           <div style={{ display: 'flex', gap: '8px' }}>
             {[
-              [t('game.playAgain'), () => router.push(`/content/${contentType}/${groupId}${collectionParam}`)],
-              [t('game.toCategory'), () => router.push(`/content/${contentType}${collectionParam}`)],
+              [t('game.playAgain'), () => router.push(`/content/${contentType}/${groupId}${trackParam}`)],
+              [t('game.toCategory'), () => router.push(`/content/${contentType}${trackParam}`)],
               [t('game.toHome'), () => router.push('/')],
             ].map(([label, onClick]) => (
               <button key={label} onClick={onClick}

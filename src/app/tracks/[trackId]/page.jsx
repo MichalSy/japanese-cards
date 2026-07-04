@@ -6,10 +6,10 @@ import { fetchCategories } from '@/config/api'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, Card } from '@/components/Layout'
 
-export default function CollectionView({ params }) {
+export default function TrackView({ params }) {
   const router = useRouter()
-  const { collectionId } = params
-  const [collection, setCollection] = useState(null)
+  const { trackId } = params
+  const [track, setTrack] = useState(null)
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -19,11 +19,11 @@ export default function CollectionView({ params }) {
       try {
         setLoading(true)
         const data = await fetchCategories()
-        const selectedCollection = (data.collections ?? []).find(item => item.id === collectionId && item.enabled !== false)
-        if (!selectedCollection) throw new Error('Collection nicht gefunden')
+        const selectedTrack = (data.tracks ?? []).find(item => item.id === trackId && item.enabled !== false)
+        if (!selectedTrack) throw new Error('Track nicht gefunden')
 
-        setCollection(selectedCollection)
-        setCategories(selectedCollection.categories
+        setTrack(selectedTrack)
+        setCategories(selectedTrack.categories
           .map(categoryId => data.categories.find(category => category.id === categoryId))
           .filter(Boolean))
       } catch (err) {
@@ -32,15 +32,15 @@ export default function CollectionView({ params }) {
         setLoading(false)
       }
     })()
-  }, [collectionId])
+  }, [trackId])
 
   return (
     <AppLayout>
-      <AppHeader><AppHeaderBar title={collection?.name} backHref="/" /></AppHeader>
+      <AppHeader><AppHeaderBar title={track?.name} backHref="/" /></AppHeader>
       <AppContent>
         <div className="space-y-6 fade-in">
-          {collection?.description && (
-            <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>{collection.description}</p>
+          {track?.description && (
+            <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>{track.description}</p>
           )}
           {loading && <div className="card" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '15px' }}>Laden...</div>}
           {error && <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#ef4444' }}>Fehler: {error}</div>}
@@ -49,7 +49,7 @@ export default function CollectionView({ params }) {
               {categories.map(category => {
                 const isEnabled = category.enabled !== false
                 return (
-                  <Card key={category.id} interactive={isEnabled} onClick={isEnabled ? () => router.push(`/content/${category.id}?collection=${collectionId}`) : undefined}>
+                  <Card key={category.id} interactive={isEnabled} onClick={isEnabled ? () => router.push(`/content/${category.id}?track=${trackId}`) : undefined}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', opacity: isEnabled ? 1 : 0.48 }}>
                       <div style={{ width: '56px', height: '56px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(236,72,153,0.15)', border: '1px solid rgba(236,72,153,0.25)', borderRadius: '16px', fontSize: '28px' }}>
                         {category.emoji}

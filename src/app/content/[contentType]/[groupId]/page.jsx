@@ -27,8 +27,8 @@ export default function GameModeSelector({ params }) {
   const [gameModeConfig, setGameModeConfig] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const querySourceCollection = searchParams.get('collection')
-  const [sourceCollection, setSourceCollection] = useState(querySourceCollection)
+  const querySourceTrack = searchParams.get('track')
+  const [sourceTrack, setSourceTrack] = useState(querySourceTrack)
 
   useEffect(() => {
     (async () => {
@@ -37,11 +37,11 @@ export default function GameModeSelector({ params }) {
         const [catConfig, gameModes, categoryData] = await Promise.all([fetchCategoryConfig(contentType), fetchGameModes(), fetchCategories()])
         setCategoryConfig(catConfig)
         setGameModeConfig(gameModes)
-        if (!querySourceCollection) {
-          const parentCollection = (categoryData.collections ?? []).find(collection =>
-            collection.enabled !== false && collection.categories?.includes(contentType)
+        if (!querySourceTrack) {
+          const parentTrack = (categoryData.tracks ?? []).find(track =>
+            track.enabled !== false && track.categories?.includes(contentType)
           )
-          setSourceCollection(parentCollection?.id ?? null)
+          setSourceTrack(parentTrack?.id ?? null)
         }
       } catch (err) {
         setError(err.message)
@@ -49,7 +49,7 @@ export default function GameModeSelector({ params }) {
         setLoading(false)
       }
     })()
-  }, [contentType, querySourceCollection])
+  }, [contentType, querySourceTrack])
 
   const gameModeMap = {}
   if (gameModeConfig?.gameModes) gameModeConfig.gameModes.forEach(mode => { gameModeMap[mode.id] = mode })
@@ -63,7 +63,7 @@ export default function GameModeSelector({ params }) {
   const groupName = t(`groups.${groupId}`, group?.name ?? groupId)
 
   const handleModeClick = (modeId) => {
-    router.push(`/game/${contentType}/${groupId}/${modeId}?cards=${cardCount}${sourceCollection ? `&collection=${sourceCollection}` : ''}`)
+    router.push(`/game/${contentType}/${groupId}/${modeId}?cards=${cardCount}${sourceTrack ? `&track=${sourceTrack}` : ''}`)
   }
 
   if (loading) return <AppLayout><AppHeader><AppHeaderBar title={t('loading')} /></AppHeader><AppContent><div className="card" style={{ color: 'rgba(255,255,255,0.5)' }}>{t('loading')}</div></AppContent></AppLayout>
@@ -80,7 +80,7 @@ export default function GameModeSelector({ params }) {
 
   return (
     <AppLayout>
-      <AppHeader><AppHeaderBar title={groupName} backHref={sourceCollection ? `/collections/${sourceCollection}` : undefined} /></AppHeader>
+      <AppHeader><AppHeaderBar title={groupName} backHref={sourceTrack ? `/tracks/${sourceTrack}` : undefined} /></AppHeader>
       <AppContent>
         <div className="space-y-6 fade-in">
           {hasNonLearnModes && (

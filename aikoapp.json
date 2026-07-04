@@ -15,7 +15,7 @@
     "needAccessAbility": false
   },
   "routes": {
-    "protected": ["/", "/content", "/game", "/api"],
+    "protected": ["/", "/tracks", "/content", "/learn", "/game", "/api"],
     "public": ["/login", "/auth/callback", "/no-access", "/start", "/api/health", "/api/dev-login"]
   },
   "abilities": {
