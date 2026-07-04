@@ -1,6 +1,6 @@
 'use client'
 
-const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_URL
+import { getCardImageUrl } from '@/utils/assets'
 
 function formatRomaji(value) {
   if (!value) return ''
@@ -9,7 +9,7 @@ function formatRomaji(value) {
 
 export default function LearnCardCharacter({ card, lang }) {
   const mnemonic = card.data?.mnemonic?.[lang] ?? card.data?.mnemonic?.en ?? null
-  const imageUrl = card.image_id ? `${ASSETS_URL}/${card.image_id}.jpg` : null
+  const imageUrl = getCardImageUrl(card.image_id)
 
   if (!imageUrl) {
     return (

@@ -6,6 +6,7 @@ import { useT } from '@/components/I18nContext'
 import AppHeaderBar from '@/components/AppHeaderBar'
 import { AppLayout, AppHeader, AppContent, AppFooter } from '@/components/Layout'
 import { isImagePreloaded, preloadImage, preloadImagesInBackground } from '@/utils/imagePreload'
+import { getCardImageUrl } from '@/utils/assets'
 import LearnCardCharacter from './LearnCardCharacter'
 import LearnCardVocabulary from './LearnCardVocabulary'
 import LearnCardInfo from './LearnCardInfo'
@@ -39,10 +40,9 @@ export default function LearnMode({ lesson, cards, lang }) {
     return [...learningCards, ...quizCards]
   }, [cards])
   const imageUrls = useMemo(() => {
-    const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL
     return lessonCards
-      .filter(card => card.image_id)
-      .map(card => `${assetsUrl}/${card.image_id}.jpg`)
+      .map(card => getCardImageUrl(card.image_id))
+      .filter(Boolean)
   }, [lessonCards])
 
   const dragRef = useRef(null)
@@ -53,9 +53,7 @@ export default function LearnMode({ lesson, cards, lang }) {
   const total = lessonCards.length
   const isSummary = index === total
   const isQuiz = card?.card_type === 'quiz_4_option'
-  const currentImageUrl = card?.image_id
-    ? `${process.env.NEXT_PUBLIC_ASSETS_URL}/${card.image_id}.jpg`
-    : null
+  const currentImageUrl = getCardImageUrl(card?.image_id)
   const currentImageReady = !currentImageUrl
     || isImagePreloaded(currentImageUrl)
     || (imageReadyState.url === currentImageUrl && imageReadyState.ready)
@@ -395,13 +393,15 @@ export default function LearnMode({ lesson, cards, lang }) {
           ) : (
             <div
               key={animKey}
-              style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'grab', animation: `${animDir === 'forward' ? 'learnSlideRight' : 'learnSlideLeft'} 0.25s cubic-bezier(0.25,0.46,0.45,0.94) both` }}
+              style={{
+                flex: 1, minHeight: 0, width: '100%',
+                display: 'flex', alignItems: 'stretch', justifyContent: 'center', cursor: 'grab',
+                animation: `${animDir === 'forward' ? 'learnSlideRight' : 'learnSlideLeft'} 0.25s cubic-bezier(0.25,0.46,0.45,0.94) both`,
+              }}
               onPointerDown={onPointerDown}
               onPointerUp={onPointerUp}
             >
-              <div className="card" style={{ width: '100%', padding: (card.card_type === 'info' || ((card.card_type === 'character' || card.card_type === 'vocabulary') && card.image_id)) ? 0 : undefined, overflow: 'hidden' }}>
-                {renderCardContent()}
-              </div>
+              {renderCardContent()}
             </div>
           )}
         </AppContent>

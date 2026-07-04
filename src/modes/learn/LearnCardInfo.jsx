@@ -97,8 +97,50 @@ function TableEl({ rows, charSize = 48 }) {
   )
 }
 
+function looksLikeWordList(tableRows) {
+  if (!tableRows.length) return false
+  const first = tableRows[0] ?? []
+  return first.some(cell => /[A-Za-zÄÖÜäöüß]/.test(cell) && cell.length > 2)
+}
+
+function WordChipIntro({ title, paragraphs, tableRows }) {
+  const words = tableRows[0] ?? []
+  const labels = tableRows[1] ?? []
+  return (
+    <div style={{
+      width: '100%', height: '100%', minHeight: 0,
+      display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
+      gap: '24px', textAlign: 'center', padding: '14px 0 20px',
+    }}>
+      {title && <h1 style={{ ...GRADIENT_TITLE, fontSize: 'clamp(38px, 11vw, 60px)' }}>{renderIntroTitle(title)}</h1>}
+      {paragraphs[0] && (
+        <p style={{ maxWidth: '330px', fontSize: '17px', color: 'rgba(255,255,255,0.62)', lineHeight: '1.55', margin: 0 }}>
+          {parseInline(paragraphs[0])}
+        </p>
+      )}
+      {words.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px', width: 'min(100%, 340px)' }}>
+          {words.map((word, i) => (
+            <div key={`${word}-${i}`} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px',
+              padding: '14px 16px', borderRadius: '22px',
+              background: 'rgba(255,255,255,0.075)', border: '1px solid rgba(255,255,255,0.11)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+            }}>
+              <span style={{ fontSize: '24px', fontWeight: '850', color: 'white', lineHeight: 1.08, textAlign: 'left' }}>{word}</span>
+              {labels[i] && <span style={{ fontSize: '13px', fontWeight: '800', color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right' }}>{labels[i]}</span>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // Intro layout: title alone in header -> divider -> dark box with subtitle + table
 function IntroVariant({ title, paragraphs, tableRows }) {
+  if (looksLikeWordList(tableRows)) return <WordChipIntro title={title} paragraphs={paragraphs} tableRows={tableRows} />
+
   return (
     <div style={{ width: '100%', textAlign: 'center' }}>
       <div style={{ padding: '30px 20px 22px', display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
