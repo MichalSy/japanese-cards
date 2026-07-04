@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { getCardImageUrl } from '@/utils/assets'
+
+const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_URL
 
 function formatRomaji(value) {
   if (!value) return ''
@@ -16,18 +17,11 @@ function translationFor(card, lang) {
     ?? null
 }
 
-function shouldShowTransliteration(native, romaji) {
-  if (!romaji) return false
-  const cleanNative = String(native ?? '').toLocaleLowerCase().replace(/[\s.!?…]/g, '')
-  const cleanRomaji = String(romaji ?? '').toLocaleLowerCase().replace(/[\s.!?…]/g, '')
-  return cleanNative !== cleanRomaji
-}
-
 export default function LearnCardVocabulary({ card, lang }) {
-  const imageUrl = getCardImageUrl(card.image_id)
+  const imageUrl = card.image_id ? `${ASSETS_URL}/${card.image_id}.jpg` : null
   const translation = translationFor(card, lang)
+  const languageLabel = lang === 'de' ? 'Bedeutung' : 'Meaning'
   const romaji = formatRomaji(card.transliteration)
-  const showTransliteration = shouldShowTransliteration(card.native, romaji)
   const audioRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
@@ -66,18 +60,31 @@ export default function LearnCardVocabulary({ card, lang }) {
     handlePlayAudio()
   }
 
-  return (
+  const translationPanel = translation && (
     <div style={{
-      width: '100%', height: '100%', minHeight: 0,
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      gap: imageUrl ? '18px' : '28px', padding: imageUrl ? '4px 0 6px' : '18px 0',
+      position: imageUrl ? 'absolute' : 'relative', bottom: imageUrl ? 0 : 'auto', left: imageUrl ? 0 : 'auto', right: imageUrl ? 0 : 'auto',
+      background: imageUrl ? 'linear-gradient(180deg, transparent, rgba(0,0,0,0.78) 32%, rgba(0,0,0,0.86))' : 'linear-gradient(135deg, rgba(236,72,153,0.13), rgba(168,85,247,0.13))',
+      padding: imageUrl ? '42px 14px 14px' : '14px 16px', textAlign: 'center',
+      border: imageUrl ? 'none' : '1px solid rgba(236,72,153,0.25)', borderRadius: imageUrl ? 0 : '22px',
+      boxShadow: imageUrl ? 'none' : 'inset 0 1px 0 rgba(255,255,255,0.06)',
     }}>
-      {imageUrl && (
+      <div style={{ fontSize: '10px', fontWeight: '850', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.58)', marginBottom: '5px' }}>
+        {languageLabel}
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{
-          width: 'min(100%, 360px)', aspectRatio: '1/1', overflow: 'hidden', position: 'relative',
-          borderRadius: '30px', background: 'rgba(255,255,255,0.045)',
-          boxShadow: '0 18px 46px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.14)',
+          fontSize: 'clamp(22px, 6.5vw, 34px)', fontWeight: '900', lineHeight: 1.1, color: 'white', overflowWrap: 'anywhere',
         }}>
+          {translation}
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
+      {imageUrl && (
+        <div style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden', position: 'relative', background: 'rgba(255,255,255,0.04)' }}>
           <img
             src={imageUrl}
             alt={translation ?? card.native}
@@ -85,72 +92,65 @@ export default function LearnCardVocabulary({ card, lang }) {
             decoding="async"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
+          {translationPanel}
         </div>
       )}
 
-      <div
-        role={card.audio_url ? 'button' : undefined}
-        tabIndex={card.audio_url ? 0 : undefined}
-        onClick={card.audio_url ? handlePlayAudio : undefined}
-        onKeyDown={handleAudioPanelKeyDown}
-        style={{
-          width: 'min(100%, 360px)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-          gap: '10px', padding: '0 8px', cursor: card.audio_url ? 'pointer' : 'default',
-        }}
-      >
-        {card.audio_url && (
-          <audio ref={audioRef} src={card.audio_url} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
-        )}
-
-        {translation && (
-          <div style={{
-            fontSize: '13px', fontWeight: '850', letterSpacing: '0.14em', textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.48)',
-          }}>
-            {translation}
-          </div>
-        )}
-
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', width: '100%' }}>
+      <div style={{ padding: imageUrl ? '10px 14px 12px' : '14px 16px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div
+          role={card.audio_url ? 'button' : undefined}
+          tabIndex={card.audio_url ? 0 : undefined}
+          onClick={card.audio_url ? handlePlayAudio : undefined}
+          onKeyDown={handleAudioPanelKeyDown}
+          style={{
+            position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '5px',
+            padding: '9px 12px', borderRadius: '18px', background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.08)',
+            cursor: card.audio_url ? 'pointer' : 'default',
+          }}
+        >
           {card.audio_url && (
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation()
-                handlePlayAudio()
-              }}
-              aria-label={lang === 'de' ? 'Aussprache abspielen' : 'Play pronunciation'}
-              style={{
-                width: '46px', height: '46px', flexShrink: 0,
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                borderRadius: '999px', cursor: 'pointer', border: '1px solid rgba(236,72,153,0.42)', color: 'white',
-                background: isPlaying ? 'linear-gradient(135deg, rgba(236,72,153,0.96), rgba(168,85,247,0.96))' : 'rgba(255,255,255,0.08)',
-                boxShadow: isPlaying ? '0 8px 22px rgba(236,72,153,0.30)' : '0 8px 20px rgba(0,0,0,0.22)',
-                transition: 'background 0.18s ease, box-shadow 0.18s ease',
-              }}
-            >
-              <span aria-hidden="true" style={{ fontSize: '16px', lineHeight: 1, transform: isPlaying ? 'none' : 'translateX(1px)' }}>{isPlaying ? '■' : '▶'}</span>
-            </button>
+            <>
+              <audio ref={audioRef} src={card.audio_url} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  handlePlayAudio()
+                }}
+                aria-label={lang === 'de' ? 'Aussprache abspielen' : 'Play pronunciation'}
+                style={{
+                  position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
+                  width: '36px', height: '36px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  borderRadius: '999px', cursor: 'pointer', border: '1px solid rgba(236,72,153,0.38)', color: 'white',
+                  background: isPlaying ? 'linear-gradient(135deg, rgba(236,72,153,0.95), rgba(168,85,247,0.95))' : 'rgba(236,72,153,0.24)',
+                  boxShadow: isPlaying ? '0 5px 14px rgba(236,72,153,0.24)' : '0 4px 12px rgba(0,0,0,0.22)',
+                  transition: 'background 0.18s ease, box-shadow 0.18s ease', zIndex: 1,
+                }}
+              >
+                <span aria-hidden="true" style={{ fontSize: '14px', lineHeight: 1, transform: isPlaying ? 'none' : 'translateX(1px)' }}>{isPlaying ? '■' : '▶'}</span>
+              </button>
+            </>
           )}
-
-          <div style={{ minWidth: 0, flex: '0 1 auto' }}>
-            <div style={{
-              fontSize: 'clamp(46px, 13vw, 76px)', lineHeight: 0.98, fontWeight: '850', color: 'white',
-              textShadow: '0 8px 32px rgba(236,72,153,0.28)', overflowWrap: 'anywhere', wordBreak: 'normal',
+          <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+            <span style={{
+              minWidth: 0, fontSize: 'clamp(30px, 9vw, 46px)', lineHeight: 1.04, fontWeight: '700', color: 'white',
+              textShadow: '0 4px 24px rgba(236,72,153,0.24)', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center',
             }}>
               {card.native}
-            </div>
+            </span>
+          </div>
+
+          <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{
+              minWidth: 0, fontSize: 'clamp(18px, 5vw, 25px)', fontWeight: '850', color: 'rgba(236,72,153,0.96)',
+              letterSpacing: '0.02em', overflowWrap: 'anywhere', wordBreak: 'normal', textAlign: 'center', lineHeight: 1.12,
+            }}>
+              {romaji || '–'}
+            </span>
           </div>
         </div>
 
-        {showTransliteration && (
-          <div style={{
-            fontSize: 'clamp(18px, 5vw, 25px)', fontWeight: '800', color: 'rgba(236,72,153,0.95)',
-            letterSpacing: '0.02em', lineHeight: 1.12,
-          }}>
-            {romaji}
-          </div>
-        )}
+        {!imageUrl && translationPanel}
       </div>
     </div>
   )
