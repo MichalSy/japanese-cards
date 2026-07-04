@@ -17,7 +17,7 @@ Deutsch ist als Lernsprache im Produktmodell aktiv. Der erste aktive Track ist `
 
 ## Aktiver Einstieg
 
-Die ersten aktiven Kategorien liefern einen kleinen, aber nutzbaren A1-Start. Die erste Begrüßungs-Lesson hat bereits Kartenbilder; weitere Deutsch-A1-Karten wachsen lessonweise nach. Alle 50 Deutsch-A1-Zielkarten haben Audio mit der deutschen ElevenLabs-Stimme `xLCJR8xcZX2YjImGFyGw`.
+Die ersten aktiven Kategorien liefern einen kleinen, aber nutzbaren A1-Start. Die erste Begrüßungs-Lesson hat bereits Kartenbilder; weitere Deutsch-A1-Karten wachsen lessonweise nach. Alle 50 Deutsch-A1-Zielkarten haben Audio mit der deutschen ElevenLabs-Stimme `KXxZd16DiBqt82nbarJx`.
 
 Bildstil und Generierungsregeln stehen in `docs/card-image-generation.md`; Audioregeln stehen in `docs/card-audio-generation.md`.
 

@@ -9,7 +9,7 @@ Use ElevenLabs for Deutsch A1.
 Default German voice:
 
 ```text
-xLCJR8xcZX2YjImGFyGw
+KXxZd16DiBqt82nbarJx
 ```
 
 The project script is:
@@ -42,15 +42,13 @@ Default German voice settings:
 
 ```json
 {
-  "stability": 0.45,
-  "similarity_boost": 0.78,
-  "style": 0.12,
-  "use_speaker_boost": true,
-  "speed": 0.95
+  "stability": 1.0,
+  "similarity_boost": 1.0,
+  "speed": 1.0
 }
 ```
 
-These German defaults are deliberately independent from the global OpenClaw TTS voice settings. Do not inherit high-speed/global chat settings for language-learning cards; short A1 phrases need slower, clearer pronunciation.
+These German defaults are deliberately independent from the global OpenClaw TTS voice settings. Use Michal's requested German voice and exact 100% stability / 100% similarity / speed 1 settings for language-learning cards.
 
 ## Japanese N5
 
