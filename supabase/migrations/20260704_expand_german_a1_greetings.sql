@@ -16,7 +16,7 @@ where lesson_id = (select id from language_cards_learning_lessons where slug='de
   and lang_code in ('de', 'en');
 
 update language_cards_cards
-set data = '{"content_md":{"de":"# Begrüßen & verabschieden\n\nDie wichtigsten Wörter für Anfang und Ende eines Gesprächs.\n\n| Hallo | Guten Morgen | Guten Tag | Guten Abend | Tschüss | Auf Wiedersehen | Bis später | Gute Nacht |\n|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n| neutral | morgens | tagsüber | abends | locker | formell | später | nachts |","en":"# Greetings & goodbyes\n\nThe most useful phrases for the beginning and end of a conversation.\n\n| Hallo | Guten Morgen | Guten Tag | Guten Abend | Tschüss | Auf Wiedersehen | Bis später | Gute Nacht |\n|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n| neutral | morning | daytime | evening | casual | formal | later | night |"}}'::jsonb
+set data = '{"content_md":{"de":"# Begrüßen & verabschieden\n\nDu lernst jetzt die wichtigsten Wörter, um ein Gespräch freundlich zu beginnen und wieder zu beenden. Hör zu, sprich nach — ein Satz reicht für den Anfang.","en":"# Greetings & goodbyes\n\nYou will learn the first phrases for starting and ending a conversation. Listen, repeat — one sentence is enough to begin."}}'::jsonb
 where slug = 'de-a1-info-greetings';
 
 -- Additional farewell/night phrases for the first lesson.
@@ -26,7 +26,24 @@ values
   ('f552db47-d93c-5459-b0da-d2556d5f1f34', 'de-a1-start-auf-wiedersehen', 'vocabulary', 'Auf Wiedersehen', 'auf VEE-der-zey-en', 'phrase', 'Auf Wiedersehen!', null, 'de-a1-start', 'beginner', null, null, null, null, 7, true, '{"lesson_slug":"de-a1-start-greetings","kind":"phrase","learn_language":"de"}'::jsonb),
   ('f7765214-6dee-5a33-9da0-ff8b0f96cac8', 'de-a1-start-bis-spaeter', 'vocabulary', 'Bis später', 'bis SHPÄ-ter', 'phrase', 'Bis später!', null, 'de-a1-start', 'beginner', null, null, null, null, 8, true, '{"lesson_slug":"de-a1-start-greetings","kind":"phrase","learn_language":"de"}'::jsonb),
   ('715d5b34-a39c-59de-9ade-400c574b3614', 'de-a1-start-gute-nacht', 'vocabulary', 'Gute Nacht', 'GU-te nakht', 'phrase', 'Gute Nacht!', null, 'de-a1-start', 'beginner', null, null, null, null, 9, true, '{"lesson_slug":"de-a1-start-greetings","kind":"phrase","learn_language":"de"}'::jsonb)
-on conflict (id) do update set slug=excluded.slug, card_type=excluded.card_type, native=excluded.native, transliteration=excluded.transliteration, word_type=excluded.word_type, example_native=excluded.example_native, example_transliteration=excluded.example_transliteration, context=excluded.context, difficulty=excluded.difficulty, sort_order=excluded.sort_order, is_active=excluded.is_active, data=excluded.data, audio_url=null, image_url=null, image_id=null;
+on conflict (id) do update set slug=excluded.slug, card_type=excluded.card_type, native=excluded.native, transliteration=excluded.transliteration, word_type=excluded.word_type, example_native=excluded.example_native, example_transliteration=excluded.example_transliteration, context=excluded.context, difficulty=excluded.difficulty, sort_order=excluded.sort_order, is_active=excluded.is_active, data=excluded.data;
+
+update language_cards_cards set
+  image_id = case slug
+    when 'de-a1-start-tschuess-greet' then 'b01b6c49-9bc8-44c9-b223-2ff1eaefe6d9'
+    when 'de-a1-start-auf-wiedersehen' then '0f88621d-8325-4d44-bb71-52f6bf09f050'
+    when 'de-a1-start-bis-spaeter' then 'b703438d-eb92-4843-97c4-d5acfc9ee07f'
+    when 'de-a1-start-gute-nacht' then 'c917db28-41d9-461c-8fa9-ddd9fa17c812'
+    else image_id
+  end,
+  audio_url = case slug
+    when 'de-a1-start-tschuess-greet' then 'https://pqnfiqczcxnwaenylysb.supabase.co/storage/v1/object/public/language-cards/audio/de-a1/start-greetings-20260704194728/de-a1-start-tschuess-greet.mp3'
+    when 'de-a1-start-auf-wiedersehen' then 'https://pqnfiqczcxnwaenylysb.supabase.co/storage/v1/object/public/language-cards/audio/de-a1/start-greetings-20260704194728/de-a1-start-auf-wiedersehen.mp3'
+    when 'de-a1-start-bis-spaeter' then 'https://pqnfiqczcxnwaenylysb.supabase.co/storage/v1/object/public/language-cards/audio/de-a1/start-greetings-20260704194728/de-a1-start-bis-spaeter.mp3'
+    when 'de-a1-start-gute-nacht' then 'https://pqnfiqczcxnwaenylysb.supabase.co/storage/v1/object/public/language-cards/audio/de-a1/start-greetings-20260704194728/de-a1-start-gute-nacht.mp3'
+    else audio_url
+  end
+where slug in ('de-a1-start-tschuess-greet', 'de-a1-start-auf-wiedersehen', 'de-a1-start-bis-spaeter', 'de-a1-start-gute-nacht');
 
 insert into language_cards_card_translations (card_id, lang_code, translation, example_translation, hint) values
   ('bd145966-92da-5894-8859-72d28c79d5a9', 'de', 'lockerer Abschied', 'Tschüss, bis morgen!', null),
