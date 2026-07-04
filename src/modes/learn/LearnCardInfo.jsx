@@ -103,36 +103,70 @@ function looksLikeWordList(tableRows) {
   return first.some(cell => /[A-Za-zÄÖÜäöüß]/.test(cell) && cell.length > 2)
 }
 
-function WordChipIntro({ title, paragraphs, tableRows }) {
+function WordChipIntro({ title, tableRows }) {
   const words = tableRows[0] ?? []
   const labels = tableRows[1] ?? []
+  const isEnglish = title === 'Greetings'
+  const heading = isEnglish ? '4 greetings' : '4 Begrüßungen'
+  const subheading = isEnglish ? 'Read once, then start.' : 'Einmal ansehen, dann los.'
+
   return (
     <div style={{
-      width: '100%', height: '100%', minHeight: 0,
-      display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
-      gap: '24px', textAlign: 'center', padding: '14px 0 20px',
+      width: '100%', minHeight: '100%',
+      display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch',
+      gap: '18px', padding: '24px 18px 26px', textAlign: 'left',
     }}>
-      {title && <h1 style={{ ...GRADIENT_TITLE, fontSize: 'clamp(38px, 11vw, 60px)' }}>{renderIntroTitle(title)}</h1>}
-      {paragraphs[0] && (
-        <p style={{ maxWidth: '330px', fontSize: '17px', color: 'rgba(255,255,255,0.62)', lineHeight: '1.55', margin: 0 }}>
-          {parseInline(paragraphs[0])}
-        </p>
-      )}
-      {words.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px', width: 'min(100%, 340px)' }}>
-          {words.map((word, i) => (
-            <div key={`${word}-${i}`} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px',
-              padding: '14px 16px', borderRadius: '22px',
-              background: 'rgba(255,255,255,0.075)', border: '1px solid rgba(255,255,255,0.11)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
-            }}>
-              <span style={{ fontSize: '24px', fontWeight: '850', color: 'white', lineHeight: 1.08, textAlign: 'left' }}>{word}</span>
-              {labels[i] && <span style={{ fontSize: '13px', fontWeight: '800', color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right' }}>{labels[i]}</span>}
-            </div>
-          ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'flex-start' }}>
+        <div style={{
+          fontSize: '12px', fontWeight: '850', letterSpacing: '0.14em', textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.42)',
+        }}>
+          {title}
         </div>
-      )}
+        <h1 style={{
+          margin: 0, fontSize: 'clamp(28px, 8vw, 36px)', fontWeight: '900', lineHeight: 1.05,
+          color: 'white', letterSpacing: '-0.03em',
+        }}>
+          {heading}
+        </h1>
+        <div style={{ fontSize: '14px', lineHeight: 1.35, color: 'rgba(255,255,255,0.48)' }}>
+          {subheading}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', width: '100%' }}>
+        {words.map((word, i) => (
+          <div key={`${word}-${i}`} style={{
+            display: 'grid', gridTemplateColumns: '34px minmax(0, 1fr) auto', alignItems: 'center', gap: '11px',
+            minHeight: '58px', padding: '10px 12px 10px 10px', borderRadius: '18px',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.085), rgba(255,255,255,0.045))',
+            border: '1px solid rgba(255,255,255,0.11)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+          }}>
+            <div style={{
+              width: '34px', height: '34px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '12px', fontWeight: '900', color: 'rgba(255,255,255,0.74)',
+              background: 'rgba(236,72,153,0.22)', border: '1px solid rgba(236,72,153,0.28)',
+            }}>
+              {i + 1}
+            </div>
+            <div style={{
+              minWidth: 0, fontSize: 'clamp(22px, 6.4vw, 29px)', fontWeight: '900', color: 'white',
+              lineHeight: 1.05, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>
+              {word}
+            </div>
+            {labels[i] && (
+              <div style={{
+                maxWidth: '92px', fontSize: '12px', fontWeight: '850', color: 'rgba(255,255,255,0.47)',
+                textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'right', lineHeight: 1.1,
+              }}>
+                {labels[i]}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
