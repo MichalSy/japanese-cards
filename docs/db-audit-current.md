@@ -1,6 +1,6 @@
 # Japanese Cards DB Audit
 
-Generated: 2026-07-04T17:28:46.248Z
+Generated: 2026-07-04T17:46:03.326Z
 
 ## Tables
 | Table | Status | Rows / Error |
@@ -9,29 +9,22 @@ Generated: 2026-07-04T17:28:46.248Z
 | language_cards_tracks | exists | 11 |
 | language_cards_track_translations | exists | 22 |
 | language_cards_track_categories | exists | 11 |
-| language_cards_categories | exists | 13 |
-| language_cards_category_translations | exists | 26 |
+| language_cards_categories | exists | 11 |
+| language_cards_category_translations | exists | 22 |
 | language_cards_learning_courses | exists | 4 |
 | language_cards_learning_course_translations | exists | 8 |
 | language_cards_learning_lessons | exists | 51 |
 | language_cards_learning_lesson_translations | exists | 102 |
 | language_cards_learning_lesson_cards | exists | 703 |
-| language_cards_practice_groups | exists | 14 |
-| language_cards_practice_group_translations | exists | 28 |
-| language_cards_practice_group_cards | exists | 158 |
-| language_cards_cards | exists | 695 |
-| language_cards_card_translations | exists | 368 |
+| language_cards_practice_groups | exists | 12 |
+| language_cards_practice_group_translations | exists | 24 |
+| language_cards_practice_group_cards | exists | 152 |
+| language_cards_cards | exists | 689 |
+| language_cards_card_translations | exists | 356 |
 | language_cards_user_settings | exists | 5 |
-| language_cards_user_card_progress | exists | 340 |
+| language_cards_user_card_progress | exists | 350 |
 | language_cards_category_snapshots | exists | 4 |
 | language_cards_user_sessions | exists | 62 |
-| language_cards_category_collections | missing | PGRST205 |
-| language_cards_category_collection_translations | missing | PGRST205 |
-| language_cards_groups | missing | PGRST205 |
-| language_cards_group_translations | missing | PGRST205 |
-| language_cards_courses | missing | PGRST205 |
-| language_cards_course_lessons | missing | PGRST205 |
-| language_cards_course_lesson_cards | missing | PGRST205 |
 
 ## Languages
 | ID | Name EN | UI | Learn | Active | Sort |
@@ -60,8 +53,6 @@ Generated: 2026-07-04T17:28:46.248Z
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | ja | hiragana | character | true | active | 1 | true | swipe, multiChoice, flashcard, typing |
 | ja | katakana | character | true | active | 2 | true | swipe, multiChoice, flashcard, typing |
-| ja | words | vocabulary | false | deprecated | 3 | true | multiChoice, flashcard, typing |
-| ja | sentences | phrase | false | deprecated | 4 | true | multiChoice, typing |
 | ja | first-words | vocabulary | true | active | 5 | false |  |
 | ja | n5-vocabulary | vocabulary | true | active | 104 | false |  |
 | ja | n5-numbers-time | vocabulary | false | planned | 105 | false |  |
@@ -108,17 +99,14 @@ Generated: 2026-07-04T17:28:46.248Z
 | --- | --- |
 | hiragana | 6 |
 | katakana | 6 |
-| sentences | 1 |
-| words | 1 |
 
 ## Cards by Type / Active
 | Type:Active | Cards |
 | --- | --- |
 | character:active | 147 |
 | info:active | 55 |
-| phrase:active | 3 |
 | quiz_4_option:active | 309 |
-| vocabulary:active | 181 |
+| vocabulary:active | 178 |
 
 ## Orphan Checks
 | Check | Count |
@@ -127,3 +115,4 @@ Generated: 2026-07-04T17:28:46.248Z
 | Practice group links pointing to missing group/card | 0 |
 | Lessons without cards | 0 |
 | Practice groups without cards | 0 |
+| Active practice groups without cards | 0 |

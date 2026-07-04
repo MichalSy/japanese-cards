@@ -102,6 +102,7 @@ async function main() {
       show_all_option: false,
       sort_order: data.category.sort_order,
       is_active: true,
+      status: 'active',
     }, { onConflict: 'language_id,slug' })
   if (categoryError) throw categoryError
 
@@ -125,6 +126,7 @@ async function main() {
       level: data.course.level,
       sort_order: data.course.sort_order,
       is_active: true,
+      status: 'active',
     }, { onConflict: 'category_id,slug' })
   if (courseError) throw courseError
 
@@ -150,6 +152,7 @@ async function main() {
         slug: group.slug,
         sort_order: group.sort_order,
         is_active: true,
+        status: 'active',
       }, { onConflict: 'course_id,slug' })
     if (lessonError) throw lessonError
 
@@ -182,7 +185,6 @@ async function main() {
         .from('language_cards_cards')
         .upsert({
           id: cardId,
-          group_id: null,
           slug: item.slug,
           card_type: 'vocabulary',
           native: item.native,
@@ -227,7 +229,6 @@ async function main() {
         .from('language_cards_cards')
         .upsert({
           id: quizCardId,
-          group_id: null,
           slug: quizSlug,
           card_type: 'quiz_4_option',
           native: item.native,

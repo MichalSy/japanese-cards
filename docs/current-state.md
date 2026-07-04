@@ -1,6 +1,6 @@
 # Current State
 
-Stand nach der Track-/Status-Migration.
+Stand nach der Track-/Status-Migration und der Entfernung alten Starter-Contents.
 
 ## Live-Datenmodell
 
@@ -15,16 +15,6 @@ Produktiv genutzt werden diese Tabellen:
 | Üben | `language_cards_practice_groups`, `language_cards_practice_group_translations`, `language_cards_practice_group_cards` |
 | Cards | `language_cards_cards`, `language_cards_card_translations` |
 | Fortschritt | `language_cards_user_card_progress`, `language_cards_category_snapshots`, `language_cards_user_sessions` |
-
-Nicht live vorhanden / nicht mehr produktiv genutzt:
-
-- `language_cards_category_collections`
-- `language_cards_category_collection_translations`
-- `language_cards_groups`
-- `language_cards_group_translations`
-- `language_cards_courses`
-- `language_cards_course_lessons`
-- `language_cards_course_lesson_cards`
 
 ## Sprachen
 
@@ -80,8 +70,6 @@ Japanisch:
 | `n5-grammar` | `planned` | nein | Roadmap |
 | `n5-kanji` | `planned` | nein | Roadmap |
 | `n5-phrases` | `planned` | nein | Roadmap |
-| `words` | `deprecated` | nein | Legacy |
-| `sentences` | `deprecated` | nein | Legacy |
 
 ## Lernen
 
@@ -102,8 +90,6 @@ Practice Groups existieren aktuell für:
 |---|---:|
 | `hiragana` | 6 |
 | `katakana` | 6 |
-| `words` | 1, aber Kategorie ist `deprecated` |
-| `sentences` | 1, aber Kategorie ist `deprecated` |
 
 Game Modes:
 
@@ -119,5 +105,3 @@ Game Modes:
 Der aktuelle DB-Audit liegt hier:
 
 - `docs/db-audit-current.md`
-
-Ältere Vorher/Nachher-Audit-Snapshots bleiben in Git nachvollziehbar, liegen aber nicht mehr als parallele Doku-Dateien im Arbeitsbaum.

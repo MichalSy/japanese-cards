@@ -1,5 +1,5 @@
 -- Introduce language-level tracks (JLPT/CEFR/custom) and explicit content status.
--- Non-destructive: no content, progress, sessions, or legacy rows are deleted.
+-- Current lifecycle states are draft, planned, and active.
 
 begin;
 
@@ -15,7 +15,6 @@ alter table language_cards_practice_groups
 
 update language_cards_categories
 set status = case
-  when language_id = 'ja' and slug in ('words', 'sentences') then 'deprecated'
   when is_active = true then 'active'
   when status is null then 'draft'
   else status
@@ -37,7 +36,6 @@ end;
 
 update language_cards_practice_groups pg
 set status = case
-  when c.slug in ('words', 'sentences') then 'deprecated'
   when pg.is_active = true then 'active'
   when pg.status is null then 'draft'
   else pg.status
@@ -58,19 +56,19 @@ do $$
 begin
   if not exists (select 1 from pg_constraint where conname = 'language_cards_categories_status_check') then
     alter table language_cards_categories add constraint language_cards_categories_status_check
-      check (status in ('draft', 'planned', 'active', 'deprecated', 'archived'));
+      check (status in ('draft', 'planned', 'active'));
   end if;
   if not exists (select 1 from pg_constraint where conname = 'language_cards_learning_courses_status_check') then
     alter table language_cards_learning_courses add constraint language_cards_learning_courses_status_check
-      check (status in ('draft', 'planned', 'active', 'deprecated', 'archived'));
+      check (status in ('draft', 'planned', 'active'));
   end if;
   if not exists (select 1 from pg_constraint where conname = 'language_cards_learning_lessons_status_check') then
     alter table language_cards_learning_lessons add constraint language_cards_learning_lessons_status_check
-      check (status in ('draft', 'planned', 'active', 'deprecated', 'archived'));
+      check (status in ('draft', 'planned', 'active'));
   end if;
   if not exists (select 1 from pg_constraint where conname = 'language_cards_practice_groups_status_check') then
     alter table language_cards_practice_groups add constraint language_cards_practice_groups_status_check
-      check (status in ('draft', 'planned', 'active', 'deprecated', 'archived'));
+      check (status in ('draft', 'planned', 'active'));
   end if;
 end $$;
 
@@ -82,7 +80,7 @@ create table if not exists language_cards_tracks (
   level_system text not null default 'custom',
   level_code text,
   emoji text,
-  status text not null default 'planned' check (status in ('draft', 'planned', 'active', 'deprecated', 'archived')),
+  status text not null default 'planned' check (status in ('draft', 'planned', 'active')),
   sort_order int not null default 0,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -101,7 +99,7 @@ create table if not exists language_cards_track_categories (
   track_id uuid not null references language_cards_tracks(id) on delete cascade,
   category_id uuid not null references language_cards_categories(id) on delete cascade,
   sort_order int not null default 0,
-  status_override text check (status_override is null or status_override in ('draft', 'planned', 'active', 'deprecated', 'archived')),
+  status_override text check (status_override is null or status_override in ('draft', 'planned', 'active')),
   created_at timestamptz not null default now(),
   primary key(track_id, category_id)
 );
@@ -243,7 +241,7 @@ from matched
 on conflict (track_id, category_id) do update set
   sort_order = excluded.sort_order;
 
--- 6) Language-aware helper for progress counts. Keep the old no-arg function as JA compatibility wrapper.
+-- 6) Language-aware helper for progress counts.
 create or replace function public.get_language_category_card_counts(p_language_id text default 'ja')
 returns table(slug text, total_cards bigint)
 language sql
@@ -258,14 +256,6 @@ as $function$
     and cat.is_active = true
     and cat.status = 'active'
   group by cat.slug;
-$function$;
-
-create or replace function public.get_category_card_counts()
-returns table(slug text, total_cards bigint)
-language sql
-stable
-as $function$
-  select * from public.get_language_category_card_counts('ja');
 $function$;
 
 notify pgrst, 'reload schema';

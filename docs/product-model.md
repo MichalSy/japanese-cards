@@ -1,6 +1,6 @@
 # Product Model
 
-Japanese Cards ist als mehrsprachige Lernplattform gedacht, nicht nur als einzelne Japanisch-App.
+Japanese Cards ist als mehrsprachige Lernplattform gedacht, nicht als Sammlung historischer Einzelstrukturen.
 
 ## Zielbild
 
@@ -50,26 +50,23 @@ Deutsch → Deutsch A1 → Artikel → Üben → Multiple Choice
 
 ## Statusmodell
 
-`is_active` bleibt aus Kompatibilitätsgründen bestehen. Fachlich zählt zusätzlich `status`:
+`is_active` bleibt für bestehende UI-/API-Kompatibilität bestehen. Fachlich zählt zusätzlich `status`:
 
 | Status | Bedeutung | Sichtbarkeit |
 |---|---|---|
 | `draft` | intern vorbereitet | nicht produktiv sichtbar |
 | `planned` | Roadmap / Kommt bald | sichtbar, aber nicht klickbar |
 | `active` | produktiv nutzbar | sichtbar und klickbar |
-| `deprecated` | Altbestand, nicht weiter benutzen | nicht produktiv sichtbar |
-| `archived` | historisch behalten | nicht produktiv sichtbar |
 
-Wichtig: `is_active = false` heißt nicht automatisch „löschen“. Es kann `planned`, `draft`, `deprecated` oder `archived` bedeuten.
+Wichtig: `is_active = false` heißt nicht automatisch „löschen“. Es kann ein geplanter Roadmap-Eintrag sein. Inhalte, die nicht mehr zum Produktmodell gehören, werden entfernt.
 
 ## Produktregel
 
 Aufräumen heißt hier:
 
-1. klassifizieren,
-2. Status setzen,
-3. Roadmap und Produktstruktur in DB abbilden,
-4. Legacy markieren,
-5. erst nach Audit und Migration löschen.
+1. Zielmodell klären,
+2. aktive und geplante Produktstruktur in der DB abbilden,
+3. nicht mehr gültige Inhalte entfernen,
+4. Doku, Code, API und DB mit denselben Begriffen halten.
 
-Keine Produktstruktur aus dem Code entfernen, nur weil Inhalte noch nicht vollständig befüllt sind.
+Keine Produktstruktur aus dem Code entfernen, nur weil Inhalte noch nicht vollständig befüllt sind. Geplante Tracks/Kategorien bleiben `planned`; alter Bestand bleibt nicht im Projekt liegen.

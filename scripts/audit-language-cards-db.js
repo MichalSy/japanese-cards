@@ -85,13 +85,6 @@ async function main() {
     'language_cards_user_card_progress',
     'language_cards_category_snapshots',
     'language_cards_user_sessions',
-    'language_cards_category_collections',
-    'language_cards_category_collection_translations',
-    'language_cards_groups',
-    'language_cards_group_translations',
-    'language_cards_courses',
-    'language_cards_course_lessons',
-    'language_cards_course_lesson_cards',
   ]
 
   const counts = []
@@ -157,11 +150,20 @@ async function main() {
   const orphanPracticeLinks = (practiceLinks.data || []).filter(l => !practiceGroupIds.has(l.practice_group_id) || !cardIds.has(l.card_id)).length
   const lessonsWithoutCards = (lessons.data || []).filter(l => !(lessonLinks.data || []).some(x => x.lesson_id === l.id)).length
   const practiceGroupsWithoutCards = (practiceGroups.data || []).filter(g => !(practiceLinks.data || []).some(x => x.practice_group_id === g.id)).length
+  const activePracticeGroupsWithoutCards = (practiceGroups.data || []).filter(g => {
+    const category = categoryById[g.category_id]
+    return g.is_active === true
+      && g.status === 'active'
+      && category?.is_active === true
+      && category?.status === 'active'
+      && !(practiceLinks.data || []).some(x => x.practice_group_id === g.id)
+  }).length
   lines.push(mdTable(['Check', 'Count'], [
     ['Learning lesson links pointing to missing lesson/card', orphanLessonLinks],
     ['Practice group links pointing to missing group/card', orphanPracticeLinks],
     ['Lessons without cards', lessonsWithoutCards],
     ['Practice groups without cards', practiceGroupsWithoutCards],
+    ['Active practice groups without cards', activePracticeGroupsWithoutCards],
   ]))
 
   const outPath = process.argv[2] || 'docs/db-audit-current.md'
