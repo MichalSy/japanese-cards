@@ -1,38 +1,38 @@
-# JLPT N5 Content Stand
+# JLPT N5 Content Plan
 
-Die App nutzt aktuell keine eigene Collection-Schicht. Die Hauptnavigation kommt direkt aus `language_cards_categories` und zeigt nur aktive Kategorien. Die produktive N5-Struktur ist deshalb eine normale Kategorie (`n5-vocabulary`) mit einem Learning Course und aktiven Lessons.
+Ziel: Die Collection `JLPT N5` bleibt der sichtbare Einstiegspfad. Fertige Kategorien sind aktiv und klickbar. Geplante Kategorien werden angezeigt, sind deaktiviert und zeigen `Kommt bald`.
 
-## Aktive Kategorien
+Die weiteren JLPT-Collections `JLPT N4`, `JLPT N3`, `JLPT N2` und `JLPT N1` werden auf der Hauptseite ebenfalls sichtbar gemacht. Sie sind deaktiviert, ausgegraut und dienen als Roadmap-Ausblick.
+
+## Navigationsstruktur
 
 | Sortierung | Slug | Status | Typ | Inhalt |
 | ---: | --- | --- | --- | --- |
 | 1 | `hiragana` | aktiv | Zeichen | Hiragana-Grundlagen, inklusive Dakuten/Handakuten |
 | 2 | `katakana` | aktiv | Zeichen | Katakana-Grundlagen, inklusive Dakuten/Handakuten |
-| 5 | `first-words` | aktiv | Vokabeln | Erste einfache Wörter zum Einstieg |
-| 104 | `n5-vocabulary` | aktiv | Vokabeln | Kernwortschatz für JLPT N5 |
+| 3 | `first-words` | aktiv | Vokabeln | Erste einfache Wörter zum Einstieg |
+| 4 | `n5-vocabulary` | aktiv | Vokabeln | Kernwortschatz für JLPT N5 |
+| 5 | `n5-numbers-time` | geplant, deaktiviert | Vokabeln | Zahlen, Uhrzeit, Datum, Wochentage, Mengen |
+| 6 | `n5-particles` | geplant, deaktiviert | Grammatik | は, が, を, に, で, と, も, の, へ, から, まで, よ, ね |
+| 7 | `n5-verbs` | geplant, deaktiviert | Grammatik | Verbgruppen, Masu-Form, Te-Form-Basis, Vergangenheit, Verneinung |
+| 8 | `n5-adjectives` | geplant, deaktiviert | Grammatik | い-Adjektive, な-Adjektive, Formen und einfache Satzmuster |
+| 9 | `n5-grammar` | geplant, deaktiviert | Grammatik | N5-Satzbau, Fragen, Existenz, Wünsche, Erlaubnis, Verbverbindungen |
+| 10 | `n5-kanji` | geplant, deaktiviert | Zeichen | N5-Kanji mit Lesungen, Bedeutung und Beispielwörtern |
+| 11 | `n5-phrases` | geplant, deaktiviert | Phrasen | Alltagssätze, Mini-Dialoge und Prüfungsmuster |
 
-Deaktivierte Legacy-Kategorien `words` und `sentences` bleiben in der DB, werden aber nicht in der Hauptnavigation angezeigt.
+## Aktueller technischer Stand
 
-## Nicht aktive / nicht live verwendete Struktur
-
-Nicht Teil des aktuellen Live-Schemas:
-
-- `language_cards_category_collections`
-- `language_cards_category_collection_translations`
-- `language_cards_categories.collection_id`
-- `language_cards_categories.collection_sort_order`
-- alte Legacy-Tabellen `language_cards_courses`, `language_cards_course_lessons`, `language_cards_course_lesson_cards`, `language_cards_groups`
-
-Neue Inhalte werden über die produktiven Tabellen gepflegt:
-
-- `language_cards_categories`
-- `language_cards_learning_courses`
-- `language_cards_learning_lessons`
-- `language_cards_learning_lesson_cards`
-- `language_cards_practice_groups`
-- `language_cards_practice_group_cards`
-- `language_cards_cards`
-- jeweilige Translation-Tabellen
+- Die Hauptseite zeigt Collection-Karten, nicht eine flache Kategorienliste.
+- `jlpt-n5` führt auf `/collections/jlpt-n5` und zeigt die aktive N5-Reihenfolge plus deaktivierte geplante Bereiche.
+- `jlpt-n4` bis `jlpt-n1` bleiben sichtbar, aber deaktiviert.
+- Kategorien verwenden die produktiven Learning-/Practice-Tabellen:
+  - `language_cards_learning_courses`
+  - `language_cards_learning_lessons`
+  - `language_cards_learning_lesson_cards`
+  - `language_cards_practice_groups`
+  - `language_cards_practice_group_cards`
+  - `language_cards_cards`
+- Die Collection-Navigation kann aus einer echten Collection-Migration kommen oder — solange diese Migration nicht aktiv ist — durch `/api/data/categories` aus den vorhandenen Kategorien und Roadmap-Daten zusammengesetzt werden.
 
 ## `n5-vocabulary`
 
@@ -53,7 +53,7 @@ Aktuell angelegt als Course `n5-vocabulary-basics`.
 
 ## Nächste Inhaltsbereiche
 
-Wenn weitere N5-Bereiche kommen, zuerst als normale `language_cards_categories` anlegen und nur nach befüllten/validierten Learning-/Practice-Daten aktivieren:
+Wenn weitere N5-Bereiche kommen, zuerst Content-Scope finalisieren, dann Learning Course/Lessons und Practice Groups/Cards anlegen. Erst nach UI-Test und Datenprüfung `is_active = true` setzen.
 
 1. Zahlen & Zeit
 2. Partikel
@@ -62,5 +62,3 @@ Wenn weitere N5-Bereiche kommen, zuerst als normale `language_cards_categories` 
 5. Grammatik
 6. Kanji
 7. Sätze & Dialoge
-
-Keine UI-Platzhalter oder synthetischen Kategorien im Code anlegen; die DB bleibt Quelle der Wahrheit.

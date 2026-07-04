@@ -1,13 +1,15 @@
 # Japanese Cards
 
-Lernspiel für japanische Schriftsysteme (Hiragana, Katakana) und Vokabeln.
+Lernspiel für japanische Schriftsysteme, Vokabeln und JLPT-Inhalte.
 
 ## Features
 
-- **Swipe Game**: Zeichen + Romaji-Paarung bewerten (Tinder-Style)
-- **Supabase-basierte Lerninhalte**: Kategorien, Learning-Lessons, Practice-Groups, Cards und Fortschritt aus der Datenbank
-- **Mehrsprachig**: Deutsch und Englisch
-- **Responsive**: Mobile (Touch) und Desktop
+- **JLPT-Gruppierung**: Startseite zeigt `JLPT N5` aktiv sowie `JLPT N4` bis `JLPT N1` als Roadmap/„Kommt bald“.
+- **Lernen + Üben**: Kategorien haben Learn-Lessons und/oder Practice-Groups mit Spielmodi.
+- **Swipe Game**: Zeichen + Romaji-Paarung bewerten (Tinder-Style).
+- **Supabase-basierte Lerninhalte**: Kategorien, Learning-Lessons, Practice-Groups, Cards und Fortschritt aus der Datenbank.
+- **Mehrsprachig**: Deutsch und Englisch.
+- **Responsive**: Mobile (Touch) und Desktop.
 
 ## Technologien
 
@@ -19,20 +21,20 @@ Lernspiel für japanische Schriftsysteme (Hiragana, Katakana) und Vokabeln.
 
 ## Projektstruktur
 
-```
+```text
 japanese-cards/
 ├── src/
 │   ├── app/               # Next.js App Router (pages & API routes)
+│   │   ├── collections/   # JLPT-/Roadmap-Gruppierung
 │   │   ├── content/       # Kategorie- und Gruppenauswahl
 │   │   ├── game/          # Spielmodi
 │   │   └── page.jsx       # Hauptmenü
 │   ├── components/        # Wiederverwendbare UI-Komponenten
-│   ├── context/           # React Context (LanguageContext)
-│   ├── modes/             # Spielmodi-Implementierungen (z.B. SwipeGame)
-│   ├── config/            # Konfigurationen
+│   ├── modes/             # Spielmodi-Implementierungen
+│   ├── config/            # API-Client-Konfiguration
 │   └── utils/             # Hilfsfunktionen
-├── public/                 # Statische Assets
-└── .aiko/                  # Generierte Auth-Dateien (nicht manuell bearbeiten)
+├── public/                # Statische Assets
+└── .aiko/                 # Generierte Auth-Dateien (nicht manuell bearbeiten)
 ```
 
 ## Installation & Start
@@ -44,7 +46,7 @@ npm install
 npm run dev
 ```
 
-Die App ist unter `http://localhost:3001` erreichbar.
+Die App ist lokal unter `http://localhost:3001` erreichbar.
 
 ## Build & Deployment
 
@@ -57,16 +59,11 @@ Domain: `japanese-cards.sytko.de`
 
 ## Auth
 
-Auth wird von `@michalsy/aiko-webapp-core` verwaltet. Der `prebuild`-Script generiert
-die nötigen Auth-Dateien automatisch. Geschützte Routen werden via Next.js Middleware
-abgesichert (Google OAuth erforderlich).
+Auth wird von `@michalsy/aiko-webapp-core` verwaltet. Der `prebuild`-Script generiert die nötigen Auth-Dateien automatisch. Geschützte Routen werden via Next.js Middleware abgesichert (Google OAuth erforderlich).
 
 ### Lokaler Dev-Login
 
-Für lokale Browser-Checks kann eine echte Supabase-Session ohne Google-OAuth erzeugt
-werden. Voraussetzung ist eine `.env.local` mit `SUPABASE_DEV_TOKEN`,
-`SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL` und
-`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+Für lokale Browser-Checks kann eine echte Supabase-Session ohne Google-OAuth erzeugt werden. Voraussetzung ist eine `.env.local` mit `SUPABASE_DEV_TOKEN`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL` und `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 
 ```bash
 npm run dev
@@ -78,13 +75,11 @@ Dann im Browser öffnen:
 http://localhost:3001/api/dev-login?token=<SUPABASE_DEV_TOKEN>&redirect=/
 ```
 
-Erwartet: Der Browser landet auf `http://localhost:3001/` und zeigt die Startseite
-mit `Hiragana` und `Katakana`. Wenn stattdessen `/login?redirect=%2F` erscheint,
-Core-Version prüfen: `@michalsy/aiko-webapp-core` muss mindestens `1.1.9` sein.
+Erwartet: Der Browser landet auf `http://localhost:3001/` und zeigt die Startseite mit `JLPT N5` sowie den Roadmap-Gruppen `JLPT N4` bis `JLPT N1`. Wenn stattdessen `/login?redirect=%2F` erscheint, Core-Version prüfen: `@michalsy/aiko-webapp-core` muss mindestens `1.1.9` sein.
 
 ## Datenbank (Supabase)
 
-Alle Tabellen nutzen den Prefix `language_cards_`. Neue Tabellen immer mit diesem Prefix anlegen.
+Alle produktiven Tabellen nutzen den Prefix `language_cards_`. Neue Tabellen immer mit diesem Prefix anlegen.
 
 | Tabelle | Zweck |
 |---|---|
@@ -106,6 +101,13 @@ Alle Tabellen nutzen den Prefix `language_cards_`. Neue Tabellen immer mit diese
 | `language_cards_category_snapshots` | Aggregierter Fortschritt pro User/Kategorie |
 | `language_cards_user_sessions` | Spielsessions mit Statistiken |
 
-Karten haben immer generische Felder: `native` (Zielsprachen-Inhalt), `transliteration` (z.B. Romaji für Japanisch, Pinyin für Chinesisch), `card_type` (`character` | `vocabulary` | `phrase` | `grammar` | `quiz_4_option` | `info`).
+Karten haben generische Felder wie `native` (Zielsprachen-Inhalt), `transliteration`, `card_type` (`character` | `vocabulary` | `phrase` | `grammar` | `quiz_4_option` | `info`) und optionale Medienfelder.
 
-Nicht mehr Teil der aktiven Struktur: alte Legacy-Tabellen `language_cards_courses`, `language_cards_course_lessons`, `language_cards_course_lesson_cards`, `language_cards_groups` sowie die nicht-live Collection-Schicht `language_cards_category_collections` / `collection_id`.
+## JLPT-/Collection-Layer
+
+Die JLPT-Gruppierung ist Produktnavigation und Roadmap, nicht gleichbedeutend mit alten Übungsgruppen. Die API `/api/data/categories` liefert deshalb zusätzlich zu `categories` auch `collections`:
+
+- `jlpt-n5` aktiv mit Hiragana, Katakana, Erste Vokabeln, N5 Vokabeln und geplanten deaktivierten N5-Bereichen.
+- `jlpt-n4` bis `jlpt-n1` deaktiviert als sichtbare Roadmap.
+
+Wenn eine echte Collection-Migration (`language_cards_category_collections` + `collection_id`) vorhanden ist, kann die API sie nutzen. Solange sie nicht vorhanden ist, wird diese Navigationsstruktur aus den bestehenden Kategorien zusammengesetzt, damit die Produktstruktur live stabil bleibt.
