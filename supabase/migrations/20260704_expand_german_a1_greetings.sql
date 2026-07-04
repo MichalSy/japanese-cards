@@ -1,5 +1,5 @@
 -- Expand the first German A1 lesson so it is a useful starter block, not just four items.
--- Keep the special mobile info-card renderer, but feed it a richer row list.
+-- Menu descriptions should summarize card counts, not list every word.
 
 update language_cards_learning_lesson_translations
 set title = case lang_code
@@ -8,8 +8,8 @@ set title = case lang_code
   else title
 end,
 description = case lang_code
-  when 'de' then 'Hallo · Guten Morgen · Guten Tag · Guten Abend · Tschüss · Auf Wiedersehen · Bis später · Gute Nacht'
-  when 'en' then 'Hello · Good morning · Good day · Good evening · Bye · Goodbye · See you later · Good night'
+  when 'de' then '8 Sätze, 8 Quizkarten.'
+  when 'en' then '8 phrase cards, 8 quiz cards.'
   else description
 end
 where lesson_id = (select id from language_cards_learning_lessons where slug='de-a1-start-greetings')

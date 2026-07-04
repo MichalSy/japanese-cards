@@ -154,8 +154,8 @@ values ('f8d547e9-684c-5f38-9baf-d31fbc6d9c8f', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-start-greetings'), 'de', 'Begrüßen', 'Hallo · Guten Morgen · Guten Tag · Guten Abend'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-start-greetings'), 'en', 'Greetings', 'Hello · Good morning · Good day · Good evening')
+  ((select id from language_cards_learning_lessons where slug='de-a1-start-greetings'), 'de', 'Begrüßen', '4 Sätze, 4 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-start-greetings'), 'en', 'Greetings', '4 phrase cards, 4 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
@@ -237,8 +237,8 @@ values ('0943ac60-9de4-5686-8c46-74f749eaec7b', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-start-politeness'), 'de', 'Höflich sein', 'bitte · danke · Entschuldigung · Tschüss'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-start-politeness'), 'en', 'Being polite', 'please · thanks · excuse me · bye')
+  ((select id from language_cards_learning_lessons where slug='de-a1-start-politeness'), 'de', 'Höflich sein', '4 Wörter, 4 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-start-politeness'), 'en', 'Being polite', '4 word cards, 4 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
@@ -314,8 +314,8 @@ values ('ee30a89c-2b1d-5b6c-8d81-a735faac2dbe', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), 'de', 'Erste Mini-Sätze', 'ja · nein · ich heiße · wie heißt du?'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), 'en', 'First mini sentences', 'yes · no · my name is · what is your name?')
+  ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), 'de', 'Erste Mini-Sätze', '4 Sätze, 4 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), 'en', 'First mini sentences', '4 sentence cards, 4 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
