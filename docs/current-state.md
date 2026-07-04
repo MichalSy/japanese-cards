@@ -1,6 +1,6 @@
 # Current State
 
-Stand nach der Track-/Status-Migration und der Entfernung alten Starter-Contents.
+Stand nach der Aktivierung von Deutsch als Lernsprache und dem ersten Deutsch-A1-Seed.
 
 ## Live-Datenmodell
 
@@ -23,10 +23,10 @@ Aktuell in `language_cards_languages`:
 | ID | Rolle |
 |---|---|
 | `ja` | aktive Lernsprache |
-| `de` | aktive UI-Sprache; Deutsch-Tracks sind als Roadmap angelegt |
+| `de` | aktive UI-Sprache und aktive Lernsprache |
 | `en` | aktive UI-Sprache |
 
-`learn_language_id` existiert in User Settings und wird von den Content-APIs verwendet. Default bleibt `ja`.
+`learn_language_id` existiert in User Settings und wird von den Content-APIs verwendet. Default für neue Settings bleibt `ja`.
 
 ## Tracks
 
@@ -40,18 +40,16 @@ Japanisch:
 | `jlpt-n2` | `planned` |
 | `jlpt-n1` | `planned` |
 
-Deutsch / CEFR Roadmap:
+Deutsch / CEFR:
 
 | Track | Status |
 |---|---|
-| `de-a1` | `planned` |
+| `de-a1` | `active` |
 | `de-a2` | `planned` |
 | `de-b1` | `planned` |
 | `de-b2` | `planned` |
 | `de-c1` | `planned` |
 | `de-c2` | `planned` |
-
-Deutsch wird noch nicht als aktive Lernsprache in der UI angeboten, solange keine Kategorien/Lessons vorhanden sind.
 
 ## Kategorien
 
@@ -71,6 +69,21 @@ Japanisch:
 | `n5-kanji` | `planned` | nein | Roadmap |
 | `n5-phrases` | `planned` | nein | Roadmap |
 
+Deutsch A1:
+
+| Kategorie | Status | Aktiv | Rolle |
+|---|---|---:|---|
+| `de-a1-start` | `active` | ja | Begrüßen, Höflichkeit, Mini-Sätze |
+| `de-a1-people` | `active` | ja | Pronomen, sein/haben, Familie |
+| `de-a1-numbers-time` | `active` | ja | Zahlen, Zeitwörter, Wochentage |
+| `de-a1-home-city` | `planned` | nein | Zuhause, Stadt, Wege |
+| `de-a1-food-shopping` | `planned` | nein | Essen, Preise, Einkaufen |
+| `de-a1-daily-life` | `planned` | nein | Alltag, Routinen, Termine |
+| `de-a1-grammar` | `planned` | nein | Artikel, Fragen, Negation, Fälle |
+| `de-a1-dialogues` | `planned` | nein | kurze Alltagssituationen |
+
+Details zur deutschen A1-Struktur stehen in `docs/de-a1-curriculum.md`.
+
 ## Lernen
 
 Aktive Learning Courses:
@@ -81,6 +94,11 @@ Aktive Learning Courses:
 | `katakana-basics` | 15 |
 | `first-words-basics` | 7 |
 | `n5-vocabulary-basics` | 10 |
+| `de-a1-start-basics` | 3 |
+| `de-a1-people-basics` | 3 |
+| `de-a1-numbers-time-basics` | 3 |
+
+Deutsch A1 enthält aktuell 50 Zielkarten, 50 Quizkarten und 3 Infokarten. Alle sind textbasiert; keine Bilder oder Sounds wurden erzeugt oder benötigt.
 
 ## Üben / Spiele
 
@@ -90,6 +108,9 @@ Practice Groups existieren aktuell für:
 |---|---:|
 | `hiragana` | 6 |
 | `katakana` | 6 |
+| `de-a1-start` | 3 |
+| `de-a1-people` | 3 |
+| `de-a1-numbers-time` | 3 |
 
 Game Modes:
 
