@@ -14,8 +14,8 @@ on conflict (language_id, slug) do update set status = excluded.status, emoji = 
 update language_cards_tracks set status = 'planned', updated_at = now() where language_id = 'de' and slug <> 'de-a1';
 
 insert into language_cards_track_translations (track_id, lang_code, name, description) values
-  ((select id from language_cards_tracks where language_id='de' and slug='de-a1'), 'de', 'Deutsch A1', 'Der aktive Einstieg: Begrüßen, erste Sätze, Menschen, Familie, Zahlen und Zeit.'),
-  ((select id from language_cards_tracks where language_id='de' and slug='de-a1'), 'en', 'German A1', 'The active beginner path: greetings, first sentences, people, family, numbers, and time.')
+  ((select id from language_cards_tracks where language_id='de' and slug='de-a1'), 'de', 'Deutsch A1', 'Der aktive Einstieg: Begrüßen, erste Sätze, Menschen, Familie, Zahlen, Zeit und Farben.'),
+  ((select id from language_cards_tracks where language_id='de' and slug='de-a1'), 'en', 'German A1', 'The active beginner path: greetings, first sentences, people, family, numbers, time, and colors.')
 on conflict (track_id, lang_code) do update set name = excluded.name, description = excluded.description;
 
 insert into language_cards_categories (id, language_id, slug, native_name, emoji, color, card_type, game_modes, show_all_option, sort_order, is_active, status)
@@ -347,12 +347,12 @@ on conflict (card_id, lang_code) do update set translation=excluded.translation,
 insert into language_cards_learning_lesson_cards (lesson_id, card_id, sort_order) values ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), 'b739408d-dff6-51a7-b439-fe804197ea86', 3) on conflict (lesson_id, card_id) do update set sort_order=excluded.sort_order;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
-values ('8535d379-3ecc-5cbe-9422-9e023a8791b2', 'de-a1-start-ich-heisse', 'vocabulary', 'Ich heiße …', 'isch HAI-se', 'phrase', 'Ich heiße Anna.', null, 'de-a1-start', 'beginner', null, null, null, null, 4, true, '{"lesson_slug":"de-a1-start-mini-sentences","kind":"phrase","learn_language":"de"}'::jsonb)
+values ('8535d379-3ecc-5cbe-9422-9e023a8791b2', 'de-a1-start-ich-heisse', 'vocabulary', 'Ich heiße', 'isch HAI-se', 'phrase', 'Ich heiße Anna.', null, 'de-a1-start', 'beginner', null, null, null, null, 4, true, '{"lesson_slug":"de-a1-start-mini-sentences","kind":"phrase","learn_language":"de"}'::jsonb)
 on conflict (id) do update set slug=excluded.slug, card_type=excluded.card_type, native=excluded.native, transliteration=excluded.transliteration, word_type=excluded.word_type, example_native=excluded.example_native, example_transliteration=excluded.example_transliteration, context=excluded.context, difficulty=excluded.difficulty, sort_order=excluded.sort_order, is_active=excluded.is_active, data=excluded.data, audio_url=null, image_url=null, image_id=null;
 
 insert into language_cards_card_translations (card_id, lang_code, translation, example_translation, hint) values
-  ('8535d379-3ecc-5cbe-9422-9e023a8791b2', 'de', 'Ich heiße …', 'Ich heiße Anna.', null),
-  ('8535d379-3ecc-5cbe-9422-9e023a8791b2', 'en', 'My name is …', 'My name is Anna.', null)
+  ('8535d379-3ecc-5cbe-9422-9e023a8791b2', 'de', 'Ich heiße', 'Ich heiße Anna.', null),
+  ('8535d379-3ecc-5cbe-9422-9e023a8791b2', 'en', 'My name is', 'My name is Anna.', null)
 on conflict (card_id, lang_code) do update set translation=excluded.translation, example_translation=excluded.example_translation, hint=excluded.hint;
 
 insert into language_cards_learning_lesson_cards (lesson_id, card_id, sort_order) values ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), '8535d379-3ecc-5cbe-9422-9e023a8791b2', 4) on conflict (lesson_id, card_id) do update set sort_order=excluded.sort_order;
@@ -369,25 +369,25 @@ on conflict (card_id, lang_code) do update set translation=excluded.translation,
 insert into language_cards_learning_lesson_cards (lesson_id, card_id, sort_order) values ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), 'c1193641-fd73-5cfd-9c44-88452b1e93d7', 5) on conflict (lesson_id, card_id) do update set sort_order=excluded.sort_order;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
-values ('ec083127-66b7-599b-b949-a3c44eb598ed', 'de-a1-start-ja-quiz', 'quiz_4_option', 'ja', 'ja', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 6, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-ja","question":{"de":"Was bedeutet ja?","en":"What does ja mean?"},"options":[{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":true,"sort_order":1},{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":false,"sort_order":2},{"default_text":"phrase","translations":{"de":"Ich heiße …","en":"My name is …"},"is_correct":false,"sort_order":3},{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
+values ('ec083127-66b7-599b-b949-a3c44eb598ed', 'de-a1-start-ja-quiz', 'quiz_4_option', 'ja', 'ja', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 6, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-ja","question":{"de":"Was bedeutet ja?","en":"What does ja mean?"},"options":[{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":true,"sort_order":1},{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":false,"sort_order":2},{"default_text":"phrase","translations":{"de":"Ich heiße","en":"My name is"},"is_correct":false,"sort_order":3},{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
 on conflict (id) do update set slug=excluded.slug, card_type=excluded.card_type, native=excluded.native, transliteration=excluded.transliteration, context=excluded.context, difficulty=excluded.difficulty, sort_order=excluded.sort_order, is_active=excluded.is_active, data=excluded.data, audio_url=null, image_url=null, image_id=null;
 
 insert into language_cards_learning_lesson_cards (lesson_id, card_id, sort_order) values ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), 'ec083127-66b7-599b-b949-a3c44eb598ed', 6) on conflict (lesson_id, card_id) do update set sort_order=excluded.sort_order;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
-values ('970f1332-1f11-5e2d-85c4-6e5533f41a12', 'de-a1-start-nein-quiz', 'quiz_4_option', 'nein', 'nain', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 7, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-nein","question":{"de":"Was bedeutet nein?","en":"What does nein mean?"},"options":[{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":true,"sort_order":1},{"default_text":"phrase","translations":{"de":"Ich heiße …","en":"My name is …"},"is_correct":false,"sort_order":2},{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":false,"sort_order":3},{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
+values ('970f1332-1f11-5e2d-85c4-6e5533f41a12', 'de-a1-start-nein-quiz', 'quiz_4_option', 'nein', 'nain', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 7, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-nein","question":{"de":"Was bedeutet nein?","en":"What does nein mean?"},"options":[{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":true,"sort_order":1},{"default_text":"phrase","translations":{"de":"Ich heiße","en":"My name is"},"is_correct":false,"sort_order":2},{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":false,"sort_order":3},{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
 on conflict (id) do update set slug=excluded.slug, card_type=excluded.card_type, native=excluded.native, transliteration=excluded.transliteration, context=excluded.context, difficulty=excluded.difficulty, sort_order=excluded.sort_order, is_active=excluded.is_active, data=excluded.data, audio_url=null, image_url=null, image_id=null;
 
 insert into language_cards_learning_lesson_cards (lesson_id, card_id, sort_order) values ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), '970f1332-1f11-5e2d-85c4-6e5533f41a12', 7) on conflict (lesson_id, card_id) do update set sort_order=excluded.sort_order;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
-values ('61ef87ca-a14a-55e9-8634-127f43aa3de1', 'de-a1-start-ich-heisse-quiz', 'quiz_4_option', 'Ich heiße …', 'isch HAI-se', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 8, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-ich-heisse","question":{"de":"Was bedeutet Ich heiße …?","en":"What does Ich heiße … mean?"},"options":[{"default_text":"phrase","translations":{"de":"Ich heiße …","en":"My name is …"},"is_correct":true,"sort_order":1},{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":false,"sort_order":2},{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":false,"sort_order":3},{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
+values ('61ef87ca-a14a-55e9-8634-127f43aa3de1', 'de-a1-start-ich-heisse-quiz', 'quiz_4_option', 'Ich heiße', 'isch HAI-se', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 8, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-ich-heisse","question":{"de":"Was bedeutet Ich heiße?","en":"What does Ich heiße mean?"},"options":[{"default_text":"phrase","translations":{"de":"Ich heiße","en":"My name is"},"is_correct":true,"sort_order":1},{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":false,"sort_order":2},{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":false,"sort_order":3},{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
 on conflict (id) do update set slug=excluded.slug, card_type=excluded.card_type, native=excluded.native, transliteration=excluded.transliteration, context=excluded.context, difficulty=excluded.difficulty, sort_order=excluded.sort_order, is_active=excluded.is_active, data=excluded.data, audio_url=null, image_url=null, image_id=null;
 
 insert into language_cards_learning_lesson_cards (lesson_id, card_id, sort_order) values ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), '61ef87ca-a14a-55e9-8634-127f43aa3de1', 8) on conflict (lesson_id, card_id) do update set sort_order=excluded.sort_order;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
-values ('3c55fde7-e379-5817-af9e-3f713c3c41d1', 'de-a1-start-wie-heisst-du-quiz', 'quiz_4_option', 'Wie heißt du?', 'vee haist du', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 9, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-wie-heisst-du","question":{"de":"Was bedeutet Wie heißt du??","en":"What does Wie heißt du? mean?"},"options":[{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":true,"sort_order":1},{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":false,"sort_order":2},{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":false,"sort_order":3},{"default_text":"phrase","translations":{"de":"Ich heiße …","en":"My name is …"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
+values ('3c55fde7-e379-5817-af9e-3f713c3c41d1', 'de-a1-start-wie-heisst-du-quiz', 'quiz_4_option', 'Wie heißt du?', 'vee haist du', null, null, null, 'de-a1-start', 'beginner', null, null, null, null, 9, true, '{"quiz_type":"vocabulary_translation","source_card_slug":"de-a1-start-wie-heisst-du","question":{"de":"Was bedeutet Wie heißt du?","en":"What does Wie heißt du? mean?"},"options":[{"default_text":"phrase","translations":{"de":"Wie heißt du?","en":"What is your name?"},"is_correct":true,"sort_order":1},{"default_text":"particle","translations":{"de":"ja","en":"yes"},"is_correct":false,"sort_order":2},{"default_text":"particle","translations":{"de":"nein","en":"no"},"is_correct":false,"sort_order":3},{"default_text":"phrase","translations":{"de":"Ich heiße","en":"My name is"},"is_correct":false,"sort_order":4}],"learn_language":"de"}'::jsonb)
 on conflict (id) do update set slug=excluded.slug, card_type=excluded.card_type, native=excluded.native, transliteration=excluded.transliteration, context=excluded.context, difficulty=excluded.difficulty, sort_order=excluded.sort_order, is_active=excluded.is_active, data=excluded.data, audio_url=null, image_url=null, image_id=null;
 
 insert into language_cards_learning_lesson_cards (lesson_id, card_id, sort_order) values ((select id from language_cards_learning_lessons where slug='de-a1-start-mini-sentences'), '3c55fde7-e379-5817-af9e-3f713c3c41d1', 9) on conflict (lesson_id, card_id) do update set sort_order=excluded.sort_order;
@@ -397,8 +397,8 @@ values ('31108034-8290-5932-bab4-bf545083efba', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-people-pronouns'), 'de', 'Ich, du, Sie', 'ich · du · er · sie · wir · Sie'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-people-pronouns'), 'en', 'I, you, formal you', 'I · you · he · she · we · formal you')
+  ((select id from language_cards_learning_lessons where slug='de-a1-people-pronouns'), 'de', 'Ich, du, Sie', '6 Pronomenkarten, 6 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-people-pronouns'), 'en', 'I, you, formal you', '6 pronoun cards, 6 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
@@ -514,8 +514,8 @@ values ('9280d972-dd31-539a-affc-9627c3ad38bb', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-people-sein-haben'), 'de', 'sein und haben', 'ich bin · du bist · ich habe · du hast'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-people-sein-haben'), 'en', 'to be and to have', 'I am · you are · I have · you have')
+  ((select id from language_cards_learning_lessons where slug='de-a1-people-sein-haben'), 'de', 'sein und haben', '4 Satzkarten, 4 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-people-sein-haben'), 'en', 'to be and to have', '4 sentence cards, 4 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
@@ -591,8 +591,8 @@ values ('3aca0c9d-0d3f-56b0-a1dd-19837d56b90d', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-people-family'), 'de', 'Familie', 'Mutter · Vater · Kind · Freund · Freundin'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-people-family'), 'en', 'Family', 'mother · father · child · friend')
+  ((select id from language_cards_learning_lessons where slug='de-a1-people-family'), 'de', 'Familie', '5 Familienkarten, 5 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-people-family'), 'en', 'Family', '5 family cards, 5 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
@@ -685,8 +685,8 @@ values ('fc72d538-b0b8-5222-aea3-b2547fc90a45', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-numbers-zero-ten'), 'de', 'Zahlen 0 bis 10', 'null · eins · zwei · … · zehn'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-numbers-zero-ten'), 'en', 'Numbers 0 to 10', 'zero · one · two · … · ten')
+  ((select id from language_cards_learning_lessons where slug='de-a1-numbers-zero-ten'), 'de', 'Zahlen 0 bis 10', '11 Zahlenkarten, 11 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-numbers-zero-ten'), 'en', 'Numbers 0 to 10', '11 number cards, 11 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
@@ -881,8 +881,8 @@ values ('a89b7a3d-63a3-5edf-9533-43bde2320366', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-time-words'), 'de', 'Zeitwörter', 'heute · morgen · gestern · Tag · Woche'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-time-words'), 'en', 'Time words', 'today · tomorrow · yesterday · day · week')
+  ((select id from language_cards_learning_lessons where slug='de-a1-time-words'), 'de', 'Zeitwörter', '5 Zeitwortkarten, 5 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-time-words'), 'en', 'Time words', '5 time word cards, 5 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
@@ -975,8 +975,8 @@ values ('c61fa714-6568-5eaf-97a1-77d282072765', (select id from language_cards_l
 on conflict (course_id, slug) do update set sort_order=excluded.sort_order, is_active=excluded.is_active, status=excluded.status;
 
 insert into language_cards_learning_lesson_translations (lesson_id, lang_code, title, description) values
-  ((select id from language_cards_learning_lessons where slug='de-a1-weekdays'), 'de', 'Wochentage', 'Montag · Dienstag · Mittwoch · Donnerstag · Freitag · Samstag · Sonntag'),
-  ((select id from language_cards_learning_lessons where slug='de-a1-weekdays'), 'en', 'Weekdays', 'Monday · Tuesday · Wednesday · Thursday · Friday · Saturday · Sunday')
+  ((select id from language_cards_learning_lessons where slug='de-a1-weekdays'), 'de', 'Wochentage', '7 Wochentagskarten, 7 Quizkarten.'),
+  ((select id from language_cards_learning_lessons where slug='de-a1-weekdays'), 'en', 'Weekdays', '7 weekday cards, 7 quiz cards.')
 on conflict (lesson_id, lang_code) do update set title=excluded.title, description=excluded.description;
 
 insert into language_cards_cards (id, slug, card_type, native, transliteration, word_type, example_native, example_transliteration, context, difficulty, content_md, audio_url, image_url, image_id, sort_order, is_active, data)
