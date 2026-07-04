@@ -12,6 +12,9 @@ import './globals.css'
 export const metadata = {
   title: 'Japanese Cards',
   description: 'Learn Japanese characters playfully',
+}
+
+export const viewport = {
   themeColor: '#0f172a',
 }
 
