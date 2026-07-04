@@ -98,7 +98,7 @@ Aktive Learning Courses:
 | `de-a1-people-basics` | 3 |
 | `de-a1-numbers-time-basics` | 3 |
 
-Deutsch A1 enthält aktuell 50 Zielkarten, 50 Quizkarten und 3 Infokarten. Die erste Begrüßungs-Lesson (`de-a1-start-greetings`) hat 4 generierte Kartenbilder; die übrigen Deutsch-A1-Zielkarten sind noch ohne Bilder und Sounds.
+Deutsch A1 enthält aktuell 50 Zielkarten, 50 Quizkarten und 3 Infokarten. Die erste Begrüßungs-Lesson (`de-a1-start-greetings`) hat 4 generierte Kartenbilder; die übrigen Deutsch-A1-Zielkarten sind noch ohne Bilder. Alle 50 Deutsch-A1-Zielkarten haben Audio (`audio_url`) mit der ElevenLabs-Stimme `xLCJR8xcZX2YjImGFyGw`.
 
 ## Üben / Spiele
 
