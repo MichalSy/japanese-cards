@@ -16,7 +16,7 @@
   },
   "routes": {
     "protected": ["/", "/content", "/game", "/api"],
-    "public": ["/login", "/auth/callback", "/no-access", "/start", "/api/dev-login"]
+    "public": ["/login", "/auth/callback", "/no-access", "/start", "/api/health", "/api/dev-login"]
   },
   "abilities": {
     "enabled": false,

@@ -20,9 +20,23 @@ npm run start    # Production-Server
 
 ### Docker
 
+Der Docker-Build ist ein vollständiger Multi-Stage-Build. Er installiert Dependencies im Build-Container per `npm ci`, baut Next.js mit `output: 'standalone'` und kopiert in das Runtime-Image nur `.next/standalone`, `.next/static`, `public/` und `aikoapp.json`. Das komplette lokale `node_modules/` wird nicht mehr in das Runtime-Image kopiert.
+
+Für das private Paket `@michalsy/aiko-webapp-core` wird ein BuildKit-Secret benötigt:
+
 ```bash
-docker build -t japanese-cards .
-docker run -p 3001:3001 japanese-cards
+TOKEN_FILE=$(mktemp)
+awk -F= '/_authToken/ { print $2 }' .npmrc > "$TOKEN_FILE"
+
+DOCKER_BUILDKIT=1 docker build \
+  --secret id=npm_token,src="$TOKEN_FILE" \
+  --build-arg NEXT_PUBLIC_SUPABASE_URL="$NEXT_PUBLIC_SUPABASE_URL" \
+  --build-arg NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="$NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" \
+  --build-arg NEXT_PUBLIC_ASSETS_URL="https://pqnfiqczcxnwaenylysb.supabase.co/storage/v1/render/image/public/language-cards" \
+  -t japanese-cards .
+
+rm -f "$TOKEN_FILE"
+docker run --env-file .env.local -p 3001:3001 japanese-cards
 ```
 
 ## CI/CD
@@ -43,8 +57,10 @@ Werden via Kubernetes Secrets injiziert (konfiguriert in `gitops-config/apps/jap
 | Variable | Beschreibung |
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase Projekt-URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Anon Key |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase Publishable/Anon Key |
+| `NEXT_PUBLIC_ASSETS_URL` | Supabase Storage Render-URL für Kartenbilder |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase Service Role Key |
+| `SUPABASE_DEV_TOKEN` | Interner Dev-Login-Token für Smoke-/Browser-Checks |
 
 ## Health Check
 

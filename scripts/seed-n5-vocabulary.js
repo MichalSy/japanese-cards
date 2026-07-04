@@ -45,34 +45,22 @@ async function upsertLearningTranslations(supabase, table, keyName, keyValue, tr
   if (error) throw error
 }
 
-async function upsertCategory(supabase, data, categoryId, collectionId) {
-  const base = {
-    id: categoryId,
-    language_id: 'ja',
-    slug: data.category.slug,
-    native_name: data.category.native_name,
-    emoji: data.category.emoji,
-    color: data.category.color,
-    card_type: 'vocabulary',
-    game_modes: [],
-    show_all_option: false,
-    sort_order: data.category.sort_order,
-    is_active: true,
-  }
-
-  const withCollection = collectionId
-    ? { ...base, collection_id: collectionId, collection_sort_order: data.category.collection_sort_order }
-    : base
-
-  let { error } = await supabase
+async function upsertCategory(supabase, data, categoryId) {
+  const { error } = await supabase
     .from('language_cards_categories')
-    .upsert(withCollection, { onConflict: 'language_id,slug' })
-
-  if (error && /collection_id|collection_sort_order/.test(error.message)) {
-    ;({ error } = await supabase
-      .from('language_cards_categories')
-      .upsert(base, { onConflict: 'language_id,slug' }))
-  }
+    .upsert({
+      id: categoryId,
+      language_id: 'ja',
+      slug: data.category.slug,
+      native_name: data.category.native_name,
+      emoji: data.category.emoji,
+      color: data.category.color,
+      card_type: 'vocabulary',
+      game_modes: [],
+      show_all_option: false,
+      sort_order: data.category.sort_order,
+      is_active: true,
+    }, { onConflict: 'language_id,slug' })
 
   if (error) throw error
 }
@@ -81,13 +69,6 @@ async function main() {
   loadEnv('.env.local')
   const data = JSON.parse(fs.readFileSync('scripts/n5-vocabulary.json', 'utf8'))
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
-
-  const { data: collection } = await supabase
-    .from('language_cards_category_collections')
-    .select('id')
-    .eq('language_id', 'ja')
-    .eq('slug', 'jlpt-n5')
-    .maybeSingle()
 
   const { data: existingCategory, error: categorySelectError } = await supabase
     .from('language_cards_categories')
@@ -98,7 +79,7 @@ async function main() {
   if (categorySelectError) throw categorySelectError
 
   const categoryId = existingCategory?.id ?? randomUUID()
-  await upsertCategory(supabase, data, categoryId, collection?.id)
+  await upsertCategory(supabase, data, categoryId)
   await upsertTranslations(supabase, 'language_cards_category_translations', 'category_id', categoryId, data.category.translations)
 
   const { data: existingCourse, error: courseSelectError } = await supabase

@@ -1,40 +1,66 @@
-# Aiko's Home - Docker Image (Runtime only)
-# Based on Node.js 20 Alpine
+# syntax=docker/dockerfile:1.7
 
-FROM node:20-alpine
-
+FROM node:20-alpine AS deps
 WORKDIR /app
 
-# Install dumb-init for proper signal handling + openssh-client for host access
-RUN apk add --no-cache dumb-init openssh-client
+COPY package.json package-lock.json ./
 
-# Copy package files and ALL node_modules from build
-COPY package*.json ./
-COPY node_modules ./node_modules
+# Private package access for @michalsy/aiko-webapp-core. The token is supplied
+# as a BuildKit secret so it is not persisted in any image layer.
+RUN --mount=type=secret,id=npm_token \
+  set -eu; \
+  token="$(cat /run/secrets/npm_token)"; \
+  printf '@michalsy:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=%s\n' "$token" > .npmrc; \
+  npm ci; \
+  rm -f .npmrc
 
-# Copy built application
-COPY .next ./.next
-COPY public ./public
-COPY server.js ./
-COPY src/app ./app
-COPY next.config.js ./
+FROM node:20-alpine AS builder
+WORKDIR /app
 
-# Create non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_ASSETS_URL
+ARG NEXT_PUBLIC_APP_VERSION
+ARG NEXT_PUBLIC_APP_VERSION_DATE
 
-# Change ownership
-RUN chown -R nextjs:nodejs /app
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+ENV NEXT_PUBLIC_ASSETS_URL=$NEXT_PUBLIC_ASSETS_URL
+ENV NEXT_PUBLIC_APP_VERSION=$NEXT_PUBLIC_APP_VERSION
+ENV NEXT_PUBLIC_APP_VERSION_DATE=$NEXT_PUBLIC_APP_VERSION_DATE
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3001
+ENV HOSTNAME=0.0.0.0
+
+RUN apk add --no-cache dumb-init openssh-client \
+  && addgroup --system --gid 1001 nodejs \
+  && adduser --system --uid 1001 nextjs
+
+# Next standalone output contains only the traced runtime dependencies instead
+# of the complete build-time node_modules tree.
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/aikoapp.json ./aikoapp.json
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 
 USER nextjs
 
-# Expose port
 EXPOSE 3001
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || exit 1
 
-# Start the application
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "server.js"]

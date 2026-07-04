@@ -41,7 +41,7 @@ URL aufrufen:
 http://localhost:3001/api/dev-login?token=aiko-jpcard-dev-2026&redirect=/content/hiragana
 ```
 
-Der Token `aiko-jpcard-dev-2026` ist in `.env.local` als `SUPABASE_DEV_TOKEN` hinterlegt. In Kubernetes/Produktion existiert dieser Token nicht - er ist ausschliesslich fur lokale Entwicklung.
+Der Token `aiko-jpcard-dev-2026` ist in `.env.local` als `SUPABASE_DEV_TOKEN` hinterlegt, wenn der lokale Dev-Login genutzt werden soll. In Kubernetes ist `SUPABASE_DEV_TOKEN` bewusst als Secret gesetzt, damit interne Browser-/Smoke-Checks ohne Google-OAuth möglich bleiben. Token nie in Logs, Screenshots oder Commands ausgeben.
 
 ### Schneller Browser-Check mit Dev-Token
 

@@ -20,7 +20,7 @@ async function main() {
   )
 
   const { data: lesson, error: lessonError } = await supabase
-    .from('language_cards_course_lessons')
+    .from('language_cards_learning_lessons')
     .select('id,slug,is_active,sort_order')
     .eq('slug', slug)
     .single()
@@ -28,7 +28,7 @@ async function main() {
   if (lessonError) throw lessonError
 
   const { data: cards, error: cardsError } = await supabase
-    .from('language_cards_course_lesson_cards')
+    .from('language_cards_learning_lesson_cards')
     .select(`
       sort_order,
       language_cards_cards (

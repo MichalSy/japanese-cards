@@ -22,24 +22,22 @@ async function main() {
   )
 
   const { data: lessons, error: lessonsError } = await supabase
-    .from('language_cards_course_lessons')
+    .from('language_cards_learning_lessons')
     .select('id,slug,is_active,sort_order')
     .order('sort_order')
 
   if (lessonsError) throw lessonsError
 
   const { data: links, error: linksError } = await supabase
-    .from('language_cards_course_lesson_cards')
+    .from('language_cards_learning_lesson_cards')
     .select('lesson_id,card_id,sort_order')
     .order('sort_order')
 
   if (linksError) throw linksError
 
-  const cardIds = [...new Set(links.map((link) => link.card_id))]
   const { data: cards, error: cardsError } = await supabase
     .from('language_cards_cards')
     .select('id,slug,card_type,native,transliteration,data')
-    .in('id', cardIds)
 
   if (cardsError) throw cardsError
 

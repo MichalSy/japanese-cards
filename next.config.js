@@ -1,7 +1,9 @@
 const { withAikoApp } = require('@michalsy/aiko-webapp-core/next-config')
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  output: 'standalone',
+}
 
 const config = withAikoApp(nextConfig, {
   clientPages: []

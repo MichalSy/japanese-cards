@@ -1,105 +1,66 @@
-# JLPT N5 Content Plan
+# JLPT N5 Content Stand
 
-Ziel: Die Collection `JLPT N5` soll den kompletten Einstiegspfad sichtbar machen. Fertige Kategorien bleiben aktiv und klickbar. Geplante Kategorien werden bereits angezeigt, sind aber deaktiviert und haben noch keine Lessons oder Practice Groups.
+Die App nutzt aktuell keine eigene Collection-Schicht. Die Hauptnavigation kommt direkt aus `language_cards_categories` und zeigt nur aktive Kategorien. Die produktive N5-Struktur ist deshalb eine normale Kategorie (`n5-vocabulary`) mit einem Learning Course und aktiven Lessons.
 
-Die weiteren JLPT-Collections `JLPT N4`, `JLPT N3`, `JLPT N2` und `JLPT N1` werden auf der Hauptseite ebenfalls sichtbar gemacht. Sie sind deaktiviert, ausgegraut und enthalten noch keine Kategorien oder Inhalte. Sie dienen nur als Roadmap-Ausblick.
-
-## Reihenfolge in der Collection
+## Aktive Kategorien
 
 | Sortierung | Slug | Status | Typ | Inhalt |
 | ---: | --- | --- | --- | --- |
 | 1 | `hiragana` | aktiv | Zeichen | Hiragana-Grundlagen, inklusive Dakuten/Handakuten |
 | 2 | `katakana` | aktiv | Zeichen | Katakana-Grundlagen, inklusive Dakuten/Handakuten |
-| 3 | `first-words` | aktiv | Vokabeln | Erste einfache Wörter zum Einstieg |
-| 4 | `n5-vocabulary` | aktiv | Vokabeln | Kernwortschatz für JLPT N5; aktuell erste Lesson sauber aktiv, weitere Lessons werden schrittweise ergänzt |
-| 5 | `n5-numbers-time` | geplant, deaktiviert | Vokabeln | Zahlen, Uhrzeit, Datum, Wochentage, Mengen |
-| 6 | `n5-particles` | geplant, deaktiviert | Grammatik | は, が, を, に, で, と, も, の, へ, から, まで, よ, ね |
-| 7 | `n5-verbs` | geplant, deaktiviert | Grammatik | Verbgruppen, Masu-Form, Te-Form-Basis, Vergangenheit, Verneinung |
-| 8 | `n5-adjectives` | geplant, deaktiviert | Grammatik | い-Adjektive, な-Adjektive, Formen und einfache Satzmuster |
-| 9 | `n5-grammar` | geplant, deaktiviert | Grammatik | N5-Satzbau, Fragen, Existenz, Wünsche, Erlaubnis, Verbverbindungen |
-| 10 | `n5-kanji` | geplant, deaktiviert | Zeichen | N5-Kanji mit Lesungen, Bedeutung und Beispielwörtern |
-| 11 | `n5-phrases` | geplant, deaktiviert | Phrasen | Alltagssätze, Mini-Dialoge, Prüfungsmuster |
+| 5 | `first-words` | aktiv | Vokabeln | Erste einfache Wörter zum Einstieg |
+| 104 | `n5-vocabulary` | aktiv | Vokabeln | Kernwortschatz für JLPT N5 |
 
-## Umsetzungshinweise
+Deaktivierte Legacy-Kategorien `words` und `sentences` bleiben in der DB, werden aber nicht in der Hauptnavigation angezeigt.
 
-- Geplante Kategorien sind in der Datenbank mit `is_active = false` angelegt.
-- Sie gehören trotzdem zur Collection `jlpt-n5` über `collection_id` und `collection_sort_order`.
-- Die Collection-Seite zeigt deaktivierte Kategorien ausgegraut mit Hinweis `Kommt bald`.
-- Deaktivierte Kategorien sind nicht klickbar und haben bewusst noch keine Learning Courses, Lessons, Practice Groups oder Cards.
-- Sobald eine Kategorie befüllt ist, wird sie über `is_active = true` freigeschaltet.
+## Nicht aktive / nicht live verwendete Struktur
 
-## Empfohlene Befüllungsstrategie
+Nicht Teil des aktuellen Live-Schemas:
 
-1. Pro Kategorie zuerst Content-Scope finalisieren: Lernziele, Card-Typen, Reihenfolge.
-2. Dann Learning Course + Lessons anlegen.
-3. Danach Practice Groups und Cards ergänzen.
-4. Erst nach UI-Test und Datenprüfung `is_active = true` setzen.
+- `language_cards_category_collections`
+- `language_cards_category_collection_translations`
+- `language_cards_categories.collection_id`
+- `language_cards_categories.collection_sort_order`
+- alte Legacy-Tabellen `language_cards_courses`, `language_cards_course_lessons`, `language_cards_course_lesson_cards`, `language_cards_groups`
 
-## Grobe Content-Aufteilung
+Neue Inhalte werden über die produktiven Tabellen gepflegt:
 
-### `n5-vocabulary`
+- `language_cards_categories`
+- `language_cards_learning_courses`
+- `language_cards_learning_lessons`
+- `language_cards_learning_lesson_cards`
+- `language_cards_practice_groups`
+- `language_cards_practice_group_cards`
+- `language_cards_cards`
+- jeweilige Translation-Tabellen
 
-Aktuell angelegt als `n5-vocabulary-basics`. Sauber aktiv ist zunächst `Familie & Menschen` mit 10 Vokabelkarten plus 10 passenden Quizkarten. Die Vokabelkarten folgen dem `first-words` Pattern mit Kana-Native, Bild (`image_id`) und Audio (`audio_url`). Weitere Lessons bleiben deaktiviert, bis Bilder mit Imagegen 2 und Audios mit ElevenLabs sauber erstellt und geprüft sind.
+## `n5-vocabulary`
 
-1. Familie & Menschen
-2. Zuhause & Orte
-3. Alltagsdinge
-4. Essen & Trinken
-5. Basisverben 1
-6. Basisverben 2
-7. Adjektive 1
-8. Adjektive 2
-9. Schule & Arbeit
-10. Natur & Wetter
+Aktuell angelegt als Course `n5-vocabulary-basics`.
 
-### `n5-numbers-time`
+| # | Lesson | Stand |
+| ---: | --- | --- |
+| 1 | `n5-vocab-family-people` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 2 | `n5-vocab-home-places` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 3 | `n5-vocab-daily-objects` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 4 | `n5-vocab-food-drink` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 5 | `n5-vocab-basic-verbs-1` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 6 | `n5-vocab-basic-verbs-2` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 7 | `n5-vocab-adjectives-1` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 8 | `n5-vocab-adjectives-2` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 9 | `n5-vocab-school-work` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
+| 10 | `n5-vocab-nature-weather` | aktiv, 10 Vokabelkarten + 10 Quizkarten, Bilder + Audio vollständig |
 
-- Zahlen 0-10.000
-- Uhrzeit und Dauer
-- Tage, Wochen, Monate, Jahre
-- Alter, Preise, Mengen
-- einfache Zähler, soweit N5-relevant
+## Nächste Inhaltsbereiche
 
-### `n5-particles`
+Wenn weitere N5-Bereiche kommen, zuerst als normale `language_cards_categories` anlegen und nur nach befüllten/validierten Learning-/Practice-Daten aktivieren:
 
-- Grundfunktion pro Partikel
-- Kontrastpaare wie `は` vs. `が`, `に` vs. `で`
-- Beispielkarten mit kurzen Sätzen
-- Übung über Lückensätze
+1. Zahlen & Zeit
+2. Partikel
+3. Verben
+4. Adjektive
+5. Grammatik
+6. Kanji
+7. Sätze & Dialoge
 
-### `n5-verbs`
-
-- Godan, Ichidan, unregelmäßige Verben
-- ます / ません / ました / ませんでした
-- Wörterbuchform als Erkennung
-- einfache Te-Form-Muster für N5
-
-### `n5-adjectives`
-
-- い-Adjektive und な-Adjektive
-- Präsens, Vergangenheit, Verneinung
-- direkte Nomenmodifikation
-- einfache Vergleichs- und Beschreibungssätze
-
-### `n5-grammar`
-
-- `です` / `だ`
-- Fragen mit `か`
-- Existenz mit `ある` / `いる`
-- `たい`, `てください`, `てもいい`, `てはいけない`
-- `から`, `ので`, einfache Satzverbindungen
-
-### `n5-kanji`
-
-- Zahlenkanji
-- Zeitkanji
-- Menschen, Orte, Basisverben
-- Lesungen nur in sinnvollen Beispielwörtern, nicht isoliert überladen
-
-### `n5-phrases`
-
-- Begrüßungen und Höflichkeit
-- Einkaufen und Restaurant
-- Orientierung
-- Schule/Arbeit/Alltag
-- kurze Dialoge als Abschlussübungen
+Keine UI-Platzhalter oder synthetischen Kategorien im Code anlegen; die DB bleibt Quelle der Wahrheit.

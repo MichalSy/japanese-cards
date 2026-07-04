@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Check } from 'lucide-react'
-import { fetchCategories, fetchCategoryWithItems } from '@/config/api'
+import { fetchCategoryWithItems } from '@/config/api'
 import { useT } from '@/components/I18nContext'
 import { fetchProgressFromServer, computeGroupProgress } from '@/utils/progressStorage'
 import AppHeaderBar from '@/components/AppHeaderBar'
@@ -29,8 +29,6 @@ export default function ContentTypeView({ params }) {
   const [error, setError] = useState(null)
   const [groupData, setGroupData] = useState({})
   const [progress, setProgress] = useState({})
-  const querySourceCollection = searchParams.get('collection')
-  const [sourceCollection, setSourceCollection] = useState(querySourceCollection)
 
   const tabContainerRef = useRef(null)
   const [indicatorLeft, setIndicatorLeft] = useState(0)
@@ -46,11 +44,10 @@ export default function ContentTypeView({ params }) {
   const loadData = useCallback(async ({ showLoading = false } = {}) => {
     try {
       if (showLoading) setLoading(true)
-      const [config, serverProgress, coursesRes, categoryData] = await Promise.all([
+      const [config, serverProgress, coursesRes] = await Promise.all([
         fetchCategoryWithItems(contentType),
         fetchProgressFromServer(contentType),
         fetch(`/api/learn/courses?category=${contentType}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : { courses: [] }),
-        fetchCategories(),
       ])
       setCategoryConfig(config)
       setProgress(serverProgress)
@@ -58,19 +55,13 @@ export default function ContentTypeView({ params }) {
       for (const group of config.groups) practiceGroups[group.id] = group.items || []
       setGroupData(practiceGroups)
       setCourses(coursesRes.courses ?? [])
-      if (!querySourceCollection) {
-        const parentCollection = (categoryData.collections ?? []).find(collection =>
-          collection.enabled !== false && collection.categories?.includes(contentType)
-        )
-        setSourceCollection(parentCollection?.id ?? null)
-      }
       setError(null)
     } catch (err) {
       setError(err.message)
     } finally {
       if (showLoading) setLoading(false)
     }
-  }, [contentType, querySourceCollection])
+  }, [contentType])
 
   useEffect(() => {
     loadData({ showLoading: true })
@@ -130,7 +121,7 @@ export default function ContentTypeView({ params }) {
 
   return (
     <AppLayout>
-      <AppHeader><AppHeaderBar title={categoryName} backHref={sourceCollection ? `/collections/${sourceCollection}` : undefined} /></AppHeader>
+      <AppHeader><AppHeaderBar title={categoryName} /></AppHeader>
 
       <AppContent>
         {activeTab === 'learn' && (
@@ -159,7 +150,7 @@ export default function ContentTypeView({ params }) {
                   )}
                 </div>
                 {(course.lessons ?? []).map((lesson, i) => (
-                  <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.slug}${sourceCollection ? `?collection=${sourceCollection}` : ''}`)}>
+                  <Card key={lesson.id} interactive onClick={() => router.push(`/learn/${lesson.slug}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                       <div style={{ width: '36px', height: '36px', flexShrink: 0, borderRadius: '50%', background: lesson.completed ? 'linear-gradient(135deg,#10b981,#34d399)' : 'linear-gradient(135deg,#ec4899,#a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: 'white', boxShadow: lesson.completed ? '0 3px 10px rgba(16,185,129,0.32)' : '0 3px 10px rgba(236,72,153,0.35)' }}>
                         {i + 1}
@@ -197,7 +188,7 @@ export default function ContentTypeView({ params }) {
               const allItems = Object.values(groupData).flat()
               const allProgress = computeGroupProgress(allItems, progress)
               return (
-                <Card interactive onClick={() => router.push(`/content/${contentType}/all${sourceCollection ? `?collection=${sourceCollection}` : ''}`)}>
+                <Card interactive onClick={() => router.push(`/content/${contentType}/all`)}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
@@ -218,7 +209,7 @@ export default function ContentTypeView({ params }) {
               const items = groupData[group.id] || []
               const groupProgress = computeGroupProgress(items, progress)
               return (
-                <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}${sourceCollection ? `?collection=${sourceCollection}` : ''}`)}>
+                <Card key={group.id} interactive onClick={() => router.push(`/content/${contentType}/${group.id}`)}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>

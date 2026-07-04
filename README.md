@@ -5,7 +5,7 @@ Lernspiel für japanische Schriftsysteme (Hiragana, Katakana) und Vokabeln.
 ## Features
 
 - **Swipe Game**: Zeichen + Romaji-Paarung bewerten (Tinder-Style)
-- **JSON-basierte Daten**: Lerninhalte in `public/GameData/`
+- **Supabase-basierte Lerninhalte**: Kategorien, Learning-Lessons, Practice-Groups, Cards und Fortschritt aus der Datenbank
 - **Mehrsprachig**: Deutsch und Englisch
 - **Responsive**: Mobile (Touch) und Desktop
 
@@ -31,9 +31,8 @@ japanese-cards/
 │   ├── modes/             # Spielmodi-Implementierungen (z.B. SwipeGame)
 │   ├── config/            # Konfigurationen
 │   └── utils/             # Hilfsfunktionen
-├── public/
-│   └── GameData/          # JSON-Daten für Kategorien und Karten
-└── .aiko/                 # Generierte Auth-Dateien (nicht manuell bearbeiten)
+├── public/                 # Statische Assets
+└── .aiko/                  # Generierte Auth-Dateien (nicht manuell bearbeiten)
 ```
 
 ## Installation & Start
@@ -89,18 +88,24 @@ Alle Tabellen nutzen den Prefix `language_cards_`. Neue Tabellen immer mit diese
 
 | Tabelle | Zweck |
 |---|---|
-| `language_cards_languages` | Lernbare Sprachen (ja, ko, zh, de...) |
-| `language_cards_categories` | Kategorien pro Sprache (Hiragana, Katakana...) |
+| `language_cards_languages` | UI- und Lernsprachen |
+| `language_cards_categories` | Aktive/deaktivierte Inhaltsbereiche wie Hiragana, Katakana, First Words, N5 Vocabulary |
 | `language_cards_category_translations` | Kategoriename/-beschreibung pro UI-Sprache |
-| `language_cards_groups` | Gruppen innerhalb einer Kategorie (A-Reihe...) |
-| `language_cards_group_translations` | Gruppenname pro UI-Sprache |
-| `language_cards_cards` | Einzelne Lernkarten |
-| `language_cards_card_translations` | Übersetzung + Beispiel pro UI-Sprache |
-| `language_cards_courses` | Kuratierte Lernpfade |
-| `language_cards_course_lessons` | Lektionen innerhalb eines Kurses |
-| `language_cards_course_lesson_cards` | Karten in einer Lektion (wiederverwendbar) |
+| `language_cards_learning_courses` | Kuratierte Lernpfade pro Kategorie |
+| `language_cards_learning_course_translations` | Kurstitel/-beschreibung pro UI-Sprache |
+| `language_cards_learning_lessons` | Lektionen innerhalb eines Learning Course |
+| `language_cards_learning_lesson_translations` | Lektionstitel/-beschreibung pro UI-Sprache |
+| `language_cards_learning_lesson_cards` | Kartenreihenfolge innerhalb einer Lesson |
+| `language_cards_practice_groups` | Übungsgruppen pro Kategorie |
+| `language_cards_practice_group_translations` | Practice-Group-Name pro UI-Sprache |
+| `language_cards_practice_group_cards` | Kartenreihenfolge innerhalb einer Practice Group |
+| `language_cards_cards` | Einzelne Lern-, Info- und Quizkarten |
+| `language_cards_card_translations` | Übersetzung + Beispiel pro UI-Sprache für Vokabel-/Phrasenkarten |
 | `language_cards_user_settings` | UI-Sprache + Lernsprache pro User |
 | `language_cards_user_card_progress` | Fortschritt pro User pro Karte |
+| `language_cards_category_snapshots` | Aggregierter Fortschritt pro User/Kategorie |
 | `language_cards_user_sessions` | Spielsessions mit Statistiken |
 
-Karten haben immer generische Felder: `native` (Zielsprachen-Inhalt), `transliteration` (z.B. Romaji für Japanisch, Pinyin für Chinesisch), `card_type` (`character` | `vocabulary` | `phrase` | `grammar`).
+Karten haben immer generische Felder: `native` (Zielsprachen-Inhalt), `transliteration` (z.B. Romaji für Japanisch, Pinyin für Chinesisch), `card_type` (`character` | `vocabulary` | `phrase` | `grammar` | `quiz_4_option` | `info`).
+
+Nicht mehr Teil der aktiven Struktur: alte Legacy-Tabellen `language_cards_courses`, `language_cards_course_lessons`, `language_cards_course_lesson_cards`, `language_cards_groups` sowie die nicht-live Collection-Schicht `language_cards_category_collections` / `collection_id`.
