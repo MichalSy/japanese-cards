@@ -16,7 +16,7 @@ where lesson_id = (select id from language_cards_learning_lessons where slug='de
   and lang_code in ('de', 'en');
 
 update language_cards_cards
-set data = '{"content_md":{"de":"# Begrüßen & verabschieden\n\nDu lernst jetzt die wichtigsten Wörter, um ein Gespräch freundlich zu beginnen und wieder zu beenden. Hör zu, sprich nach — ein Satz reicht für den Anfang.","en":"# Greetings & goodbyes\n\nYou will learn the first phrases for starting and ending a conversation. Listen, repeat — one sentence is enough to begin."}}'::jsonb
+set data = '{"content_md":{"de":"# Begrüßen & verabschieden\n\nDu lernst jetzt die wichtigsten Wörter, um ein Gespräch freundlich zu beginnen und wieder zu beenden. Hör zu, sprich nach - ein Satz reicht für den Anfang.","en":"# Greetings & goodbyes\n\nYou will learn the first phrases for starting and ending a conversation. Listen, repeat - one sentence is enough to begin."}}'::jsonb
 where slug = 'de-a1-info-greetings';
 
 -- Additional farewell/night phrases for the first lesson.
