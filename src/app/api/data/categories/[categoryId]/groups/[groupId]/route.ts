@@ -11,6 +11,7 @@ function mapCard(card: any, lang: string, groupName?: string) {
     word_type: card.word_type ?? null, example_native: card.example_native ?? null,
     translation: ct.translation ?? null, example_translation: ct.example_translation ?? null,
     difficulty: card.difficulty ?? null, context: card.context ?? null,
+    image_id: card.image_id ?? null, audio_url: card.audio_url ?? null, data: card.data ?? null,
     group_name: groupName ?? null,
   }
 }
@@ -35,7 +36,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
       .from('language_cards_practice_groups')
       .select(`slug, sort_order, language_cards_practice_group_translations (lang_code, name),
                language_cards_practice_group_cards (sort_order,
-                 language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation)))`)
+                 language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, image_id, audio_url, data, language_cards_card_translations (lang_code, translation, example_translation)))`)
       .eq('category_id', cat.id)
       .order('sort_order')
 
@@ -62,7 +63,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
     .select(`slug, language_cards_practice_group_translations (lang_code, name),
              language_cards_categories!inner (slug, card_type),
              language_cards_practice_group_cards (sort_order,
-               language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, language_cards_card_translations (lang_code, translation, example_translation)))`)
+               language_cards_cards (slug, card_type, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, image_id, audio_url, data, language_cards_card_translations (lang_code, translation, example_translation)))`)
     .eq('slug', groupId)
     .eq('language_cards_categories.slug', categoryId)
     .single()

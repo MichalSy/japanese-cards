@@ -15,7 +15,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const practiceGroupSelect = includeItems
     ? `slug, sort_order, game_modes, language_cards_practice_group_translations (lang_code, name),
        language_cards_practice_group_cards (sort_order,
-         language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active,
+         language_cards_cards (slug, native, transliteration, word_type, example_native, difficulty, context, sort_order, is_active, image_id, audio_url, data,
            language_cards_card_translations (lang_code, translation, example_translation)))`
     : `slug, sort_order, game_modes, language_cards_practice_group_translations (lang_code, name)`
 
@@ -51,6 +51,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
             word_type: c.word_type ?? null, example_native: c.example_native ?? null,
             translation: ct2.translation ?? null, example_translation: ct2.example_translation ?? null,
             difficulty: c.difficulty ?? null, context: c.context ?? null,
+            image_id: c.image_id ?? null, audio_url: c.audio_url ?? null, data: c.data ?? null,
             group_name: gt.name ?? g.slug,
           }
         })

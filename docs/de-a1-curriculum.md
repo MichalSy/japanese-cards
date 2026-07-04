@@ -17,7 +17,9 @@ Deutsch ist als Lernsprache im Produktmodell aktiv. Der erste aktive Track ist `
 
 ## Aktiver Einstieg
 
-Die ersten aktiven Kategorien liefern einen kleinen, aber nutzbaren A1-Start ohne Bilder und ohne Audio. Alle Karten sind textbasiert.
+Die ersten aktiven Kategorien liefern einen kleinen, aber nutzbaren A1-Start. Die erste Begrüßungs-Lesson hat bereits Kartenbilder; weitere Deutsch-A1-Karten wachsen lessonweise nach. Audio ist noch nicht erzeugt.
+
+Bildstil und Generierungsregeln stehen in `docs/card-image-generation.md`.
 
 | Kategorie | Lesson | Titel | Inhalt |
 |---|---|---|---|
