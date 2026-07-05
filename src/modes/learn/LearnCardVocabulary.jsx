@@ -21,6 +21,8 @@ export default function LearnCardVocabulary({ card, lang }) {
   const imageUrl = card.image_id ? `${ASSETS_URL}/${card.image_id}.jpg` : null
   const translation = translationFor(card, lang)
   const languageLabel = lang === 'de' ? 'Bedeutung' : 'Meaning'
+  const hint = card.hint ?? card.data?.hint?.[lang] ?? card.data?.hint?.en ?? card.data?.hint ?? null
+  const hintLabel = lang === 'de' ? 'Hilfe' : 'Tip'
   const romaji = formatRomaji(card.transliteration)
   const audioRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -149,6 +151,19 @@ export default function LearnCardVocabulary({ card, lang }) {
             </span>
           </div>
         </div>
+
+        {hint && (
+          <div style={{
+            padding: '10px 12px', borderRadius: '16px',
+            background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.22)',
+            color: 'rgba(255,255,255,0.86)', fontSize: '14px', lineHeight: 1.38,
+          }}>
+            <div style={{ fontSize: '10px', fontWeight: '850', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(134,239,172,0.82)', marginBottom: '4px' }}>
+              {hintLabel}
+            </div>
+            {hint}
+          </div>
+        )}
 
         {!imageUrl && translationPanel}
       </div>
