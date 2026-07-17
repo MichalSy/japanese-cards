@@ -200,13 +200,15 @@ export default function LearnMode({ lesson, cards, lang }) {
     const quizType = card.data?.quiz_type ?? 'character_choice'
     const isVocabularyQuiz = quizType === 'vocabulary_translation'
     const isArticleQuiz = quizType === 'article_choice'
-    const isTextQuiz = isVocabularyQuiz || isArticleQuiz
+    const isSentenceQuiz = quizType === 'sentence_choice'
+    const isTextQuiz = isVocabularyQuiz || isArticleQuiz || isSentenceQuiz
     const hasManyOptions = (card.data?.options?.length ?? 0) > 4
+    const usesStackedAnswers = isSentenceQuiz && (card.data?.options?.length ?? 0) === 3
     const label = question ?? (lang === 'de' ? 'Das Hiragana-Zeichen für:' : 'The Hiragana character for:')
     const promptText = card.data?.prompt?.[lang] ?? card.data?.prompt?.en ?? card.native
     const correct = answerData?.isCorrect ?? false
     const correctOpt = shuffledOpts.find(o => o.is_correct)
-    const correctText = isArticleQuiz
+    const correctText = (isArticleQuiz || isSentenceQuiz)
       ? (correctOpt?.translations?.de ?? correctOpt?.default_text)
       : (correctOpt?.translations?.[lang] ?? correctOpt?.default_text)
 
@@ -226,7 +228,7 @@ export default function LearnMode({ lesson, cards, lang }) {
             {label}
           </div>
           <div style={{
-            fontSize: isTextQuiz ? 'clamp(54px, 15vw, 82px)' : 'clamp(96px, 26vw, 130px)',
+            fontSize: isSentenceQuiz ? 'clamp(28px, 8vw, 44px)' : (isTextQuiz ? 'clamp(54px, 15vw, 82px)' : 'clamp(96px, 26vw, 130px)'),
             fontWeight: '800', lineHeight: 1.08, textAlign: 'center', maxWidth: '100%', overflowWrap: 'anywhere',
             background: 'linear-gradient(135deg, #ec4899, #a855f7)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
@@ -261,9 +263,14 @@ export default function LearnMode({ lesson, cards, lang }) {
         </div>
 
         {/* Answer grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: hasManyOptions ? '7px' : '8px', padding: hasManyOptions ? '12px' : '16px' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: usesStackedAnswers ? '1fr' : '1fr 1fr',
+          gap: usesStackedAnswers ? '10px' : (hasManyOptions ? '7px' : '8px'),
+          padding: usesStackedAnswers ? '14px 16px 16px' : (hasManyOptions ? '12px' : '16px'),
+        }}>
           {shuffledOpts.map((opt, i) => {
-            const optText = isArticleQuiz ? (opt.translations?.de ?? opt.default_text) : (opt.translations?.[lang] ?? opt.default_text)
+            const optText = (isArticleQuiz || isSentenceQuiz) ? (opt.translations?.de ?? opt.default_text) : (opt.translations?.[lang] ?? opt.default_text)
             const isSelected = answerData?.selectedIndex === i
             const isCorrect = opt.is_correct
             let bg = 'rgba(255,255,255,0.05)'
@@ -281,9 +288,11 @@ export default function LearnMode({ lesson, cards, lang }) {
                 disabled={answerData != null}
                 onClick={() => answerData == null && setQuizAnswers(prev => ({ ...prev, [index]: { selectedIndex: i, isCorrect: opt.is_correct } }))}
                 style={{
-                  minHeight: isTextQuiz ? (hasManyOptions ? '50px' : (isArticleQuiz ? '58px' : '72px')) : '82px', padding: isTextQuiz ? (hasManyOptions ? '8px 9px' : '10px 12px') : '0',
-                  background: bg, border: `1.5px solid ${borderColor}`, borderRadius: hasManyOptions ? '15px' : '18px',
-                  color, fontSize: isTextQuiz ? (hasManyOptions ? 'clamp(15px, 4vw, 19px)' : 'clamp(17px, 4.8vw, 24px)') : '38px', fontWeight: isTextQuiz ? '800' : '300', lineHeight: 1.1,
+                  width: '100%',
+                  minHeight: usesStackedAnswers ? '64px' : (isTextQuiz ? (hasManyOptions ? '50px' : (isArticleQuiz ? '58px' : '72px')) : '82px'),
+                  padding: usesStackedAnswers ? '12px 16px' : (isTextQuiz ? (hasManyOptions ? '8px 9px' : '10px 12px') : '0'),
+                  background: bg, border: `1.5px solid ${borderColor}`, borderRadius: usesStackedAnswers ? '16px' : (hasManyOptions ? '15px' : '18px'),
+                  color, fontSize: usesStackedAnswers ? 'clamp(17px, 4.6vw, 22px)' : (isTextQuiz ? (hasManyOptions ? 'clamp(15px, 4vw, 19px)' : 'clamp(17px, 4.8vw, 24px)') : '38px'), fontWeight: isTextQuiz ? '800' : '300', lineHeight: usesStackedAnswers ? 1.22 : 1.1,
                   cursor: answerData != null ? 'default' : 'pointer',
                   transition: 'background 0.15s, border-color 0.15s, opacity 0.2s',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', opacity,
