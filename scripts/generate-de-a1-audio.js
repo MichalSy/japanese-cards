@@ -88,7 +88,7 @@ async function listGermanA1VocabularyCards(supabase) {
   for (const lesson of data || []) {
     for (const link of lesson.language_cards_learning_lesson_cards || []) {
       const card = link.language_cards_cards
-      if (!card || card.card_type !== 'vocabulary' || card.is_active === false) continue
+      if (!card || !['vocabulary', 'sentence'].includes(card.card_type) || card.is_active === false) continue
       rows.push({
         lessonSlug: lesson.slug,
         sortOrder: link.sort_order ?? 0,
