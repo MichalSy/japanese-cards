@@ -36,7 +36,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
 
   const quizCardIds = ((lesson as any).language_cards_learning_lesson_cards ?? [])
     .map((row: any) => row.language_cards_cards)
-    .filter((card: any) => card?.card_type === 'quiz_4_option')
+    .filter((card: any) => card?.card_type === 'quiz_4_option' || card?.card_type === 'sentence_quiz')
     .map((card: any) => card.id)
 
   if (quizCardIds.length === 0) {

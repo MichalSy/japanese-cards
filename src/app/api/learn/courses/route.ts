@@ -70,7 +70,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const quizCardIdsByLessonId = new Map<string, string[]>()
   for (const row of lessonCards ?? []) {
     const card = (row as any).language_cards_cards
-    if (card?.card_type !== 'quiz_4_option') continue
+    if (card?.card_type !== 'quiz_4_option' && card?.card_type !== 'sentence_quiz') continue
     const ids = quizCardIdsByLessonId.get((row as any).lesson_id) ?? []
     ids.push(card.id)
     quizCardIdsByLessonId.set((row as any).lesson_id, ids)
