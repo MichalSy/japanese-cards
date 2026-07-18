@@ -103,7 +103,7 @@ export default function LearnMode({ lesson, cards, lang }) {
     }
     return shuffleCache.current[cacheKey]
   }
-  const shuffledOpts = isQuiz ? getShuffledOpts(index) : []
+  const shuffledOpts = card?.card_type === 'quiz_4_option' ? getShuffledOpts(index) : []
 
   const progress = ((index + 1) / total) * 100
   const answered = isQuiz ? quizAnswers[index] != null : true
@@ -362,9 +362,8 @@ export default function LearnMode({ lesson, cards, lang }) {
       <LearnSentenceQuiz
         card={card}
         lang={lang}
-        options={shuffledOpts}
         answerData={quizAnswers[index] ?? null}
-        onAnswer={(selectedIndex, isCorrect) => setQuizAnswers(prev => ({ ...prev, [index]: { selectedIndex, isCorrect } }))}
+        onAnswer={(selectedWords, isCorrect) => setQuizAnswers(prev => ({ ...prev, [index]: { selectedWords, isCorrect } }))}
         t={t}
       />
     )
