@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 function cleanWord(word) {
   return String(word ?? '').trim().replace(/^[.,!?;:„“"'()]+|[.,!?;:„“"'()]+$/g, '')
@@ -36,6 +36,8 @@ function stableShuffle(words, seedText) {
 }
 
 export default function LearnSentenceQuiz({ card, lang, answerData, onAnswer, t }) {
+  const audioRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
   const fallbackOptions = card.data?.options ?? []
   const fallbackCorrect = fallbackOptions.find(option => option.is_correct)?.default_text
   const fallbackDistractor = fallbackOptions.find(option => !option.is_correct)?.default_text
@@ -53,6 +55,7 @@ export default function LearnSentenceQuiz({ card, lang, answerData, onAnswer, t 
   )
   const [selectedWords, setSelectedWords] = useState(() => answerData?.selectedWords ?? [])
 
+  const isListeningQuiz = card.data?.quiz_type === 'sentence_audio_builder'
   const question = card.data?.question?.[lang] ?? card.data?.question?.en ?? (lang === 'de' ? 'Baue den deutschen Satz:' : 'Build the German sentence:')
   const prompt = card.data?.prompt?.[lang] ?? card.data?.prompt?.en ?? card.native
   const correct = answerData?.isCorrect ?? false
@@ -61,6 +64,37 @@ export default function LearnSentenceQuiz({ card, lang, answerData, onAnswer, t 
   const chosenKeys = new Set(chosen.map(word => word.toLocaleLowerCase('de-DE')))
   const availableWords = wordPool.filter(word => !chosenKeys.has(word.toLocaleLowerCase('de-DE')))
   const correctSentence = `${targetWords.join(' ')}.`
+
+  useEffect(() => {
+    setIsPlaying(false)
+    return () => {
+      audioRef.current?.pause()
+      if (audioRef.current) audioRef.current.currentTime = 0
+    }
+  }, [card.audio_url])
+
+  const handlePlayAudio = async () => {
+    if (!audioRef.current || !card.audio_url) return
+    if (!audioRef.current.paused) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setIsPlaying(false)
+      return
+    }
+    try {
+      audioRef.current.currentTime = 0
+      await audioRef.current.play()
+      setIsPlaying(true)
+    } catch {
+      setIsPlaying(false)
+    }
+  }
+
+  const handleAudioKeyDown = event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return
+    event.preventDefault()
+    handlePlayAudio()
+  }
 
   const addWord = word => {
     if (locked || selectedWords.length >= targetWords.length) return
@@ -84,9 +118,28 @@ export default function LearnSentenceQuiz({ card, lang, answerData, onAnswer, t 
           {question}
         </div>
 
-        <div style={{ fontSize: 'clamp(24px, 7vw, 38px)', fontWeight: '900', lineHeight: 1.15, textAlign: 'center', maxWidth: '100%', overflowWrap: 'anywhere', background: 'linear-gradient(135deg, #ec4899, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', filter: 'drop-shadow(0 0 28px rgba(236,72,153,0.32))' }}>
-          {prompt}
-        </div>
+        {isListeningQuiz ? (
+          <div
+            role="button"
+            tabIndex={0}
+            aria-label={lang === 'de' ? 'Satz anhören' : 'Listen to sentence'}
+            onClick={handlePlayAudio}
+            onKeyDown={handleAudioKeyDown}
+            style={{ width: 'min(210px, 70vw)', minHeight: '104px', padding: '16px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', borderRadius: '24px', border: '1.5px solid rgba(236,72,153,0.35)', background: isPlaying ? 'linear-gradient(135deg, rgba(236,72,153,0.20), rgba(168,85,247,0.20))' : 'rgba(255,255,255,0.055)', boxShadow: isPlaying ? '0 8px 30px rgba(236,72,153,0.18)' : '0 8px 24px rgba(0,0,0,0.18)', cursor: card.audio_url ? 'pointer' : 'default' }}
+          >
+            <audio ref={audioRef} src={card.audio_url ?? undefined} preload="none" onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
+            <div aria-hidden="true" style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '999px', color: 'white', fontSize: '18px', background: isPlaying ? 'linear-gradient(135deg,#ec4899,#a855f7)' : 'rgba(236,72,153,0.25)', border: '1px solid rgba(236,72,153,0.42)', boxShadow: '0 5px 16px rgba(236,72,153,0.22)' }}>
+              {isPlaying ? '■' : '▶'}
+            </div>
+            <div style={{ fontSize: '14px', fontWeight: '800', color: 'rgba(255,255,255,0.76)' }}>
+              {lang === 'de' ? 'Satz anhören' : 'Listen to the sentence'}
+            </div>
+          </div>
+        ) : (
+          <div style={{ fontSize: 'clamp(24px, 7vw, 38px)', fontWeight: '900', lineHeight: 1.15, textAlign: 'center', maxWidth: '100%', overflowWrap: 'anywhere', background: 'linear-gradient(135deg, #ec4899, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', filter: 'drop-shadow(0 0 28px rgba(236,72,153,0.32))' }}>
+            {prompt}
+          </div>
+        )}
 
         <div aria-label={lang === 'de' ? 'Satzpositionen' : 'Sentence positions'} style={{ width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', minHeight: '43px' }}>
           {targetWords.map((_, index) => {

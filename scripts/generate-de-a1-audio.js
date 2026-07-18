@@ -149,6 +149,13 @@ async function main() {
       .eq('id', card.id)
     if (updateError) throw updateError
 
+    const { error: quizUpdateError } = await supabase
+      .from('language_cards_cards')
+      .update({ audio_url: audioUrl })
+      .eq('card_type', 'sentence_quiz')
+      .contains('data', { source_card_slug: card.slug })
+    if (quizUpdateError) throw quizUpdateError
+
     results.push({ lesson: card.lessonSlug, slug: card.slug, bytes: audio.length, audio_url: audioUrl })
     await sleep(700)
   }
