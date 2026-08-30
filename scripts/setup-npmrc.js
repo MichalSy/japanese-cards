@@ -1,15 +1,16 @@
 const fs = require('fs')
-const path = require('path')
+const { execFileSync } = require('child_process')
 
-const secretsPath = path.join(__dirname, '../../secrets.json')
-const npmrcPath = path.join(__dirname, '../.npmrc')
+const npmrcPath = require('path').join(__dirname, '../.npmrc')
 
-const secrets = JSON.parse(fs.readFileSync(secretsPath, 'utf8'))
-const token = secrets?.github?.token
+const token = execFileSync(
+  '/home/aiko/.local/bin/infisical-secret',
+  ['github-packages', 'NPM_TOKEN'],
+  { encoding: 'utf8' }
+).trim()
 
 if (!token) {
-  console.error('Kein GitHub-Token in secrets.json gefunden.')
-  console.error('Bitte eintragen: { "github": { "token": "ghp_..." } }')
+  console.error('Kein NPM_TOKEN im Infisical-Ordner /github-packages gefunden.')
   process.exit(1)
 }
 

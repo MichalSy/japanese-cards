@@ -103,4 +103,4 @@ DDL-Migrationen werden per Supabase Management API ausgeführt:
 node scripts/apply-supabase-sql.js supabase/migrations/<migration>.sql
 ```
 
-Der Runner liest `SUPABASE_ACCESS_TOKEN` aus der Umgebung oder aus `~/secrets.json` und gibt keine Secrets aus.
+Der Runner liest `SUPABASE_ACCESS_TOKEN` aus der Umgebung oder Infisical und gibt keine Secrets aus.

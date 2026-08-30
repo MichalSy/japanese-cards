@@ -1,21 +1,16 @@
 #!/usr/bin/env node
 const fs = require('fs')
 const https = require('https')
-const path = require('path')
+const { execFileSync } = require('child_process')
 
 const PROJECT_REF = process.env.SUPABASE_PROJECT_REF || 'pqnfiqczcxnwaenylysb'
 
 function readSecretsToken() {
-  const defaultSecrets = fs.existsSync('/home/aiko/secrets.json') ? '/home/aiko/secrets.json' : path.join(process.env.HOME || '/home/aiko', 'secrets.json')
-  const secretsPath = process.env.SUPABASE_SECRETS_FILE || defaultSecrets
-  const secrets = JSON.parse(fs.readFileSync(secretsPath, 'utf8'))
-  for (const nugget of secrets.nuggets || []) {
-    if (nugget.name !== 'supabase') continue
-    for (const entry of nugget.config || []) {
-      if (entry.key === 'SUPABASE_ACCESS_TOKEN') return entry.value
-    }
-  }
-  return null
+  return execFileSync(
+    '/home/aiko/.local/bin/infisical-secret',
+    ['supabase', 'SUPABASE_ACCESS_TOKEN'],
+    { encoding: 'utf8' }
+  ).trim()
 }
 
 function postQuery(query, token) {
@@ -61,7 +56,7 @@ async function main() {
     process.exit(2)
   }
   const token = process.env.SUPABASE_ACCESS_TOKEN || readSecretsToken()
-  if (!token) throw new Error('SUPABASE_ACCESS_TOKEN not found in env or ~/secrets.json nugget supabase')
+  if (!token) throw new Error('SUPABASE_ACCESS_TOKEN not found in env or Infisical folder /supabase')
   const query = fs.readFileSync(sqlFile, 'utf8')
   const started = Date.now()
   const result = await postQuery(query, token)

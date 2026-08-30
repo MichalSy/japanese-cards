@@ -6,14 +6,8 @@
 
 Das Paket `@michalsy/aiko-webapp-core` liegt auf GitHub Packages. Ohne Token schlagt `npm install` fehl.
 
-1. Token in `C:\Projects\aiko\secrets.json` eintragen:
-```json
-{
-  "kie.ai": { "token": "..." },
-  "github": { "token": "ghp_..." }
-}
-```
-Der Token braucht den Scope `read:packages`.
+1. `NPM_TOKEN` im Infisical-Ordner `/github-packages` hinterlegen. Der Token
+braucht den Scope `read:packages`.
 
 2. `.npmrc` generieren:
 ```bash
