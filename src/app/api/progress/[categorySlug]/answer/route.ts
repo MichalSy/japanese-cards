@@ -1,5 +1,7 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { resolveSettings } from '@/lib/settingsCache'
 
@@ -10,7 +12,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
 
   if (!cardSlug) return NextResponse.json({ error: 'cardSlug required' }, { status: 400 })
 
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
   const { learn_language_id } = await resolveSettings(user.id, supabase)
   const learningLanguage = learn_language_id ?? 'ja'
 
@@ -59,6 +61,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
         ...(justMastered ? { first_mastered_at: now } : {}),
       })
       .eq('id', existing.id)
+      .eq('user_id', user.id)
   } else {
     await supabase
       .from('language_cards_user_card_progress')

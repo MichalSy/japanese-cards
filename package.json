@@ -3,20 +3,18 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "generate": "npx @michalsy/aiko-webapp-core generate && cp -r .aiko/app/api .aiko/app/auth .aiko/app/login src/app/ && (cp -r .aiko/app/no-access src/app/ 2>/dev/null; true) && (cp -r .aiko/app/start src/app/ 2>/dev/null; true) && mkdir -p src/contexts && (cp -r .aiko/contexts/* src/contexts/ 2>/dev/null; true) && cp .aiko/middleware.ts src/middleware.ts && (cp .aiko/pages.ts src/pages.ts 2>/dev/null; true)",
-    "predev": "npm run generate",
     "dev": "node server.js",
-    "prebuild": "npm run generate",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "lint": "next lint"
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@michalsy/aiko-webapp-core": "1.1.10",
+    "@michalsy/aiko-webapp-core": "1.8.3",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
     "lucide-react": "^0.563.0",
     "next": "^14.2.0",
+    "next-auth": "4.24.15",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
   },

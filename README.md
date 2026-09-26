@@ -35,7 +35,7 @@ Details:
 - **Lernen:** Kurse, Lektionen und Karten aus Supabase.
 - **Üben:** Practice Groups und Game Modes. Produktiv aktiv ist aktuell Swipe.
 - **Mehrsprachigkeit:** UI-Sprachen Deutsch/Englisch; Lernsprache aktuell Japanisch, Datenmodell für weitere Lernsprachen vorbereitet.
-- **Auth:** Google OAuth via Supabase/Aiko Webapp Core; lokaler Dev-Login für Smoke-/Browser-Checks.
+- **Auth:** Google-Anmeldung über den zentralen Authentik-Server und Aiko Core 1.8.3. Supabase speichert weiter Lerninhalte und Fortschritt.
 
 ## Technologien
 
@@ -74,15 +74,12 @@ Die App läuft auf `http://localhost:3001`.
 npm run build
 ```
 
-`prebuild` generiert Aiko-Webapp-Core-Dateien und kopiert sie nach `src/`.
-
-## Dev-Login
-
-Für lokale und interne Smoke-Checks kann `/api/dev-login` genutzt werden. Token nie ausgeben oder in Screenshots/Logs sichtbar machen.
-
-```text
-http://localhost:3001/api/dev-login?token=<SUPABASE_DEV_TOKEN>&redirect=/
-```
+Die Anmeldung nutzt den eigenen Authentik-Client `japanese-cards`. Der Callback ist
+`https://japanese-cards.sytko.de/auth/callback/authentik`. Lokal benötigt ein
+vollständiger Login eine zusätzlich registrierte lokale Callback-Adresse.
+API-Routen prüfen die OAuth-Sitzung serverseitig. Die Zuordnung zum bestehenden
+Fortschritt verwendet die feste Google-ID; E-Mail-Adressen dienen nicht zur
+Kontozusammenführung. Der alte Supabase-Dev-Login ist entfernt.
 
 Erwartung nach Login:
 

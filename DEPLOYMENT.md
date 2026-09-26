@@ -14,7 +14,7 @@ Japanese Cards läuft als Docker-Container in Kubernetes, deployed via ArgoCD (G
 
 ```bash
 npm install
-npm run build    # führt prebuild + next build aus
+npm run build
 npm run start    # Production-Server
 ```
 
@@ -30,25 +30,22 @@ awk -F= '/_authToken/ { print $2 }' .npmrc > "$TOKEN_FILE"
 
 DOCKER_BUILDKIT=1 docker build \
   --secret id=npm_token,src="$TOKEN_FILE" \
-  --build-arg NEXT_PUBLIC_SUPABASE_URL="$NEXT_PUBLIC_SUPABASE_URL" \
-  --build-arg NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="$NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" \
   --build-arg NEXT_PUBLIC_ASSETS_URL="https://pqnfiqczcxnwaenylysb.supabase.co/storage/v1/render/image/public/language-cards" \
   -t japanese-cards .
 
-rm -f "$TOKEN_FILE"
+rm "$TOKEN_FILE"
 docker run --env-file .env.local -p 3001:3001 japanese-cards
 ```
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/docker.yml`) baut das Image bei jedem Push auf `main`
-und pusht es nach `ghcr.io`. ArgoCD erkennt das neue Image und deployed automatisch.
+GitHub Actions (`.github/workflows/docker.yml`) baut das Image bei jedem Push auf
+`main`, pusht es nach `ghcr.io` und aktualisiert die Image-Version in GitOps.
+Argo CD synchronisiert anschließend die App.
 
-## prebuild
-
-Der `prebuild`-Script generiert Auth-Dateien via `@michalsy/aiko-webapp-core generate`
-und kopiert sie nach `src/`. Diese Dateien nicht manuell bearbeiten — werden bei jedem
-Build überschrieben.
+Die Datenbankmigration `20260926_oidc_identities.sql` wird vor dem App-Rollout
+angewendet. `20260926_disable_supabase_auth.sql` folgt nach erfolgreicher
+Funktionsprüfung, damit der bisherige Login während des Rollouts nutzbar bleibt.
 
 ## Umgebungsvariablen
 
@@ -56,11 +53,14 @@ Werden via Kubernetes Secrets injiziert (konfiguriert in `gitops-config/apps/jap
 
 | Variable | Beschreibung |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Projekt-URL |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase Publishable/Anon Key |
+| `AUTHENTIK_ISSUER` | Exakter Issuer des Japanese-Cards-Clients |
+| `AUTHENTIK_CLIENT_ID` | OAuth-Client-ID |
+| `AUTHENTIK_CLIENT_SECRET` | OAuth-Client-Secret aus Infisical |
+| `NEXTAUTH_URL` | App-URL mit `/auth` |
+| `NEXTAUTH_SECRET` | Sitzungsschlüssel aus Infisical |
+| `SUPABASE_URL` | Supabase-Projekt-URL für den Server |
 | `NEXT_PUBLIC_ASSETS_URL` | Supabase Storage Render-URL für Kartenbilder |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Service Role Key |
-| `SUPABASE_DEV_TOKEN` | Interner Dev-Login-Token für Smoke-/Browser-Checks |
+| `SUPABASE_SERVICE_ROLE_KEY` | Serverseitiger Datenzugang aus Infisical |
 
 ## Health Check
 
@@ -70,5 +70,5 @@ Werden via Kubernetes Secrets injiziert (konfiguriert in `gitops-config/apps/jap
 
 - [ ] `npm run build` läuft ohne Errors
 - [ ] `GET /api/health` antwortet
-- [ ] Login via Google OAuth funktioniert
+- [ ] Login über Authentik funktioniert und vorhandener Fortschritt erscheint
 - [ ] Spielmodi laden korrekt

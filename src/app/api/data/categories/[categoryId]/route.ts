@@ -1,5 +1,7 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { resolveSettings } from '@/lib/settingsCache'
 
@@ -7,7 +9,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const { user } = context
   const { categoryId } = await context.params
   const includeItems = new URL(req.url).searchParams.get('items') === 'true'
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
   const { ui_language: lang, learn_language_id } = await resolveSettings(user.id, supabase)
   const learningLanguage = learn_language_id ?? 'ja'
   const pick = (arr: any[]) => arr?.find((x) => x.lang_code === lang) ?? arr?.find((x) => x.lang_code === 'en') ?? {}

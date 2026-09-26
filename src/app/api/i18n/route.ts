@@ -1,5 +1,7 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { resolveSettings } from '@/lib/settingsCache'
 import { translations } from '@/lib/translations'
@@ -8,7 +10,7 @@ import { translations } from '@/lib/translations'
 // Backend knows the user from the auth token and picks the right language automatically.
 export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
   const settings = await resolveSettings(user.id, supabase)
 
   const { data: lang } = await supabase

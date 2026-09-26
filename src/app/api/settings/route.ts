@@ -1,11 +1,13 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { resolveSettings, invalidateCache } from '@/lib/settingsCache'
 
 export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
   const settings = await resolveSettings(user.id, supabase)
 
   const { data: lang } = await supabase
@@ -20,7 +22,7 @@ export const GET = requireAuth(async (_req: Request, context: any) => {
 export const POST = requireAuth(async (req: Request, context: any) => {
   const { user } = context
   const body = await req.json()
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
 
   const update: Record<string, string | boolean> = {}
   if (body.ui_language) update.ui_language = body.ui_language

@@ -1,12 +1,14 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { resolveSettings } from '@/lib/settingsCache'
 
 export const GET = requireAuth(async (_req: Request, context: any) => {
   const { user } = context
   const { lessonId } = await context.params
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
   const settings = await resolveSettings(user.id, supabase)
   const { ui_language: lang } = settings
 

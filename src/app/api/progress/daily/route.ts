@@ -1,5 +1,7 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 
 function isoWeek(date: Date): string {
@@ -25,7 +27,7 @@ export const GET = requireAuth(async (req: Request, context: any) => {
   const params = new URL(req.url).searchParams
   const weeks = parseInt(params.get('weeks') ?? '0')
   const days = parseInt(params.get('days') ?? '5')
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
 
   if (weeks > 0) {
     const since = new Date()

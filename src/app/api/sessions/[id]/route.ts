@@ -1,12 +1,14 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 
 export const PATCH = requireAuth(async (req: Request, context: any) => {
   const { user } = context
   const { id } = await context.params
   const body = await req.json()
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
 
   const ended_at = new Date().toISOString()
 

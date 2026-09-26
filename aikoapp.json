@@ -7,16 +7,16 @@
   },
   "auth": {
     "enabled": true,
-    "provider": "google",
+    "provider": "authentik",
     "loginTitle": "Irasshaimase! 🌸",
     "loginSubtitle": "Learn Japanese Characters",
-    "loginButtonText": "Sign in with Google",
+    "loginButtonText": "Sicher anmelden",
     "successRedirect": "/",
     "needAccessAbility": false
   },
   "routes": {
     "protected": ["/", "/tracks", "/content", "/learn", "/game", "/api"],
-    "public": ["/login", "/auth/callback", "/no-access", "/start", "/api/health", "/api/dev-login"]
+    "public": ["/login", "/auth", "/api/health"]
   },
   "abilities": {
     "enabled": false,

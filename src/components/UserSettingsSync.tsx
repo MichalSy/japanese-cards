@@ -1,23 +1,24 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useAuth, useLanguage } from '@michalsy/aiko-webapp-core'
+import { useLanguage } from '@michalsy/aiko-webapp-core'
+import { useSession } from 'next-auth/react'
 import { useSettings } from '@/components/SettingsContext'
 import { useSetStrings } from '@/components/I18nContext'
 
 export default function UserSettingsSync() {
-  const { user } = useAuth()
+  const { status } = useSession()
+  const authenticated = status === 'authenticated'
   const { language, setLanguage } = useLanguage()
   const { setSettings } = useSettings()
   const setStrings = useSetStrings()
-  const fetchedForUserRef = useRef<string | null>(null)
+  const fetchedForUserRef = useRef(false)
   const prevLangRef = useRef(language)
 
   // On login: load settings + translations from backend (one request, no params needed)
   useEffect(() => {
-    if (!user?.id) return
-    if (fetchedForUserRef.current === user.id) return
-    fetchedForUserRef.current = user.id
+    if (!authenticated || fetchedForUserRef.current) return
+    fetchedForUserRef.current = true
 
     fetch('/api/i18n')
       .then((r) => (r.ok ? r.json() : null))
@@ -36,12 +37,12 @@ export default function UserSettingsSync() {
         })
       })
       .catch(() => {})
-  }, [user?.id])
+  }, [authenticated])
 
   // When language changes (e.g. set by settings page): save to DB only
   // Translations are reloaded by the settings page via /api/i18n after saving
   useEffect(() => {
-    if (!user?.id || !fetchedForUserRef.current) return
+    if (!authenticated || !fetchedForUserRef.current) return
     if (language === prevLangRef.current) return
     prevLangRef.current = language
 
@@ -50,7 +51,7 @@ export default function UserSettingsSync() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ui_language: language }),
     }).catch(() => {})
-  }, [user?.id, language])
+  }, [authenticated, language])
 
   return null
 }

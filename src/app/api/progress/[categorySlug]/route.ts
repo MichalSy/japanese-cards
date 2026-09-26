@@ -1,5 +1,7 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { resolveSettings } from '@/lib/settingsCache'
 
@@ -10,7 +12,7 @@ function computeScore(correct: number, incorrect: number): number {
 export const GET = requireAuth(async (_req: Request, context: any) => {
   const { categorySlug } = await context.params
   const { user } = context
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
   const { learn_language_id } = await resolveSettings(user.id, supabase)
   const learningLanguage = learn_language_id ?? 'ja'
 
@@ -65,7 +67,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
   const body = await req.json()
   const results: { cardSlug: string; isCorrect: boolean }[] = body.results ?? []
 
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
   const { learn_language_id } = await resolveSettings(user.id, supabase)
   const learningLanguage = learn_language_id ?? 'ja'
 
@@ -107,6 +109,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
         .from('language_cards_user_card_progress')
         .update({ correct_count: correct, incorrect_count: incorrect, mastery_level: mastery, last_reviewed_at: new Date().toISOString(), updated_at: new Date().toISOString() })
         .eq('id', existing.id)
+        .eq('user_id', user.id)
     } else {
       const correct = isCorrect ? 1 : 0
       const incorrect = isCorrect ? 0 : 1

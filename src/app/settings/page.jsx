@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import { useLanguage } from '@/context/LanguageContext'
 import { useSettings } from '@/components/SettingsContext'
 import { useT, useSetStrings } from '@/components/I18nContext'
@@ -149,6 +150,11 @@ export default function SettingsPage() {
                   </svg>
                 </div>
                 <span style={{ fontSize: '15px', fontWeight: '600', color: '#ef4444' }}>{t('settings.resetProgress')}</span>
+              </button>
+            </Card>
+            <Card>
+              <button onClick={() => void signOut({ callbackUrl: '/login' })} style={{ width: '100%', padding: '8px', background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontWeight: '600' }}>
+                Abmelden
               </button>
             </Card>
           </div>

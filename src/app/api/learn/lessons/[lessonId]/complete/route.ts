@@ -1,5 +1,7 @@
-import { createServerSupabaseClient } from '@michalsy/aiko-webapp-core/server'
-import { requireAuth } from '@michalsy/aiko-webapp-core/server'
+export const dynamic = 'force-dynamic'
+
+import { createDataClient } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 
 function normalizeCount(value: unknown) {
@@ -11,7 +13,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
   const { user } = context
   const { lessonId } = await context.params
   const body = await req.json().catch(() => ({}))
-  const supabase = await createServerSupabaseClient()
+  const supabase = createDataClient()
 
   const quizCount = normalizeCount(body.quiz_count)
   const correctCount = normalizeCount(body.correct_count)
@@ -71,6 +73,7 @@ export const POST = requireAuth(async (req: Request, context: any) => {
           updated_at: now,
         })
         .eq('id', existing.id)
+        .eq('user_id', user.id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     } else {
       const { error } = await supabase
