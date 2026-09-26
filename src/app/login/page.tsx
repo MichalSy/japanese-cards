@@ -14,7 +14,7 @@ export default function LoginPage() {
       <h1>Irasshaimase!</h1>
       <p>Japanisch lernen mit Japanese Cards</p>
       <button type="button" disabled={status === 'loading'} onClick={() => void signIn('authentik', { callbackUrl: '/' })}>
-        Sicher anmelden
+        Mit Google anmelden
       </button>
     </div>
   </main>
